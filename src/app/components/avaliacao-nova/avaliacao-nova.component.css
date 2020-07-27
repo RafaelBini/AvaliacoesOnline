@@ -1,0 +1,26 @@
+.atributos-table td {
+    padding-bottom: 7px;
+    padding-top: 7px;
+}
+
+.choosing-table td {
+    padding: 8px;
+    background-color: whitesmoke;
+    border-radius: 10px;
+}
+
+.choosing-table  td:hover {
+    background-color: rgb(67, 113, 211, 0.7);
+    cursor: pointer;
+    color: white;    
+}
+
+.banco-de-questoes{
+    position: fixed;
+    height: 65%;
+    width: 300px;
+    right: 10px;
+    bottom: 20px;
+    border: 2px solid black;
+
+}

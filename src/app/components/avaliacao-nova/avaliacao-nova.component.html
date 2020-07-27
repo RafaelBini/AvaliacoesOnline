@@ -1,0 +1,387 @@
+<div style="padding: 10px; padding-left: 130px; color:white; font-size: 15px; background-color: rgb(87, 212, 76);">
+    Nova Avaliação
+</div>
+
+<mat-horizontal-stepper linear #stepper>
+
+    <mat-step [editable]="true">
+        <ng-template matStepLabel>Atributos Gerais</ng-template>
+
+        <table class="atributos-table" style="margin: auto; width: 60%; font-size: 18px;">
+            <tr>
+                <td style="background-color: whitesmoke; border-radius: 10px;" colspan="2" align="center">
+                    <h2>Características Principais</h2>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Título:
+                </td>
+                <td>
+                    <input required style="width: 90%; font-size: 18px;" />
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    Descrição:
+                </td>
+                <td>
+                    <textarea rows="3" style="width: 90%; font-size: 18px;"></textarea>
+                    <br />
+                    <span style="font-size: 11px;">0/260 caracteres</span>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    Inicio:
+                </td>
+                <td>
+                    <input type="datetime-local" />
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    Término:
+                </td>
+                <td>
+                    <input type="datetime-local" />
+                    <!--min="2020-07-28T16:15:23" -->
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" align="left" colspan="2">
+
+                    <input id="aleatorio" type="checkbox" checked />
+                    <label for="aleatorio">
+                        Ordenar questões de forma aleatória
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" colspan="2">
+                    <button mat-raised-button matStepperNext style="margin: 20px;">OK</button>
+                </td>
+            </tr>
+        </table>
+
+
+
+    </mat-step>
+
+    <mat-step [editable]="true">
+        <ng-template matStepLabel>Disposição dos Alunos</ng-template>
+
+        <table class="choosing-table" style="margin: auto; width: 60%; font-size: 18px;">
+
+            <tr>
+                <td colspan="2" align="center" style="background-color: whitesmoke; cursor: default; color: black;">
+                    <h2>Disposição dos Alunos</h2>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="5" width='300px' align="center" valign="top" height="300px"
+                    style="padding: 12px; font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
+                    <mat-icon
+                        style="color: rgb(67, 113, 211); height: 200px; width: 200px; font-size: 150px; margin: auto;">
+                        person</mat-icon>
+                    <br />
+                    Neste modo, cada Aluno faz a avaliação de forma individual.
+                </td>
+                <td class="choose-btn" style="background-color: rgb(67, 113, 211); color: white;">
+                    Individual
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    Em Grupo (Definido pelo Professor)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Em Grupo (Definido pelos Alunos)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Em Grupo (Definido Aleatóriamente)
+                </td>
+
+            </tr>
+            <tr>
+                <td align="center" colspan="2" style="background-color: whitesmoke;">
+                    <button mat-raised-button matStepperNext>Próximo</button>
+                </td>
+            </tr>
+
+        </table>
+
+    </mat-step>
+    <mat-step [editable]="true">
+
+        <ng-template matStepLabel>Método de Correção</ng-template>
+
+        <table class="choosing-table" style="margin: auto; width: 60%; font-size: 18px;">
+
+            <tr>
+                <td colspan="2" align="center" style="background-color: whitesmoke; cursor: default; color: black;">
+                    <h2>Método de Correção</h2>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="5" width='300px' align="center" valign="top" height="300px"
+                    style="padding: 12px; font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
+                    <mat-icon
+                        style="color: rgb(67, 113, 211); height: 200px; width: 200px; font-size: 140px; margin: auto;">
+                        rule</mat-icon>
+                    <br />
+                    Neste método de correção os próprios alunos corrigem as avaliações uns dos outros. A nota é definida
+                    pela média das notas atribuidas pelos alunos.
+                </td>
+                <td class="choose-btn">
+                    Professor
+                </td>
+
+            </tr>
+            <tr>
+                <td class="choose-btn">
+                    Automática
+                </td>
+            </tr>
+            <tr>
+                <td class="choose-btn" style="background-color: rgb(67, 113, 211); color: white;">
+                    Pelos Pares
+                </td>
+            </tr>
+            <tr>
+                <td class="choose-btn">
+                    Autoavaliação
+                </td>
+
+            </tr>
+            <tr>
+                <td align="center" colspan="2" style="background-color: whitesmoke;">
+                    <button mat-raised-button matStepperNext>Próximo</button>
+                </td>
+            </tr>
+
+        </table>
+
+
+
+    </mat-step>
+    <mat-step [editable]="true">
+
+        <ng-template matStepLabel>Forma de Pontuação</ng-template>
+
+        <table class="choosing-table" style="margin: auto; width: 60%; font-size: 18px;">
+
+            <tr>
+                <td colspan="2" align="center" style="background-color: whitesmoke; cursor: default; color: black;">
+                    <h2>Forma de Pontuação</h2>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="5" width='300px' align="center" valign="top" height="300px"
+                    style="padding: 12px; font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
+                    <mat-icon
+                        style="color: rgb(67, 113, 211); height: 200px; width: 200px; font-size: 140px; margin: auto;">
+                        plus_one</mat-icon>
+                    <br />
+                    Neste modo cada questão possui um valor fixo que contribui para a somativa o total da avaliação.
+                </td>
+                <td class="choose-btn" style="background-color: rgb(67, 113, 211); color: white;">
+                    Pontuação Fixa Por Questão
+                </td>
+
+            </tr>
+            <tr>
+                <td class="choose-btn">
+                    Pontuação Comparativa
+                </td>
+            </tr>
+            <tr>
+                <td class="choose-btn">
+                    Pontuação Por Tentativa
+                </td>
+            </tr>
+            <tr>
+                <td class="choose-btn">
+                    Pontuação Por Participação
+                </td>
+
+            </tr>
+            <tr>
+                <td align="center" colspan="2" style="background-color: whitesmoke;">
+                    <button mat-raised-button matStepperNext>Próximo</button>
+                </td>
+            </tr>
+
+        </table>
+
+    </mat-step>
+    <mat-step [editable]="true">
+
+        <ng-template matStepLabel>Questões</ng-template>
+
+        <div style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
+
+            <div align="center"
+                style="background-color: whitesmoke; cursor: default; color: black; width: 100%; border-radius: 10px;">
+                <h2>Questões</h2>
+            </div>
+
+            <div style="background-color: white; cursor: default; height: 20px; width: 100%;">
+
+            </div>
+
+            <div
+                style="position: relative; background-color: whitesmoke; border-radius: 10px; padding: 12px; width: 100%;">
+
+                <table style="width: 100%;">
+                    <tr>
+                        <td align="center">
+                            <mat-icon style="cursor: move;">drag_handle</mat-icon>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea style="width: 100%" rows="4">Qual é a cor da grama?</textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <select>
+                                <option>Associativa</option>
+                                <option selected>Disertativa</option>
+                                <option>Entrega</option>
+                                <option>Multipla Escolha - Multipla Resposta</option>
+                                <option>Multipla Escolha - Unica Resposta</option>
+                                <option>Preenchimento</option>
+                                <option>Veradadeiro ou Falso</option>
+                                <option>Veradadeiro ou Falso - Justificativa</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+
+                        <td>
+                            <textarea style="width: 100%" rows="3"></textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right">
+                            <button mat-icon-button matTooltip="Adicionar Imagem">
+                                <mat-icon>insert_photo</mat-icon>
+                            </button>
+                            <button mat-icon-button matTooltip="Adicionar Anexo">
+                                <mat-icon>attach_file</mat-icon>
+                            </button>
+                            <button mat-icon-button matTooltip="Remover Questão">
+                                <mat-icon style="color: rgb(143, 12, 12);">delete</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background-color: white; cursor: default; height: 20px; width: 100%;">
+
+            </div>
+
+            <div
+                style="position: relative; background-color: whitesmoke; border-radius: 10px; padding: 12px; width: 100%;">
+
+                <table style="width: 100%;">
+                    <tr>
+                        <td align="center">
+                            <mat-icon style="cursor: move;">drag_handle</mat-icon>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea style="width: 100%" rows="4">Qual é a cor da grama?</textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <select>
+                                <option>Associativa</option>
+                                <option>Disertativa</option>
+                                <option>Entrega</option>
+                                <option selected>Multipla Escolha - Multipla Resposta</option>
+                                <option>Multipla Escolha - Unica Resposta</option>
+                                <option>Preenchimento</option>
+                                <option>Veradadeiro ou Falso</option>
+                                <option>Veradadeiro ou Falso - Justificativa</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <input id="o1" type="checkbox" />
+                            <label for="o1">Vermelha</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="o2" type="checkbox" />
+                            <label for="o2">Azul</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="o3" type="checkbox" />
+                            <label for="o3">Verde</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="o4" type="checkbox" />
+                            <label for="o5">Roxa</label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right">
+                            <button mat-icon-button matTooltip="Remover Questão">
+                                <mat-icon>insert_photo</mat-icon>
+                            </button>
+                            <button mat-icon-button matTooltip="Remover Questão">
+                                <mat-icon>attach_file</mat-icon>
+                            </button>
+                            <button mat-icon-button matTooltip="Remover Questão">
+                                <mat-icon style="color: rgb(143, 12, 12);">delete</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="width: 100%;">
+                <button mat-raised-button (click)="finalizar()"
+                    style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
+                    Tudo pronto, Finalizar!
+                </button>
+            </div>
+
+            <button mat-fab matTooltip="Adiconar Questão"
+                style="position: fixed; bottom: 30px; right: 30px; background-color: rgb(37, 146, 43);">
+                <mat-icon style="color: white;">add</mat-icon>
+            </button>
+
+        </div>
+
+    </mat-step>
+</mat-horizontal-stepper>
