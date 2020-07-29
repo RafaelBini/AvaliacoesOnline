@@ -1,3 +1,5 @@
+import { AvaliacaoAlunoComponent } from './components/avaliacao-aluno/avaliacao-aluno.component';
+import { LoginComponent } from './components/login/login.component';
 import { AvaliacaoCorrecaoComponent } from './components/avaliacao-correcao/avaliacao-correcao.component';
 import { AvaliacaoProfessorComponent } from './components/avaliacao-professor/avaliacao-professor.component';
 import { AvaliacaoNovaComponent } from './components/avaliacao-nova/avaliacao-nova.component';
@@ -11,6 +13,11 @@ const routes: Routes = [
   { path: "nova-avaliacao", component: AvaliacaoNovaComponent },
   { path: "professor/avaliacao/:id", component: AvaliacaoProfessorComponent },
   { path: "professor/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
+  { path: "login", component: LoginComponent },
+  { path: "aluno/avaliacao/:id", component: AvaliacaoAlunoComponent },
+  { path: "aluno/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
+  { path: "avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
+  { path: ":id", component: LoginComponent },
 ];
 
 @NgModule({

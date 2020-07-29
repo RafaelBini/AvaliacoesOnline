@@ -1,13 +1,14 @@
-<div style="padding: 10px; padding-left: 130px; margin-bottom: 20px; color:white; font-size: 15px; background-color: var(--cor-primaria);">
-    <a routerLink="/professor" style="color: white;">Avaliações</a> - <a routerLink="/professor/avaliacao/1" style="color: white;">Avaliação 01</a> - Correção
+<div *ngIf="tipo != 'avaliacao'"
+    style="padding: 10px; padding-left: 130px; margin-bottom: 20px; color:white; font-size: 15px; background-color: var(--cor-primaria);">
+    <a [routerLink]="'/' + tipo" style="color: white;">Avaliações</a> - <a [routerLink]="'/' + tipo + '/avaliacao/1'"
+        style="color: white;">Avaliação 01</a> - Correção
 </div>
 
 <div style="margin: auto; width: 70%;">
     <div style="margin: auto; text-align: center; font-size: 40px; margin-bottom: 40px;">
-        Grupo 01 
+        Grupo 01
     </div>
-    <div
-    class="questao">
+    <div class="questao">
 
         <table style="width: 100%;">
             <tr>
@@ -19,26 +20,26 @@
                 <td>
                     <textarea disabled style="width: 100%; padding: 5px" rows="3">A cor da grama é rosa</textarea>
                 </td>
-            </tr>  
- 
+            </tr>
+
             <tr>
                 <td style="background-color: var(--cor-secundaria); color: white; padding: 10px; border-radius: 8px;">
                     Valor: 100
                     <br />
-                    Nota: <input type="number" #nota value="0" style="width: 70px;" />
-                    <button (click)="nota.value = '100'" matTooltip="Dar nota máxima"  mat-icon-button>
+                    Nota: <input type="number" [disabled]="tipo == 'avaliacao'" #nota value="0" style="width: 70px;" />
+                    <button *ngIf="tipo != 'avaliacao'" (click)="nota.value = '100'" matTooltip="Dar nota máxima"
+                        mat-icon-button>
                         <mat-icon>done</mat-icon>
                     </button>
                     <br /><br />
-                    Observação  (opcional):
-                    <textarea rows="3" style="width: 94%; padding: 6px;"></textarea>
+                    Observação (opcional):
+                    <textarea rows="3" [disabled]="tipo == 'avaliacao'" style="width: 94%; padding: 6px;"></textarea>
                 </td>
-            </tr>      
+            </tr>
         </table>
     </div>
 
-    <div
-    class="questao">
+    <div class="questao">
 
         <table style="width: 100%;">
             <tr>
@@ -48,48 +49,55 @@
             </tr>
             <tr>
                 <td>
-                    <input id="o1" type="checkbox" />
+                    <input id="o1" disabled type="checkbox" />
                     <label for="o1">Vermelha</label>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input id="o2" checked disabled type="checkbox" />
+                    <input id="o2" disabled checked disabled type="checkbox" />
                     <label for="o2">Azul</label>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input id="o3" type="checkbox" />
+                    <input id="o3" disabled type="checkbox" />
                     <label for="o3">Verde</label>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input id="o4" type="checkbox" />
+                    <input id="o4" disabled type="checkbox" />
                     <label for="o5">Roxa</label>
                 </td>
-            </tr>   
+            </tr>
 
             <tr>
                 <td style="background-color: var(--cor-secundaria); color: white; padding: 10px; border-radius: 8px;">
                     Valor: 100
                     <br />
-                    Nota: <input type="number" #nota value="0" style="width: 70px;" />
-                    <button (click)="nota.value = '100'" matTooltip="Dar nota máxima"  mat-icon-button>
+                    Nota: <input type="number" [disabled]="tipo == 'avaliacao'" #nota value="0" style="width: 70px;" />
+                    <button *ngIf="tipo != 'avaliacao'" (click)="nota.value = '100'" matTooltip="Dar nota máxima"
+                        mat-icon-button>
                         <mat-icon>done</mat-icon>
                     </button>
                     <br /><br />
-                    Observação  (opcional):
-                    <textarea rows="3" style="width: 94%; padding: 6px;"></textarea>
+                    Observação (opcional):
+                    <textarea [disabled]="tipo == 'avaliacao'" rows="3" style="width: 94%; padding: 6px;"></textarea>
                 </td>
-            </tr>           
+            </tr>
         </table>
     </div>
 
-    <div style="margin: auto; text-align: center; font-size: 40px; margin-bottom: 40px;">
-        <a routerLink="/professor/avaliacao/1" mat-button style="background-color: var(--cor-primaria); color: white">
+    <div *ngIf="tipo != 'avaliacao'" style="margin: auto; text-align: center; font-size: 40px; margin-bottom: 40px;">
+        <a [routerLink]="'/' + tipo + '/avaliacao/1'" mat-button
+            style="background-color: var(--cor-primaria); color: white">
             Finalizar Correção
+        </a>
+    </div>
+    <div *ngIf="tipo == 'avaliacao'" style="margin: auto; text-align: center; font-size: 40px; margin-bottom: 40px;">
+        <a [routerLink]="'/aluno/avaliacao/1'" mat-button style="background-color: var(--cor-primaria); color: white">
+            Voltar
         </a>
     </div>
 

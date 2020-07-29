@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-avaliacao-correcao',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AvaliacaoCorrecaoComponent implements OnInit {
 
-  constructor() { }
+  constructor(public route: ActivatedRoute) { }
+  public tipo = "professor";
 
   ngOnInit(): void {
+    this.route.url.subscribe((value) => {
+      this.tipo = value[0].path;
+    })
+
   }
 
 }

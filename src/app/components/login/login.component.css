@@ -1,0 +1,29 @@
+input[type=text], input[type=password] {
+    padding: 5px;
+    font-size: 16pxs;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    width: 50%;
+}
+
+label {
+    font-size: 16px;
+    margin-right: 16px;
+}
+
+.container {
+    margin: auto; margin-top: 1%; 
+    padding: 50px; padding-top: 20px;
+    text-align: center; 
+    width: 40%; 
+    background-color: whitesmoke;
+    border: 1px dashed var(--cor-primaria); 
+
+    color: black;
+    border-radius: 10px;
+}
+
+.botao-entrar {
+    background-color: var(--cor-primaria);
+    color: white;
+}

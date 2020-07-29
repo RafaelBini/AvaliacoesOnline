@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +21,9 @@ import { AvaliacaoNovaComponent } from './components/avaliacao-nova/avaliacao-no
 import { AvaliacaoCriadaDialogComponent } from './dialogs/avaliacao-criada-dialog/avaliacao-criada-dialog.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AvaliacaoCorrecaoComponent } from './components/avaliacao-correcao/avaliacao-correcao.component';
+import { LoginComponent } from './components/login/login.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { AvaliacaoAlunoComponent } from './components/avaliacao-aluno/avaliacao-aluno.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,9 @@ import { AvaliacaoCorrecaoComponent } from './components/avaliacao-correcao/aval
     AvaliacaoProfessorComponent,
     AvaliacaoNovaComponent,
     AvaliacaoCriadaDialogComponent,
-    AvaliacaoCorrecaoComponent
+    AvaliacaoCorrecaoComponent,
+    LoginComponent,
+    AvaliacaoAlunoComponent
   ],
   imports: [
     BrowserModule,
@@ -46,9 +51,14 @@ import { AvaliacaoCorrecaoComponent } from './components/avaliacao-correcao/aval
     MatDatepickerModule,
     MatToolbarModule,
     MatTooltipModule,
-    DragDropModule
+    DragDropModule,
+    MatButtonToggleModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+
+  ],
+  bootstrap: [AppComponent],
+  exports: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

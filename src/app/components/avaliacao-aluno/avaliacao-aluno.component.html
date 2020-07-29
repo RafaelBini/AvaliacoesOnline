@@ -1,0 +1,226 @@
+<mat-horizontal-stepper linear #stepper>
+    <!-- <mat-horizontal-stepper linear [selectedIndex]="1" #stepper> -->
+
+    <mat-step>
+        <!-- <mat-step [editable]="false" [completed]="false"> -->
+        <ng-template matStepLabel>Em Preparação</ng-template>
+
+        <div style="text-align: center; box-sizing: content-box; font-size: 23px; margin-top: 40px;">
+            A avaliação iniciará em
+        </div>
+        <div style="text-align: center; box-sizing: content-box; font-size: 30px; margin-top: 40px;">
+            3 minutos
+        </div>
+
+        <br /><br />
+
+        <div style="text-align: justify; padding: 20px; margin: auto; width: 50%; background-color: whitesmoke;">
+            <table width="100%">
+                <tr>
+                    <td align="center">
+                        <b>Titulo da Avaliação</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Descrição da Avaliação, descrição da Avaliação, descrição da Avaliação, descrição da Avaliação,
+                        descrição da Avaliação, descrição da Avaliação, descrição da Avaliação, descrição da Avaliação,
+                        descrição da Avaliação, descrição da Avaliação.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <hr />
+                        <b>Professor</b>: Rafael Bini
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Início da Avaliação</b>: 31/07/2020 18:00
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Término da Avaliação</b>: 31/07/2020 19:00
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </mat-step>
+
+    <mat-step>
+        <!-- <mat-step [editable]="false" [completed]="false"> -->
+        <ng-template matStepLabel>Durante Avaliação</ng-template>
+        <div style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
+
+            <div align="center"
+                style="padding: 20px; background-color: whitesmoke;  color: black; width: 100%; border-radius: 10px;">
+                <b style="font-size: 22px;">Titulo da Avaliação</b>
+                <br /><br />
+                <div style="text-align: justify;">
+                    Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
+                    Descrição da
+                    Avaliação
+                    <br /><br />
+                    Professor: Rafael Bini
+                    <br /><br />
+                    Inicio: 31/07/2020 18:00
+                    <br />
+                    Término: 31/07/2020 19:00
+                    <br />
+                </div>
+                <br />
+                <div style="text-align: justify; ">
+                    Meu Grupo:
+                    <li>Matheus Cabral - <b>Finalizou</b></li>
+                    <li>Thyago Vinicius</li>
+                    <li>Marcos Kerchenr</li>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="questao" *ngFor="let questao of questoes; index as qi">
+
+                <table style="width: 100%;">
+
+                    <tr>
+                        <td style="padding-bottom: 20px; font-size: 15px;">
+                            {{qi + 1}}. {{questao.pergunta}}
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="questao.tipo == 1">
+                        <td>
+
+                            <textarea placeholder="Escreva aqui a resposta" style="width: 100%" rows="3"></textarea>
+                            <br />
+                            <button mat-icon-button matTooltip="Adicionar Imagem">
+                                <mat-icon>insert_photo</mat-icon>
+                            </button>
+                            <button mat-icon-button matTooltip="Adicionar Anexo">
+                                <mat-icon>attach_file</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="questao.tipo == 3">
+                        <td>
+                            <table width="100%">
+                                <tr *ngFor="let alternativa of questao.alternativas; index as ai">
+                                    <td valign="top" width="5px">
+                                        <input [id]="alternativa.texto" type="checkbox" />
+                                    </td>
+                                    <td style="word-wrap: break-word;">
+                                        <label style="cursor: pointer;" [for]="alternativa.texto">{{alternativa.texto}}
+                                        </label>
+
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td align="left" style="position: relative; padding-top: 20px;">
+                            <div>
+                                Valor: {{questao.valor}}/100
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div style="width: 100%;">
+            <button *ngIf="!finalizado" (click)="finalizado = true" mat-raised-button
+                style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
+                Sinalizar Finalização
+            </button>
+            <div *ngIf="finalizado"
+                style="margin: auto; text-align: center; width: 60%; background-color: whitesmoke; border-radius: 10px; margin-top: 15px; margin-bottom: 40px; font-size: 14px; padding: 10px; display: block;">
+                <h2>Finalização sinalizada!</h2>
+                Esta avaliação será finalizada quando todos do seu grupo sinalizarem também.
+            </div>
+        </div>
+
+    </mat-step>
+
+    <mat-step>
+        <!-- <mat-step [editable]="false" [completed]="false"> -->
+        <ng-template matStepLabel>Em Correção</ng-template>
+
+        <div style="margin: auto; text-align: center;">
+            <h2>Correções em Andamento</h2>
+        </div>
+
+        <div
+            style="margin: auto; margin-top: 30px; width: 100%; font-size: 22px; height: 50vh; overflow: auto; margin-bottom: 20px;">
+            <div class="individuo" style="border-color: var(--encerrada)">
+                Grupo 01 - Avaliação Corrigida
+                <br /><br />
+                <div style="font-size: 15px;">
+                    Nota: 96/100
+                </div>
+                <a routerLink="/aluno/avaliacao/correcao/1" mat-button
+                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
+                    Revisar
+                </a>
+            </div>
+
+            <div class="individuo" style="border-color: var(--em-correcao);">
+                Grupo 02 - Avaliação Aguardando Correção
+                <br /><br />
+                <div style="font-size: 15px;">
+                    Nota: 0/100
+                </div>
+                <a routerLink="/aluno/avaliacao/correcao/1" mat-button
+                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
+                    Corrigir
+                </a>
+            </div>
+            <div class="individuo" style="border-color: var(--em-correcao);">
+                Grupo 03 - Avaliação Aguardando Correção
+                <br /><br />
+                <div style="font-size: 15px;">
+                    Nota: 0/100
+                </div>
+                <a routerLink="/aluno/avaliacao/correcao/1" mat-button
+                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
+                    Corrigir
+                </a>
+            </div>
+        </div>
+
+
+    </mat-step>
+
+    <mat-step>
+        <!-- <mat-step [editable]="false" [completed]="false"> -->
+        <ng-template matStepLabel>Avaliação Encerrada</ng-template>
+
+        <div
+            style="text-align: center; margin: auto; width: 60%; background-color: whitesmoke; border-radius: 10px; padding: 30px; box-sizing: content-box; font-size: 23px; margin-top: 40px;">
+            <h2>Avaliação Encerrada</h2>
+            <br />
+            <span
+                style="font-size: 16px; background-color: var(--cor-primaria); padding: 20px; color: white; border-radius: 10px;">Sua
+                nota: 85/100</span>
+            <br /><br /><br />
+            <a mat-raised-button routerLink="/avaliacao/correcao/1">
+                Consultar Correção
+            </a>
+        </div>
+
+
+    </mat-step>
+
+
+</mat-horizontal-stepper>

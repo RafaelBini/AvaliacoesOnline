@@ -76,12 +76,13 @@
 
 
 
-    <mat-step [editable]="true"  state="disposicao">
+    <mat-step [editable]="true" state="disposicao">
         <ng-template matStepLabel>Disposição dos Alunos</ng-template>
 
         <table style="margin: auto; width: 60%; font-size: 18px;">
             <tr>
-                <td class="default-td" colspan="2" align="center" style="opacity: 1; background-color: whitesmoke; cursor: default; color: black;">
+                <td class="default-td" colspan="2" align="center"
+                    style="opacity: 1; background-color: whitesmoke; cursor: default; color: black;">
                     <h2>Disposição dos Alunos</h2>
                 </td>
             </tr>
@@ -97,15 +98,16 @@
                 </td>
             </tr>
             <tr *ngFor="let disposicao of disposicoes; index as i;">
-                <td class="choose-btn" (click)="disposicaoSelecionada = i"  [style.borderColor]="disposicaoSelecionada == i ? 'var(--cor-primaria)' : 'transparent'">
+                <td class="choose-btn" (click)="disposicaoSelecionada = i"
+                    [style.borderColor]="disposicaoSelecionada == i ? 'var(--cor-primaria)' : 'transparent'">
                     {{disposicao.nome}}
                 </td>
-            </tr>     
+            </tr>
             <tr>
                 <td align="center" colspan="2" style="background-color: whitesmoke;">
                     <button mat-raised-button matStepperNext>Próximo</button>
                 </td>
-            </tr>       
+            </tr>
         </table>
 
     </mat-step>
@@ -116,7 +118,8 @@
         <table class="choosing-table" style="margin: auto; width: 60%; font-size: 18px;">
 
             <tr>
-                <td colspan="2" align="center" style="opacity: 1; background-color: whitesmoke; cursor: default; color: black;">
+                <td colspan="2" align="center"
+                    style="opacity: 1; background-color: whitesmoke; cursor: default; color: black;">
                     <h2>Método de Correção</h2>
                 </td>
             </tr>
@@ -132,10 +135,11 @@
                 </td>
             </tr>
             <tr *ngFor="let correcao of correcoes; index as i;">
-                <td class="choose-btn" (click)="correcaoSelecionada = i"  [style.borderColor]="correcaoSelecionada == i ? 'var(--cor-primaria)' : 'transparent'">
+                <td class="choose-btn" (click)="correcaoSelecionada = i"
+                    [style.borderColor]="correcaoSelecionada == i ? 'var(--cor-primaria)' : 'transparent'">
                     {{correcao.nome}}
                 </td>
-            </tr>   
+            </tr>
             <tr>
                 <td align="center" colspan="2" style="background-color: whitesmoke;">
                     <button mat-raised-button matStepperNext>Próximo</button>
@@ -154,7 +158,8 @@
         <table class="choosing-table" style="margin: auto; width: 60%; font-size: 18px;">
 
             <tr>
-                <td colspan="2" align="center" style="opacity: 1; background-color: whitesmoke; cursor: default; color: black;">
+                <td colspan="2" align="center"
+                    style="opacity: 1; background-color: whitesmoke; cursor: default; color: black;">
                     <h2>Forma de Pontuação</h2>
                 </td>
             </tr>
@@ -170,10 +175,11 @@
                 </td>
             </tr>
             <tr *ngFor="let pontuacao of pontuacoes; index as i;">
-                <td class="choose-btn" (click)="pontuacaoSelecionada = i"  [style.borderColor]="pontuacaoSelecionada == i ? 'var(--cor-primaria)' : 'transparent'">
+                <td class="choose-btn" (click)="pontuacaoSelecionada = i"
+                    [style.borderColor]="pontuacaoSelecionada == i ? 'var(--cor-primaria)' : 'transparent'">
                     {{pontuacao.nome}}
                 </td>
-            </tr>   
+            </tr>
             <tr>
                 <td align="center" colspan="2" style="background-color: whitesmoke;">
                     <button mat-raised-button matStepperNext>Próximo</button>
@@ -187,7 +193,8 @@
 
         <ng-template matStepLabel>Questões</ng-template>
 
-        <div cdkDropList [cdkDropListData]="questoes" (cdkDropListDropped)="drop($event)" style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
+        <div cdkDropList [cdkDropListData]="questoes" (cdkDropListDropped)="drop($event)"
+            style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
 
             <div align="center"
                 style="background-color: whitesmoke; cursor: default; color: black; width: 100%; border-radius: 10px;">
@@ -202,36 +209,48 @@
                             <mat-icon style="cursor: move;" cdkDragHandle>drag_handle</mat-icon>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <textarea style="width: 100%" rows="4">{{questao.pergunta}}</textarea>
-                        </td>
-                    </tr>
 
                     <tr>
-                        <td>
-                            <select #tipo (change)="questao.tipo = tipo.value">
-                                <option *ngFor="let questaoTipo of questaoTipos; index as qti"  [selected]="questao.tipo == qti" [value]="qti">
+                        <td align="right" style="padding-bottom: 18px; position: relative;">
+
+                            <select style="padding: 8px;" #tipo (change)="questao.tipo = tipo.value">
+                                <option *ngFor="let questaoTipo of questaoTipos; index as qti"
+                                    [selected]="questao.tipo == qti" [value]="qti">
                                     {{questaoTipo.nome}}
                                 </option>
                             </select>
                         </td>
                     </tr>
 
+                    <tr>
+                        <td>
+                            Pergunta / Descrição da Questão:
+                            <br />
+                            <textarea style="width: 100%; max-width: 100%; padding: 5px;"
+                                rows="4">{{questao.pergunta}}</textarea>
+                        </td>
+                    </tr>
+
                     <tr *ngIf="questao.tipo == 1">
                         <td>
+                            Resposta:
+                            <br />
                             <textarea style="width: 100%" rows="3">{{questao.resposta}}</textarea>
                         </td>
                     </tr>
 
                     <tr *ngIf="questao.tipo == 3">
-                        <td >
-                            <table width="100%" cdkDropList [cdkDropListData]="questao.alternativas" (cdkDropListDropped)="drop($event)">
-                                <tr *ngFor="let alternativa of questao.alternativas; index as ai" >
-                                    <td style="background-color: white; cursor: move; position: relative; height: 40px;" cdkDrag>
-                                        <input [id]="alternativa.texto" [checked]="alternativa.correta" type="checkbox" />
+                        <td>
+                            <table width="100%" cdkDropList [cdkDropListData]="questao.alternativas"
+                                (cdkDropListDropped)="drop($event)">
+                                <tr *ngFor="let alternativa of questao.alternativas; index as ai">
+                                    <td style="background-color: white; cursor: move; position: relative; height: 40px;"
+                                        cdkDrag>
+                                        <input [id]="alternativa.texto" [checked]="alternativa.correta"
+                                            type="checkbox" />
                                         <label [for]="alternativa.texto">{{alternativa.texto}} </label>
-                                        <button mat-icon-button (click)="removerAlternativa(qi, ai)" style="position: absolute; top: 0px; right: 0px;">
+                                        <button mat-icon-button (click)="removerAlternativa(qi, ai)"
+                                            style="position: absolute; top: 0px; right: 0px;">
                                             <mat-icon style="color: var(--cor-perigosa)">cancel</mat-icon>
                                         </button>
                                     </td>
@@ -239,7 +258,9 @@
                                 <tr>
                                     <td style="background-color: white; height: 40px;">
                                         <input disabled type="checkbox" />
-                                        <input type="text" (keydown)="onNovaAlterKeyDown($event, qi, novaAlternativa.value)" #novaAlternativa style="width: 70%" />
+                                        <input type="text"
+                                            (keydown)="onNovaAlterKeyDown($event, qi, novaAlternativa.value)"
+                                            #novaAlternativa style="width: 70%" />
                                         <button (click)="addAlternativa(qi, novaAlternativa.value)" mat-icon-button>
                                             <mat-icon>add</mat-icon>
                                         </button>
@@ -247,11 +268,14 @@
                                 </tr>
                             </table>
                         </td>
-                    </tr>                       
+                    </tr>
 
 
                     <tr>
-                        <td align="right">
+                        <td align="right" style="position: relative; padding-top: 20px;">
+                            <div style="position: absolute; left: 0px;">
+                                Valor: <input style="padding: 7px;" type="number" max="100" min="1" value="10" />
+                            </div>
                             <button mat-icon-button matTooltip="Adicionar Imagem">
                                 <mat-icon>insert_photo</mat-icon>
                             </button>
@@ -266,7 +290,7 @@
                 </table>
             </div>
 
-            
+
             <div style="width: 100%;">
                 <button mat-raised-button (click)="finalizar()"
                     style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">

@@ -2,8 +2,6 @@ import { AvaliacaoCriadaDialogComponent } from './../../dialogs/avaliacao-criada
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import { transformAll } from '@angular/compiler/src/render3/r3_ast';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -122,7 +120,6 @@ export class AvaliacaoNovaComponent implements OnInit {
       resposta: "",
       alternativas: []
     },
-
   ];
 
 

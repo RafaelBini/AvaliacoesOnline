@@ -26,15 +26,6 @@
     color: black;    
 }
 
-.banco-de-questoes{
-    position: fixed;
-    height: 65%;
-    width: 300px;
-    right: 10px;
-    bottom: 20px;
-    border: 2px solid black;
-
-}
 
 .questao {
     position: relative; 
