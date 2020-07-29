@@ -1,4 +1,45 @@
-/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --em-preparacao: rgb(35, 149, 255);
+  --encerrada: rgb(95, 209, 95);
+  --em-correcao: rgb(255, 127, 52);
+  --em-avaliacao: rgb(238, 63, 63);
+  --cor-primaria: rgb(18, 97, 128);
+  --cor-secundaria: rgb(28, 116, 151);  
+  --cor-tranquila: rgb(95, 209, 95);
+  --cor-perigosa: rgb(199, 50, 30);
+}
+
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+textarea {
+    font-family: Arial;
+}
+
+/*  SCROLL BAR  */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;    
+  }  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 2px;
+  }   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--cor-primaria); 
+    border-radius: 4px;
+  }  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--cor-secundaria); 
+  }
+
+/*-------------------*/
+
+.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+  background-color: var(--cor-primaria) !important;
+}

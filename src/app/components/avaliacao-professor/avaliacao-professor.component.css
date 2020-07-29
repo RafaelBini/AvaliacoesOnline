@@ -1,0 +1,65 @@
+/* Parte 01 - Preparação */
+
+.grupo{
+    background-color: whitesmoke; 
+    color: var(--cor-primaria);
+    padding: 10px;
+    width: 45%; 
+    min-height: 80px; 
+    margin: auto;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    border: 1px dashed var(--cor-primaria);
+}
+    
+.aluno{
+    z-index: 1000;
+    width: 90%;
+    height: 50px;
+    background-color: whitesmoke;
+    border: 1px solid var(--cor-primaria);
+    border-left: 12px solid var(--cor-primaria);
+    color: black;
+    padding: 7px;
+    border-radius: 8px;
+    margin: auto;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    cursor: move
+}
+
+
+/* CDK DRAG & DROP */
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  /* Parte 02 - Durante Avaliação */
+
+  .individuo {
+    padding: 20px;
+    background-color: whitesmoke;
+    color: black;
+    margin: auto;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    position: relative;
+    width: 60%;
+    border: 1px solid black;
+    border-left: 12px solid black;
+  }

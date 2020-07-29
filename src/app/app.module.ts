@@ -19,6 +19,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AvaliacaoProfessorComponent } from './components/avaliacao-professor/avaliacao-professor.component';
 import { AvaliacaoNovaComponent } from './components/avaliacao-nova/avaliacao-nova.component';
 import { AvaliacaoCriadaDialogComponent } from './dialogs/avaliacao-criada-dialog/avaliacao-criada-dialog.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AvaliacaoCorrecaoComponent } from './components/avaliacao-correcao/avaliacao-correcao.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { AvaliacaoCriadaDialogComponent } from './dialogs/avaliacao-criada-dialo
     ProfessorComponent,
     AvaliacaoProfessorComponent,
     AvaliacaoNovaComponent,
-    AvaliacaoCriadaDialogComponent
+    AvaliacaoCriadaDialogComponent,
+    AvaliacaoCorrecaoComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,8 @@ import { AvaliacaoCriadaDialogComponent } from './dialogs/avaliacao-criada-dialo
     MatDatepickerModule,
     MatDatepickerModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

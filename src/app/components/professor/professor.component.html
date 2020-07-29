@@ -1,3 +1,4 @@
+
 <mat-tab-group mat-align-tabs="start">
     <mat-tab label="Avaliações">
         <div style="padding: 80px; padding-top: 30px; position: relative;">
@@ -11,12 +12,12 @@
                 </tr>
                 <tr>
                     <td>
-                        <div class="avalicao-card" style="border-left: 7px solid rgb(184, 171, 94);">
+                        <div class="avalicao-card" style="border-left: 7px solid var(--em-correcao);">
                             <h3><b>Avaliação 01</b></h3>
                             Uma avaliação para Teste
                             <br />
                             <br />
-                            <span class="linkCompartilhavel" style="background-color: rgb(184, 171, 94);"><a
+                            <span class="linkCompartilhavel" style="background-color: var(--em-correcao);"><a
                                     href="#">avaliacao.com/001001</a></span>
                             <button matTooltip="Copiar link" mat-icon-button>
                                 <mat-icon style="font-size: 17px;">content_copy</mat-icon>
@@ -27,7 +28,7 @@
                             Término: 31/07/2020 21:00
 
                             <a routerLink="avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box"
-                                style="background-color: rgb(184, 171, 94);">
+                                style="background-color: var(--em-correcao);">
                                 Status: Em Correção
                                 <hr />
                                 Corrigir Avaliações
@@ -40,7 +41,7 @@
 
                             <button matTooltip="Encerrar Avaliação" mat-icon-button
                                 style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: red;">cancel</mat-icon>
+                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
                             </button>
                         </div>
                     </td>
@@ -48,12 +49,12 @@
 
                 <tr>
                     <td>
-                        <div class="avalicao-card" style="border-left: 7px solid rgb(184, 94, 94);">
+                        <div class="avalicao-card" style="border-left: 7px solid var(--em-avaliacao);">
                             <h3><b>Avaliação 05</b></h3>
                             Uma avaliação para Teste
                             <br />
                             <br />
-                            <span class="linkCompartilhavel" style="background-color: rgb(184, 94, 94);"><a
+                            <span class="linkCompartilhavel" style="background-color: var(--em-avaliacao);"><a
                                     href="#">avaliacao.com/001001</a></span>
                             <button matTooltip="Copiar link" mat-icon-button>
                                 <mat-icon style="font-size: 17px;">content_copy</mat-icon>
@@ -64,7 +65,7 @@
                             Término: 31/07/2020 21:00
 
                             <a routerLink="avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box"
-                                style="background-color: rgb(184, 94, 94);">
+                                style="background-color: var(--em-avaliacao);">
                                 Status: Durante Avaliação
                                 <hr />
                                 Acompanhar os alunos
@@ -77,7 +78,7 @@
 
                             <button matTooltip="Excluir Avaliação" mat-icon-button
                                 style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: red;">cancel</mat-icon>
+                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
                             </button>
                         </div>
                     </td>
@@ -90,12 +91,12 @@
                 </tr>
                 <tr>
                     <td>
-                        <div class="avalicao-card" style="border-left: 7px solid rgb(94, 184, 101);">
+                        <div class="avalicao-card" style="border-left: 7px solid var(--encerrada);">
                             <h3><b>Avaliação 02</b></h3>
                             Uma avaliação para Teste
                             <br />
                             <br />
-                            <span class="linkCompartilhavel" style="background-color: rgb(94, 184, 101);"><a
+                            <span class="linkCompartilhavel" style="background-color: var(--encerrada);"><a
                                     href="#">avaliacao.com/001001</a></span>
                             <button matTooltip="Copiar link" mat-icon-button>
                                 <mat-icon style="font-size: 17px;">content_copy</mat-icon>
@@ -106,7 +107,7 @@
                             Término: 31/07/2020 21:00
 
                             <a routerLink="avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box"
-                                style="background-color: rgb(94, 184, 101);">
+                                style="background-color: var(--encerrada);">
                                 Status: Encerrada
                                 <hr />
                                 Consultar notas dos alunos
@@ -119,7 +120,7 @@
 
                             <button matTooltip="Encerrar Avaliação" mat-icon-button
                                 style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: red;">cancel</mat-icon>
+                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
                             </button>
                         </div>
                     </td>
@@ -153,7 +154,7 @@
 
                             <button matTooltip="Encerrar Avaliação" mat-icon-button
                                 style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: red;">cancel</mat-icon>
+                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
                             </button>
                         </div>
                     </td>
@@ -187,7 +188,7 @@
 
                             <button matTooltip="Encerrar Avaliação" mat-icon-button
                                 style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: red;">cancel</mat-icon>
+                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
                             </button>
                         </div>
                     </td>
@@ -195,7 +196,7 @@
             </table>
 
             <a routerLink="/nova-avaliacao" matTooltip="Nova Avaliação"
-                style="position: fixed; right: 50px; bottom: 50px; background-color: rgb(94, 184, 101); color: white"
+                style="position: fixed; right: 50px; bottom: 50px; background-color: var(--encerrada); color: white"
                 mat-fab>
                 <mat-icon>add</mat-icon>
             </a>

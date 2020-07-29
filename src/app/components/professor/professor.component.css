@@ -3,7 +3,7 @@
     width: 60%;
     padding: 10px;
     border-radius: 7px;
-    border-left: 7px solid rgb(70, 83, 206);
+    border-left: 7px solid var(--em-preparacao);
     position: relative;
     margin-bottom: 30px;
 }
@@ -14,7 +14,7 @@
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 5px;
-    background-color: rgb(70, 83, 206);
+    background-color: var(--em-preparacao);
 }
 
 .linkCompartilhavel a {
@@ -25,7 +25,7 @@
     position: absolute;
     height: 80px;
     width: 40%;
-    background-color: rgb(0, 123, 231);
+    background-color: var(--em-preparacao);
     bottom: 30px;
     right: 10px;
     border-radius: 5px;
