@@ -6,18 +6,23 @@ import { AvaliacaoNovaComponent } from './components/avaliacao-nova/avaliacao-no
 import { ProfessorComponent } from './components/professor/professor.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AlunoNovoComponent } from './components/aluno-novo/aluno-novo.component';
+import { AlunoComponent } from './components/aluno/aluno.component';
 
 
 const routes: Routes = [
+  { path: "professor/aluno/novo", component: AlunoNovoComponent },
   { path: "professor", component: ProfessorComponent },
   { path: "nova-avaliacao", component: AvaliacaoNovaComponent },
   { path: "professor/avaliacao/:id", component: AvaliacaoProfessorComponent },
   { path: "professor/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
   { path: "login", component: LoginComponent },
+  { path: "aluno", component: AlunoComponent },
   { path: "aluno/avaliacao/:id", component: AvaliacaoAlunoComponent },
   { path: "aluno/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
-  { path: "avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
+  { path: "avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent }, 
   { path: ":id", component: LoginComponent },
+  
 ];
 
 @NgModule({

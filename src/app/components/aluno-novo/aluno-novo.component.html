@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <form #userForm="ngForm">
+        {{ userForm.value | json }}
+        <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
+            <label for="matricula">GRR do aluno:</label>
+            <input required type="text" class="form-control" name="matricula" value="{{aluno.matricula}}" [(ngModel)]="aluno.matricula">
+        </div>
+        <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
+            <label for="nome">Nome do aluno:</label>
+            <input required type="text" class="form-control" name="nome" value="{{aluno.nome}}" [(ngModel)]="aluno.nome">
+        </div>
+        <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
+            <label for="email">E-mail do aluno:</label>
+            <input required type="email" class="form-control" name="email" value="{{aluno.email}}" [(ngModel)]="aluno.email">
+        </div>
+        <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
+            <label for="senha">Senha padrão do aluno:</label>
+            <input [disabled]="true" type="text" class="form-control" name="senha" value="TADS2020">  
+        </div>
+        <button (click)="cadastrar()" style="margin-left: 50%;" type="button" class="btn btn-success">Cadastrar</button>
+    </form>
+</div>

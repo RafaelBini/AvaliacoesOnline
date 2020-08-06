@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +25,9 @@ import { AvaliacaoCorrecaoComponent } from './components/avaliacao-correcao/aval
 import { LoginComponent } from './components/login/login.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AvaliacaoAlunoComponent } from './components/avaliacao-aluno/avaliacao-aluno.component';
+import { AlunoComponent } from './components/aluno/aluno.component';
+import { AlunoNovoComponent } from './components/aluno-novo/aluno-novo.component';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +38,9 @@ import { AvaliacaoAlunoComponent } from './components/avaliacao-aluno/avaliacao-
     AvaliacaoCriadaDialogComponent,
     AvaliacaoCorrecaoComponent,
     LoginComponent,
-    AvaliacaoAlunoComponent
+    AvaliacaoAlunoComponent,
+    AlunoComponent,
+    AlunoNovoComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +58,8 @@ import { AvaliacaoAlunoComponent } from './components/avaliacao-aluno/avaliacao-
     MatToolbarModule,
     MatTooltipModule,
     DragDropModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    FormsModule
   ],
   providers: [
 

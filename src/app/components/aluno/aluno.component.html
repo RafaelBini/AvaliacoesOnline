@@ -1,0 +1,113 @@
+<mat-tab-group mat-align-tabs="start">
+    <mat-tab label="Avaliação e Notas">
+        <div style="padding: 80px; padding-top: 30px; position: relative;">
+            <div style="overflow: auto; height: 362px;"> 
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Avaliação</th>
+                            <th scope="col">Professor</th>
+                            <th scope="col">Nota</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        <tr style="background-color: var(--em-correcao); color: white;">
+                            <td>1</td>
+                            <td>Avaliação 01</td>
+                            <td>Paulo</td>
+                            <td>-</td>
+                            <td>Em Correção</td>
+                        </tr>
+                        <tr style="background-color: var(--em-avaliacao); color: white;">
+                            <td>2</td>
+                            <td>Avaliação 05</td>
+                            <td>Sandramara</td>
+                            <td>-</td>
+                            <td>Durante Avaliação</td>
+                        </tr>
+                        <tr style="background-color: var(--encerrada); color: white;">
+                            <td>3</td>
+                            <td>Avaliação 02</td>
+                            <td>Dieval</td>
+                            <td>55</td>
+                            <td>Encerrada</td>
+                        </tr>
+                        <tr style="background-color: var(--em-preparacao); color: white;">
+                            <td>4</td>
+                            <td>Avaliação 03</td>
+                            <td>Carlos Felipe</td>
+                            <td>-</td>
+                            <td>Em Preparação</td>
+                        </tr>
+                        <tr style="background-color: var(--em-preparacao); color: white;">
+                            <td>5</td>
+                            <td>Avaliação 04</td>
+                            <td>Matheus Leonardo</td>
+                            <td>-</td>
+                            <td>Em Preparação</td>
+                        </tr>
+                        <tr style="background-color: var(--em-correcao); color: white;">
+                            <td>6</td>
+                            <td>Avaliação 06</td>
+                            <td>Marcos Kerchner</td>
+                            <td>-</td>
+                            <td>Em Correção</td>
+                        </tr>
+                        <tr style="background-color: var(--encerrada); color: white;">
+                            <td>7</td>
+                            <td>Matéria Teste 07</td>
+                            <td>Rafael Bini</td>
+                            <td>80</td>
+                            <td>Encerrada</td>
+                        </tr>
+                        <tr style="background-color: var(--encerrada); color: white;">
+                            <td>8</td>
+                            <td>Matéria Teste 08</td>
+                            <td>João Sorrisão</td>
+                            <td>94</td>
+                            <td>Encerrada</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        
+    </mat-tab>
+    <mat-tab label="Meu perfil">
+        <div>
+           <div class="container-fluid">
+                <form #userForm="ngForm">
+                    <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
+                        <label for="matricula">Matrícula:</label>
+                        <input required [disabled]="true" type="text" value="{{aluno.matricula}}" class="form-control" name="matricula" [(ngModel)]="aluno.matricula">
+                    </div>
+
+                    <div style="padding-left: 80px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
+                        <label for="nome">Nome:</label>
+                        <input required type="text" value="{{aluno.nome}}" class="form-control" name="nome" [(ngModel)]="aluno.nome">
+                    </div>
+                    
+                    <div style="padding-left: 80px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input required type="email" value="{{aluno.email}}" class="form-control" name="email" [(ngModel)]="aluno.email">
+                    </div>
+    
+                    <div style="padding-left: 80px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
+                        <label for="senha">Senha:</label>
+                        <input required [disabled]="isDisabled" type="password" value={{aluno.senha}} class="form-control" name="senha" [(ngModel)]="aluno.senha">
+                        <svg (click)="alterarSenha()" matTooltip="Alterar senha" style="position: absolute; top: 35px; right: 40px;" width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                        </svg>      
+                    </div>
+    
+                    <div *ngIf="divNovaSenha" style="padding-left: 80px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
+                        <label for="senha">Repita a nova senha:</label>
+                        <input required type="password" class="form-control" value={{novaSenha}} name="nova_senha">
+                    </div>
+                    <button (click)="editar()" style="margin-left: 50%;" type="button" class="btn btn-primary">Editar</button>
+                </form>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>
