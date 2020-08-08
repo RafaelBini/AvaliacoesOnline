@@ -1,5 +1,7 @@
+import { AlunoNovoComponent } from './../aluno-novo/aluno-novo.component';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
-import { Professor } from 'src/app/professor';
+
 
 @Component({
   selector: 'app-professor',
@@ -7,31 +9,32 @@ import { Professor } from 'src/app/professor';
   styleUrls: ['./professor.component.css']
 })
 export class ProfessorComponent implements OnInit {
-  public isDisabled = true;
-  public divNovaSenha = false;
-  public senha = "professor";
-  public novaSenha = "";
-  public prof = new Professor("professor@gmail.com", "professor", "");
-  constructor() { }
+  public alterar = false;
+
+  public alunos = [
+    { nome: "godo@gmail.com", email: "Godofredo", matricula: "grr20178700" },
+    { nome: "rub@gmail.com", email: "Ruberlinda", matricula: "grr20181110" },
+    { nome: "cdnleon@outlook.com", email: "Leon Martins", matricula: "grr20194580" },
+    { nome: "nil@gmail.com", email: "Nilce Moretto", matricula: "grr20171234" },
+    { nome: "fredb12@hotmail.com", email: "Fred Desimpedidos", matricula: "grr20184658" },
+    { nome: "marilia@gmail.com", email: "Marília Galvão", matricula: "grr20167755" },
+    { nome: "bueno@gmail.com", email: "Galvão Bueno", matricula: "grr20184848" },
+    { nome: "alanzoka@hotmail.com", email: "Alan Ferreira", matricula: "grr20178452" },
+    { nome: "balga@outlook.com", email: "Mari Balga", matricula: "grr20196658" },
+    { nome: "clone@gmail.com", email: "Henrique Grosse", matricula: "grr20184610" },
+  ]
+
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
 
-  alterarSenha(){
-    this.isDisabled = false;
-    this.divNovaSenha = true;
+  addAluno() {
+    this.dialog.open(AlunoNovoComponent, {
+
+    });
   }
 
-  editar(){
-    this.isDisabled = true;
-    this.divNovaSenha = false;
-    confirm("Sua senha foi alterada com sucesso");
-    //this.senha = this.novaSenha;
-    //this.teste[0].senha = this.teste[0].nova_senha;
-    if(this.prof.novaSenha != ""){
-      this.prof.senha = this.prof.novaSenha;
-      this.prof.novaSenha = " ";
-    }
-  }
+
 
 }

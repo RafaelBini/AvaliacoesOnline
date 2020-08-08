@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Aluno } from 'src/app/aluno';
+import { Aluno } from 'src/app/models/aluno';
 
 @Component({
   selector: 'app-aluno-novo',
@@ -13,9 +13,5 @@ export class AlunoNovoComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  cadastrar(){
-    confirm("Aluno cadastrado com sucesso");
-    window.location.href = "http://localhost:4200/professor";
-  }
 
 }

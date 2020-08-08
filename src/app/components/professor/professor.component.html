@@ -229,142 +229,115 @@
 
     </mat-tab>
     <mat-tab label="Alunos">
-        <div>
-            <div style="overflow: auto; height: 400px;">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Matrícula</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>grr20178700</td>
-                            <td>Godofredo</td>
-                            <td>godo@gmail.com</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>grr20181110</td>
-                            <td>Ruberlinda</td>
-                            <td>rub@gmail.com</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>grr20194580</td>
-                            <td>Leon Martins</td>
-                            <td>cdnleon@outlook.com</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">4</th>
-                            <td>grr20171234</td>
-                            <td>Nilce Moretto</td>
-                            <td>nil@gmail.com</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">5</th>
-                            <td>grr20184658</td>
-                            <td>Fred Desimpedidos</td>
-                            <td>fredb12@hotmail.com</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">6</th>
-                            <td>grr20167755</td>
-                            <td>Marília Galvão</td>
-                            <td>marilia@gmail.com</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">7</th>
-                            <td>grr20184848</td>
-                            <td>Galvão Bueno</td>
-                            <td>bueno@gmail.com</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">8</th>
-                            <td>grr20178452</td>
-                            <td>Alan Ferreira</td>
-                            <td>alanzoka@hotmail.com</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">9</th>
-                            <td>grr20196658</td>
-                            <td>Mari Balga</td>
-                            <td>balga@outlook.com</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">10</th>
-                            <td>grr20184610</td>
-                            <td>Henrique Grosse</td>
-                            <td>clone@gmail.com</td>
-                        </tr>
-                    </tbody>   
-                </table>
-            </div>
 
-            <a routerLink="/professor/aluno/novo" matTooltip="Novo Aluno"
-                style="position: fixed; right: 100px; bottom: 50px; background-color: var(--cor-primaria); color: white"
-                mat-fab>
-                <mat-icon>add</mat-icon>
-            </a>
-            <a matTooltip="Importar alunos via CSV"
-                style="position: fixed; right: 30px; bottom: 50px; background-color: var(--cor-primaria); color: white"
-                mat-fab>
-                <mat-icon>arrow_upward</mat-icon>
-            </a>
-        </div>
-        
-        
+        <table class="tabela-alunos">
+            <tr>
+                <td align="center">
+                    <input type="checkbox" />
+                </td>
+                <td align="center">
+                    <b>Matricula</b>
+                </td>
+                <td align="center">
+                    <b>Email</b>
+                </td>
+                <td align="center">
+                    <b>Nome</b>
+                </td>
+                <td align="center">
+                    <b>Opções</b>
+                </td>
+            </tr>
+            <tr *ngFor="let aluno of alunos" class="aluno-line">
+                <td align="center">
+                    <input type="checkbox" />
+                </td>
+                <td align="center">
+                    {{aluno.matricula}}
+                </td>
+                <td>
+                    {{aluno.nome}}
+                </td>
+                <td>
+                    {{aluno.email}}
+                </td>
+                <td align="center">
+                    <button mat-icon-button>
+                        <mat-icon>
+                            create
+                        </mat-icon>
+                    </button>
+                    <button mat-icon-button>
+                        <mat-icon style="color: var(--cor-perigosa)">
+                            delete
+                        </mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+
+        <button (click)="addAluno()" matTooltip="Novo Aluno"
+            style="position: fixed; right: 100px; bottom: 50px; background-color: var(--cor-primaria); color: white"
+            mat-fab>
+            <mat-icon>add</mat-icon>
+        </button>
+        <a matTooltip="Importar alunos via CSV"
+            style="position: fixed; right: 30px; bottom: 50px; background-color: var(--cor-primaria); color: white"
+            mat-fab>
+            <mat-icon>arrow_upward</mat-icon>
+        </a>
+
+
+
     </mat-tab>
     <mat-tab label="Meu Perfil">
-        <!--<form action="/professor">
-            <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; position: relative;" class="form-group row">
-                <label for="email" class="col-sm-2 col-form-label">E-mail</label>
-                <div class="col-sm-10">
-                    <input type="text" value="professor@ufpr.br">
-                </div>
-            </div>
-            <div style="padding-left: 80px; position: relative;" class="form-group row">
-                <label for="senha" class="col-sm-2 col-form-label">Senha:</label>
-                <div class="col-sm-10">
-                    <input type="password" value="professor">
-                </div>
-            </div>
-            <button [disabled]="true" type="button" class="btn btn-primary">Editar</button>
-        </form>-->
-        <div class="container-fluid">
-            <form #userForm="ngForm">
-                <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
-                    <label for="email">E-mail:</label>
-                    <input required type="email" value="professor@ufpr.br" class="form-control" name="email" [(ngModel)]="prof.email">
-                </div>
 
-                <div style="padding-left: 80px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
-                    <label for="senha">Senha:</label>
-                    <input required [disabled]="isDisabled" type="password" value={{senha}} class="form-control" name="senha" [(ngModel)]="prof.senha">
-                    <!--<button (click)="alterarSenha()" matTooltip="Alterar senha" mat-icon-button
-                        style="position: absolute; top: 25px; right: 40px;">
-                        <mat-icon>create</mat-icon>
-                    </button>-->
-                    <svg (click)="alterarSenha()" matTooltip="Alterar senha" style="position: absolute; top: 35px; right: 40px;" width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                    </svg>
+        <div style="background-color: whitesmoke; width: 50%; border-radius: 10px; margin: auto;">
+            <table class="tabela-editar-perfil">
+                <tr>
+                    <td colspan='2' align="center">
+                        <h2>Alterar Meus Dados</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%">
+                        E-mail:
+                    </td>
+                    <td>
+                        <input required type="email" value="professor@ufpr.br" name="email">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Senha:
+                    </td>
+                    <td>
+                        <input required [disabled]="!alterar" type="password" value="senha123" name="senha">
 
-                    
-                </div>
+                        <button (click)="alterar = true" mat-button matTooltip="Alterar senha">
+                            <mat-icon>create</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="alterar">
+                    <td>
+                        Confirmar Senha:
+                    </td>
+                    <td>
+                        <input required type="password" class="form-control" value="" name="nova_senha">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' align="center">
+                        <button type="button" mat-raised-button>Editar</button>
+                    </td>
+                </tr>
 
-                <div *ngIf="divNovaSenha" style="padding-left: 80px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
-                    <label for="senha">Repita a nova senha:</label>
-                    <input required type="password" class="form-control" value={{novaSenha}} name="nova_senha" [(ngModel)]="prof.novaSenha">
-                </div>
-                <button (click)="editar()" style="margin-left: 50%;" type="button" class="btn btn-primary">Editar</button>
-            </form>
+            </table>
         </div>
-        
-        
+
+
+
     </mat-tab>
 </mat-tab-group>

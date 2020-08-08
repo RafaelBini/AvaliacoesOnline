@@ -1,22 +1,50 @@
-<div class="container-fluid">
-    <form #userForm="ngForm">
-        {{ userForm.value | json }}
-        <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
-            <label for="matricula">GRR do aluno:</label>
-            <input required type="text" class="form-control" name="matricula" value="{{aluno.matricula}}" [(ngModel)]="aluno.matricula">
-        </div>
-        <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
-            <label for="nome">Nome do aluno:</label>
-            <input required type="text" class="form-control" name="nome" value="{{aluno.nome}}" [(ngModel)]="aluno.nome">
-        </div>
-        <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
-            <label for="email">E-mail do aluno:</label>
-            <input required type="email" class="form-control" name="email" value="{{aluno.email}}" [(ngModel)]="aluno.email">
-        </div>
-        <div style="padding-left: 80px; padding-top: 30px; padding-bottom: 5px; padding-right: 80px; position: relative;" class="form-group">
-            <label for="senha">Senha padrão do aluno:</label>
-            <input [disabled]="true" type="text" class="form-control" name="senha" value="TADS2020">  
-        </div>
-        <button (click)="cadastrar()" style="margin-left: 50%;" type="button" class="btn btn-success">Cadastrar</button>
-    </form>
+<div style="padding: 10px;">
+    <table class="tabela-aluno">
+        <tr>
+            <td colspan="2" align="center">
+                <h2>Novo Aluno</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="matricula">GRR do aluno:</label>
+            </td>
+            <td>
+                <input required type="text" class="form-control" name="matricula" value="{{aluno.matricula}}"
+                    [(ngModel)]="aluno.matricula">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="nome">Nome do aluno:</label>
+            </td>
+            <td>
+                <input required type="text" class="form-control" name="nome" value="{{aluno.nome}}"
+                    [(ngModel)]="aluno.nome">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="email">E-mail do aluno:</label>
+            </td>
+            <td>
+                <input required type="email" class="form-control" name="email" value="{{aluno.email}}"
+                    [(ngModel)]="aluno.email">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="senha">Senha padrão do aluno:</label>
+            </td>
+            <td>
+                <input type="text" class="form-control" name="senha" value="TADS2020">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <button mat-button mat-dialog-close
+                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;">Cadastrar</button>
+            </td>
+        </tr>
+    </table>
 </div>

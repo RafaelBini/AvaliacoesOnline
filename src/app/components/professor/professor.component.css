@@ -40,3 +40,33 @@
     right: 10px;
     cursor: pointer;
 }
+
+/* ALUNOS */
+
+.tabela-alunos{
+    width: 80%; margin: auto; margin-top: 20px;
+    border-collapse: collapse;    
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.tabela-alunos td{
+    background-color: whitesmoke;
+    border-bottom: 2px solid white;
+    padding: 6px;    
+}
+
+.tabela-alunos b{
+    font-size: 17px;
+}
+
+/* PERFIL */
+
+.tabela-editar-perfil {
+    width: 90%; margin: auto; margin-top: 10px;
+
+}
+
+.tabela-editar-perfil td {
+    padding: 11px;
+}
