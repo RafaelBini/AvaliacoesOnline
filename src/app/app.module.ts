@@ -27,6 +27,11 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AvaliacaoAlunoComponent } from './components/avaliacao-aluno/avaliacao-aluno.component';
 import { AlunoComponent } from './components/aluno/aluno.component';
 import { AlunoNovoComponent } from './components/aluno-novo/aluno-novo.component';
+import { InfoQuestaoComponent } from './dialogs/info-questao/info-questao.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { BuscarQuestaoComponent } from './dialogs/buscar-questao/buscar-questao.component';
 
 
 @NgModule({
@@ -40,7 +45,9 @@ import { AlunoNovoComponent } from './components/aluno-novo/aluno-novo.component
     LoginComponent,
     AvaliacaoAlunoComponent,
     AlunoComponent,
-    AlunoNovoComponent
+    AlunoNovoComponent,
+    InfoQuestaoComponent,
+    BuscarQuestaoComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +66,10 @@ import { AlunoNovoComponent } from './components/aluno-novo/aluno-novo.component
     MatTooltipModule,
     DragDropModule,
     MatButtonToggleModule,
-    FormsModule
+    FormsModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [
 

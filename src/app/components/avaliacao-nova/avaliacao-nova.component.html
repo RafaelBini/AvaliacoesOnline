@@ -15,7 +15,7 @@
             </tr>
 
             <tr>
-                <td>
+                <td width="25%">
                     Título:
                 </td>
                 <td>
@@ -37,7 +37,13 @@
                     Inicio:
                 </td>
                 <td>
-                    <input type="datetime-local" [value]="hojeFormatado" />
+                    <input type="datetime-local" [value]="hojeFormatado" *ngIf="!isInicioIndeterminado" />
+
+                    <mat-checkbox style="margin-left: 5px;" #inicioIndeterminado
+                        (change)="isInicioIndeterminado = inicioIndeterminado.checked">
+
+                        <span style="font-size: 12px;">Indeterminado</span>
+                    </mat-checkbox>
                 </td>
             </tr>
             <tr>
@@ -45,8 +51,14 @@
                     Término:
                 </td>
                 <td>
-                    <input type="datetime-local" [value]="hojeFormatado" />
                     <!--min="2020-07-28T16:15:23" -->
+                    <input type="datetime-local" [value]="hojeFormatado" *ngIf="!isTerminoIndeterminado" />
+
+                    <mat-checkbox style="margin-left: 5px;" #terminoIndeterminado
+                        (change)="isTerminoIndeterminado = terminoIndeterminado.checked">
+
+                        <span style="font-size: 12px;">Indeterminado</span>
+                    </mat-checkbox>
                 </td>
             </tr>
             <tr>
@@ -57,15 +69,25 @@
             <tr>
                 <td valign="top" align="left" colspan="2">
 
-                    <input id="aleatorio" type="checkbox" checked />
-                    <label for="aleatorio">
+                    <mat-checkbox [checked]="true">
+
                         Ordenar questões de forma aleatória
-                    </label>
+                    </mat-checkbox>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" align="left" colspan="2">
+
+                    <mat-checkbox>
+
+                        Bloquear participação de alunos atrasados
+                    </mat-checkbox>
                 </td>
             </tr>
             <tr>
                 <td align="center" colspan="2">
-                    <button mat-raised-button matStepperNext style="margin: 20px;">OK</button>
+                    <button mat-button matStepperNext
+                        style="margin: 20px; background-color: var(--cor-primaria); color: white;">OK</button>
                 </td>
             </tr>
         </table>
@@ -131,7 +153,56 @@
                         {{correcoes[correcaoSelecionada].icone}}
                     </mat-icon>
                     <br />
+                    <div *ngIf="correcaoSelecionada == 2"
+                        style="width: 90%; padding: 4px; border-radius: 4px; color: white; background-color: var(--cor-primaria);">
+                        <table style="width: 100%; text-align: center;">
+                            <tr *ngIf="disposicaoSelecionada == 0">
+                                <td>CADA ALUNO</td>
+                                <td style="font-size: 11px;">CORRIGE</td>
+                                <td>
+                                    <select style="text-align: center;" #SELECT_QTD
+                                        (change)="selectParesChange(SELECT_QTD.value)">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option value="DEFINIR">DEFINIR</option>
+                                        <option>TODOS</option>
+                                    </select>
+                                    <input *ngIf="correcaoParesQtd" type="number" style="width: 30px" />
+                                    ALUNO(S)
+                                </td>
+                            </tr>
+                            <tr *ngIf="disposicaoSelecionada != 0">
+                                <td>
+                                    CADA <select>
+                                        <option>ALUNO</option>
+                                        <option>GRUPO</option>
+                                    </select>
+                                </td>
+                                <td style="font-size: 11px;">CORRIGE</td>
+                                <td>
+                                    <select style="text-align: center;" #SELECT_QTD
+                                        (change)="selectParesChange(SELECT_QTD.value)">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option value="DEFINIR">DEFINIR</option>
+                                        <option>TODOS</option>
+                                    </select>
+                                    <input *ngIf="correcaoParesQtd" type="number" style="width: 30px" />
+                                    GRUPO(S)
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br />
                     {{correcoes[correcaoSelecionada].descricao}}
+                    <br />
+
                 </td>
             </tr>
             <tr *ngFor="let correcao of correcoes; index as i;">
@@ -212,6 +283,11 @@
 
                     <tr>
                         <td align="right" style="padding-bottom: 18px; position: relative;">
+
+                            <button STYLE="position: absolute; left: 3px;" mat-icon-button
+                                (click)="openInfoQuestao(questao)">
+                                <mat-icon>info</mat-icon>
+                            </button>
 
                             <select style="padding: 8px;" #tipo (change)="questao.tipo = tipo.value">
                                 <option *ngFor="let questaoTipo of questaoTipos; index as qti"
@@ -301,6 +377,11 @@
             <button mat-fab matTooltip="Adiconar Questão" (click)="addQuestao()"
                 style="position: fixed; bottom: 30px; right: 30px; background-color: var(--cor-primaria);">
                 <mat-icon style="color: white;">add</mat-icon>
+            </button>
+
+            <button mat-fab matTooltip="Buscar Questão" (click)="buscarQuestao()"
+                style="position: fixed; bottom: 100px; right: 30px; background-color: var(--cor-primaria);">
+                <mat-icon style="color: white;">folder_open</mat-icon>
             </button>
 
         </div>

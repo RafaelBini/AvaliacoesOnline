@@ -13,16 +13,15 @@ import { AlunoComponent } from './components/aluno/aluno.component';
 const routes: Routes = [
   { path: "professor/aluno/novo", component: AlunoNovoComponent },
   { path: "professor", component: ProfessorComponent },
-  { path: "nova-avaliacao", component: AvaliacaoNovaComponent },
-  { path: "professor/avaliacao/:id", component: AvaliacaoProfessorComponent },
-  { path: "professor/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
   { path: "login", component: LoginComponent },
   { path: "aluno", component: AlunoComponent },
+  { path: "professor/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
+  { path: "professor/avaliacao/nova", component: AvaliacaoNovaComponent },
+  { path: "professor/avaliacao/:id", component: AvaliacaoProfessorComponent },
   { path: "aluno/avaliacao/:id", component: AvaliacaoAlunoComponent },
   { path: "aluno/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
-  { path: "avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent }, 
+  { path: "avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
   { path: ":id", component: LoginComponent },
-  
 ];
 
 @NgModule({

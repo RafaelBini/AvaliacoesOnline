@@ -12,16 +12,16 @@ export class ProfessorComponent implements OnInit {
   public alterar = false;
 
   public alunos = [
-    { nome: "godo@gmail.com", email: "Godofredo", matricula: "grr20178700" },
-    { nome: "rub@gmail.com", email: "Ruberlinda", matricula: "grr20181110" },
-    { nome: "cdnleon@outlook.com", email: "Leon Martins", matricula: "grr20194580" },
-    { nome: "nil@gmail.com", email: "Nilce Moretto", matricula: "grr20171234" },
-    { nome: "fredb12@hotmail.com", email: "Fred Desimpedidos", matricula: "grr20184658" },
-    { nome: "marilia@gmail.com", email: "Marília Galvão", matricula: "grr20167755" },
-    { nome: "bueno@gmail.com", email: "Galvão Bueno", matricula: "grr20184848" },
-    { nome: "alanzoka@hotmail.com", email: "Alan Ferreira", matricula: "grr20178452" },
-    { nome: "balga@outlook.com", email: "Mari Balga", matricula: "grr20196658" },
-    { nome: "clone@gmail.com", email: "Henrique Grosse", matricula: "grr20184610" },
+    { email: "godo@gmail.com", nome: "Godofredo", matricula: "grr20178700" },
+    { email: "rub@gmail.com", nome: "Ruberlinda", matricula: "grr20181110" },
+    { email: "cdnleon@outlook.com", nome: "Leon Martins", matricula: "grr20194580" },
+    { email: "nil@gmail.com", nome: "Nilce Moretto", matricula: "grr20171234" },
+    { email: "fredb12@hotmail.com", nome: "Fred Desimpedidos", matricula: "grr20184658" },
+    { email: "marilia@gmail.com", nome: "Marília Galvão", matricula: "grr20167755" },
+    { email: "bueno@gmail.com", nome: "Galvão Bueno", matricula: "grr20184848" },
+    { email: "alanzoka@hotmail.com", nome: "Alan Ferreira", matricula: "grr20178452" },
+    { email: "balga@outlook.com", nome: "Mari Balga", matricula: "grr20196658" },
+    { email: "clone@gmail.com", nome: "Henrique Grosse", matricula: "grr20184610" },
   ]
 
   constructor(private dialog: MatDialog) { }

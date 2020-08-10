@@ -1,3 +1,5 @@
+import { BuscarQuestaoComponent } from './../../dialogs/buscar-questao/buscar-questao.component';
+import { InfoQuestaoComponent } from './../../dialogs/info-questao/info-questao.component';
 import { AvaliacaoCriadaDialogComponent } from './../../dialogs/avaliacao-criada-dialog/avaliacao-criada-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
@@ -13,6 +15,8 @@ export class AvaliacaoNovaComponent implements OnInit {
 
   constructor(public router: Router, public dialog: MatDialog) { }
   public hojeFormatado = new Date().toISOString().substr(0, 10) + "T00:00";
+  public isTerminoIndeterminado = false;
+  public isInicioIndeterminado = false;
 
   public disposicoes = [
     {
@@ -51,7 +55,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     },
     {
       nome: "Pelos Pares",
-      descricao: "Neste método de correção os próprios alunos corrigem as avaliações uns dos outros. A nota é definida pela média das notas atribuidas pelos alunos.",
+      descricao: "Neste método de correção os próprios alunos corrigem as avaliações uns dos outros.",
       icone: "sync_alt"
     },
     {
@@ -61,6 +65,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     }
   ];
   public correcaoSelecionada = 0;
+  public correcaoParesQtd;
 
   public pontuacoes = [
     {
@@ -123,6 +128,7 @@ export class AvaliacaoNovaComponent implements OnInit {
   ];
 
 
+
   ngOnInit(): void {
     console.log(this.hojeFormatado);
   }
@@ -165,7 +171,25 @@ export class AvaliacaoNovaComponent implements OnInit {
     this.dialog.open(AvaliacaoCriadaDialogComponent);
   }
 
+  selectParesChange(opcaoSelecionada) {
+    if (opcaoSelecionada == 'DEFINIR') {
+      this.correcaoParesQtd = 2;
+    }
+    else {
+      this.correcaoParesQtd = null;
+    }
+  }
 
+  openInfoQuestao(questao) {
+    this.dialog.open(InfoQuestaoComponent, {
+      width: '80%'
+    });
+  }
 
+  buscarQuestao() {
+    this.dialog.open(BuscarQuestaoComponent, {
+      width: '75%'
+    });
+  }
 
 }

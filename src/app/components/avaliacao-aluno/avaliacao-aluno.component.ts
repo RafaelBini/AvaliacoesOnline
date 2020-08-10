@@ -33,6 +33,13 @@ export class AvaliacaoAlunoComponent implements OnInit {
     },
   ];
 
+  alunosOnline = [
+    { nome: "Rafael Bini" },
+    { nome: "Matheus Leonardo" },
+    { nome: "Douglas Marques" },
+    { nome: "Guilherme Cruz" },
+  ]
+
 
   ngOnInit(): void {
   }

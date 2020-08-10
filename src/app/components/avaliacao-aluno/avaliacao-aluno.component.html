@@ -18,7 +18,9 @@
             <table width="100%">
                 <tr>
                     <td align="center">
-                        <b>Titulo da Avaliação</b>
+                        <b>
+                            <h2>Titulo da Avaliação</h2>
+                        </b>
                     </td>
                 </tr>
                 <tr>
@@ -30,7 +32,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <hr />
+                        <br />
                         <b>Professor</b>: Rafael Bini
                     </td>
                 </tr>
@@ -42,6 +44,15 @@
                 <tr>
                     <td>
                         <b>Término da Avaliação</b>: 31/07/2020 19:00
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <h1>Alunos Online</h1>
+            <table>
+                <tr *ngFor="let aluno of alunosOnline">
+                    <td>
+                        <li>{{aluno.nome}}</li>
                     </td>
                 </tr>
             </table>
@@ -89,7 +100,7 @@
 
                     <tr>
                         <td style="padding-bottom: 20px; font-size: 15px;">
-                            {{qi + 1}}. {{questao.pergunta}}
+                            <b>{{qi + 1}}</b>/{{questoes.length}}. {{questao.pergunta}}
                         </td>
                     </tr>
 
@@ -199,6 +210,15 @@
             </div>
         </div>
 
+        <div
+            style="background-color: whitesmoke; padding: 17px; border-radius: 8px; margin: auto; width: 60%; text-align: center;">
+            <span style="font-size: 18px;">Aguardando os outros alunos corrigirem as avaliações...</span>
+            <div style="background-color: white; position: relative; border-radius: 4px; height: 30px;">
+                <span
+                    style="position: absolute; top: 0px; color: var(--cor-primaria); font-size: 22px; line-height: 30px;">75%</span>
+                <div style="background-color: var(--em-correcao); width: 75%; height: 30px; border-radius: 4px;"></div>
+            </div>
+        </div>
 
     </mat-step>
 

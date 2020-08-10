@@ -1,0 +1,33 @@
+* {
+    font-size: 17px;
+}
+
+.questao {
+    width: 90%;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    text-align: justify;
+    padding: 7px;
+    margin: auto;
+    margin-bottom: 20px;
+    font-size: 13px;
+    display: flexbox;
+    position: relative;
+    border: 1px dashed transparent;
+}
+
+.questao:hover{
+    border: 1px dashed var(--cor-primaria);
+    cursor: pointer;
+}
+
+.tag{
+    padding: 3px;
+    background-color: var(--cor-primaria);
+    color: white;
+    margin-right: 4px;
+    border-radius: 5px;
+    font-size: 11px;
+    width: fit-content;
+    display: flexbox;
+}
