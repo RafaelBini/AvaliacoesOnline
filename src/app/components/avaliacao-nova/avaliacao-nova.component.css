@@ -78,7 +78,7 @@
     padding: 10px;  
     width: 100%; 
     font-size: 15px;
-    border: 1px dashed  var(--cor-primaria);
+    border: 1px dashed var(--cor-primaria);
   }
 
   .botao-tipo:hover {

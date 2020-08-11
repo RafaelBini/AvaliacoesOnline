@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Avaliacao } from './../../models/avaliacao';
+import { ComumService } from './../../services/comum.service';
+import { Questao } from './../../models/questao';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-buscar-questao',
@@ -8,70 +12,92 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class BuscarQuestaoComponent implements OnInit {
 
-  constructor(private snack: MatSnackBar) { }
+  constructor(public dialogRef: MatDialogRef<BuscarQuestaoComponent>,
+    @Inject(MAT_DIALOG_DATA) public avaliacao: Avaliacao, private snack: MatSnackBar, public comumService: ComumService) { }
 
-  public questoes: any[] = [
+  public questoes: Questao[] = [
     {
       pergunta: "Qual é a cor da grama?",
       tags: ["grama", "botânica"],
       tipo: 1,
-      nivel: 1
+      nivelDificuldade: 1,
+      alternativas: []
     },
     {
       pergunta: "Quanto é 2 + 2?",
       tags: ["matemática", "soma", "cálculo", "números"],
-      tipo: 1,
-      nivel: 1
+      tipo: 3,
+      nivelDificuldade: 1,
+      alternativas: [
+        { texto: "1", correta: false },
+        { texto: "2", correta: false },
+        { texto: "3", correta: false },
+        { texto: "4", correta: true },
+      ]
     },
     {
       pergunta: "Por que o céu é azul?",
       tags: ["astronomia", "cores", "química"],
       tipo: 1,
-      nivel: 4
+      nivelDificuldade: 4,
+      alternativas: []
     },
     {
       pergunta: "Qual é o país mais populoso do mundo?",
       tags: ["geografia", "população", "conhecimentos gerais"],
       tipo: 1,
-      nivel: 3
+      nivelDificuldade: 3,
+      alternativas: []
     },
     {
       pergunta: "Quais são os nomes continentes do planeta Terra?",
       tags: ["geografia", "território"],
       tipo: 1,
-      nivel: 3
+      nivelDificuldade: 3,
+      alternativas: []
     },
   ];
 
+  questoesFiltradas: Array<Questao>;
+
+  filtroNivelDificuldade: number = -1;
+  filtroTermoPesquisado: string;
+
   ngOnInit(): void {
+    this.questoesFiltradas = this.questoes;
   }
 
-  getNivel(numero) {
-    if (numero == 1) {
-      return "Muito Fácil";
-    }
-    else if (numero == 2) {
-      return "Fácil";
-    }
-    else if (numero == 3) {
-      return "Médio";
-    }
-    else if (numero == 4) {
-      return "Difícil";
-    }
-    else if (numero == 5) {
-      return "Muito Difícil";
-    }
-    else {
-      return "Indeterminado";
-    }
-  }
 
   add(index) {
-    this.questoes.splice(index, 1);
+    var questaoParaAdicionar = this.questoesFiltradas.splice(index, 1);
+    this.avaliacao.questoes.push(questaoParaAdicionar[0]);
     this.snack.open("Questão adicionada", null, {
       duration: 3000
     })
   }
+
+  filtrarQuestoes() {
+
+    this.questoesFiltradas = this.questoes;
+
+    if (this.filtroTermoPesquisado != "" && this.filtroTermoPesquisado != null) {
+      this.filtroTermoPesquisado = this.comumService.normalizar(this.filtroTermoPesquisado);
+      this.questoesFiltradas = this.questoes.filter(questao => {
+        if (this.comumService.normalizar(questao.pergunta).includes(this.filtroTermoPesquisado))
+          return true;
+        for (let tag of questao.tags) {
+          if (this.comumService.normalizar(tag).includes(this.filtroTermoPesquisado))
+            return true;
+        };
+        return false;
+      });
+    }
+
+    if (this.filtroNivelDificuldade >= 0 && this.filtroNivelDificuldade <= 4) {
+      this.questoesFiltradas = this.questoesFiltradas.filter(questao => questao.nivelDificuldade == this.filtroNivelDificuldade)
+    }
+
+  }
+
 
 }

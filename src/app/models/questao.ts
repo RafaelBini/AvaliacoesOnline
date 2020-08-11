@@ -4,8 +4,9 @@ import { Alternativa } from './alternativa';
 export interface Questao {
     pergunta: string;
     tipo: number;
-    resposta: string;
-    alternativas: Array<Alternativa>;
-    valor: number;
+    resposta?: string;
+    alternativas?: Array<Alternativa>;
+    valor?: number;
     nivelDificuldade: number;
+    tags?: Array<string>;
 }

@@ -147,8 +147,6 @@
                 <tr>
                     <td align="left" style="padding-bottom: 18px; position: relative;">
 
-
-
                         <select style="padding: 8px;" #tipo (change)="questao.tipo = tipo.value">
                             <option *ngFor="let questaoTipo of comumService.questaoTipos; index as qti"
                                 [selected]="questao.tipo == qti" [value]="qti">
@@ -229,7 +227,7 @@
                         <button matTooltip="Alterar tags" mat-icon-button (click)="openInfoQuestao(questao)">
                             <mat-icon>local_offer</mat-icon>
                         </button>
-                        <button mat-icon-button matTooltip="Remover Questão">
+                        <button mat-icon-button (click)="avaliacao.questoes.splice(qi, 1)" matTooltip="Remover Questão">
                             <mat-icon style="color: rgb(143, 12, 12);">delete</mat-icon>
                         </button>
                     </td>

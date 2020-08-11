@@ -1,31 +1,32 @@
 <div style="position: relative;">
     <h1>Buscar Questão</h1>
     <br />
-    <input type="text" style="width: 80%; padding: 5px; margin: auto; display: block;"
+    <input type="text" (keyup)="filtrarQuestoes()" [(ngModel)]="filtroTermoPesquisado"
+        style="width: 80%; padding: 5px; margin: auto; display: block;"
         placeholder="Digite aqui um tema ou uma parte da questão (ex.: céu)" />
     <br />
-    <select style="padding: 5px; margin: auto; display: block;">
-        <option>Qualquer Nível de Dificuldade</option>
-        <option>Muito Fácil</option>
-        <option>Fácil</option>
-        <option>Médio</option>
-        <option>Difícil</option>
-        <option>Muito Difícil</option>
+    <select style="padding: 5px; margin: auto; display: block;" (change)="filtrarQuestoes()"
+        [(ngModel)]="filtroNivelDificuldade">
+        <option value="-1">Qualquer Nível de Dificuldade</option>
+        <option *ngFor="let nivelDificuldade of comumService.niveisDificuldade; index as i" [value]="i">
+            {{nivelDificuldade}}</option>
     </select>
 
     <br />
-    <div style="text-align: center; width: 100%; max-height: 40vh; display: flex; flex-wrap: wrap; overflow: auto;">
+    <div
+        style="text-align: center; width: 100%; max-height: 40vh; min-height: 40vh; display: flex; flex-wrap: wrap; overflow: auto;">
 
-        <div *ngIf="questoes.length <= 0" class="questao" style="text-align: center;">
+        <div *ngIf="questoesFiltradas.length <= 0" class="questao" style="text-align: center;">
             Você não tem questões para adicionar
         </div>
 
-        <div *ngFor="let questao of questoes; index as i" (click)="add(i)" class="questao"
+        <div *ngFor="let questao of questoesFiltradas; index as i" (click)="add(i)" class="questao"
             matTooltip="Clique para adicionar">
 
             <b>{{questao.pergunta}}</b>
             <br />
-            Dissertativa - {{getNivel(questao.nivel)}}
+            {{comumService.questaoTipos[questao.tipo].nome}} -
+            {{comumService.niveisDificuldade[questao.nivelDificuldade]}}
             <br />
             <div style="display: flex; padding: 7px;">
                 <div *ngFor="let tag of questao.tags" class="tag">

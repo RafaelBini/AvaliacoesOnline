@@ -103,6 +103,7 @@ export class AvaliacaoNovaComponent implements OnInit {
 
   buscarQuestao() {
     this.dialog.open(BuscarQuestaoComponent, {
+      data: this.avaliacao,
       width: '75%'
     });
   }

@@ -107,4 +107,20 @@ export class ComumService {
     },
   ];
 
+  public niveisDificuldade = [
+    "Muito Fácil",
+    "Fácil",
+    "Médio",
+    "Difícil",
+    "Muito Difícil",
+  ];
+
+
+  normalizar(valor: string): string {
+    if (valor != null)
+      return valor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    return "";
+  }
+
 }
