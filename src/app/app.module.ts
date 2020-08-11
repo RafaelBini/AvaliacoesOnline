@@ -32,7 +32,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BuscarQuestaoComponent } from './dialogs/buscar-questao/buscar-questao.component';
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { EscolherTipoComponent } from './dialogs/escolher-tipo/escolher-tipo.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { BuscarQuestaoComponent } from './dialogs/buscar-questao/buscar-questao.
     AlunoComponent,
     AlunoNovoComponent,
     InfoQuestaoComponent,
-    BuscarQuestaoComponent
+    BuscarQuestaoComponent,
+    EscolherTipoComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +71,8 @@ import { BuscarQuestaoComponent } from './dialogs/buscar-questao/buscar-questao.
     FormsModule,
     MatChipsModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatExpansionModule
   ],
   providers: [
 

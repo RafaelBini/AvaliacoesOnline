@@ -1,0 +1,144 @@
+<table *ngIf="data.tipoEscolhido == 'disposicao'" style="margin: auto; width: 100%; font-size: 18px;">
+    <tr>
+        <td class="default-td" colspan="2" align="center"
+            style="opacity: 1; background-color: whitesmoke; cursor: default; color: black;">
+            <h2>Disposição dos Alunos</h2>
+        </td>
+    </tr>
+    <tr>
+        <td class="default-td" rowspan="6" width='300px' align="center" valign="top" height="300px"
+            style="padding: 12px; opacity: 1;  font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
+            <mat-icon style="color: var(--cor-primaria); height: 200px; width: 200px; font-size: 150px; margin: auto;">
+                {{comumService.disposicoes[data.avaliacao.tipoDisposicao].icone}}
+            </mat-icon>
+            <br />
+            {{comumService.disposicoes[data.avaliacao.tipoDisposicao].descricao}}
+        </td>
+    </tr>
+    <tr *ngFor="let disposicao of comumService.disposicoes; index as i;">
+        <td class="choose-btn" (click)="data.avaliacao.tipoDisposicao = i"
+            [style.borderColor]="data.avaliacao.tipoDisposicao == i ? 'var(--cor-primaria)' : 'transparent'">
+            {{disposicao.nome}}
+        </td>
+    </tr>
+    <tr>
+        <td align="center" colspan="2" style="background-color: whitesmoke;">
+            <button mat-raised-button mat-dialog-close>OK</button>
+        </td>
+    </tr>
+</table>
+
+<table *ngIf="data.tipoEscolhido == 'correcao'" class="choosing-table"
+    style="margin: auto; width: 100%; font-size: 18px;">
+
+    <tr>
+        <td colspan="2" align="center" style="opacity: 1; background-color: whitesmoke; cursor: default; color: black;">
+            <h2>Escolha um Método de Correção</h2>
+        </td>
+    </tr>
+    <tr>
+        <td class="default-td" rowspan="6" width='300px' align="center" valign="top" height="300px"
+            style="padding: 12px; opacity: 1;  font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
+            <mat-icon style="color: var(--cor-primaria); height: 200px; width: 200px; font-size: 150px; margin: auto;">
+                {{comumService.correcoes[data.avaliacao.tipoCorrecao].icone}}
+            </mat-icon>
+            <br />
+            <div *ngIf="data.avaliacao.tipoCorrecao == 2"
+                style="width: 90%; padding: 4px; border-radius: 4px; color: white; background-color: var(--cor-primaria);">
+                <table style="width: 100%; text-align: center;">
+                    <tr *ngIf="data.avaliacao.tipoDisposicao == 0">
+                        <td>CADA ALUNO</td>
+                        <td style="font-size: 11px;">CORRIGE</td>
+                        <td>
+                            <select style="text-align: center;" [(ngModel)]="data.avaliacao.correcaoParesQtdTipo"
+                                #SELECT_QTD (change)="selectParesChange(SELECT_QTD.value)">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="DEFINIR">DEFINIR</option>
+                                <option value="TODOS">TODOS</option>
+                            </select>
+                            <input *ngIf="data.avaliacao.correcaoParesQtdTipo == 'DEFINIR'" type="number"
+                                [(ngModel)]="data.avaliacao.correcaoParesQtdNumero" style="width: 30px" />
+                            ALUNO(S)
+                        </td>
+                    </tr>
+                    <tr *ngIf="data.avaliacao.tipoDisposicao != 0">
+                        <td>
+                            CADA <select>
+                                <option>ALUNO</option>
+                                <option>GRUPO</option>
+                            </select>
+                        </td>
+                        <td style="font-size: 11px;">CORRIGE</td>
+                        <td>
+                            <select style="text-align: center;" [(ngModel)]="data.avaliacao.correcaoParesQtdTipo"
+                                #SELECT_QTD (change)="selectParesChange(SELECT_QTD.value)">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="DEFINIR">DEFINIR</option>
+                                <option value="TODOS">TODOS</option>
+                            </select>
+                            <input *ngIf="data.avaliacao.correcaoParesQtdTipo == 'DEFINIR'" type="number"
+                                [(ngModel)]="data.avaliacao.correcaoParesQtdNumero" style="width: 30px" />
+                            GRUPO(S)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            {{comumService.correcoes[data.avaliacao.tipoCorrecao].descricao}}
+            <br />
+
+        </td>
+    </tr>
+    <tr *ngFor="let correcao of comumService.correcoes; index as i;">
+        <td class="choose-btn" (click)="data.avaliacao.tipoCorrecao = i"
+            [style.borderColor]="data.avaliacao.tipoCorrecao == i ? 'var(--cor-primaria)' : 'transparent'">
+            {{correcao.nome}}
+        </td>
+    </tr>
+    <tr>
+        <td align="center" colspan="2" style="background-color: whitesmoke;">
+            <button mat-raised-button mat-dialog-close>OK</button>
+        </td>
+    </tr>
+
+</table>
+
+<table *ngIf="data.tipoEscolhido == 'pontuacao'" class="choosing-table"
+    style="margin: auto; width: 100%; font-size: 18px;">
+
+    <tr>
+        <td colspan="2" align="center" style="opacity: 1; background-color: whitesmoke; cursor: default; color: black;">
+            <h2>Forma de Pontuação</h2>
+        </td>
+    </tr>
+    <tr>
+        <td class="default-td" rowspan="6" width='300px' align="center" valign="top" height="300px"
+            style="padding: 12px; opacity: 1;  font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
+            <mat-icon style="color: var(--cor-primaria); height: 200px; width: 200px; font-size: 150px; margin: auto;">
+                {{comumService.pontuacoes[data.avaliacao.tipoPontuacao].icone}}
+            </mat-icon>
+            <br />
+            {{comumService.pontuacoes[data.avaliacao.tipoPontuacao].descricao}}
+        </td>
+    </tr>
+    <tr *ngFor="let pontuacao of comumService.pontuacoes; index as i;">
+        <td class="choose-btn" (click)="data.avaliacao.tipoPontuacao = i"
+            [style.borderColor]="data.avaliacao.tipoPontuacao == i ? 'var(--cor-primaria)' : 'transparent'">
+            {{pontuacao.nome}}
+        </td>
+    </tr>
+    <tr>
+        <td align="center" colspan="2" style="background-color: whitesmoke;">
+            <button mat-raised-button mat-dialog-close>OK</button>
+        </td>
+    </tr>
+
+</table>

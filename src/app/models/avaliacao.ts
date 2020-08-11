@@ -3,9 +3,9 @@ import { Questao } from './questao';
 export interface Avaliacao {
     titulo: string;
     descricao: string;
-    dtInicio: Date;
+    dtInicio: string;
     isInicioIndeterminado: boolean;
-    dtTermino: Date;
+    dtTermino: string;
     isTerminoIndeterminado: boolean,
     isOrdemAleatoria: boolean,
     isBloqueadoAlunoAtrasado: boolean,

@@ -1,0 +1,23 @@
+
+.default-td {
+    padding: 8px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    border-left: 12px solid transparent;
+}
+
+.choose-btn{
+    padding: 8px;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    border-left: 12px solid transparent;
+}
+
+.choose-btn:hover {
+    border-color: var(--cor-secundaria) !important;
+    background-color: white;
+    cursor: pointer;
+    color: black;    
+}

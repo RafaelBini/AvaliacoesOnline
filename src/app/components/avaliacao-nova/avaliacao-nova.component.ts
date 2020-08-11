@@ -1,6 +1,6 @@
+import { EscolherTipoComponent } from './../../dialogs/escolher-tipo/escolher-tipo.component';
 import { ComumService } from './../../services/comum.service';
 import { Avaliacao } from './../../models/avaliacao';
-import { AvaliacaoProfessorComponent } from './../avaliacao-professor/avaliacao-professor.component';
 import { BuscarQuestaoComponent } from './../../dialogs/buscar-questao/buscar-questao.component';
 import { InfoQuestaoComponent } from './../../dialogs/info-questao/info-questao.component';
 import { AvaliacaoCriadaDialogComponent } from './../../dialogs/avaliacao-criada-dialog/avaliacao-criada-dialog.component';
@@ -23,9 +23,9 @@ export class AvaliacaoNovaComponent implements OnInit {
   public avaliacao: Avaliacao = {
     titulo: "",
     descricao: "",
-    dtInicio: new Date(),
+    dtInicio: this.comumService.getStringFromDate(new Date()),
     isInicioIndeterminado: false,
-    dtTermino: new Date(),
+    dtTermino: this.comumService.getStringFromDate(new Date()),
     isTerminoIndeterminado: false,
     isOrdemAleatoria: false,
     isBloqueadoAlunoAtrasado: false,
@@ -46,8 +46,6 @@ export class AvaliacaoNovaComponent implements OnInit {
     ],
 
   }
-
-  public finalizado = false;
 
   public visao = "professor";
 
@@ -95,17 +93,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     this.dialog.open(AvaliacaoCriadaDialogComponent);
   }
 
-  selectParesChange(opcaoSelecionada: string) {
-    if (!isNaN(+opcaoSelecionada)) {
-      this.avaliacao.correcaoParesQtdNumero = Number(opcaoSelecionada);
-    }
-    else if (opcaoSelecionada == "DEFINIR") {
-      this.avaliacao.correcaoParesQtdNumero = 6;
-    }
-    else if (opcaoSelecionada == "TODOS") {
-      this.avaliacao.correcaoParesQtdNumero = null;
-    }
-  }
+
 
   openInfoQuestao(questao) {
     this.dialog.open(InfoQuestaoComponent, {
@@ -115,6 +103,16 @@ export class AvaliacaoNovaComponent implements OnInit {
 
   buscarQuestao() {
     this.dialog.open(BuscarQuestaoComponent, {
+      width: '75%'
+    });
+  }
+
+  abrirTipos(tipoEscolhido) {
+    this.dialog.open(EscolherTipoComponent, {
+      data: {
+        avaliacao: this.avaliacao,
+        tipoEscolhido: tipoEscolhido
+      },
       width: '75%'
     });
   }
