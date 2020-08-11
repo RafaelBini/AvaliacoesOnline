@@ -1,6 +1,6 @@
 <div style="padding: 15px;">
-    <h1>Mais informações</h1>
-    Tags (separadas por vírgula):
+    <h1>Tags (separadas por vírgula)</h1>
+    <h3>Use as tags para encontrar essa questão posteriormente</h3>
     <br />
     <mat-form-field style="width: 90%;">
         <mat-chip-list #chipList>
@@ -13,22 +13,10 @@
                 [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
         </mat-chip-list>
     </mat-form-field>
-    <br />
-    Nível de Dificuldade:
-    <br />
-    <mat-form-field appearance="fill">
-        <mat-select value="3">
-            <mat-option value='1' selected>Muito Fácil</mat-option>
-            <mat-option value='2'>Fácil</mat-option>
-            <mat-option value='3'>Médio</mat-option>
-            <mat-option value='4'>Difícil</mat-option>
-            <mat-option value='5'>Muito Difícil</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <br />
+
     <br />
     <button mat-button mat-dialog-close
         style="margin: auto; display: block; background-color: var(--cor-primaria); color: white">
-        Ok
+        OK
     </button>
 </div>

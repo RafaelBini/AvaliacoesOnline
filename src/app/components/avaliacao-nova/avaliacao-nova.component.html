@@ -19,7 +19,7 @@
                     Título:
                 </td>
                 <td>
-                    <input required style="width: 90%; font-size: 13px;" />
+                    <input required style="width: 90%; font-size: 13px;" [(ngModel)]="avaliacao.titulo" />
                 </td>
             </tr>
             <tr>
@@ -27,7 +27,8 @@
                     Descrição:
                 </td>
                 <td>
-                    <textarea rows="3" style="width: 90%; font-size: 13px;"></textarea>
+                    <textarea rows="3" style="width: 90%; font-size: 13px;"
+                        [(ngModel)]="avaliacao.descricao"></textarea>
                     <br />
                     <span style="font-size: 11px;">0/260 caracteres</span>
                 </td>
@@ -37,10 +38,11 @@
                     Inicio:
                 </td>
                 <td>
-                    <input type="datetime-local" [value]="hojeFormatado" *ngIf="!isInicioIndeterminado" />
+                    <input type="datetime-local" [value]="comumService.getStringFromDate(avaliacao.dtInicio)"
+                        *ngIf="!avaliacao.isInicioIndeterminado" />
 
                     <mat-checkbox style="margin-left: 5px;" #inicioIndeterminado
-                        (change)="isInicioIndeterminado = inicioIndeterminado.checked">
+                        (change)="avaliacao.isInicioIndeterminado = inicioIndeterminado.checked">
 
                         <span style="font-size: 12px;">Indeterminado</span>
                     </mat-checkbox>
@@ -52,10 +54,11 @@
                 </td>
                 <td>
                     <!--min="2020-07-28T16:15:23" -->
-                    <input type="datetime-local" [value]="hojeFormatado" *ngIf="!isTerminoIndeterminado" />
+                    <input type="datetime-local" [value]="comumService.getStringFromDate(avaliacao.dtTermino)"
+                        *ngIf="!avaliacao.isTerminoIndeterminado" />
 
                     <mat-checkbox style="margin-left: 5px;" #terminoIndeterminado
-                        (change)="isTerminoIndeterminado = terminoIndeterminado.checked">
+                        (change)="avaliacao.isTerminoIndeterminado = terminoIndeterminado.checked">
 
                         <span style="font-size: 12px;">Indeterminado</span>
                     </mat-checkbox>
@@ -69,7 +72,7 @@
             <tr>
                 <td valign="top" align="left" colspan="2">
 
-                    <mat-checkbox [checked]="true">
+                    <mat-checkbox [(ngModel)]="avaliacao.isOrdemAleatoria">
 
                         Ordenar questões de forma aleatória
                     </mat-checkbox>
@@ -78,7 +81,7 @@
             <tr>
                 <td valign="top" align="left" colspan="2">
 
-                    <mat-checkbox>
+                    <mat-checkbox [(ngModel)]="avaliacao.isBloqueadoAlunoAtrasado">
 
                         Bloquear participação de alunos atrasados
                     </mat-checkbox>
@@ -113,15 +116,15 @@
                     style="padding: 12px; opacity: 1;  font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
                     <mat-icon
                         style="color: var(--cor-primaria); height: 200px; width: 200px; font-size: 150px; margin: auto;">
-                        {{disposicoes[disposicaoSelecionada].icone}}
+                        {{comumService.disposicoes[avaliacao.tipoDisposicao].icone}}
                     </mat-icon>
                     <br />
-                    {{disposicoes[disposicaoSelecionada].descricao}}
+                    {{comumService.disposicoes[avaliacao.tipoDisposicao].descricao}}
                 </td>
             </tr>
-            <tr *ngFor="let disposicao of disposicoes; index as i;">
-                <td class="choose-btn" (click)="disposicaoSelecionada = i"
-                    [style.borderColor]="disposicaoSelecionada == i ? 'var(--cor-primaria)' : 'transparent'">
+            <tr *ngFor="let disposicao of comumService.disposicoes; index as i;">
+                <td class="choose-btn" (click)="avaliacao.tipoDisposicao = i"
+                    [style.borderColor]="avaliacao.tipoDisposicao == i ? 'var(--cor-primaria)' : 'transparent'">
                     {{disposicao.nome}}
                 </td>
             </tr>
@@ -150,31 +153,32 @@
                     style="padding: 12px; opacity: 1;  font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
                     <mat-icon
                         style="color: var(--cor-primaria); height: 200px; width: 200px; font-size: 150px; margin: auto;">
-                        {{correcoes[correcaoSelecionada].icone}}
+                        {{comumService.correcoes[avaliacao.tipoCorrecao].icone}}
                     </mat-icon>
                     <br />
-                    <div *ngIf="correcaoSelecionada == 2"
+                    <div *ngIf="avaliacao.tipoCorrecao == 2"
                         style="width: 90%; padding: 4px; border-radius: 4px; color: white; background-color: var(--cor-primaria);">
                         <table style="width: 100%; text-align: center;">
-                            <tr *ngIf="disposicaoSelecionada == 0">
+                            <tr *ngIf="avaliacao.tipoDisposicao == 0">
                                 <td>CADA ALUNO</td>
                                 <td style="font-size: 11px;">CORRIGE</td>
                                 <td>
-                                    <select style="text-align: center;" #SELECT_QTD
-                                        (change)="selectParesChange(SELECT_QTD.value)">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
+                                    <select style="text-align: center;" [(ngModel)]="avaliacao.correcaoParesQtdTipo"
+                                        #SELECT_QTD (change)="selectParesChange(SELECT_QTD.value)">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
                                         <option value="DEFINIR">DEFINIR</option>
-                                        <option>TODOS</option>
+                                        <option value="TODOS">TODOS</option>
                                     </select>
-                                    <input *ngIf="correcaoParesQtd" type="number" style="width: 30px" />
+                                    <input *ngIf="avaliacao.correcaoParesQtdTipo == 'DEFINIR'" type="number"
+                                        [(ngModel)]="avaliacao.correcaoParesQtdNumero" style="width: 30px" />
                                     ALUNO(S)
                                 </td>
                             </tr>
-                            <tr *ngIf="disposicaoSelecionada != 0">
+                            <tr *ngIf="avaliacao.tipoDisposicao != 0">
                                 <td>
                                     CADA <select>
                                         <option>ALUNO</option>
@@ -183,31 +187,32 @@
                                 </td>
                                 <td style="font-size: 11px;">CORRIGE</td>
                                 <td>
-                                    <select style="text-align: center;" #SELECT_QTD
-                                        (change)="selectParesChange(SELECT_QTD.value)">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
+                                    <select style="text-align: center;" [(ngModel)]="avaliacao.correcaoParesQtdTipo"
+                                        #SELECT_QTD (change)="selectParesChange(SELECT_QTD.value)">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
                                         <option value="DEFINIR">DEFINIR</option>
-                                        <option>TODOS</option>
+                                        <option value="TODOS">TODOS</option>
                                     </select>
-                                    <input *ngIf="correcaoParesQtd" type="number" style="width: 30px" />
+                                    <input *ngIf="avaliacao.correcaoParesQtdTipo == 'DEFINIR'" type="number"
+                                        [(ngModel)]="avaliacao.correcaoParesQtdNumero" style="width: 30px" />
                                     GRUPO(S)
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <br />
-                    {{correcoes[correcaoSelecionada].descricao}}
+                    {{comumService.correcoes[avaliacao.tipoCorrecao].descricao}}
                     <br />
 
                 </td>
             </tr>
-            <tr *ngFor="let correcao of correcoes; index as i;">
-                <td class="choose-btn" (click)="correcaoSelecionada = i"
-                    [style.borderColor]="correcaoSelecionada == i ? 'var(--cor-primaria)' : 'transparent'">
+            <tr *ngFor="let correcao of comumService.correcoes; index as i;">
+                <td class="choose-btn" (click)="avaliacao.tipoCorrecao = i"
+                    [style.borderColor]="avaliacao.tipoCorrecao == i ? 'var(--cor-primaria)' : 'transparent'">
                     {{correcao.nome}}
                 </td>
             </tr>
@@ -239,15 +244,15 @@
                     style="padding: 12px; opacity: 1;  font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
                     <mat-icon
                         style="color: var(--cor-primaria); height: 200px; width: 200px; font-size: 150px; margin: auto;">
-                        {{pontuacoes[pontuacaoSelecionada].icone}}
+                        {{comumService.pontuacoes[avaliacao.tipoPontuacao].icone}}
                     </mat-icon>
                     <br />
-                    {{pontuacoes[pontuacaoSelecionada].descricao}}
+                    {{comumService.pontuacoes[avaliacao.tipoPontuacao].descricao}}
                 </td>
             </tr>
-            <tr *ngFor="let pontuacao of pontuacoes; index as i;">
-                <td class="choose-btn" (click)="pontuacaoSelecionada = i"
-                    [style.borderColor]="pontuacaoSelecionada == i ? 'var(--cor-primaria)' : 'transparent'">
+            <tr *ngFor="let pontuacao of comumService.pontuacoes; index as i;">
+                <td class="choose-btn" (click)="avaliacao.tipoPontuacao = i"
+                    [style.borderColor]="avaliacao.tipoPontuacao == i ? 'var(--cor-primaria)' : 'transparent'">
                     {{pontuacao.nome}}
                 </td>
             </tr>
@@ -264,15 +269,18 @@
 
         <ng-template matStepLabel>Questões</ng-template>
 
-        <div cdkDropList [cdkDropListData]="questoes" (cdkDropListDropped)="drop($event)"
-            style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
+
+        <!-- VISÃO DE PROFESSOR -->
+
+        <div *ngIf="visao == 'professor'" cdkDropList [cdkDropListData]="avaliacao.questoes"
+            (cdkDropListDropped)="drop($event)" style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
 
             <div align="center"
                 style="background-color: whitesmoke; cursor: default; color: black; width: 100%; border-radius: 10px;">
                 <h2>Questões</h2>
             </div>
 
-            <div class="questao" cdkDrag *ngFor="let questao of questoes; index as qi">
+            <div class="questao" cdkDrag *ngFor="let questao of avaliacao.questoes; index as qi">
 
                 <table style="width: 100%;">
                     <tr>
@@ -282,18 +290,24 @@
                     </tr>
 
                     <tr>
-                        <td align="right" style="padding-bottom: 18px; position: relative;">
+                        <td align="left" style="padding-bottom: 18px; position: relative;">
 
-                            <button STYLE="position: absolute; left: 3px;" mat-icon-button
-                                (click)="openInfoQuestao(questao)">
-                                <mat-icon>info</mat-icon>
-                            </button>
+
 
                             <select style="padding: 8px;" #tipo (change)="questao.tipo = tipo.value">
-                                <option *ngFor="let questaoTipo of questaoTipos; index as qti"
+                                <option *ngFor="let questaoTipo of comumService.questaoTipos; index as qti"
                                     [selected]="questao.tipo == qti" [value]="qti">
                                     {{questaoTipo.nome}}
                                 </option>
+                            </select>
+                            <select [(ngModel)]="questao.nivelDificuldade" matTooltip="Nível de Dificuldade"
+                                style="padding: 8px; position: absolute; right: 0px;" #tipo
+                                (change)="questao.tipo = tipo.value">
+                                <option value='1' selected>Muito Fácil</option>
+                                <option value='2'>Fácil</option>
+                                <option value='3'>Médio</option>
+                                <option value='4'>Difícil</option>
+                                <option value='5'>Muito Difícil</option>
                             </select>
                         </td>
                     </tr>
@@ -302,8 +316,8 @@
                         <td>
                             Pergunta / Descrição da Questão:
                             <br />
-                            <textarea style="width: 100%; max-width: 100%; padding: 5px;"
-                                rows="4">{{questao.pergunta}}</textarea>
+                            <textarea style="width: 100%; max-width: 100%; padding: 5px;" [(ngModel)]="questao.pergunta"
+                                rows="4"></textarea>
                         </td>
                     </tr>
 
@@ -350,13 +364,17 @@
                     <tr>
                         <td align="right" style="position: relative; padding-top: 20px;">
                             <div style="position: absolute; left: 0px;">
-                                Valor: <input style="padding: 7px;" type="number" max="100" min="1" value="10" />
+                                Valor: <input style="padding: 7px;" type="number" max="100" min="1"
+                                    [(ngModel)]="questao.valor" />
                             </div>
                             <button mat-icon-button matTooltip="Adicionar Imagem">
                                 <mat-icon>insert_photo</mat-icon>
                             </button>
                             <button mat-icon-button matTooltip="Adicionar Anexo">
                                 <mat-icon>attach_file</mat-icon>
+                            </button>
+                            <button matTooltip="Alterar tags" mat-icon-button (click)="openInfoQuestao(questao)">
+                                <mat-icon>local_offer</mat-icon>
                             </button>
                             <button mat-icon-button matTooltip="Remover Questão">
                                 <mat-icon style="color: rgb(143, 12, 12);">delete</mat-icon>
@@ -365,7 +383,6 @@
                     </tr>
                 </table>
             </div>
-
 
             <div style="width: 100%;">
                 <button mat-raised-button (click)="finalizar()"
@@ -385,6 +402,119 @@
             </button>
 
         </div>
+
+        <button *ngIf="visao == 'professor'" mat-fab (click)="visao='aluno'" matTooltip="Ver como aluno"
+            style="position: fixed; bottom: 175px; right: 30px; color: white; background-color: var(--cor-primaria);">
+            <mat-icon>visibility</mat-icon>
+        </button>
+
+
+        <!-- VISÃO DE ALUNO -->
+
+        <div *ngIf="visao == 'aluno'">
+            <div style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
+
+                <div align="center"
+                    style="padding: 20px; background-color: whitesmoke;  color: black; width: 100%; border-radius: 10px;">
+                    <b style="font-size: 22px;">{{avaliacao.titulo}}</b>
+                    <br /><br />
+                    <div style="text-align: justify;">
+                        {{avaliacao.descricao}}
+                        <br /><br />
+                        Professor: Rafael Bini
+                        <br /><br />
+                        Inicio: 31/07/2020 18:00
+                        <br />
+                        Término: 31/07/2020 19:00
+                        <br />
+                    </div>
+                    <br />
+                    <div style="text-align: justify; ">
+                        Meu Grupo:
+                        <li>Matheus Cabral - <b>Finalizou</b></li>
+                        <li>Thyago Vinicius</li>
+                        <li>Marcos Kerchenr</li>
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="questao" *ngFor="let questao of avaliacao.questoes; index as qi">
+
+                    <table style="width: 100%;">
+
+                        <tr>
+                            <td style="padding-bottom: 20px; font-size: 15px;">
+                                <b>{{qi + 1}}</b>/{{avaliacao.questoes.length}}. {{questao.pergunta}}
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="questao.tipo == 1">
+                            <td>
+
+                                <textarea placeholder="Escreva aqui a resposta" style="width: 100%" rows="3"></textarea>
+                                <br />
+                                <button mat-icon-button matTooltip="Adicionar Imagem">
+                                    <mat-icon>insert_photo</mat-icon>
+                                </button>
+                                <button mat-icon-button matTooltip="Adicionar Anexo">
+                                    <mat-icon>attach_file</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="questao.tipo == 3">
+                            <td>
+                                <table width="100%">
+                                    <tr *ngFor="let alternativa of questao.alternativas; index as ai">
+                                        <td valign="top" width="5px">
+                                            <input [id]="alternativa.texto" type="checkbox" />
+                                        </td>
+                                        <td style="word-wrap: break-word;">
+                                            <label style="cursor: pointer;"
+                                                [for]="alternativa.texto">{{alternativa.texto}}
+                                            </label>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td align="left" style="position: relative; padding-top: 20px;">
+                                <div>
+                                    Valor: {{questao.valor}}/100
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <div style="width: 100%;">
+                <button *ngIf="!finalizado" (click)="finalizado = true" mat-raised-button
+                    style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
+                    Sinalizar Finalização
+                </button>
+                <div *ngIf="finalizado"
+                    style="margin: auto; text-align: center; width: 60%; background-color: whitesmoke; border-radius: 10px; margin-top: 15px; margin-bottom: 40px; font-size: 14px; padding: 10px; display: block;">
+                    <h2>Finalização sinalizada!</h2>
+                    Esta avaliação será finalizada quando todos do seu grupo sinalizarem também.
+                </div>
+            </div>
+        </div>
+
+        <button *ngIf="visao == 'aluno'" mat-fab (click)="visao='professor'" matTooltip="Sair da visão do aluno"
+            style="position: fixed; bottom: 175px; right: 30px; color: white; background-color: var(--cor-primaria);">
+            <mat-icon>close</mat-icon>
+        </button>
 
     </mat-step>
 
