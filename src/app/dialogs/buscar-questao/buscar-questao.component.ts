@@ -29,10 +29,10 @@ export class BuscarQuestaoComponent implements OnInit {
       tipo: 3,
       nivelDificuldade: 1,
       alternativas: [
-        { texto: "1", correta: false },
-        { texto: "2", correta: false },
-        { texto: "3", correta: false },
-        { texto: "4", correta: true },
+        { texto: "1", correta: false, selecionada: false },
+        { texto: "2", correta: false, selecionada: false },
+        { texto: "3", correta: false, selecionada: false },
+        { texto: "4", correta: true, selecionada: false },
       ]
     },
     {

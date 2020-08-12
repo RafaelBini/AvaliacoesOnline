@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Questao } from './../../models/questao';
+import { Component, OnInit, Inject } from '@angular/core';
 import { COMMA, ENTER, SEMICOLON } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-info-questao',
@@ -13,12 +15,10 @@ export class InfoQuestaoComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
-  temas: any[] = [
-    { nome: 'Botânica' },
-    { nome: 'Cores' },
-  ];
 
-  constructor() { }
+
+  constructor(public dialogRef: MatDialogRef<InfoQuestaoComponent>,
+    @Inject(MAT_DIALOG_DATA) public questao: Questao) { }
 
   ngOnInit(): void {
   }
@@ -29,7 +29,8 @@ export class InfoQuestaoComponent implements OnInit {
 
     // Add our fruit
     if ((value || '').trim()) {
-      this.temas.push({ nome: value.trim() });
+      this.questao.tags.push(value);
+      console.log(this.questao.tags);
     }
 
     // Reset the input value
@@ -39,10 +40,10 @@ export class InfoQuestaoComponent implements OnInit {
   }
 
   remove(tema: any): void {
-    const index = this.temas.indexOf(tema);
+    const index = this.questao.tags.indexOf(tema);
 
     if (index >= 0) {
-      this.temas.splice(index, 1);
+      this.questao.tags.splice(index, 1);
     }
   }
 

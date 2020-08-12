@@ -20,6 +20,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 textarea {
     font-family: Arial;
+    resize: vertical;
+    padding: 5px;
 }
 
 /*  SCROLL BAR  */
@@ -50,4 +52,11 @@ textarea {
 
 .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
   background-color: var(--cor-primaria) !important;
+}
+
+.mat-checkbox-layout, .mat-checkbox-label{
+  white-space: normal !important;
+  word-wrap: break-all !important;
+  width: 100%;
+  display: inline-flex;
 }

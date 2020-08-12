@@ -42,6 +42,7 @@ export class AvaliacaoNovaComponent implements OnInit {
         alternativas: [],
         valor: 1,
         nivelDificuldade: 1,
+        tags: []
       },
     ],
 
@@ -53,29 +54,7 @@ export class AvaliacaoNovaComponent implements OnInit {
 
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
-  }
 
-  removerAlternativa(questaoIndex, alternativaIndesejadaIndex) {
-    this.avaliacao.questoes[questaoIndex].alternativas.splice(alternativaIndesejadaIndex, 1);
-  }
-
-  addAlternativa(alternativaIndex, texto) {
-    this.avaliacao.questoes[alternativaIndex].alternativas.push({ texto: texto, correta: false });
-  }
-  onNovaAlterKeyDown(event, alternativaIndex, texto) {
-    if (event.key == 'Enter') {
-      this.addAlternativa(alternativaIndex, texto);
-    }
-  }
 
   addQuestao() {
     this.avaliacao.questoes.push({
@@ -85,20 +64,13 @@ export class AvaliacaoNovaComponent implements OnInit {
       alternativas: [],
       valor: 1,
       nivelDificuldade: 1,
+      tags: []
     });
   }
 
   finalizar() {
     this.router.navigate(['/professor']);
     this.dialog.open(AvaliacaoCriadaDialogComponent);
-  }
-
-
-
-  openInfoQuestao(questao) {
-    this.dialog.open(InfoQuestaoComponent, {
-      width: '80%'
-    });
   }
 
   buscarQuestao() {

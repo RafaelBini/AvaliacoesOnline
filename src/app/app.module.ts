@@ -34,6 +34,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { BuscarQuestaoComponent } from './dialogs/buscar-questao/buscar-questao.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { EscolherTipoComponent } from './dialogs/escolher-tipo/escolher-tipo.component';
+import { QuestaoComponent } from './components/questao/questao.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { EscolherTipoComponent } from './dialogs/escolher-tipo/escolher-tipo.com
     AlunoNovoComponent,
     InfoQuestaoComponent,
     BuscarQuestaoComponent,
-    EscolherTipoComponent
+    EscolherTipoComponent,
+    QuestaoComponent
   ],
   imports: [
     BrowserModule,

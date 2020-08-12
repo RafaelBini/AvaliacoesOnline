@@ -1,4 +1,5 @@
 export interface Alternativa {
-    texto: string,
-    correta: boolean
+    texto: string;
+    correta: boolean;
+    selecionada: boolean;
 }
