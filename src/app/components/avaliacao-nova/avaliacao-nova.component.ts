@@ -41,8 +41,9 @@ export class AvaliacaoNovaComponent implements OnInit {
         resposta: "",
         alternativas: [],
         valor: 1,
-        nivelDificuldade: 1,
-        tags: []
+        nivelDificuldade: 2,
+        tags: [],
+        associacoes: [],
       },
     ],
 
@@ -51,7 +52,7 @@ export class AvaliacaoNovaComponent implements OnInit {
   public visao = "professor";
 
   ngOnInit(): void {
-
+    this.comumService.scrollToTop();
   }
 
 
@@ -63,9 +64,13 @@ export class AvaliacaoNovaComponent implements OnInit {
       resposta: "",
       alternativas: [],
       valor: 1,
-      nivelDificuldade: 1,
-      tags: []
+      nivelDificuldade: 2,
+      tags: [],
+      associacoes: [],
     });
+
+    this.comumService.scrollToBottom();
+
   }
 
   finalizar() {

@@ -21,7 +21,8 @@ export class BuscarQuestaoComponent implements OnInit {
       tags: ["grama", "botânica"],
       tipo: 1,
       nivelDificuldade: 1,
-      alternativas: []
+      alternativas: [],
+      resposta: "A cor da Grama é verde."
     },
     {
       pergunta: "Quanto é 2 + 2?",
@@ -40,21 +41,24 @@ export class BuscarQuestaoComponent implements OnInit {
       tags: ["astronomia", "cores", "química"],
       tipo: 1,
       nivelDificuldade: 4,
-      alternativas: []
+      alternativas: [],
+      resposta: "É a luz azul — que tem o comprimento mais curto — que se espalha mais por essas pequenas partículas, o que leva à coloração azulada que observamos.\nAvaliar a forma como explicou. Verificar se conhece (...)"
     },
     {
       pergunta: "Qual é o país mais populoso do mundo?",
       tags: ["geografia", "população", "conhecimentos gerais"],
       tipo: 1,
       nivelDificuldade: 3,
-      alternativas: []
+      alternativas: [],
+      resposta: "O país mais populoso é a China."
     },
     {
       pergunta: "Quais são os nomes continentes do planeta Terra?",
       tags: ["geografia", "território"],
       tipo: 1,
       nivelDificuldade: 3,
-      alternativas: []
+      alternativas: [],
+      resposta: "África, Ásia, Europa, Oceania, América e Antártida."
     },
   ];
 
@@ -73,7 +77,8 @@ export class BuscarQuestaoComponent implements OnInit {
     this.avaliacao.questoes.push(questaoParaAdicionar[0]);
     this.snack.open("Questão adicionada", null, {
       duration: 3000
-    })
+    });
+
   }
 
   filtrarQuestoes() {

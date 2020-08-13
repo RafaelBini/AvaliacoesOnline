@@ -28,6 +28,27 @@
   margin-bottom: 7px;
 }
 
+.input-basico{
+  border: 1px dotted rgba(0, 0, 0, 0.20);
+  border-radius: 7px;
+}
+.input-basico:focus {
+  outline: none;
+  border: 1px dashed var(--cor-primaria);
+  border-radius: 7px;
+}
+
+.select-basico {
+  cursor: pointer;
+  border: 1px dotted rgba(0, 0, 0, 0.20);
+  border-radius: 7px;
+}
+.select-basico:focus {
+  outline: none;
+  border: 1px dashed var(--cor-primaria);
+  border-radius: 7px;
+}
+
 /* QUESTÕES MULTIPLA ESCOLHA */
 
 .invisible-input{
@@ -50,6 +71,22 @@
   max-width: 95%;
   word-wrap: break-all !important;
   position: relative;
+}
+
+/* ENVIO DE ARQUIVOS */
+
+.upload-area{
+  background-color: white; color: gray; 
+  cursor: pointer; user-select: none; 
+  line-height: 200px; height: 200px; 
+  width: 90%; margin: auto;  border: 1px dashed gray; border-radius: 10px; 
+  text-align: center; font-size: 19px;
+}
+
+.upload-area:hover {
+  color: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+
 }
 
 /* --------------------- */

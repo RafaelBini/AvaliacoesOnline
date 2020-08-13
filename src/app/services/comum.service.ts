@@ -115,12 +115,47 @@ export class ComumService {
     "Muito Difícil",
   ];
 
+  public arquivosPossiveis = [
+    {
+      categoria: 'Imagem', extensoes: [
+        '.jpg', '.jpeg', '.png', '.svg'
+      ]
+    },
+    {
+      categoria: 'Texto', extensoes: [
+        '.pdf', '.docx', '.doc', '.txt'
+      ]
+    },
+    {
+      categoria: 'Video', extensoes: [
+        '.avi', '.mp4', '.mov', '.wmv'
+      ]
+    },
+  ]
+
 
   normalizar(valor: string): string {
     if (valor != null)
       return valor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
     return "";
+  }
+
+  scrollToBottom() {
+    setTimeout(() => {
+      window.scroll({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 20);
+  }
+
+  scrollToTop() {
+    setTimeout(() => {
+      window.scroll({
+        top: 0
+      });
+    }, 1);
   }
 
 }

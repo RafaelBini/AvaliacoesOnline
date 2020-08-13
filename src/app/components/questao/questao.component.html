@@ -18,20 +18,18 @@
                 <tr>
                     <td align="left" style="padding-bottom: 18px; position: relative;">
 
-                        <select style="padding: 8px;" #tipo (change)="questao.tipo = tipo.value">
+                        <select class="select-basico" style="padding: 8px;" #tipo
+                            (change)="tipoQuestaoChanged(questao, tipo.value)">
                             <option *ngFor="let questaoTipo of comumService.questaoTipos; index as qti"
                                 [selected]="questao.tipo == qti" [value]="qti">
                                 {{questaoTipo.nome}}
                             </option>
                         </select>
                         <select [(ngModel)]="questao.nivelDificuldade" matTooltip="Nível de Dificuldade"
-                            style="padding: 8px; position: absolute; right: 0px;" #tipo
+                            class="select-basico" style="padding: 8px; position: absolute; right: 0px;" #tipo
                             (change)="questao.tipo = tipo.value">
-                            <option value='1' selected>Muito Fácil</option>
-                            <option value='2'>Fácil</option>
-                            <option value='3'>Médio</option>
-                            <option value='4'>Difícil</option>
-                            <option value='5'>Muito Difícil</option>
+                            <option *ngFor="let nivelDificuldade of comumService.niveisDificuldade; index as ni"
+                                [value]='ni'>{{nivelDificuldade}}</option>
                         </select>
                     </td>
                 </tr>
@@ -39,19 +37,127 @@
                 <!-- Pergunta -->
                 <tr>
                     <td>
-                        Pergunta / Descrição da Questão:
-                        <br />
-                        <textarea style="width: 100%; max-width: 100%; padding: 5px;" [(ngModel)]="questao.pergunta"
-                            rows="4"></textarea>
+                        <textarea
+                            [placeholder]="questao.perguntaPlaceholder ? questao.perguntaPlaceholder : 'Digite aqui uma pergunta ou uma descrição para a questão'"
+                            class="input-basico" style=" margin: auto; width: 98%; max-width: 98%; padding: 5px;"
+                            [(ngModel)]="questao.pergunta" rows="4"></textarea>
+                    </td>
+                </tr>
+
+                <!-- Resposta Associativa -->
+                <tr *ngIf="questao.tipo == 0">
+                    <td>
+                        <table width="100%" cdkDropList [cdkDropListData]="questao.associacoes"
+                            (cdkDropListDropped)="drop($event)">
+
+                            <!-- LISTA DE ASSOCIASSOES -->
+                            <tr cdkDrag *ngFor="let associacao of questao.associacoes; index as ai">
+                                <td width="15%" class="alternativa">
+                                    <mat-select [disabled]="true" [value]="associacao.opcaoCorreta">
+                                        <mat-option [value]="_associacao.opcaoCorreta"
+                                            *ngFor="let _associacao of questao.associacoes">
+                                            {{_associacao.opcaoCorreta}}
+                                        </mat-option>
+                                    </mat-select>
+                                </td>
+                                <td width="80%" class="alternativa">
+                                    {{associacao.texto}}
+                                    <button mat-icon-button matTooltip="Copiar questão"
+                                        style="position: absolute; top: 1px; right: 2px; color: gray; font-size: 7px;"
+                                        (click)="novaAssociacaoInput.value = associacao.texto;">
+                                        <mat-icon>content_copy</mat-icon>
+                                    </button>
+                                </td>
+                                <td width="5%"
+                                    style="background-color: rgba(255, 255, 255, 0.452);  text-align: center;">
+                                    <button mat-icon-button matTooltip="Remover associacao"
+                                        (click)="removerAssociacao(questao, ai)">
+                                        <mat-icon style="color: var(--cor-perigosa)">cancel</mat-icon>
+                                    </button>
+
+                                </td>
+                            </tr>
+
+                            <!-- ADICIONAR ASSOCIACAO -->
+                            <tr>
+                                <td width="15%" style="background-color: white; height: 40px; padding: 10px;">
+                                    <input type="text" class="invisible-input" #novaAssociacaoOpcaoInput maxlength="20"
+                                        placeholder="Digite uma opção" />
+                                </td>
+                                <td width="80%" style="background-color: white; height: 40px; padding: 10px;">
+                                    <div style="display: inline-flex; width: 100%;">
+                                        <textarea rows="1"
+                                            (keyup)="onNovaAssocKeyUp($event, questao, novaAssociacaoInput, novaAssociacaoOpcaoInput);"
+                                            #novaAssociacaoInput class="invisible-input"
+                                            placeholder="Descrição da opção"
+                                            style="width: 90%; height: 100%; padding: 10px;"></textarea>
+                                    </div>
+                                </td>
+                                <td width="5%" style="background-color: white; text-align: center;">
+                                    <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
+                                        (click)="addAssociacao(questao, novaAssociacaoInput, novaAssociacaoOpcaoInput);"
+                                        mat-icon-button>
+                                        <mat-icon
+                                            style="background-color: var(--cor-primaria); color: white; border-radius: 50%;">
+                                            add
+                                        </mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
 
                 <!-- Resposta Dissertativa -->
                 <tr *ngIf="questao.tipo == 1">
                     <td>
-                        Resposta:
+                        <textarea placeholder="Escreva aqui algo para auxiliar no momento da correção"
+                            class="input-basico" style="width: 98%; margin: auto;"
+                            rows="4">{{questao.resposta}}</textarea>
+                    </td>
+                </tr>
+
+                <!-- Resposta Envio de Arquivo -->
+                <tr *ngIf="questao.tipo == 2">
+                    <td>
                         <br />
-                        <textarea style="width: 100%" rows="3">{{questao.resposta}}</textarea>
+                        A resposta será feita através do envio de um ou mais arquivos.
+                        <br /><br />
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Selecione o tipo de arquivo</mat-label>
+                            <mat-select #tipoArquivoSelecionado
+                                (selectionChange)="tipoArquivoChanged(questao, tipoArquivoSelecionado.value)"
+                                [value]="'Todos'">
+                                <mat-option value="Todos">Todos</mat-option>
+                                <mat-option *ngFor="let tipo of comumService.arquivosPossiveis; index as i" [value]="i">
+                                    {{tipo.categoria}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="tipoArquivoSelecionado.value != 'Todos'" appearance="fill">
+                            <mat-label>Extensões aceitas</mat-label>
+                            <mat-select multiple [(ngModel)]="questao.extensoes">
+                                <mat-option [value]="extensao"
+                                    *ngFor="let extensao of comumService.arquivosPossiveis[tipoArquivoSelecionado.value].extensoes">
+                                    {{extensao}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="tipoArquivoSelecionado.value == 'Todos'" appearance="fill">
+                            <mat-label>Extensões aceitas</mat-label>
+                            <mat-select multiple [(ngModel)]="questao.extensoes">
+                                <mat-optgroup *ngFor="let arquivoPossivel of comumService.arquivosPossiveis"
+                                    [label]="arquivoPossivel.categoria">
+                                    <mat-option *ngFor="let extensao of arquivoPossivel.extensoes" [value]="extensao">
+                                        {{extensao}}
+                                    </mat-option>
+                                </mat-optgroup>
+                            </mat-select>
+                        </mat-form-field>
+
                     </td>
                 </tr>
 
@@ -77,7 +183,7 @@
                                 <td width="5%"
                                     style="background-color: rgba(255, 255, 255, 0.452);  text-align: center;">
                                     <button mat-icon-button matTooltip="Remover alternativa"
-                                        (click)="removerAlternativa(qi, ai)">
+                                        (click)="removerAlternativa(questao, ai)">
                                         <mat-icon style="color: var(--cor-perigosa)">cancel</mat-icon>
                                     </button>
 
@@ -89,7 +195,7 @@
                                 <td width="95%" style="background-color: white; height: 40px; padding: 10px;">
                                     <mat-checkbox [disabled]="true">
                                         <textarea type="text" rows="1"
-                                            (keyup)="onNovaAlterKeyUp($event, qi, novaAlternativInput);"
+                                            (keyup)="onNovaAlterKeyUp($event, questao, novaAlternativInput);"
                                             #novaAlternativInput class="invisible-input"
                                             placeholder="Digite aqui uma nova alternativa"
                                             style="width: 90%; height: 100%; padding: 10px;"></textarea>
@@ -97,7 +203,7 @@
                                 </td>
                                 <td style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
-                                        (click)="addAlternativa(qi, novaAlternativInput);" mat-icon-button>
+                                        (click)="addAlternativa(questao, novaAlternativInput);" mat-icon-button>
                                         <mat-icon
                                             style="background-color: var(--cor-primaria); color: white; border-radius: 50%;">
                                             add
@@ -147,15 +253,37 @@
                 <!-- PERGUNTA -->
                 <tr>
                     <td style="padding-bottom: 20px; font-size: 15px;">
-                        <b>{{qi + 1}}</b>/{{avaliacao.questoes.length}}. {{questao.pergunta}}
+                        <b>Questão {{qi + 1}}</b>/{{avaliacao.questoes.length}}. {{questao.pergunta}}
                     </td>
+                </tr>
+
+                <!-- RESPOSTA ASSOCIATIVA -->
+                <tr *ngIf="questao.tipo == 0">
+                    <td>
+                        <table width="100%">
+                            <tr *ngFor="let associacao of questao.associacoes; index as ai">
+                                <td width="20%" class="alternativa" style="cursor:default;">
+                                    <mat-select [(ngModel)]="associacao.opcaoSelecionada">
+                                        <mat-option [value]="_associacao.opcaoCorreta"
+                                            *ngFor="let _associacao of questao.associacoes">
+                                            {{_associacao.opcaoCorreta}}
+                                        </mat-option>
+                                    </mat-select>
+                                </td>
+                                <td width="80%" class="alternativa" style="cursor:default;">
+                                    {{associacao.texto}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
                 </tr>
 
                 <!-- RESPOSTA DISSERTATIVA -->
                 <tr *ngIf="questao.tipo == 1">
-                    <td>
-
-                        <textarea placeholder="Escreva aqui a resposta" style="width: 100%" rows="3"></textarea>
+                    <td align="right">
+                        <textarea placeholder="Escreva aqui a resposta" class="input-basico"
+                            style="width: 98%; margin: auto;" rows="4"></textarea>
                         <br />
                         <button mat-icon-button matTooltip="Adicionar Imagem">
                             <mat-icon>insert_photo</mat-icon>
@@ -163,6 +291,21 @@
                         <button mat-icon-button matTooltip="Adicionar Anexo">
                             <mat-icon>attach_file</mat-icon>
                         </button>
+                    </td>
+                </tr>
+
+                <!-- RESPOSTA ENVIO DE ARQUIVO -->
+                <tr *ngIf="questao.tipo == 2">
+                    <td>
+                        <div matTooltip="Enviar arquivos" class="upload-area">
+                            ARRASTE E SOLTE O(S) ARQUIVO(S) AQUI
+                        </div>
+                        <div style="width: 90%; margin: auto; color: gray;">
+                            <br />
+                            Extensões permitidas: {{questao.extensoes.join('; ')}}
+                            <br />
+                            Tamanho total máximo: 60 MB
+                        </div>
                     </td>
                 </tr>
 
@@ -189,6 +332,7 @@
 
                     </td>
                 </tr>
+
             </table>
         </div>
     </div>

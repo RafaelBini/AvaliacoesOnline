@@ -35,6 +35,7 @@ import { BuscarQuestaoComponent } from './dialogs/buscar-questao/buscar-questao.
 import { MatExpansionModule } from '@angular/material/expansion';
 import { EscolherTipoComponent } from './dialogs/escolher-tipo/escolher-tipo.component';
 import { QuestaoComponent } from './components/questao/questao.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { QuestaoComponent } from './components/questao/questao.component';
     MatChipsModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatRadioModule
   ],
   providers: [
 
