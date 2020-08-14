@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Aluno } from 'src/app/models/aluno';
+import { Usuario } from 'src/app/models/usuario';
 
 @Component({
   selector: 'app-aluno-novo',
@@ -7,7 +7,7 @@ import { Aluno } from 'src/app/models/aluno';
   styleUrls: ['./aluno-novo.component.css']
 })
 export class AlunoNovoComponent implements OnInit {
-  public aluno = new Aluno("", "", "", "TADS2020");
+  public aluno: Usuario;
   constructor() { }
 
   ngOnInit(): void {

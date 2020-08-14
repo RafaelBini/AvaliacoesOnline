@@ -4,11 +4,17 @@
     <br /><br />
     <input type="password" placeholder="Senha" />
     <br /><br />
-    <input type="radio" checked id="aluno" name="tipoAcesso" value="aluno">
-    <label for="aluno">Sou Aluno</label>
-    <input type="radio" id="professor" name="tipoAcesso" value="professor">
-    <label for="professor">Sou Professor</label>
+    <mat-radio-group [(ngModel)]="tipoUsuario">
+        <mat-radio-button value="aluno">Sou Aluno</mat-radio-button>        
+        <mat-radio-button value="professor" style="margin-left: 30px;">Sou Professor</mat-radio-button>
+    </mat-radio-group>
     <br /><br />
-    <a class="botao-entrar" routerLink="/aluno" mat-button>ENTRAR</a>
-    <!--<a class="botao-entrar" routerLink="/aluno/avaliacao/1" mat-button>ENTRAR</a>-->
+    
+    <button class="botao-entrar" (click)="abrirCadastrar()" mat-button>CADASTRAR-SE</button>
+
+    <a *ngIf="!id && tipoUsuario == 'aluno'" class="botao-entrar" style="margin-left: 30px;" routerLink="/aluno" mat-button>ENTRAR</a>
+    <a *ngIf="!id && tipoUsuario == 'professor'" class="botao-entrar" style="margin-left: 30px;" routerLink="/professor" mat-button>ENTRAR</a>
+    <a *ngIf="id && tipoUsuario == 'aluno'" class="botao-entrar" style="margin-left: 30px;" [routerLink]="'/aluno/avaliacao/' + id" mat-button>ENTRAR</a>
+    <a *ngIf="id && tipoUsuario == 'professor'" class="botao-entrar" style="margin-left: 30px;" [routerLink]="'/professor/avaliacao/' + id" mat-button>ENTRAR</a>
+
 </div>

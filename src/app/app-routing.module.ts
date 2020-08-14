@@ -22,6 +22,7 @@ const routes: Routes = [
   { path: "aluno/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
   { path: "avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
   { path: ":id", component: LoginComponent },
+  { path: "", component: LoginComponent },
 ];
 
 @NgModule({
