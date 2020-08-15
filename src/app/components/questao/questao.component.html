@@ -53,20 +53,25 @@
                             <!-- LISTA DE ASSOCIASSOES -->
                             <tr cdkDrag *ngFor="let associacao of questao.associacoes; index as ai">
                                 <td width="15%" class="alternativa">
-                                    <mat-select [disabled]="true" [value]="associacao.opcaoCorreta">
-                                        <mat-option [value]="_associacao.opcaoCorreta"
-                                            *ngFor="let _associacao of questao.associacoes">
-                                            {{_associacao.opcaoCorreta}}
-                                        </mat-option>
-                                    </mat-select>
+                                    <div style="display: inline-flex; width: 100%;">
+                                        <textarea [(ngModel)]="associacao.opcaoCorreta" class="invisible-input"
+                                            style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
+                                    </div>
                                 </td>
                                 <td width="80%" class="alternativa">
-                                    {{associacao.texto}}
+                                    <div style="display: inline-flex; width: 100%;">
+                                        <textarea [(ngModel)]="associacao.texto" class="invisible-input"
+                                            style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
+                                    </div>
                                     <button mat-icon-button matTooltip="Copiar questão"
                                         style="position: absolute; top: 1px; right: 2px; color: gray; font-size: 7px;"
                                         (click)="novaAssociacaoInput.value = associacao.texto;">
                                         <mat-icon>content_copy</mat-icon>
                                     </button>
+                                    <mat-icon cdkDragHandle
+                                        style="cursor: move; color: gray; position: absolute; top: 0px; left: 30%;">
+                                        drag_handle
+                                    </mat-icon>
                                 </td>
                                 <td width="5%"
                                     style="background-color: rgba(255, 255, 255, 0.452);  text-align: center;">
@@ -90,7 +95,7 @@
                                             (keyup)="onNovaAssocKeyUp($event, questao, novaAssociacaoInput, novaAssociacaoOpcaoInput);"
                                             #novaAssociacaoInput class="invisible-input"
                                             placeholder="Descrição da opção"
-                                            style="width: 90%; height: 100%; padding: 10px;"></textarea>
+                                            style="width: 95%; height: 100%; padding: 10px;"></textarea>
                                     </div>
                                 </td>
                                 <td width="5%" style="background-color: white; text-align: center;">
@@ -112,8 +117,8 @@
                 <tr *ngIf="questao.tipo == 1">
                     <td>
                         <textarea placeholder="Escreva aqui algo para auxiliar no momento da correção"
-                            class="input-basico" style="width: 98%; margin: auto;"
-                            rows="4">{{questao.resposta}}</textarea>
+                            class="input-basico" style="width: 98%; margin: auto;" [(ngModel)]="questao.resposta"
+                            rows="4"></textarea>
                     </td>
                 </tr>
 
@@ -161,7 +166,7 @@
                     </td>
                 </tr>
 
-                <!-- Resposta Multipla Escolha -->
+                <!-- Resposta Multipla Escolha - Multipla Resposta -->
                 <tr *ngIf="questao.tipo == 3">
                     <td>
                         <table width="100%" cdkDropList [cdkDropListData]="questao.alternativas"
@@ -172,13 +177,18 @@
                                 <td width="95%" class="alternativa">
                                     <mat-checkbox [(ngModel)]="alternativa.correta" [id]="alternativa.texto"
                                         [checked]="alternativa.correta">
-                                        {{alternativa.texto}}
+                                        <textarea [(ngModel)]="alternativa.texto" class="invisible-input"
+                                            style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                     </mat-checkbox>
                                     <button mat-icon-button matTooltip="Copiar questão"
                                         style="position: absolute; top: 1px; right: 2px; color: gray; font-size: 7px;"
                                         (click)="novaAlternativInput.value = alternativa.texto">
                                         <mat-icon>content_copy</mat-icon>
                                     </button>
+                                    <mat-icon cdkDragHandle
+                                        style="cursor: move; color: gray; position: absolute; top: 0px; left: 50%;">
+                                        drag_handle
+                                    </mat-icon>
                                 </td>
                                 <td width="5%"
                                     style="background-color: rgba(255, 255, 255, 0.452);  text-align: center;">
@@ -198,12 +208,142 @@
                                             (keyup)="onNovaAlterKeyUp($event, questao, novaAlternativInput);"
                                             #novaAlternativInput class="invisible-input"
                                             placeholder="Digite aqui uma nova alternativa"
-                                            style="width: 90%; height: 100%; padding: 10px;"></textarea>
+                                            style="width: 95%; height: 100%; padding: 10px;"></textarea>
                                     </mat-checkbox>
                                 </td>
                                 <td style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
                                         (click)="addAlternativa(questao, novaAlternativInput);" mat-icon-button>
+                                        <mat-icon
+                                            style="background-color: var(--cor-primaria); color: white; border-radius: 50%;">
+                                            add
+                                        </mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Resposta Multipla Escolha - Única Resposta -->
+                <tr *ngIf="questao.tipo == 4">
+                    <td>
+                        <table width="100%" cdkDropList [cdkDropListData]="questao.alternativas"
+                            (cdkDropListDropped)="drop($event)">
+
+                            <!-- LISTA DE ALTERNATIVAS -->
+                            <tr cdkDrag *ngFor="let alternativa of questao.alternativas; index as ai">
+                                <td width="95%" class="alternativa">
+                                    <mat-checkbox [(ngModel)]="alternativa.correta"
+                                        (ngModelChange)="desmarcarTudoMenosUma(questao, ai, editavel)"
+                                        [id]="alternativa.texto" [checked]="alternativa.correta">
+                                        <textarea [(ngModel)]="alternativa.texto" class="invisible-input"
+                                            style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
+                                    </mat-checkbox>
+                                    <button mat-icon-button matTooltip="Copiar questão"
+                                        style="position: absolute; top: 1px; right: 2px; color: gray; font-size: 7px;"
+                                        (click)="novaAlternativInput.value = alternativa.texto">
+                                        <mat-icon>content_copy</mat-icon>
+                                    </button>
+                                    <mat-icon cdkDragHandle
+                                        style="cursor: move; color: gray; position: absolute; top: 0px; left: 50%;">
+                                        drag_handle
+                                    </mat-icon>
+                                </td>
+                                <td width="5%"
+                                    style="background-color: rgba(255, 255, 255, 0.452);  text-align: center;">
+                                    <button mat-icon-button matTooltip="Remover alternativa"
+                                        (click)="removerAlternativa(questao, ai)">
+                                        <mat-icon style="color: var(--cor-perigosa)">cancel</mat-icon>
+                                    </button>
+
+                                </td>
+                            </tr>
+
+                            <!-- ADICIONAR ALTERNATIVA -->
+                            <tr>
+                                <td width="95%" style="background-color: white; height: 40px; padding: 10px;">
+                                    <mat-checkbox [disabled]="true">
+                                        <textarea type="text" rows="1"
+                                            (keyup)="onNovaAlterKeyUp($event, questao, novaAlternativInput);"
+                                            #novaAlternativInput class="invisible-input"
+                                            placeholder="Digite aqui uma nova alternativa"
+                                            style="width: 95%; height: 100%; padding: 10px;"></textarea>
+                                    </mat-checkbox>
+                                </td>
+                                <td style="background-color: white; text-align: center;">
+                                    <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
+                                        (click)="addAlternativa(questao, novaAlternativInput);" mat-icon-button>
+                                        <mat-icon
+                                            style="background-color: var(--cor-primaria); color: white; border-radius: 50%;">
+                                            add
+                                        </mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Resposta Preenchimento -->
+                <tr *ngIf="questao.tipo == 5">
+                    <td>
+                        <button mat-icon-button matTooltip="Adicionar opção de preenchimento"
+                            (click)="inserirOpcaoPreeencherSelecionado(questao, novaOpcaoPreencherInput, editorPreencher)">
+                            <mat-icon>space_bar</mat-icon>
+                        </button>
+                        <textarea [(ngModel)]="questao.textoParaPreencher" #editorPreencher
+                            (keyup)="onEditorPreencherKeyUp(questao)"
+                            placeholder="Escreva aqui um texto para ser completado" class="input-basico"
+                            style="width: 98%; overflow: auto; margin: auto; height: 6em; padding: 5px"></textarea>
+                        <table width="100%">
+
+                            <!-- LISTA DE OPÇÕES PARA PREENCHER -->
+                            <tr *ngFor="let opcaoParaPreencher of questao.opcoesParaPreencher; index as ai">
+                                <td *ngIf="opcaoParaPreencher.ativa" width="5%" class="alternativa"
+                                    style="cursor: default">
+                                    ({{ai + 1}})
+                                </td>
+                                <td *ngIf="opcaoParaPreencher.ativa" width="90%" class="alternativa"
+                                    style="cursor: default">
+                                    <div style="display: inline-flex; width: 100%;">
+                                        <textarea [(ngModel)]="opcaoParaPreencher.texto" class="invisible-input"
+                                            style="width: 95%; height: 100%; padding: 10px;" rows="1">
+                                    </textarea>
+                                    </div>
+                                    <button mat-icon-button matTooltip="Copiar opção"
+                                        style="position: absolute; top: 1px; right: 2px; color: gray; font-size: 7px;"
+                                        (click)="novaOpcaoPreencherInput.value = opcaoParaPreencher.texto">
+                                        <mat-icon>content_copy</mat-icon>
+                                    </button>
+                                </td>
+                                <td *ngIf="opcaoParaPreencher.ativa" width="5%"
+                                    style="background-color: rgba(255, 255, 255, 0.452);  text-align: center;">
+                                    <button mat-icon-button matTooltip="Remover alternativa"
+                                        (click)="removerOpcaoPreencher(questao, ai)">
+                                        <mat-icon style="color: var(--cor-perigosa)">cancel</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- ADICIONAR OPÇÃO PARA PREENCHER -->
+                            <tr>
+                                <td width="5%" style="background-color: white; height: 40px; padding: 10px;">
+                                    ({{questao.opcoesParaPreencher.length + 1}})
+                                </td>
+                                <td width="90%" style="background-color: white; height: 40px; padding: 10px;">
+                                    <div style="display: inline-flex; width: 100%;">
+                                        <textarea type="text" rows="1"
+                                            (keyup)="onNovaOpcaoPreencherKeyUp($event, questao, novaOpcaoPreencherInput, editorPreencher);"
+                                            #novaOpcaoPreencherInput class="invisible-input"
+                                            placeholder="Digite aqui uma opção para completar o texto"
+                                            style="width: 95%; height: 100%; padding: 10px;"></textarea>
+                                    </div>
+                                </td>
+                                <td style="background-color: white; text-align: center;">
+                                    <button matTooltip="Adicionar opção (Ctrl + Enter)"
+                                        (click)="addOpcaoPreencher(questao, novaOpcaoPreencherInput, editorPreencher);"
+                                        mat-icon-button>
                                         <mat-icon
                                             style="background-color: var(--cor-primaria); color: white; border-radius: 50%;">
                                             add
@@ -309,7 +449,7 @@
                     </td>
                 </tr>
 
-                <!-- RESPOSTA MULTIPLA ESCOLHA -->
+                <!-- RESPOSTA MULTIPLA ESCOLHA - MULTIPLA RESPOSTA -->
                 <tr *ngIf="questao.tipo == 3">
                     <td>
                         <table width="100%">
@@ -323,13 +463,44 @@
                     </td>
                 </tr>
 
+                <!-- RESPOSTA MULTIPLA ESCOLHA - ÚNICA RESPOSTA -->
+                <tr *ngIf="questao.tipo == 4">
+                    <td>
+                        <table width="100%">
+                            <tr *ngFor="let alternativa of questao.alternativas; index as ai">
+                                <td valign="middle" class="alternativa" style="cursor: default;">
+                                    <mat-checkbox [(ngModel)]="alternativa.selecionada"
+                                        (ngModelChange)="desmarcarTudoMenosUma(questao, ai, editavel)">
+                                        {{alternativa.texto}}
+                                    </mat-checkbox>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- RESPOSTA PREENCHIMENTO -->
+                <tr *ngIf="questao.tipo == 5">
+                    <td align="justfy">
+                        <span *ngFor="let parte of questao.partesPreencher">
+                            <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
+                            <select *ngIf="parte.tipo == 'select'" class="select-basico" style="padding: 5px"
+                                [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada">
+                                <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao)"
+                                    [value]="opcaoPreencher.texto">
+                                    {{opcaoPreencher.texto}}
+                                </option>
+                            </select>
+                        </span>
+                    </td>
+                </tr>
+
                 <!-- VALOR DA QUESTÃO -->
                 <tr>
                     <td align="left" style="position: relative; padding-top: 20px;">
                         <div>
                             Valor: {{questao.valor}}/100
                         </div>
-
                     </td>
                 </tr>
 

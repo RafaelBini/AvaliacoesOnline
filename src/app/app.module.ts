@@ -37,6 +37,8 @@ import { EscolherTipoComponent } from './dialogs/escolher-tipo/escolher-tipo.com
 import { QuestaoComponent } from './components/questao/questao.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { CadastrarSeComponent } from './dialogs/cadastrar-se/cadastrar-se.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { CadastrarSeComponent } from './dialogs/cadastrar-se/cadastrar-se.compon
     BuscarQuestaoComponent,
     EscolherTipoComponent,
     QuestaoComponent,
-    CadastrarSeComponent
+    CadastrarSeComponent,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,
@@ -78,7 +81,7 @@ import { CadastrarSeComponent } from './dialogs/cadastrar-se/cadastrar-se.compon
     MatFormFieldModule,
     MatSelectModule,
     MatExpansionModule,
-    MatRadioModule
+    MatRadioModule,
   ],
   providers: [
 

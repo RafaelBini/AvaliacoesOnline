@@ -1,20 +1,26 @@
+import { OpcaoPreencher } from './../../models/opcao-preencher';
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Pipe, Injectable } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { InfoQuestaoComponent } from 'src/app/dialogs/info-questao/info-questao.component';
 import { Associacao } from 'src/app/models/associacao';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-questao',
   templateUrl: './questao.component.html',
   styleUrls: ['./questao.component.css']
 })
+
+
+
 export class QuestaoComponent implements OnInit {
   @Input() avaliacao: Avaliacao;
   @Input() editavel: boolean;
+
 
 
   constructor(public comumService: ComumService, private dialog: MatDialog) { }
@@ -39,6 +45,12 @@ export class QuestaoComponent implements OnInit {
       this.tipoArquivoChanged(questao, 'Todos');
     }
   }
+  openInfoQuestao(questao) {
+    this.dialog.open(InfoQuestaoComponent, {
+      width: '80%',
+      data: questao
+    });
+  }
 
   // Alternativa
   removerAlternativa(questao, alternativaIndesejadaIndex) {
@@ -52,6 +64,16 @@ export class QuestaoComponent implements OnInit {
 
     if (event.key == 'Enter' && event.ctrlKey) {
       this.addAlternativa(questao, novaAlternativInput);
+    }
+  }
+  desmarcarTudoMenosUma(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
+    for (var i = 0; i < questao.alternativas.length; i++) {
+      if (i != alternativaIndex && isEditavel) {
+        questao.alternativas[i].correta = false;
+      }
+      else if (i != alternativaIndex && !isEditavel) {
+        questao.alternativas[i].selecionada = false;
+      }
     }
   }
 
@@ -89,11 +111,70 @@ export class QuestaoComponent implements OnInit {
     }
   }
 
-  openInfoQuestao(questao) {
-    this.dialog.open(InfoQuestaoComponent, {
-      width: '80%',
-      data: questao
+  // PREENCHIMENTO / COMPLETAR
+  inserirOpcaoPreeencherSelecionado(questao: Questao, novaOpcaoPreencherInput, editorElement) {
+    novaOpcaoPreencherInput.value = questao.textoParaPreencher.substring(editorElement.selectionStart, editorElement.selectionEnd);
+    this.addOpcaoPreencher(questao, novaOpcaoPreencherInput, editorElement);
+  }
+  removerOpcaoPreencher(questao: Questao, opcaoPreencherIndesejadaIndex) {
+    questao.opcoesParaPreencher[opcaoPreencherIndesejadaIndex].ativa = false;
+    questao.partesPreencher = this.getPreenchimentoPartes(questao);
+  }
+  addOpcaoPreencher(questao: Questao, novaOpcaoPreencherInput, editorElement) {
+    questao.opcoesParaPreencher.push({ texto: novaOpcaoPreencherInput.value, opcaoSelecionada: "", ativa: true });
+    novaOpcaoPreencherInput.value = "";
+    questao.textoParaPreencher =
+      questao.textoParaPreencher.substring(0, editorElement.selectionStart)
+      + `(${questao.opcoesParaPreencher.length})` +
+      questao.textoParaPreencher.substring(editorElement.selectionEnd, questao.textoParaPreencher.length);
+
+    questao.partesPreencher = this.getPreenchimentoPartes(questao);
+  }
+  onNovaOpcaoPreencherKeyUp(event, questao, novaOpcaoPreencherInput, editorElement) {
+    if (event.key == 'Enter' && event.ctrlKey) {
+      this.addOpcaoPreencher(questao, novaOpcaoPreencherInput, editorElement);
+    }
+  }
+  onEditorPreencherKeyUp(questao) {
+    questao.partesPreencher = this.getPreenchimentoPartes(questao);
+  }
+  getOpcoesPreencherAtivas(questao: Questao) {
+    return questao.opcoesParaPreencher.filter(opcao => opcao.ativa);
+  }
+  getPreenchimentoPartes(questao: Questao) {
+    var texto = questao.textoParaPreencher;
+    var textoSplitado = [];
+    var partes = [];
+    const SEPARADOR_RANDOMICO = `*#${Math.random()}#*`;
+    const IDENTIFICADOR_RANDOMICO = `*#${Math.random()}#*`;
+    for (var i = 0; i < questao.opcoesParaPreencher.length; i++) {
+      if (questao.opcoesParaPreencher[i].ativa)
+        texto = texto.replace(`(${i + 1})`, `${SEPARADOR_RANDOMICO + IDENTIFICADOR_RANDOMICO + (i + 1) + SEPARADOR_RANDOMICO}`);
+    }
+
+    textoSplitado = texto.split(SEPARADOR_RANDOMICO);
+
+    textoSplitado.forEach(parte => {
+      if (parte.includes(IDENTIFICADOR_RANDOMICO)) {
+        partes.push({
+          conteudo: parseInt(parte.replace(IDENTIFICADOR_RANDOMICO, "")) - 1,
+          tipo: "select"
+        });
+        console.log(partes);
+      }
+      else {
+        partes.push({
+          conteudo: parte,
+          tipo: "texto"
+        });
+      }
     });
+
+    return partes;
+
   }
 
+
 }
+
+

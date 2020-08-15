@@ -31,6 +31,7 @@
 .input-basico{
   border: 1px dotted rgba(0, 0, 0, 0.20);
   border-radius: 7px;
+  background-color: white;
 }
 .input-basico:focus {
   outline: none;
@@ -64,7 +65,6 @@
 
 .alternativa {
   background-color: rgba(255, 255, 255, 0.452); 
-  cursor: move; 
   position: relative; 
   height: 40px; 
   padding: 10px;

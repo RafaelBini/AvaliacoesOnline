@@ -1,3 +1,4 @@
+import { OpcaoPreencher } from './opcao-preencher';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { Alternativa } from './alternativa';
 import { Associacao } from './associacao';
@@ -13,4 +14,7 @@ export interface Questao {
     nivelDificuldade: number;
     tags?: Array<string>;
     extensoes?: Array<string>;
+    textoParaPreencher?: string;
+    opcoesParaPreencher?: Array<OpcaoPreencher>;
+    partesPreencher?: Array<any>;
 }

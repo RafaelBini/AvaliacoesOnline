@@ -37,13 +37,15 @@ export class AvaliacaoNovaComponent implements OnInit {
     questoes: [
       {
         pergunta: "",
-        tipo: 1,
+        tipo: 5,
         resposta: "",
         alternativas: [],
         valor: 1,
         nivelDificuldade: 2,
         tags: [],
         associacoes: [],
+        textoParaPreencher: "",
+        opcoesParaPreencher: []
       },
     ],
 
@@ -67,6 +69,8 @@ export class AvaliacaoNovaComponent implements OnInit {
       nivelDificuldade: 2,
       tags: [],
       associacoes: [],
+      textoParaPreencher: "",
+      opcoesParaPreencher: []
     });
 
     this.comumService.scrollToBottom();
