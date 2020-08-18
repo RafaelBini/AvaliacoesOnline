@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { UrlNode } from 'src/app/models/url-node';
 
 
 @Component({
@@ -49,9 +50,15 @@ export class AvaliacaoNovaComponent implements OnInit {
       },
     ],
 
-  }
+  };
 
   public visao = "professor";
+
+  public caminho: Array<UrlNode> = [
+    { nome: `Professor`, url: `/professor` },
+    { nome: `Avaliações`, url: `/professor` },
+    { nome: `Nova Avaliação`, url: `/professor` },
+  ];
 
   ngOnInit(): void {
     this.comumService.scrollToTop();

@@ -1,3 +1,6 @@
+import { UrlNode } from './../../models/url-node';
+import { Avaliacao } from 'src/app/models/avaliacao';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
@@ -7,6 +10,8 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
   styleUrls: ['./avaliacao-professor.component.css']
 })
 export class AvaliacaoProfessorComponent implements OnInit {
+
+
 
   public grupos: Array<any> = [
     {
@@ -22,9 +27,21 @@ export class AvaliacaoProfessorComponent implements OnInit {
     { nome: "Marcos Almeida" },
   ];
 
-  constructor() { }
+  public avaliacao: any = {
+    titulo: "Avaliação 01",
+    descricao: "Essa é uma avaliação criada para testes.",
+  }
+
+  public caminho: Array<UrlNode> = [
+    { nome: `Professor`, url: `/professor` },
+    { nome: `Avaliações`, url: `/professor/avaliacoes` },
+    { nome: `${this.avaliacao.titulo}`, url: `#` },
+  ];
+
+  constructor(public route: ActivatedRoute) { }
 
   ngOnInit(): void {
+
   }
 
   addGrupo() {

@@ -38,6 +38,7 @@ import { QuestaoComponent } from './components/questao/questao.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { CadastrarSeComponent } from './dialogs/cadastrar-se/cadastrar-se.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { BarraNavegacaoComponent } from './components/barra-navegacao/barra-navegacao.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     EscolherTipoComponent,
     QuestaoComponent,
     CadastrarSeComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    BarraNavegacaoComponent
   ],
   imports: [
     BrowserModule,

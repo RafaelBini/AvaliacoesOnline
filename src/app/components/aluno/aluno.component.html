@@ -1,4 +1,6 @@
-<mat-tab-group mat-align-tabs="start">
+<app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
+
+<mat-tab-group mat-align-tabs="start" [selectedIndex]="selectedTab" (selectedIndexChange)="tabAlterada($event)">
     <mat-tab label="Avaliação e Notas">
         <table style="width: 100%; margin: auto; margin-top: 20px;">
             <tr>
@@ -21,7 +23,7 @@
                         <br />
                         Término: 31/07/2020 21:00
 
-                        <a routerLink="avaliacao/1" class="info-box">
+                        <a routerLink="/aluno/avaliacao/1" class="info-box">
                             Status: {{avaliacao.status}}
                         </a>
 

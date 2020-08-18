@@ -1,4 +1,6 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { UrlNode } from 'src/app/models/url-node';
 
 
 @Component({
@@ -8,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AvaliacaoAlunoComponent implements OnInit {
 
-  constructor() { }
+  constructor(public route: ActivatedRoute) { }
   public finalizado = false;
 
   public questoes = [
@@ -38,10 +40,20 @@ export class AvaliacaoAlunoComponent implements OnInit {
     { nome: "Matheus Leonardo" },
     { nome: "Douglas Marques" },
     { nome: "Guilherme Cruz" },
-  ]
+  ];
 
+  public avaliacao = {
+    titulo: "Avaliacao 01"
+  }
+
+  public caminho: Array<UrlNode> = [
+    { nome: `Aluno`, url: `/aluno` },
+    { nome: `Avaliações`, url: `/aluno/avaliacoes` },
+    { nome: `${this.avaliacao.titulo}`, url: `#` },
+  ];
 
   ngOnInit(): void {
+
   }
 
 }

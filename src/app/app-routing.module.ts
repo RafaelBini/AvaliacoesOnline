@@ -13,8 +13,10 @@ import { AlunoComponent } from './components/aluno/aluno.component';
 const routes: Routes = [
   { path: "professor/aluno/novo", component: AlunoNovoComponent },
   { path: "professor", component: ProfessorComponent },
+  { path: "professor/:tab", component: ProfessorComponent },
   { path: "login", component: LoginComponent },
   { path: "aluno", component: AlunoComponent },
+  { path: "aluno/:tab", component: AlunoComponent },
   { path: "professor/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
   { path: "professor/avaliacao/nova", component: AvaliacaoNovaComponent },
   { path: "professor/avaliacao/:id", component: AvaliacaoProfessorComponent },

@@ -1,6 +1,8 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlunoNovoComponent } from './../aluno-novo/aluno-novo.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
+import { UrlNode } from 'src/app/models/url-node';
 
 
 @Component({
@@ -10,6 +12,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfessorComponent implements OnInit {
   public alterar = false;
+  public selectedTab = 0;
 
   public alunos = [
     { email: "godo@gmail.com", nome: "Godofredo", matricula: "grr20178700" },
@@ -22,11 +25,33 @@ export class ProfessorComponent implements OnInit {
     { email: "alanzoka@hotmail.com", nome: "Alan Ferreira", matricula: "grr20178452" },
     { email: "balga@outlook.com", nome: "Mari Balga", matricula: "grr20196658" },
     { email: "clone@gmail.com", nome: "Henrique Grosse", matricula: "grr20184610" },
+  ];
+
+  private tabs = [
+    "avaliacoes",
+    "alunos",
+    "perfil",
+    "dashboard"
   ]
 
-  constructor(private dialog: MatDialog) { }
+  public caminho: Array<UrlNode> = [
+    { nome: `Professor`, url: `/professor` },
+  ];
+
+  constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      if (params.tab) {
+        this.selectedTab = this.tabs.indexOf(params.tab);
+      }
+    });
+  }
+
+  tabAlterada(index) {
+
+    this.router.navigate([`/professor/${this.tabs[index]}`]);
+
   }
 
   addAluno() {

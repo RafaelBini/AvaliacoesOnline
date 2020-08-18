@@ -1,3 +1,5 @@
+<app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
+
 <div *ngIf="tipo != 'avaliacao'"
     style="padding: 10px; padding-left: 130px; margin-bottom: 20px; color:white; font-size: 15px; background-color: var(--cor-primaria);">
     <a [routerLink]="'/' + tipo" style="color: white;">Avaliações</a> - <a [routerLink]="'/' + tipo + '/avaliacao/1'"
