@@ -1,11 +1,7 @@
-<div class="barra">
-    <span *ngFor="let urlNode of caminho; index as i">
-        <span *ngIf="i < (caminho.length -1)">
-            <a [routerLink]="urlNode.url">{{urlNode.nome}}</a> -
-        </span>
-        <span *ngIf="i >= (caminho.length -1)">
-            {{urlNode.nome}}
-        </span>
-    </span>
-
+<div class="container barra">
+    <div *ngFor="let urlNode of caminho; index as i" class="container">
+        <span *ngIf="i < (caminho.length -1)"><a [routerLink]="urlNode.url">{{urlNode.nome}}</a></span>
+        <mat-icon *ngIf="i < (caminho.length -1)">navigate_next</mat-icon>
+        <span *ngIf="i >= (caminho.length -1)">{{urlNode.nome}}</span>
+    </div>
 </div>

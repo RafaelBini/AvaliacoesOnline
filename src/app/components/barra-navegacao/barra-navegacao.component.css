@@ -1,11 +1,29 @@
-.barra{
-    padding: 10px; 
-    padding-left: 130px; 
-    color: white; 
-    font-size: 15px; 
-    background-color: var(--cor-primaria);
+* {
+    color: var(--cor-primaria); 
+    text-decoration: none;
 }
 
-a {
-    color: white;
+.barra{
+    padding: 10px;    
+    background-color: whitesmoke;
+    width: fit-content;     
+    border-bottom-right-radius: 15px; 
 }
+
+.divisor{
+    margin-left: 12px;
+    margin-right: 12px;
+
+}
+
+a:hover {
+    text-decoration: underline dashed;
+}
+
+.container {
+    display: inline-flex;
+    align-items: center;
+
+    width: fit-content;
+  }
+  

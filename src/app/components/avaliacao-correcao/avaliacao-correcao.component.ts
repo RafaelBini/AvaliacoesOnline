@@ -18,17 +18,31 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
     titulo: "Avaliacao 01"
   }
 
-  public caminho: Array<UrlNode> = [
-    { nome: `Professor`, url: `/professor` },
-    { nome: `Avaliações`, url: `/professor` },
-    { nome: `${this.avaliacao.titulo}`, url: `/professor/avaliacao/${this.avaliacao.id}` },
-    { nome: `${this.avaliacao.titulo}`, url: `#` },
-  ];
+  public caminho: Array<UrlNode>;
 
   ngOnInit(): void {
+
     this.route.url.subscribe((value) => {
       this.tipo = value[0].path;
-    })
+    });
+
+    if (this.tipo == "professor") {
+      this.caminho = [
+        { nome: `Professor`, url: `/professor` },
+        { nome: `Avaliações`, url: `/professor` },
+        { nome: `${this.avaliacao.titulo}`, url: `/professor/avaliacao/${this.avaliacao.id}` },
+        { nome: `Correção`, url: `#` },
+      ];
+    }
+    else {
+      this.caminho = [
+        { nome: `Aluno`, url: `/aluno` },
+        { nome: `Avaliações`, url: `/aluno/avaliacoes` },
+        { nome: `${this.avaliacao.titulo}`, url: `/aluno/avaliacao/${this.avaliacao.id}` },
+        { nome: `Correção`, url: `#` },
+      ];
+    }
+
 
   }
 
