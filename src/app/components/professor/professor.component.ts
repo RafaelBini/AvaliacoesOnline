@@ -28,14 +28,15 @@ export class ProfessorComponent implements OnInit {
   ];
 
   private tabs = [
-    "avaliacoes",
-    "alunos",
-    "perfil",
-    "dashboard"
+    { id: "avaliacoes", nome: "Avaliações" },
+    { id: "alunos", nome: "Alunos" },
+    { id: "perfil", nome: "Meu Perfil" },
+    { id: "dashboard", nome: "Dashboard" }
   ]
 
   public caminho: Array<UrlNode> = [
     { nome: `Professor`, url: `/professor` },
+    { nome: this.tabs[0].nome, url: `#` },
   ];
 
   constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router) { }
@@ -43,15 +44,16 @@ export class ProfessorComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params.tab) {
-        this.selectedTab = this.tabs.indexOf(params.tab);
+        const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);
+        this.selectedTab = index;
+        this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
     });
   }
 
   tabAlterada(index) {
-
-    this.router.navigate([`/professor/${this.tabs[index]}`]);
-
+    this.router.navigate([`/professor/${this.tabs[index].id}`]);
+    this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
   }
 
   addAluno() {

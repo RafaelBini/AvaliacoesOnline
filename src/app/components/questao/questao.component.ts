@@ -95,6 +95,9 @@ export class QuestaoComponent implements OnInit {
       this.addAssociacao(questao, novaAssociacaoInput, novaAssociacaoOpcaoInput);
     }
   }
+  getAssociacoesOrdenadas(questao: Questao) {
+    return questao.associacoes.concat().sort((a, b) => a.texto > b.texto ? 1 : -1);
+  }
 
   // Envio de Arquivo
   tipoArquivoChanged(questao, tipo) {
@@ -139,7 +142,7 @@ export class QuestaoComponent implements OnInit {
     questao.partesPreencher = this.getPreenchimentoPartes(questao);
   }
   getOpcoesPreencherAtivas(questao: Questao) {
-    return questao.opcoesParaPreencher.filter(opcao => opcao.ativa);
+    return questao.opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.texto > b.texto ? 1 : -1);
   }
   getPreenchimentoPartes(questao: Questao) {
     var texto = questao.textoParaPreencher;

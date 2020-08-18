@@ -1,7 +1,11 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
 <mat-tab-group mat-align-tabs="start" [selectedIndex]="selectedTab" (selectedIndexChange)="tabAlterada($event)">
-    <mat-tab label="Avaliações">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon style="margin-right: 8px;">description</mat-icon>
+            Avaliações
+        </ng-template>
         <div style="padding: 80px; padding-top: 30px; position: relative;">
             <h2>Minhas Avaliações</h2>
 
@@ -230,7 +234,11 @@
         </div>
 
     </mat-tab>
-    <mat-tab label="Alunos">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon style="margin-right: 8px;">recent_actors</mat-icon>
+            Alunos
+        </ng-template>
 
         <table class="tabela-alunos">
             <tr>
@@ -293,7 +301,11 @@
 
 
     </mat-tab>
-    <mat-tab label="Meu Perfil">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon style="margin-right: 8px;">account_circle</mat-icon>
+            Meu Perfil
+        </ng-template>
 
         <div style="background-color: whitesmoke; width: 50%; border-radius: 10px; margin: auto;">
             <table class="tabela-editar-perfil">
@@ -342,7 +354,11 @@
 
 
     </mat-tab>
-    <mat-tab label="Dashboards">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon style="margin-right: 8px;">dashboard</mat-icon>
+            Dashboard
+        </ng-template>
 
     </mat-tab>
 </mat-tab-group>

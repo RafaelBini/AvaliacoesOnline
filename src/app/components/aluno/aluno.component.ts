@@ -23,29 +23,32 @@ export class AlunoComponent implements OnInit {
 
   ];
 
+  public tabs = [
+    { id: "avaliacoes", nome: "Avaliação" },
+    { id: "perfil", nome: "Meu Perfil" }
+  ]
+
   public caminho: Array<UrlNode> = [
     { nome: `Aluno`, url: `/aluno` },
+    { nome: this.tabs[0].nome, url: "#" }
   ];
-
-  public tabs = [
-    "avaliacoes",
-    "perfil"
-  ]
 
   constructor(public route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params.tab) {
-        this.selectedTab = this.tabs.indexOf(params.tab);
+        const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);
+        this.selectedTab = index;
+        this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
     });
   }
 
   tabAlterada(index) {
 
-    this.router.navigate([`/aluno/${this.tabs[index]}`]);
-
+    this.router.navigate([`/aluno/${this.tabs[index].id}`]);
+    this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
   }
 
 }

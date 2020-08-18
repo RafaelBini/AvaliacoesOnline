@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
   public id: string = null;
-  public tipoUsuario: String = "aluno";
+  public tipoUsuario: String = "professor";
 
   constructor(private dialog: MatDialog, private route: ActivatedRoute) { }
 

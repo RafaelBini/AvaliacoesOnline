@@ -38,7 +38,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     questoes: [
       {
         pergunta: "",
-        tipo: 5,
+        tipo: 3,
         resposta: "",
         alternativas: [],
         valor: 1,

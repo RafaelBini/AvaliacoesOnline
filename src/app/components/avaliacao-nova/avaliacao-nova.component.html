@@ -168,11 +168,11 @@
 
     <div
         style="padding: 20px; background-color: whitesmoke;  color: black; width: 100%; border-radius: 10px; text-align: center;">
-        <span style="font-size: 22px; font-weight: bold;">{{avaliacao.titulo}}</span>
+        <span style="font-size: 22px; font-weight: bold;">{{avaliacao.titulo || 'Sem Título'}}</span>
         <br /><br />
 
         <div style="text-align: justify;">
-            {{avaliacao.descricao}}
+            {{avaliacao.descricao || 'Sem Descrição'}}
             <br /><br />
             Professor: Rafael Bini
             <br /><br />

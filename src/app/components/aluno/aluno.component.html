@@ -1,7 +1,11 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
 <mat-tab-group mat-align-tabs="start" [selectedIndex]="selectedTab" (selectedIndexChange)="tabAlterada($event)">
-    <mat-tab label="Avaliação e Notas">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon style="margin-right: 8px;">description</mat-icon>
+            Avaliações e Notas
+        </ng-template>
         <table style="width: 100%; margin: auto; margin-top: 20px;">
             <tr>
                 <td align="center">
@@ -36,7 +40,12 @@
 
 
     </mat-tab>
-    <mat-tab label="Meu perfil">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon style="margin-right: 8px;">account_circle</mat-icon>
+            Meu Perfil
+        </ng-template>
+
         <div style="background-color: whitesmoke; width: 50%; border-radius: 10px; margin: auto;">
             <table class="tabela-editar-perfil">
                 <tr>

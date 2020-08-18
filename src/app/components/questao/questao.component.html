@@ -176,7 +176,7 @@
                             <tr cdkDrag *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td width="95%" class="alternativa">
                                     <mat-checkbox [(ngModel)]="alternativa.correta" [id]="alternativa.texto"
-                                        [checked]="alternativa.correta">
+                                        [(ngModel)]="alternativa.correta">
                                         <textarea [(ngModel)]="alternativa.texto" class="invisible-input"
                                             style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                     </mat-checkbox>
@@ -402,10 +402,11 @@
                     <td>
                         <table width="100%">
                             <tr *ngFor="let associacao of questao.associacoes; index as ai">
-                                <td width="20%" class="alternativa" style="cursor:default;">
-                                    <mat-select [(ngModel)]="associacao.opcaoSelecionada">
+                                <td width="20%" style="cursor:default;">
+                                    <mat-select class="select-basico" style="width: 82%;"
+                                        [(ngModel)]="associacao.opcaoSelecionada">
                                         <mat-option [value]="_associacao.opcaoCorreta"
-                                            *ngFor="let _associacao of questao.associacoes">
+                                            *ngFor="let _associacao of getAssociacoesOrdenadas(questao)">
                                             {{_associacao.opcaoCorreta}}
                                         </mat-option>
                                     </mat-select>
@@ -484,7 +485,7 @@
                     <td align="justfy">
                         <span *ngFor="let parte of questao.partesPreencher">
                             <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
-                            <select *ngIf="parte.tipo == 'select'" class="select-basico" style="padding: 5px"
+                            <select *ngIf="parte.tipo == 'select'" class="select-basico"
                                 [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada">
                                 <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao)"
                                     [value]="opcaoPreencher.texto">
