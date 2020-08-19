@@ -1,13 +1,12 @@
-import { OpcaoPreencher } from './../../models/opcao-preencher';
+
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
-import { Component, OnInit, Input, Pipe, Injectable } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { InfoQuestaoComponent } from 'src/app/dialogs/info-questao/info-questao.component';
-import { Associacao } from 'src/app/models/associacao';
-import { DomSanitizer } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-questao',
@@ -23,12 +22,19 @@ export class QuestaoComponent implements OnInit {
 
 
 
-  constructor(public comumService: ComumService, private dialog: MatDialog) { }
+  constructor(public comumService: ComumService, private dialog: MatDialog, private elementRef: ElementRef) { }
 
   ngOnInit(): void {
+
   }
 
+
   // GERAL
+  ajustarAltura(event) {
+    var paddingTop = parseFloat(event.target.style.paddingTop.replace("px", ""));
+    var paddingBottom = parseFloat(event.target.style.paddingBottom.replace("px", ""));
+    event.target.style.height = ""; event.target.style.height = (event.target.scrollHeight - (paddingTop + paddingBottom)) + "px";
+  }
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -57,7 +63,7 @@ export class QuestaoComponent implements OnInit {
     questao.alternativas.splice(alternativaIndesejadaIndex, 1);
   }
   addAlternativa(questao, novaAlternativInput) {
-    questao.alternativas.push({ texto: novaAlternativInput.value, correta: false, selecionada: false });
+    questao.alternativas.push({ texto: novaAlternativInput.value, correta: false, selecionada: null });
     novaAlternativInput.value = "";
   }
   onNovaAlterKeyUp(event, questao, novaAlternativInput) {
@@ -67,6 +73,8 @@ export class QuestaoComponent implements OnInit {
     }
   }
   desmarcarTudoMenosUma(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
+    if (questao.tipo != 4)
+      return;
     for (var i = 0; i < questao.alternativas.length; i++) {
       if (i != alternativaIndex && isEditavel) {
         questao.alternativas[i].correta = false;
