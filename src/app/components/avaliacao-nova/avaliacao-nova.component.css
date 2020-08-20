@@ -26,6 +26,14 @@
     color: black;    
 }
 
+.contador-caracteres{
+  font-size: 10px;
+  color: gray;
+  user-select: none;
+  position: absolute;
+  top: 0px;
+  right: 7px;
+}
 
 .questao {
     position: relative; 

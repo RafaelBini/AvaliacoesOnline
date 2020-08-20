@@ -9,13 +9,15 @@
             <input required placeholder="Título da Avaliação" class="titulo-input" [(ngModel)]="avaliacao.titulo" />
         </div>
         <br />
-        <div>
-            <textarea rows="3" class="descricao-textarea"
-                style="width: 97%; margin: auto; display: block; font-size: 13px; padding: 7px;  border: none; border-radius: 4px; resize: vertical;"
+        <div style="position: relative;">
+            <textarea #descricaoTextarea maxlength="500" rows="3" class="descricao-textarea"
+                (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
+                style="width: 97%; margin: auto; display: block; font-size: 13px; padding: 5px;  padding-top: 14px; border: none; border-radius: 4px; resize: vertical;"
                 [(ngModel)]="avaliacao.descricao"
                 placeholder="Insira aqui uma descrição / instruções iniciais"></textarea>
-            <br />
-            <span style="font-size: 11px;">0/260 caracteres</span>
+            <span *ngIf="estaEmFoco(descricaoTextarea)"
+                class="contador-caracteres">{{descricaoTextarea.value.length}}/500</span>
+
         </div>
 
         <table class="atributos-table" style="margin: auto; width: 100%; font-size: 15px;">

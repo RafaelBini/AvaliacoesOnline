@@ -2,12 +2,10 @@ import { EscolherTipoComponent } from './../../dialogs/escolher-tipo/escolher-ti
 import { ComumService } from './../../services/comum.service';
 import { Avaliacao } from './../../models/avaliacao';
 import { BuscarQuestaoComponent } from './../../dialogs/buscar-questao/buscar-questao.component';
-import { InfoQuestaoComponent } from './../../dialogs/info-questao/info-questao.component';
 import { AvaliacaoCriadaDialogComponent } from './../../dialogs/avaliacao-criada-dialog/avaliacao-criada-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { UrlNode } from 'src/app/models/url-node';
 
 
@@ -65,7 +63,14 @@ export class AvaliacaoNovaComponent implements OnInit {
   }
 
 
-
+  estaEmFoco(objetoDom): boolean {
+    return objetoDom == document.activeElement;
+  }
+  ajustarAltura(event) {
+    var paddingTop = parseFloat(event.target.style.paddingTop.replace("px", ""));
+    var paddingBottom = parseFloat(event.target.style.paddingBottom.replace("px", ""));
+    event.target.style.height = ""; event.target.style.height = (event.target.scrollHeight + 0.7 - (paddingTop + paddingBottom)) + "px";
+  }
   addQuestao() {
     this.avaliacao.questoes.push({
       pergunta: "",

@@ -460,8 +460,14 @@
                 <!-- RESPOSTA DISSERTATIVA -->
                 <tr *ngIf="questao.tipo == 1">
                     <td align="right">
-                        <textarea placeholder="Escreva aqui a resposta" class="input-basico"
-                            style="width: 98%; margin: auto;" rows="4"></textarea>
+                        <div style="position: relative;">
+                            <textarea #respostaAlunoTextarea maxlength="500" placeholder="Escreva aqui a resposta"
+                                (input)="ajustarAltura($event)" (click)="ajustarAltura($event)" class="input-basico"
+                                style="width: 98%; margin: auto;" rows="4"></textarea>
+                            <span *ngIf="estaEmFoco(respostaAlunoTextarea)"
+                                class="contador-caracteres">{{respostaAlunoTextarea.value.length}}/500</span>
+                        </div>
+
                         <br />
                         <button mat-icon-button matTooltip="Adicionar Imagem">
                             <mat-icon>insert_photo</mat-icon>
