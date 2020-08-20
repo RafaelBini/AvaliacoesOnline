@@ -31,7 +31,7 @@
 .input-basico{
   border: 1px dotted rgba(0, 0, 0, 0.20);
   border-radius: 7px;
-  background-color: white;
+  background-color: white;  
 }
 .input-basico:focus {
   outline: none;
@@ -50,6 +50,15 @@
   outline: none;
   border: 1px dashed var(--cor-primaria);
   border-radius: 7px;
+}
+
+.contador-caracteres{
+  font-size: 10px;
+  color: gray;
+  user-select: none;
+  position: absolute;
+  top: 0px;
+  right: 7px;
 }
 
 /* QUESTÕES MULTIPLA ESCOLHA */
