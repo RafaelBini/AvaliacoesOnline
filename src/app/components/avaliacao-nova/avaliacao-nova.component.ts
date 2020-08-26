@@ -24,6 +24,8 @@ export class AvaliacaoNovaComponent implements OnInit {
     descricao: "",
     dtInicio: this.comumService.getStringFromDate(new Date()),
     isInicioIndeterminado: false,
+    dtInicioCorrecao: this.comumService.getStringFromDate(new Date()),
+    isInicioCorrecaoIndeterminado: false,
     dtTermino: this.comumService.getStringFromDate(new Date()),
     isTerminoIndeterminado: false,
     isOrdemAleatoria: false,
@@ -69,7 +71,7 @@ export class AvaliacaoNovaComponent implements OnInit {
   ajustarAltura(event) {
     var paddingTop = parseFloat(event.target.style.paddingTop.replace("px", ""));
     var paddingBottom = parseFloat(event.target.style.paddingBottom.replace("px", ""));
-    event.target.style.height = ""; event.target.style.height = (event.target.scrollHeight + 0.7 - (paddingTop + paddingBottom)) + "px";
+    event.target.style.height = ""; event.target.style.height = (event.target.scrollHeight - (paddingTop + paddingBottom)) + "px";
   }
   addQuestao() {
     this.avaliacao.questoes.push({

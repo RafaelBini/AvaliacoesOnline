@@ -32,11 +32,16 @@
   border: 1px dotted rgba(0, 0, 0, 0.20);
   border-radius: 7px;
   background-color: white;  
+  overflow: hidden;
 }
 .input-basico:focus {
   outline: none;
   border: 1px dashed var(--cor-primaria);
   border-radius: 7px;
+}
+.input-basico:disabled {
+  background-color: rgb(250, 250, 250);  
+  color: rgb(97, 97, 97);
 }
 
 .select-basico {

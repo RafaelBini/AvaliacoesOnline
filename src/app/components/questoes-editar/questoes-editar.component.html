@@ -1,6 +1,4 @@
-<!-- QUESTÕES EDITÁVEIS -->
-
-<div *ngIf="editavel">
+<div>
     <div cdkDropList [cdkDropListData]="avaliacao.questoes" (cdkDropListDropped)="drop($event)"
         style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
 
@@ -19,9 +17,8 @@
                     <td align="left" style="padding-bottom: 18px; position: relative;">
 
                         <select class="select-basico" style="padding: 8px;" #tipo
-                            (change)="tipoQuestaoChanged(questao, tipo.value)">
-                            <option *ngFor="let questaoTipo of comumService.questaoTipos; index as qti"
-                                [selected]="questao.tipo == qti" [value]="qti">
+                            (change)="tipoQuestaoChanged(questao, tipo.value)" [(ngModel)]="questao.tipo">
+                            <option *ngFor="let questaoTipo of getQuestaoTiposAdequados()" [value]="questaoTipo.codigo">
                                 {{questaoTipo.nome}}
                             </option>
                         </select>
@@ -39,13 +36,13 @@
                     <td style="position: relative;">
 
                         <textarea #perguntaTextarea (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
-                            maxlength="1000"
+                            maxlength="3500"
                             [placeholder]="questao.perguntaPlaceholder ? questao.perguntaPlaceholder : 'Digite aqui uma pergunta ou uma descrição para a questão'"
                             class="input-basico"
                             style=" margin: auto; width: 98%; max-width: 98%; padding: 5px; padding-top: 14px;"
                             [(ngModel)]="questao.pergunta" rows="4"></textarea>
                         <span *ngIf="estaEmFoco(perguntaTextarea)"
-                            class="contador-caracteres">{{questao.pergunta.length}}/1000</span>
+                            class="contador-caracteres">{{questao.pergunta.length}}/3500</span>
                     </td>
                 </tr>
 
@@ -124,13 +121,13 @@
                 <!-- Resposta Dissertativa -->
                 <tr *ngIf="questao.tipo == 1">
                     <td style="position: relative;">
-                        <textarea #dissertativaTextarea maxlength="500" (input)="ajustarAltura($event)"
+                        <textarea #dissertativaTextarea maxlength="2500" (input)="ajustarAltura($event)"
                             (click)="ajustarAltura($event)"
                             placeholder="Escreva aqui algo para auxiliar no momento da correção" class="input-basico"
                             style="width: 98%; margin: auto; padding: 5px; padding-top: 14px;"
                             [(ngModel)]="questao.resposta" rows="4"></textarea>
                         <span *ngIf="estaEmFoco(dissertativaTextarea)"
-                            class="contador-caracteres">{{dissertativaTextarea.value.length}}/500</span>
+                            class="contador-caracteres">{{dissertativaTextarea.value.length}}/2500</span>
                     </td>
                 </tr>
 
@@ -188,7 +185,7 @@
                             <tr cdkDrag *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td width="95%" class="alternativa">
                                     <mat-checkbox [(ngModel)]="alternativa.correta"
-                                        (ngModelChange)="desmarcarTudoMenosUma(questao, ai, editavel)">
+                                        (ngModelChange)="desmarcarTudoMenosUma(questao, ai, true)">
                                         <textarea #alternativaTextarea maxlength="500" (input)="ajustarAltura($event)"
                                             (click)="ajustarAltura($event)" [(ngModel)]="alternativa.texto"
                                             class="invisible-input" style="width: 95%; height: 100%; padding: 10px;"
@@ -242,6 +239,7 @@
                 <!-- Resposta Preenchimento -->
                 <tr *ngIf="questao.tipo == 5">
                     <td>
+                        Selecione uma palavra do texto e clique aqui:
                         <button mat-icon-button matTooltip="Adicionar opção de preenchimento"
                             (click)="inserirOpcaoPreeencherSelecionado(questao, novaOpcaoPreencherInput, editorPreencher)">
                             <mat-icon>space_bar</mat-icon>
@@ -251,7 +249,7 @@
                                 (click)="ajustarAltura($event)" [(ngModel)]="questao.textoParaPreencher"
                                 #editorPreencher (keyup)="onEditorPreencherKeyUp(questao)"
                                 placeholder="Escreva aqui um texto para ser completado" class="input-basico"
-                                style="width: 98%; overflow: auto; margin: auto; padding: 5px; padding-top: 14px"></textarea>
+                                style="width: 98%; margin: auto; padding: 5px; padding-top: 14px;"></textarea>
                             <span *ngIf="estaEmFoco(preenchimentoTextarea)"
                                 class="contador-caracteres">{{preenchimentoTextarea.value.length}}/500</span>
                         </div>
@@ -335,13 +333,13 @@
                                 </td>
                                 <td width="90%" class="alternativa">
                                     <div style=" display: inline-flex; width: 100%; position: relative;">
-                                        <textarea #verdadeiroFalsoAlternativaTextarea maxlength="500"
+                                        <textarea #verdadeiroFalsoAlternativaTextarea maxlength="2500"
                                             (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
                                             [(ngModel)]="alternativa.texto" class="invisible-input"
                                             [style.color]="alternativa.correta ? 'green' : 'red'"
                                             style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                         <span *ngIf="estaEmFoco(verdadeiroFalsoAlternativaTextarea)"
-                                            class="contador-caracteres">{{verdadeiroFalsoAlternativaTextarea.value.length}}/500</span>
+                                            class="contador-caracteres">{{verdadeiroFalsoAlternativaTextarea.value.length}}/2500</span>
                                     </div>
                                     <mat-icon cdkDragHandle
                                         style="cursor: move; color: gray; position: absolute; top: 0px; left: 50%;">
@@ -368,13 +366,13 @@
                                 <td width="90%" style="background-color: white; height: 40px; padding: 10px;">
 
                                     <div style="display: inline-flex; width: 100%; position: relative;">
-                                        <textarea #novaAlternativInput maxlength="500" (input)="ajustarAltura($event)"
+                                        <textarea #novaAlternativInput maxlength="2500" (input)="ajustarAltura($event)"
                                             (click)="ajustarAltura($event)" type="text" rows="1"
                                             (keyup)="onNovaAlterKeyUp($event, questao, novaAlternativInput);"
                                             class="invisible-input" placeholder="Digite aqui uma nova afirmação"
                                             style="width: 95%; height: 100%; padding: 10px;"></textarea>
                                         <span *ngIf="estaEmFoco(novaAlternativInput)"
-                                            class="contador-caracteres">{{novaAlternativInput.value.length}}/500</span>
+                                            class="contador-caracteres">{{novaAlternativInput.value.length}}/2500</span>
                                     </div>
 
                                 </td>
@@ -395,9 +393,11 @@
                 <!-- Opções da questão -->
                 <tr>
                     <td align="right" style="position: relative; padding-top: 20px;">
-                        <div style="position: absolute; left: 0px;">
+                        <div *ngIf="avaliacao.tipoPontuacao != 3" style="position: absolute; left: 0px;">
                             Valor: <input style="padding: 7px;" type="number" max="100" min="1"
                                 [(ngModel)]="questao.valor" />
+                            <span
+                                style="padding: 9px; color: gray;">{{ ( (questao.valor/getPontuacaoMaxima())*100 ) |  number:'1.0-0' }}%</span>
                         </div>
                         <button mat-icon-button matTooltip="Adicionar Imagem">
                             <mat-icon>insert_photo</mat-icon>
@@ -416,168 +416,5 @@
             </table>
         </div>
 
-    </div>
-</div>
-
-<!-- QUESTÕES NÃO EDITÁVEIS -->
-
-<div *ngIf="!editavel">
-    <div style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
-        <div class="questao" *ngFor="let questao of avaliacao.questoes; index as qi">
-
-            <table style="width: 100%;">
-
-                <!-- PERGUNTA -->
-                <tr>
-                    <td style="padding-bottom: 20px; font-size: 15px; white-space: pre-line;">
-                        <b>Questão {{qi + 1}}</b>/{{avaliacao.questoes.length}}. {{questao.pergunta}}
-                    </td>
-                </tr>
-
-                <!-- RESPOSTA ASSOCIATIVA -->
-                <tr *ngIf="questao.tipo == 0">
-                    <td>
-                        <table width="100%">
-                            <tr *ngFor="let associacao of questao.associacoes; index as ai">
-                                <td width="20%" style="cursor:default;">
-                                    <mat-select class="select-basico" style="width: 82%;"
-                                        [(ngModel)]="associacao.opcaoSelecionada">
-                                        <mat-option [value]="_associacao.opcaoCorreta"
-                                            *ngFor="let _associacao of getAssociacoesOrdenadas(questao)">
-                                            {{_associacao.opcaoCorreta}}
-                                        </mat-option>
-                                    </mat-select>
-                                </td>
-                                <td width="80%" class="alternativa" style="cursor:default;">
-                                    <span style="white-space: pre-line;">{{associacao.texto}}</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-
-                </tr>
-
-                <!-- RESPOSTA DISSERTATIVA -->
-                <tr *ngIf="questao.tipo == 1">
-                    <td align="right">
-                        <div style="position: relative;">
-                            <textarea #respostaAlunoTextarea maxlength="500" placeholder="Escreva aqui a resposta"
-                                (input)="ajustarAltura($event)" (click)="ajustarAltura($event)" class="input-basico"
-                                style="width: 98%; margin: auto;" rows="4"></textarea>
-                            <span *ngIf="estaEmFoco(respostaAlunoTextarea)"
-                                class="contador-caracteres">{{respostaAlunoTextarea.value.length}}/500</span>
-                        </div>
-
-                        <br />
-                        <button mat-icon-button matTooltip="Adicionar Imagem">
-                            <mat-icon>insert_photo</mat-icon>
-                        </button>
-                        <button mat-icon-button matTooltip="Adicionar Anexo">
-                            <mat-icon>attach_file</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- RESPOSTA ENVIO DE ARQUIVO -->
-                <tr *ngIf="questao.tipo == 2">
-                    <td>
-                        <div matTooltip="Enviar arquivos" class="upload-area">
-                            ARRASTE E SOLTE O(S) ARQUIVO(S) AQUI
-                        </div>
-                        <div style="width: 90%; margin: auto; color: gray;">
-                            <br />
-                            Extensões permitidas: {{questao.extensoes.join('; ')}}
-                            <br />
-                            Tamanho total máximo: 60 MB
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- RESPOSTA MULTIPLA ESCOLHA - MULTIPLA OU ÚNICA RESPOSTA -->
-                <tr *ngIf="questao.tipo == 3 || questao.tipo == 4">
-                    <td>
-                        <table width="100%">
-                            <tr *ngFor="let alternativa of questao.alternativas; index as ai">
-                                <td valign="middle" class="alternativa">
-                                    <mat-checkbox [(ngModel)]="alternativa.selecionada"
-                                        (ngModelChange)="desmarcarTudoMenosUma(questao, ai, editavel)">
-                                        <span style="white-space: pre-line;">{{alternativa.texto}}</span>
-                                    </mat-checkbox>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-
-                <!-- RESPOSTA PREENCHIMENTO -->
-                <tr *ngIf="questao.tipo == 5">
-                    <td align="justfy">
-                        <span style="white-space: pre-line;" *ngFor="let parte of questao.partesPreencher">
-                            <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
-                            <select *ngIf="parte.tipo == 'select'" class="select-basico"
-                                [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada">
-                                <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao)"
-                                    [value]="opcaoPreencher.texto">
-                                    {{opcaoPreencher.texto}}
-                                </option>
-                            </select>
-                        </span>
-                    </td>
-                </tr>
-
-                <!-- RESPOSTA VERDADEIRO OU FALSO - COM OU SEM JUSTIFICATIVA -->
-                <tr *ngIf="questao.tipo == 6 || questao.tipo == 7">
-                    <td>
-                        <table width="100%">
-                            <tr *ngFor="let alternativa of questao.alternativas; index as ai">
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td width="5%" class="alternativa">
-                                                <mat-button-toggle-group [(ngModel)]="alternativa.selecionada">
-                                                    <mat-button-toggle matTooltip="Marcar como verdadeiro"
-                                                        [value]="true">V
-                                                    </mat-button-toggle>
-                                                    <mat-button-toggle matTooltip="Marcar como falso" [value]="false">F
-                                                    </mat-button-toggle>
-                                                </mat-button-toggle-group>
-                                            </td>
-                                            <td valign="middle" class="alternativa"
-                                                style="cursor: default; white-space: pre-line;"
-                                                [style.color]="alternativa.selecionada == null ? 'black' : (alternativa.selecionada == true ? 'green' : 'red')">
-                                                {{alternativa.texto}}
-                                            </td>
-                                        </tr>
-                                        <tr *ngIf="alternativa.selecionada == false && questao.tipo == 7">
-                                            <td colspan="2">
-                                                <div style="display: inline-flex; width: 100%;">
-                                                    <textarea (input)="ajustarAltura($event)"
-                                                        (click)="ajustarAltura($event)"
-                                                        placeholder="Digite aqui uma justificativa"
-                                                        [(ngModel)]="alternativa.justificativa" class="input-basico"
-                                                        style="width: 100%; height: 100%; padding: 10px;"
-                                                        rows="2"></textarea>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-
-                <!-- VALOR DA QUESTÃO -->
-                <tr>
-                    <td align="left" style="position: relative; padding-top: 20px;">
-                        <div>
-                            Valor: {{questao.valor}}/100
-                        </div>
-                    </td>
-                </tr>
-
-            </table>
-        </div>
     </div>
 </div>

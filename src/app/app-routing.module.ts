@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: "professor/avaliacao/:id", component: AvaliacaoProfessorComponent },
   { path: "aluno/avaliacao/:id", component: AvaliacaoAlunoComponent },
   { path: "aluno/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
-  { path: "avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
+  { path: "aluno/avaliacao/consulta/:id", component: AvaliacaoCorrecaoComponent },
   { path: ":id", component: LoginComponent },
   { path: "", component: LoginComponent },
 ];

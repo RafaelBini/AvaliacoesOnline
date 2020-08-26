@@ -8,24 +8,18 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { InfoQuestaoComponent } from 'src/app/dialogs/info-questao/info-questao.component';
 
 
+
 @Component({
-  selector: 'app-questao',
-  templateUrl: './questao.component.html',
-  styleUrls: ['./questao.component.css']
+  selector: 'app-questoes-editar',
+  templateUrl: './questoes-editar.component.html',
+  styleUrls: ['./questoes-editar.component.css']
 })
-
-
-
-export class QuestaoComponent implements OnInit {
+export class QuestoesEditarComponent implements OnInit {
   @Input() avaliacao: Avaliacao;
-  @Input() editavel: boolean;
-
-
 
   constructor(public comumService: ComumService, private dialog: MatDialog, private elementRef: ElementRef) { }
 
   ngOnInit(): void {
-
   }
 
 
@@ -36,7 +30,7 @@ export class QuestaoComponent implements OnInit {
   ajustarAltura(event) {
     var paddingTop = parseFloat(event.target.style.paddingTop.replace("px", ""));
     var paddingBottom = parseFloat(event.target.style.paddingBottom.replace("px", ""));
-    event.target.style.height = ""; event.target.style.height = (event.target.scrollHeight + 0.7 - (paddingTop + paddingBottom)) + "px";
+    event.target.style.height = ""; event.target.style.height = (event.target.scrollHeight - (paddingTop + paddingBottom)) + "px";
   }
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
@@ -47,6 +41,7 @@ export class QuestaoComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
     }
+    console.log(this.avaliacao);
   }
   tipoQuestaoChanged(questao, novoTipo) {
     questao.tipo = novoTipo;
@@ -59,6 +54,22 @@ export class QuestaoComponent implements OnInit {
       width: '80%',
       data: questao
     });
+  }
+  getPontuacaoMaxima() {
+    var pontuacaoMaxima = 0;
+    this.avaliacao.questoes.forEach(questao => {
+      pontuacaoMaxima += questao.valor;
+    });
+    return pontuacaoMaxima;
+  }
+  getQuestaoTiposAdequados() {
+
+    if (this.avaliacao.tipoCorrecao == 1) {
+      return this.comumService.questaoTipos.concat().filter(tipo => tipo.temCorrecaoAutomatica);
+    }
+
+    return this.comumService.questaoTipos;
+
   }
 
   // Alternativa
@@ -174,7 +185,6 @@ export class QuestaoComponent implements OnInit {
           conteudo: parseInt(parte.replace(IDENTIFICADOR_RANDOMICO, "")) - 1,
           tipo: "select"
         });
-        console.log(partes);
       }
       else {
         partes.push({
@@ -190,5 +200,3 @@ export class QuestaoComponent implements OnInit {
 
 
 }
-
-

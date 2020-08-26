@@ -65,7 +65,12 @@
     <mat-step>
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Durante Avaliação</ng-template>
-        <div style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
+
+        <div style="position: fixed; top: 30%; right: 4%; width: 15%;">
+            <app-countdown></app-countdown>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; width: 60%; margin: auto; position: relative;">
 
             <div align="center"
                 style="padding: 20px; background-color: whitesmoke;  color: black; width: 100%; border-radius: 10px;">
@@ -170,12 +175,43 @@
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Em Correção</ng-template>
 
-        <div style="margin: auto; text-align: center;">
-            <h2>Correções em Andamento</h2>
+        <div style="position: fixed; top: 30%; right: 4%; width: 15%;">
+            <app-countdown></app-countdown>
         </div>
 
-        <div
-            style="margin: auto; margin-top: 30px; width: 100%; font-size: 22px; height: 50vh; overflow: auto; margin-bottom: 20px;">
+
+        <div align="center"
+            style="padding: 20px; margin: auto; background-color: whitesmoke;  color: black; width: 55%; border-radius: 10px;">
+            <b style="font-size: 22px;">Titulo da Avaliação</b>
+            <br /><br />
+            <div style="text-align: justify;">
+                Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
+                Descrição da
+                Avaliação
+                <br /><br />
+                Professor: Rafael Bini
+                <br /><br />
+                Inicio: 31/07/2020 18:00
+                <br />
+                Término: 31/07/2020 19:00
+                <br />
+            </div>
+            <br />
+            <div style="text-align: justify; ">
+                Meu Grupo:
+                <li>Matheus Cabral</li>
+                <li>Thyago Vinicius</li>
+                <li>Marcos Kerchenr</li>
+            </div>
+
+
+        </div>
+        <br />
+        <div style="margin: auto; text-align: center;">
+            <h2>Corrija as avaliações abaixo:</h2>
+        </div>
+
+        <div style="margin: auto; margin-top: 30px; width: 100%; font-size: 22px; height: 50vh; margin-bottom: 20px;">
             <div class="individuo" style="border-color: var(--encerrada)">
                 Grupo 01 - Avaliação Corrigida
                 <br /><br />
@@ -211,7 +247,7 @@
                 </a>
             </div>
         </div>
-
+        <br />
         <div
             style="background-color: whitesmoke; padding: 17px; border-radius: 8px; margin: auto; width: 60%; text-align: center;">
             <span style="font-size: 18px;">Aguardando os outros alunos corrigirem as avaliações...</span>
@@ -221,6 +257,9 @@
                 <div style="background-color: var(--em-correcao); width: 75%; height: 30px; border-radius: 4px;"></div>
             </div>
         </div>
+        <br />
+        <br />
+        <br />
 
     </mat-step>
 
@@ -236,7 +275,7 @@
                 style="font-size: 16px; background-color: var(--cor-primaria); padding: 20px; color: white; border-radius: 10px;">Sua
                 nota: 85/100</span>
             <br /><br /><br />
-            <a mat-raised-button routerLink="/avaliacao/correcao/1">
+            <a mat-raised-button routerLink="/aluno/avaliacao/consulta/1">
                 Consultar Correção
             </a>
         </div>

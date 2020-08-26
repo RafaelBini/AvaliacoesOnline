@@ -10,28 +10,45 @@
         </div>
         <br />
         <div style="position: relative;">
-            <textarea #descricaoTextarea maxlength="500" rows="3" class="descricao-textarea"
+            <textarea #descricaoTextarea maxlength="1500" rows="3" class="descricao-textarea"
                 (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
                 style="width: 97%; margin: auto; display: block; font-size: 13px; padding: 5px;  padding-top: 14px; border: none; border-radius: 4px; resize: vertical;"
                 [(ngModel)]="avaliacao.descricao"
                 placeholder="Insira aqui uma descrição / instruções iniciais"></textarea>
             <span *ngIf="estaEmFoco(descricaoTextarea)"
-                class="contador-caracteres">{{descricaoTextarea.value.length}}/500</span>
+                class="contador-caracteres">{{descricaoTextarea.value.length}}/1500</span>
 
         </div>
 
         <table class="atributos-table" style="margin: auto; width: 100%; font-size: 15px;">
 
             <tr>
-                <td valign="top" width="15%">
-                    Inicio:
+                <td valign="top" width="22%">
+                    Inicio da Avaliação:
                 </td>
-                <td>
+                <td style="display: flex;">
                     <input type="datetime-local" [(ngModel)]="avaliacao.dtInicio"
                         *ngIf="!avaliacao.isInicioIndeterminado" />
+                    <div style="width: fit-content">
+                        <mat-checkbox style="margin-left: 5px;" #inicioIndeterminado
+                            (change)="avaliacao.isInicioIndeterminado = inicioIndeterminado.checked">
 
-                    <mat-checkbox style="margin-left: 5px;" #inicioIndeterminado
-                        (change)="avaliacao.isInicioIndeterminado = inicioIndeterminado.checked">
+                            <span style="font-size: 12px; ">Indeterminado</span>
+                        </mat-checkbox>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    Início da Correção:
+                </td>
+                <td style="display: flex;">
+                    <!--min="2020-07-28T16:15:23" -->
+                    <input type="datetime-local" [(ngModel)]="avaliacao.dtInicioCorrecao"
+                        *ngIf="!avaliacao.isInicioCorrecaoIndeterminado" />
+
+                    <mat-checkbox style="margin-left: 5px;" #inicioCorrecaoIndeterminado
+                        (change)="avaliacao.isInicioCorrecaoIndeterminado = inicioCorrecaoIndeterminado.checked">
 
                         <span style="font-size: 12px;">Indeterminado</span>
                     </mat-checkbox>
@@ -39,9 +56,9 @@
             </tr>
             <tr>
                 <td valign="top">
-                    Término:
+                    Término da Correção:
                 </td>
-                <td>
+                <td style="display: flex;">
                     <!--min="2020-07-28T16:15:23" -->
                     <input type="datetime-local" [(ngModel)]="avaliacao.dtTermino"
                         *ngIf="!avaliacao.isTerminoIndeterminado" />
@@ -53,6 +70,7 @@
                     </mat-checkbox>
                 </td>
             </tr>
+
             <tr>
                 <td>
 
@@ -134,9 +152,9 @@
 
     </div>
 
-    <app-questao [avaliacao]="avaliacao" [editavel]="true">
+    <app-questoes-editar [avaliacao]="avaliacao">
 
-    </app-questao>
+    </app-questoes-editar>
 
     <div style="width: 100%;">
         <button mat-raised-button (click)="finalizar()"
@@ -203,9 +221,9 @@
 
     <div style="width: 100%;">
 
-        <app-questao [avaliacao]="avaliacao" [editavel]="false">
+        <app-questoes-responder [avaliacao]="avaliacao">
 
-        </app-questao>
+        </app-questoes-responder>
 
         <button (click)="visao='professor'" mat-raised-button
             style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">

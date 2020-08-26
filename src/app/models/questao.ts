@@ -2,8 +2,10 @@ import { OpcaoPreencher } from './opcao-preencher';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { Alternativa } from './alternativa';
 import { Associacao } from './associacao';
+import { Correcao } from './correcao';
 
 export interface Questao {
+    id?: string,
     pergunta: string;
     perguntaPlaceholder?: string;
     tipo: number;
@@ -17,4 +19,8 @@ export interface Questao {
     textoParaPreencher?: string;
     opcoesParaPreencher?: Array<OpcaoPreencher>;
     partesPreencher?: Array<any>;
+    correcoes?: Array<Correcao>;
+    correcaoProfessor?: Correcao;
+    respostaAluno?: string;
+
 }

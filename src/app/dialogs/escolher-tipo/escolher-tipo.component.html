@@ -16,7 +16,7 @@
         </td>
     </tr>
     <tr *ngFor="let disposicao of comumService.disposicoes; index as i;">
-        <td class="choose-btn" (click)="data.avaliacao.tipoDisposicao = i"
+        <td class="choose-btn" (click)="selecionarDisposicao(disposicao.codigo)"
             [style.borderColor]="data.avaliacao.tipoDisposicao == i ? 'var(--cor-primaria)' : 'transparent'">
             {{disposicao.nome}}
         </td>
@@ -98,7 +98,7 @@
         </td>
     </tr>
     <tr *ngFor="let correcao of comumService.correcoes; index as i;">
-        <td class="choose-btn" (click)="data.avaliacao.tipoCorrecao = i"
+        <td class="choose-btn" (click)="selecionarCorrecao(correcao.codigo)"
             [style.borderColor]="data.avaliacao.tipoCorrecao == i ? 'var(--cor-primaria)' : 'transparent'">
             {{correcao.nome}}
         </td>
@@ -130,7 +130,7 @@
         </td>
     </tr>
     <tr *ngFor="let pontuacao of comumService.pontuacoes; index as i;">
-        <td class="choose-btn" (click)="data.avaliacao.tipoPontuacao = i"
+        <td class="choose-btn" (click)="selecionarPontuacao(pontuacao.codigo)"
             [style.borderColor]="data.avaliacao.tipoPontuacao == i ? 'var(--cor-primaria)' : 'transparent'">
             {{pontuacao.nome}}
         </td>

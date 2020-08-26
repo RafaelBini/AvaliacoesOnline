@@ -30,4 +30,33 @@ export class EscolherTipoComponent implements OnInit {
       this.data.avaliacao.correcaoParesQtdNumero = null;
     }
   }
+
+  selecionarCorrecao(codigoCorrecao) {
+    this.data.avaliacao.tipoCorrecao = codigoCorrecao;
+    const CODIGO_CORRECAO_AUTOMATICA = 1;
+    const CODIGO_QUESTAO_DISSERTATIVA = 1;
+    const CODIGO_QUESTAO_ENTREGA = 2;
+    const CODIGO_QUESTAO_V_F_COM_JUSTIFICATIVA = 7;
+
+    const CODIGO_QUESTAO_V_F_SEM_JUSTIFICATIVA = 6;
+    const CODIGO_QUESTAO_MULTIPLAESCOLHA = 4;
+
+
+    if (codigoCorrecao == CODIGO_CORRECAO_AUTOMATICA)
+      this.data.avaliacao.questoes.forEach(questao => {
+        if (questao.tipo == CODIGO_QUESTAO_DISSERTATIVA || questao.tipo == CODIGO_QUESTAO_ENTREGA)
+          questao.tipo = CODIGO_QUESTAO_MULTIPLAESCOLHA;
+        else if (questao.tipo == CODIGO_QUESTAO_V_F_COM_JUSTIFICATIVA)
+          questao.tipo = CODIGO_QUESTAO_V_F_SEM_JUSTIFICATIVA;
+      });
+
+  }
+
+  selecionarDisposicao(codigoDisposicao) {
+    this.data.avaliacao.tipoDisposicao = codigoDisposicao;
+  }
+
+  selecionarPontuacao(codigoPontuacao) {
+    this.data.avaliacao.tipoPontuacao = codigoPontuacao;
+  }
 }

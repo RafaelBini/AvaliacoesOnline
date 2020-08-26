@@ -34,11 +34,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { BuscarQuestaoComponent } from './dialogs/buscar-questao/buscar-questao.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { EscolherTipoComponent } from './dialogs/escolher-tipo/escolher-tipo.component';
-import { QuestaoComponent } from './components/questao/questao.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { CadastrarSeComponent } from './dialogs/cadastrar-se/cadastrar-se.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { BarraNavegacaoComponent } from './components/barra-navegacao/barra-navegacao.component';
+import { CountdownComponent } from './components/countdown/countdown.component';
+import { QuestoesCorrigirComponent } from './components/questoes-corrigir/questoes-corrigir.component';
+import { QuestoesEditarComponent } from './components/questoes-editar/questoes-editar.component';
+import { QuestoesResponderComponent } from './components/questoes-responder/questoes-responder.component';
 
 
 @NgModule({
@@ -56,10 +59,13 @@ import { BarraNavegacaoComponent } from './components/barra-navegacao/barra-nave
     InfoQuestaoComponent,
     BuscarQuestaoComponent,
     EscolherTipoComponent,
-    QuestaoComponent,
     CadastrarSeComponent,
     SafeHtmlPipe,
-    BarraNavegacaoComponent
+    BarraNavegacaoComponent,
+    CountdownComponent,
+    QuestoesCorrigirComponent,
+    QuestoesEditarComponent,
+    QuestoesResponderComponent,
   ],
   imports: [
     BrowserModule,
