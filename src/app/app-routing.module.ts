@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: "aluno/:tab", component: AlunoComponent },
   { path: "professor/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
   { path: "professor/avaliacao/nova", component: AvaliacaoNovaComponent },
+  { path: "professor/avaliacao/editar/:id", component: AvaliacaoNovaComponent },
   { path: "professor/avaliacao/:id", component: AvaliacaoProfessorComponent },
   { path: "aluno/avaliacao/:id", component: AvaliacaoAlunoComponent },
   { path: "aluno/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },

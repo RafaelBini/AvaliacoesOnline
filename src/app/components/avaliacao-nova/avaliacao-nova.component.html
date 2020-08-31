@@ -19,6 +19,23 @@
                 class="contador-caracteres">{{descricaoTextarea.value.length}}/1500</span>
 
         </div>
+        <div style="position: relative;">
+            <mat-form-field style="width: 95%; padding: 15px; margin: auto;">
+                <mat-chip-list #chipList>
+                    <mat-chip *ngFor="let tag of avaliacao.tags" [selectable]="true" [removable]="true"
+                        (removed)="removeTag(tag)">
+                        {{tag}}
+                        <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+                    </mat-chip>
+                    <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)" />
+
+                </mat-chip-list>
+                <mat-placeholder class="placeholder">Digite aqui algumas tags para te ajudarem a encontrar essa
+                    avaliação</mat-placeholder>
+            </mat-form-field>
+
+        </div>
 
         <table class="atributos-table" style="margin: auto; width: 100%; font-size: 15px;">
 
@@ -144,8 +161,6 @@
     </table>
     <br />
 
-
-
     <div
         style="text-align: center; background-color: whitesmoke; margin-bottom: 15px; cursor: default; color: black; width: 100%; border-radius: 10px;">
         <h2>Questões</h2>
@@ -156,9 +171,13 @@
 
     </app-questoes-editar>
 
-    <div style="width: 100%;">
+    <div style="width: 100%; text-align: center;">
         <button mat-raised-button (click)="finalizar()"
-            style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
+            style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: inline-block;">
+            Salvar
+        </button>
+        <button mat-raised-button (click)="finalizar()"
+            style="margin: auto; margin-top: 40px; margin-left: 20px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: inline-block; background-color: var(--cor-primaria); color: white;">
             Tudo pronto, Finalizar!
         </button>
     </div>

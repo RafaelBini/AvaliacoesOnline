@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UrlNode } from 'src/app/models/url-node';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 
 
 @Component({
@@ -35,6 +37,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     correcaoParesQtdTipo: "1",
     correcaoParesQtdNumero: 1,
     tipoPontuacao: 0,
+    tags: [],
     questoes: [
       {
         pergunta: "",
@@ -59,11 +62,34 @@ export class AvaliacaoNovaComponent implements OnInit {
     { nome: `Avaliações`, url: `/professor` },
     { nome: `Nova Avaliação`, url: `/professor` },
   ];
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
 
   ngOnInit(): void {
     this.comumService.scrollToTop();
   }
 
+
+  addTag(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      this.avaliacao.tags.push(value);
+      console.log(this.avaliacao.tags);
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+  removeTag(tema: any): void {
+    const index = this.avaliacao.tags.indexOf(tema);
+
+    if (index >= 0) {
+      this.avaliacao.tags.splice(index, 1);
+    }
+  }
 
   estaEmFoco(objetoDom): boolean {
     return objetoDom == document.activeElement;

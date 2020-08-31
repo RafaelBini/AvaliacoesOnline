@@ -68,3 +68,22 @@ textarea {
 .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
   border-color: var(--cor-primaria) !important;
 }
+
+.mat-chip.mat-standard-chip{
+  background-color: var(--cor-primaria) !important;
+  color: white !important;
+}
+.mat-chip.mat-standard-chip .mat-chip-remove {
+  color: white;
+}
+
+
+.mat-focused .placeholder {
+  color: var(--cor-primaria) !important;
+}
+.mat-form-field-underline .mat-form-field-ripple{
+  background-color: var(--cor-primaria) !important;
+}
+.mat-form-field-underline{
+  background-color: var(--cor-primaria) !important;
+}
