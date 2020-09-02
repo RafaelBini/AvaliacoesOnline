@@ -1,237 +1,76 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
-<mat-tab-group mat-align-tabs="start" [selectedIndex]="selectedTab" (selectedIndexChange)="tabAlterada($event)">
+<mat-tab-group mat-align-tabs="center" mat-stretch-tabs [selectedIndex]="selectedTab"
+    (selectedIndexChange)="tabAlterada($event)">
     <mat-tab>
         <ng-template mat-tab-label>
             <mat-icon style="margin-right: 8px;">description</mat-icon>
             Avaliações
         </ng-template>
-        <div style="padding: 80px; padding-top: 30px; position: relative;">
-            <h2>Minhas Avaliações</h2>
 
-            <table style="width: 100%;">
-                <tr>
+        <div style="position: relative;">
+
+            <div style="background-color: whitesmoke; padding: 15px;">
+                <table style="width: 50%; margin: auto; display: block;">
+                    <tr>
+                        <td width="95%">
+                            <input type="text" class="input-clean" style="width: 100%;" #inputBusca maxlength="85"
+                                (keyup)="onBuscaKeyUp(inputBusca.value)"
+                                placeholder="Digite aqui uma parte do titulo, descrição ou tag da avaliação que procura" />
+                        </td>
+                        <td width="5%" style="padding: 5px;">
+                            <button mat-icon-button>
+                                <mat-icon style="color: gray;">search</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <mat-tab-group mat-align-tabs="center" *ngIf="agruparAvaliacoes" [selectedIndex]="selectedStatusTab">
+
+                <mat-tab *ngFor="let status of comumService.statusAvaliacao">
+                    <ng-template mat-tab-label>
+                        {{status.nome}} ({{getAvaliacoesNoStatus(status.id).length}})
+                    </ng-template>
+
+                    <table style="width: 100%;  margin-top: 20px;">
+                        <tr *ngFor="let avaliacao of getAvaliacoesNoStatus(status.id)">
+                            <td>
+                                <app-avaliacao-card-professor [avaliacao]="avaliacao"></app-avaliacao-card-professor>
+                            </td>
+                        </tr>
+                    </table>
+
+                </mat-tab>
+            </mat-tab-group>
+
+            <table *ngIf="agruparAvaliacoes == false" style="width: 100%; margin-top: 20px;">
+                <tr *ngFor="let avaliacao of avaliacoesFiltradas">
                     <td>
-                        <h3>Acontecendo Agora</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="avalicao-card" style="border-left: 7px solid var(--em-correcao);">
-                            <h3><b>Avaliação 01</b></h3>
-                            Uma avaliação para Teste
-                            <br />
-                            <br />
-                            <span class="linkCompartilhavel" style="background-color: var(--em-correcao);"><a
-                                    href="/001001">avaliacao.com/001001</a></span>
-                            <button matTooltip="Copiar link" mat-icon-button>
-                                <mat-icon style="font-size: 17px;">content_copy</mat-icon>
-                            </button>
-                            <br /><br />
-                            Inicio: 31/07/2020 18:00
-                            <br />
-                            Término: 31/07/2020 21:00
-
-                            <a routerLink="/professor/avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box"
-                                style="background-color: var(--em-correcao);">
-                                Status: Em Correção
-                                <hr />
-                                Corrigir Avaliações
-                            </a>
-
-                            <a routerLink="/professor/avaliacao/editar/1" matTooltip=" Editar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 60px;">
-                                <mat-icon>create</mat-icon>
-                            </a>
-
-                            <button matTooltip="Duplicar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 30px;">
-                                <mat-icon>content_copy</mat-icon>
-                            </button>
-
-                            <button matTooltip="Excluir Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
-                            </button>
-                        </div>
+                        <app-avaliacao-card-professor [avaliacao]="avaliacao"></app-avaliacao-card-professor>
                     </td>
                 </tr>
 
-                <tr>
-                    <td>
-                        <div class="avalicao-card" style="border-left: 7px solid var(--em-avaliacao);">
-                            <h3><b>Avaliação 05</b></h3>
-                            Uma avaliação para Teste
-                            <br />
-                            <br />
-                            <span class="linkCompartilhavel" style="background-color: var(--em-avaliacao);"><a
-                                    href="/001001">avaliacao.com/001001</a></span>
-                            <button matTooltip="Copiar link" mat-icon-button>
-                                <mat-icon style="font-size: 17px;">content_copy</mat-icon>
-                            </button>
-                            <br /><br />
-                            Inicio: 31/07/2020 18:00
-                            <br />
-                            Término: 31/07/2020 21:00
-
-                            <a routerLink="/professor/avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box"
-                                style="background-color: var(--em-avaliacao);">
-                                Status: Durante Avaliação
-                                <hr />
-                                Acompanhar os alunos
-                            </a>
-
-                            <button matTooltip="Editar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 60px;">
-                                <mat-icon>create</mat-icon>
-                            </button>
-
-                            <button matTooltip="Duplicar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 30px;">
-                                <mat-icon>content_copy</mat-icon>
-                            </button>
-
-                            <button matTooltip="Excluir Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <h3>Encerradas / Não Iniciadas</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="avalicao-card" style="border-left: 7px solid var(--encerrada);">
-                            <h3><b>Avaliação 02</b></h3>
-                            Uma avaliação para Teste
-                            <br />
-                            <br />
-                            <span class="linkCompartilhavel" style="background-color: var(--encerrada);"><a
-                                    href="/001001">avaliacao.com/001001</a></span>
-                            <button matTooltip="Copiar link" mat-icon-button>
-                                <mat-icon style="font-size: 17px;">content_copy</mat-icon>
-                            </button>
-                            <br /><br />
-                            Inicio: 31/07/2020 18:00
-                            <br />
-                            Término: 31/07/2020 21:00
-
-                            <a routerLink="/professor/avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box"
-                                style="background-color: var(--encerrada);">
-                                Status: Encerrada
-                                <hr />
-                                Consultar notas dos alunos
-                            </a>
-
-                            <button matTooltip="Editar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 60px;">
-                                <mat-icon>create</mat-icon>
-                            </button>
-
-                            <button matTooltip="Duplicar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 30px;">
-                                <mat-icon>content_copy</mat-icon>
-                            </button>
-
-                            <button matTooltip="Excluir Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="avalicao-card">
-                            <h3><b>Avaliação 03</b></h3>
-                            Uma avaliação para Teste
-                            <br />
-                            <br />
-                            <span class="linkCompartilhavel"><a href="/001001">avaliacao.com/001001</a></span>
-                            <button matTooltip="Copiar link" mat-icon-button>
-                                <mat-icon style="font-size: 17px;">content_copy</mat-icon>
-                            </button>
-                            <br /><br />
-                            Inicio: 31/07/2020 18:00
-                            <br />
-                            Término: 31/07/2020 21:00
-
-                            <a routerLink="/professor/avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box">
-                                Status: Em Preparação
-                                <hr />
-                                Configurar Grupos / Iniciar a Avaliação
-                            </a>
-
-                            <button matTooltip="Editar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 60px;">
-                                <mat-icon>create</mat-icon>
-                            </button>
-
-                            <button matTooltip="Duplicar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 30px;">
-                                <mat-icon>content_copy</mat-icon>
-                            </button>
-
-                            <button matTooltip="Excluir Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="avalicao-card">
-                            <h3><b>Avaliação 04</b></h3>
-                            Uma avaliação para Teste
-                            <br />
-                            <br />
-                            <span class="linkCompartilhavel"><a href="/001001">avaliacao.com/001001</a></span>
-                            <button matTooltip="Copiar link" mat-icon-button>
-                                <mat-icon style="font-size: 17px;">content_copy</mat-icon>
-                            </button>
-                            <br /><br />
-                            Inicio: 31/07/2020 18:00
-                            <br />
-                            Término: 31/07/2020 21:00
-
-                            <a routerLink="/professor/avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box">
-                                Status: Em Preparação
-                                <hr />
-                                Configurar Grupos / Iniciar a Avaliação
-                            </a>
-
-                            <button matTooltip="Editar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 60px;">
-                                <mat-icon>create</mat-icon>
-                            </button>
-
-                            <button matTooltip="Duplicar Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 30px;">
-                                <mat-icon>content_copy</mat-icon>
-                            </button>
-
-                            <button matTooltip="Excluir Avaliação" mat-icon-button
-                                style="position: absolute; top: 0px; right: 0px;">
-                                <mat-icon style="color: var(--em-avaliacao);">cancel</mat-icon>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
             </table>
 
-            <a routerLink="/professor/avaliacao/nova" matTooltip="Nova Avaliação"
-                style="position: fixed; right: 50px; bottom: 50px; background-color: var(--cor-primaria); color: white"
-                mat-fab>
-                <mat-icon>add</mat-icon>
-            </a>
-
         </div>
+
+        <button mat-fab [matMenuTriggerFor]="menu" matTooltip="Opções de Filtro"
+            style="z-index: 1000; position: fixed; right: 50px; bottom: 120px; background-color: var(--cor-primaria); color: white">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" yPosition="above" xPosition="before">
+            <button mat-menu-item (click)="agruparAvaliacoes = !agruparAvaliacoes">
+                {{agruparAvaliacoes ? 'Desagrupar' : 'Agrupar'}}
+            </button>
+        </mat-menu>
+
+        <a routerLink="/professor/avaliacao/nova" matTooltip="Nova Avaliação"
+            style="z-index: 1000; position: fixed; right: 50px; bottom: 50px; background-color: var(--cor-primaria); color: white"
+            mat-fab>
+            <mat-icon>add</mat-icon>
+        </a>
 
     </mat-tab>
     <mat-tab>

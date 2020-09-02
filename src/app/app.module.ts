@@ -42,7 +42,8 @@ import { CountdownComponent } from './components/countdown/countdown.component';
 import { QuestoesCorrigirComponent } from './components/questoes-corrigir/questoes-corrigir.component';
 import { QuestoesEditarComponent } from './components/questoes-editar/questoes-editar.component';
 import { QuestoesResponderComponent } from './components/questoes-responder/questoes-responder.component';
-
+import { MatMenuModule } from '@angular/material/menu';
+import { AvaliacaoCardProfessorComponent } from './components/avaliacao-card-professor/avaliacao-card-professor.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { QuestoesResponderComponent } from './components/questoes-responder/ques
     QuestoesCorrigirComponent,
     QuestoesEditarComponent,
     QuestoesResponderComponent,
+    AvaliacaoCardProfessorComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,6 +92,7 @@ import { QuestoesResponderComponent } from './components/questoes-responder/ques
     MatSelectModule,
     MatExpansionModule,
     MatRadioModule,
+    MatMenuModule
   ],
   providers: [
 

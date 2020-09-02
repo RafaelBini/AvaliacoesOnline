@@ -1,8 +1,10 @@
+import { ComumService } from './../../services/comum.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlunoNovoComponent } from './../aluno-novo/aluno-novo.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
+import { Avaliacao } from 'src/app/models/avaliacao';
 
 
 @Component({
@@ -13,6 +15,8 @@ import { UrlNode } from 'src/app/models/url-node';
 export class ProfessorComponent implements OnInit {
   public alterar = false;
   public selectedTab = 0;
+  public agruparAvaliacoes = true;
+  public selectedStatusTab = 0;
 
   public alunos = [
     { email: "godo@gmail.com", nome: "Godofredo", matricula: "grr20178700" },
@@ -27,6 +31,57 @@ export class ProfessorComponent implements OnInit {
     { email: "clone@gmail.com", nome: "Henrique Grosse", matricula: "grr20184610" },
   ];
 
+  public avaliacoesFiltradas;
+  public avaliacoes: Array<any> = [
+    {
+      id: "0000001",
+      titulo: "Avaliação 01",
+      descricao: "Uma avaliação para Teste",
+      status: 0,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+      tags: [
+        'IHC',
+        'Interação Humano Computador'
+      ]
+    },
+    {
+      id: "0000002",
+      titulo: "Avaliação 02",
+      descricao: "Uma avaliação para Teste",
+      status: 1,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+      tags: [
+        'Web II'
+      ]
+    },
+    {
+      id: "0000003",
+      titulo: "Avaliação 03",
+      descricao: "Uma avaliação para Teste",
+      status: 2,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+    },
+    {
+      id: "0000004",
+      titulo: "Avaliação 04",
+      descricao: "Uma avaliação para Teste",
+      status: 3,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+    },
+    {
+      id: "0000005",
+      titulo: "Avaliação 05",
+      descricao: "Uma avaliação para Teste",
+      status: 3,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+    },
+  ]
+
   private tabs = [
     { id: "avaliacoes", nome: "Avaliações" },
     { id: "alunos", nome: "Alunos" },
@@ -39,7 +94,7 @@ export class ProfessorComponent implements OnInit {
     { nome: this.tabs[0].nome, url: `#` },
   ];
 
-  constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router) { }
+  constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, public comumService: ComumService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -49,6 +104,57 @@ export class ProfessorComponent implements OnInit {
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
     });
+    this.avaliacoesFiltradas = this.avaliacoes;
+    this.selecionarStatusTabAdequada();
+  }
+
+  getStatusPorPrioridade() {
+    return this.comumService.statusAvaliacao.concat().sort((a, b) => b.prioridade - a.prioridade);
+  }
+
+  getAvaliacoesNoStatus(status) {
+    return this.avaliacoesFiltradas.concat().filter(avaliacao => avaliacao.status == status);
+  }
+
+  selecionarStatusTabAdequada() {
+    for (let status of this.comumService.statusAvaliacao) {
+      if (this.avaliacoesFiltradas.concat().filter(ava => ava.status == status.id).length > 0) {
+        this.selectedStatusTab = status.id;
+        return;
+      }
+    }
+  }
+
+  onBuscaKeyUp(texto: string) {
+    this.avaliacoesFiltradas = this.avaliacoes.filter(avaliacao => {
+
+      texto = this.comumService.normalizar(texto);
+      var titulo = this.comumService.normalizar(avaliacao.titulo);
+      var descricao = this.comumService.normalizar(avaliacao.descricao);
+
+      if (titulo.includes(texto))
+        return true;
+
+      if (descricao.includes(texto))
+        return true;
+
+      for (let parteTitulo of titulo.split(" ")) {
+        if (parteTitulo.includes(texto))
+          return true;
+      }
+
+      if (avaliacao.tags != null) {
+        for (let tag of avaliacao.tags) {
+          if (this.comumService.normalizar(tag).includes(texto))
+            return true;
+        }
+      }
+
+
+      return false;
+
+    });
+    this.selecionarStatusTabAdequada();
   }
 
   tabAlterada(index) {

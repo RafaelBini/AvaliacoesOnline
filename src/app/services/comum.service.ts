@@ -12,6 +12,38 @@ export class ComumService {
     return date.toISOString().substr(0, 10) + "T00:00";
   }
 
+  public statusAvaliacao = [
+    {
+      id: 0,
+      nome: "Em Preparação",
+      descricao: "A avaliação ainda não iniciou. Nesta fase os grupos podem estar sendo definidos.",
+      acaoProfessor: "Configurar grupos / Iniciar Avaliação",
+      cor: "var(--em-preparacao)",
+      prioridade: 1,
+    },
+    {
+      id: 1,
+      nome: "Durante Avaliação",
+      acaoProfessor: "Acompanhar os alunos",
+      cor: "var(--em-avaliacao)",
+      prioridade: 2,
+    },
+    {
+      id: 2,
+      nome: "Em Correção",
+      acaoProfessor: "Corrigir / Revisar Avaliações",
+      cor: "var(--em-correcao)",
+      prioridade: 3,
+    },
+    {
+      id: 3,
+      nome: "Encerrada",
+      acaoProfessor: "Consultar / Alterar notas dos alunos",
+      cor: "var(--encerrada)",
+      prioridade: 0,
+    }
+  ];
+
   public disposicoes = [
     {
       codigo: 0,

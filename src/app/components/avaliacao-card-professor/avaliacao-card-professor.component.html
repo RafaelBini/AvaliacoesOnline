@@ -1,0 +1,45 @@
+<div class="avalicao-card" [style.borderColor]="status.cor">
+    <h3><b>{{avaliacao.titulo}}</b></h3>
+    <div style="display: flex;">
+        <div *ngFor="let tag of avaliacao.tags" class="tag" [style.backgroundColor]="status.cor">
+            {{tag}}
+        </div>
+    </div>
+    <br />
+    {{avaliacao.descricao}}
+    <br />
+    <br />
+    <span class="linkCompartilhavel" [style.backgroundColor]="status.cor"><a
+            [routerLink]="'/'+avaliacao.id">avaliacao.com/{{avaliacao.id}}</a></span>
+    <button matTooltip="Copiar link" mat-icon-button>
+        <mat-icon style="font-size: 17px;">content_copy</mat-icon>
+    </button>
+    <br /><br />
+    Inicio: 31/07/2020 18:00
+    <br />
+    Término: 31/07/2020 21:00
+
+    <a routerLink="/professor/avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box"
+        [style.backgroundColor]="status.cor">
+        Status: {{status.nome}}
+        <hr />
+        {{status.acaoProfessor}}
+    </a>
+
+    <button mat-icon-button style="position: absolute; top: 3px; right: 3px;" [matMenuTriggerFor]="aboveMenu">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #aboveMenu="matMenu">
+        <button mat-menu-item>
+            <mat-icon>content_copy</mat-icon>Duplicar
+        </button>
+        <a [routerLink]="'/professor/avaliacao/editar/' + avaliacao.id" mat-menu-item>
+            <mat-icon>create</mat-icon>Editar
+        </a>
+        <button mat-menu-item>
+            <mat-icon>cancel</mat-icon>Excluir
+        </button>
+    </mat-menu>
+
+
+</div>

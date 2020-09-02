@@ -18,5 +18,6 @@ export interface Avaliacao {
     correcaoParesQtdNumero: number,
     tipoPontuacao: number,
     questoes: Array<Questao>,
-    tags?: Array<string>;
+    tags?: Array<string>,
+    status: number
 }

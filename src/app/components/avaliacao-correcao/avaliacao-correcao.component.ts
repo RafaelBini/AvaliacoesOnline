@@ -18,6 +18,7 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
   public caminho: Array<UrlNode>;
 
   public avaliacao: Avaliacao = {
+    status: 0,
     id: "01",
     titulo: "Avaliacao 01",
     descricao: "",

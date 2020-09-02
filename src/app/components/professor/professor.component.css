@@ -1,37 +1,14 @@
-.avalicao-card{
-    background-color: whitesmoke;
-    width: 60%;
-    padding: 10px;
-    border-radius: 7px;
-    border-left: 7px solid var(--em-preparacao);
-    position: relative;
-    margin-bottom: 30px;
+/* GERAL */
+
+.input-clean{
+    border: 1px dashed transparent;
+    padding: 7px;
+    border-radius: 6px;
+    font-size: 14px;
 }
-
-
-.linkCompartilhavel {
-    padding: 6px; 
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 5px;
-    background-color: var(--em-preparacao);
-}
-
-.linkCompartilhavel a {
-    color: white
-}
-
-.info-box{
-    position: absolute;
-    height: 80px;
-    width: 40%;
-    background-color: var(--em-preparacao);
-    bottom: 30px;
-    right: 10px;
-    border-radius: 5px;
-    color: white;
-    padding: 6px;
-    text-decoration: none;
+.input-clean:focus{
+    outline: none;
+    border: 1px dashed var(--cor-primaria);
 }
 
 .bi, .bi-eye {
@@ -40,6 +17,7 @@
     right: 10px;
     cursor: pointer;
 }
+
 
 /* ALUNOS */
 
@@ -70,3 +48,5 @@
 .tabela-editar-perfil td {
     padding: 11px;
 }
+
+

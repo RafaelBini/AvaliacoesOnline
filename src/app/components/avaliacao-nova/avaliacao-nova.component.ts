@@ -22,6 +22,7 @@ export class AvaliacaoNovaComponent implements OnInit {
 
 
   public avaliacao: Avaliacao = {
+    status: 0,
     titulo: "",
     descricao: "",
     dtInicio: this.comumService.getStringFromDate(new Date()),

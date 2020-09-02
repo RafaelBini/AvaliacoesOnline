@@ -1,0 +1,54 @@
+.avalicao-card{
+    background-color: whitesmoke;
+    width: 60%;
+    padding: 10px;
+    border-radius: 7px;
+    border-left: 7px solid var(--em-preparacao);
+    position: relative;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+
+.linkCompartilhavel {
+    padding: 6px; 
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    background-color: var(--em-preparacao);
+}
+
+.linkCompartilhavel a {
+    color: white
+}
+
+.info-box{
+    position: absolute;
+    height: 80px;
+    width: 40%;
+    background-color: var(--em-preparacao);
+    bottom: 30px;
+    right: 10px;
+    border-radius: 5px;
+    color: white;
+    padding: 6px;
+    text-decoration: none;
+}
+
+.bi, .bi-eye {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.tag{
+    padding: 6px;
+    background-color: var(--cor-primaria);
+    color: white;
+    margin-right: 4px;
+    border-radius: 7px;
+    font-size: 13px;
+    width: fit-content;
+    display: flexbox;
+}
