@@ -44,6 +44,8 @@ import { QuestoesEditarComponent } from './components/questoes-editar/questoes-e
 import { QuestoesResponderComponent } from './components/questoes-responder/questoes-responder.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { AvaliacaoCardProfessorComponent } from './components/avaliacao-card-professor/avaliacao-card-professor.component';
+import { MatListModule } from '@angular/material/list';
+import { UsuarioPerfilEditarComponent } from './components/usuario-perfil-editar/usuario-perfil-editar.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +70,7 @@ import { AvaliacaoCardProfessorComponent } from './components/avaliacao-card-pro
     QuestoesEditarComponent,
     QuestoesResponderComponent,
     AvaliacaoCardProfessorComponent,
+    UsuarioPerfilEditarComponent,
   ],
   imports: [
     BrowserModule,
@@ -92,7 +95,8 @@ import { AvaliacaoCardProfessorComponent } from './components/avaliacao-card-pro
     MatSelectModule,
     MatExpansionModule,
     MatRadioModule,
-    MatMenuModule
+    MatMenuModule,
+    MatListModule
   ],
   providers: [
 

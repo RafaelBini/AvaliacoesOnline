@@ -46,49 +46,7 @@
             Meu Perfil
         </ng-template>
 
-        <div style="background-color: whitesmoke; width: 50%; border-radius: 10px; margin: auto;">
-            <table class="tabela-editar-perfil">
-                <tr>
-                    <td colspan='2' align="center">
-                        <h2>Alterar Meus Dados</h2>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30%">
-                        E-mail:
-                    </td>
-                    <td>
-                        <input required type="email" value="aluno@ufpr.br" name="email">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Senha:
-                    </td>
-                    <td>
-                        <input required [disabled]="!alterar" type="password" value="senha123" name="senha">
-
-                        <button (click)="alterar = true" mat-button matTooltip="Alterar senha">
-                            <mat-icon>create</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-                <tr *ngIf="alterar">
-                    <td>
-                        Confirmar Senha:
-                    </td>
-                    <td>
-                        <input required type="password" class="form-control" value="" name="nova_senha">
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan='2' align="center">
-                        <button type="button" mat-raised-button>Editar</button>
-                    </td>
-                </tr>
-
-            </table>
-        </div>
+        <app-usuario-perfil-editar></app-usuario-perfil-editar>
 
     </mat-tab>
 </mat-tab-group>

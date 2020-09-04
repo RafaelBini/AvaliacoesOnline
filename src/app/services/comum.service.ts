@@ -8,6 +8,21 @@ export class ComumService {
 
   constructor() { }
 
+  public loggedUser = {
+    id: '01',
+    nome: 'Rafael Bini',
+    acesso: 'Professor',
+
+  }
+
+  public fazerLogout() {
+    this.loggedUser.id = null;
+  }
+
+  public fazerLogin() {
+    this.loggedUser.id = "01";
+  }
+
   getStringFromDate(date: Date) {
     return date.toISOString().substr(0, 10) + "T00:00";
   }

@@ -1,3 +1,4 @@
+import { ComumService } from './../../services/comum.service';
 import { ActivatedRoute } from '@angular/router';
 import { CadastrarSeComponent } from './../../dialogs/cadastrar-se/cadastrar-se.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +13,7 @@ export class LoginComponent implements OnInit {
   public id: string = null;
   public tipoUsuario: String = "professor";
 
-  constructor(private dialog: MatDialog, private route: ActivatedRoute) { }
+  constructor(private dialog: MatDialog, private route: ActivatedRoute, public comumService: ComumService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -24,6 +25,10 @@ export class LoginComponent implements OnInit {
     this.dialog.open(CadastrarSeComponent, {
       data: { tipoUsuario: this.tipoUsuario, id: this.id }
     });
+  }
+
+  fazerLogin() {
+    this.comumService.loggedUser.id = "01";
   }
 
 }

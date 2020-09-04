@@ -1,8 +1,8 @@
 <div style="padding: 10px;">
     <table style="width: 100%;">
-        <tr>            
+        <tr>
             <td colspan="2" align="center">
-                <h2>Cadastrar-se</h2>                
+                <h2>Cadastrar-se</h2>
             </td>
         </tr>
         <tr>
@@ -10,8 +10,7 @@
                 <label for="nome">Nome:</label>
             </td>
             <td>
-                <input required type="text" class="form-control" name="nome"
-                    [(ngModel)]="novoUsuario.nome">
+                <input required type="text" class="form-control" name="nome" [(ngModel)]="novoUsuario.nome">
             </td>
         </tr>
         <tr>
@@ -19,13 +18,12 @@
                 <label for="email">E-mail:</label>
             </td>
             <td>
-                <input required type="email" class="form-control" name="email"
-                    [(ngModel)]="novoUsuario.email">
+                <input required type="email" class="form-control" name="email" [(ngModel)]="novoUsuario.email">
             </td>
         </tr>
         <tr>
             <td>
-                
+
                 <label for="senha">Senha:</label>
             </td>
             <td>
@@ -42,10 +40,20 @@
         </tr>
         <tr>
             <td colspan="2" align="center">
-                <a mat-dialog-close *ngIf="!data.id && data.tipoUsuario == 'aluno'" style="background-color: var(--cor-primaria); color: white; margin-top: 5px;" routerLink="/aluno" mat-button>CADASTRAR</a>
-                <a mat-dialog-close *ngIf="!data.id && data.tipoUsuario == 'professor'" style="background-color: var(--cor-primaria); color: white; margin-top: 5px;" routerLink="/professor" mat-button>CADASTRAR</a>
-                <a mat-dialog-close *ngIf="data.id && data.tipoUsuario == 'aluno'" style="background-color: var(--cor-primaria); color: white; margin-top: 5px;" [routerLink]="'/aluno/avaliacao/' + data.id" mat-button>CADASTRAR</a>
-                <a mat-dialog-close *ngIf="data.id && data.tipoUsuario == 'professor'" style="background-color: var(--cor-primaria); color: white; margin-top: 5px;" [routerLink]="'/professor/avaliacao/' + data.id" mat-button>CADASTRAR</a>
+                <a mat-dialog-close *ngIf="!data.id && data.tipoUsuario == 'aluno'"
+                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;" routerLink="/aluno"
+                    (click)="comumService.fazerLogin()" mat-button>CADASTRAR</a>
+                <a mat-dialog-close *ngIf="!data.id && data.tipoUsuario == 'professor'"
+                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;"
+                    routerLink="/professor" (click)="comumService.fazerLogin()" mat-button>CADASTRAR</a>
+                <a mat-dialog-close *ngIf="data.id && data.tipoUsuario == 'aluno'"
+                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;"
+                    [routerLink]="'/aluno/avaliacao/' + data.id" (click)="comumService.fazerLogin()"
+                    mat-button>CADASTRAR</a>
+                <a mat-dialog-close *ngIf="data.id && data.tipoUsuario == 'professor'"
+                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;"
+                    [routerLink]="'/professor/avaliacao/' + data.id" (click)="comumService.fazerLogin()"
+                    mat-button>CADASTRAR</a>
 
             </td>
         </tr>

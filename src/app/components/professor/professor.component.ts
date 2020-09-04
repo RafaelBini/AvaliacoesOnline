@@ -13,22 +13,24 @@ import { Avaliacao } from 'src/app/models/avaliacao';
   styleUrls: ['./professor.component.css']
 })
 export class ProfessorComponent implements OnInit {
-  public alterar = false;
+
   public selectedTab = 0;
   public agruparAvaliacoes = true;
   public selectedStatusTab = 0;
 
+  public alunosSelecionados = [];
+  public alunosFiltrados = [];
   public alunos = [
-    { email: "godo@gmail.com", nome: "Godofredo", matricula: "grr20178700" },
-    { email: "rub@gmail.com", nome: "Ruberlinda", matricula: "grr20181110" },
-    { email: "cdnleon@outlook.com", nome: "Leon Martins", matricula: "grr20194580" },
-    { email: "nil@gmail.com", nome: "Nilce Moretto", matricula: "grr20171234" },
-    { email: "fredb12@hotmail.com", nome: "Fred Desimpedidos", matricula: "grr20184658" },
-    { email: "marilia@gmail.com", nome: "Marília Galvão", matricula: "grr20167755" },
-    { email: "bueno@gmail.com", nome: "Galvão Bueno", matricula: "grr20184848" },
-    { email: "alanzoka@hotmail.com", nome: "Alan Ferreira", matricula: "grr20178452" },
-    { email: "balga@outlook.com", nome: "Mari Balga", matricula: "grr20196658" },
-    { email: "clone@gmail.com", nome: "Henrique Grosse", matricula: "grr20184610" },
+    { email: "godo@gmail.com", nome: "Godofredo", matricula: "grr20178700", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "rub@gmail.com", nome: "Ruberlinda", matricula: "grr20181110", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "cdnleon@outlook.com", nome: "Leon Martins", matricula: "grr20194580", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "nil@gmail.com", nome: "Nilce Moretto", matricula: "grr20171234", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "fredb12@hotmail.com", nome: "Fred Desimpedidos", matricula: "grr20184658", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "marilia@gmail.com", nome: "Marília Galvão", matricula: "grr20167755", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "bueno@gmail.com", nome: "Galvão Bueno", matricula: "grr20184848", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "alanzoka@hotmail.com", nome: "Alan Ferreira", matricula: "grr20178452", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "balga@outlook.com", nome: "Mari Balga", matricula: "grr20196658", tags: ['LPOO II', 'DAC'] },
+    { email: "clone@gmail.com", nome: "Henrique Grosse", matricula: "grr20184610", tags: ['Empreendedorismo e Inovação', 'Gestão Empresarial'] },
   ];
 
   public avaliacoesFiltradas;
@@ -97,6 +99,8 @@ export class ProfessorComponent implements OnInit {
   constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, public comumService: ComumService) { }
 
   ngOnInit(): void {
+
+    this.comumService.loggedUser.acesso = "Professor";
     this.route.params.subscribe(params => {
       if (params.tab) {
         const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);
@@ -105,8 +109,18 @@ export class ProfessorComponent implements OnInit {
       }
     });
     this.avaliacoesFiltradas = this.avaliacoes;
+    this.alunosFiltrados = this.alunos;
     this.selecionarStatusTabAdequada();
   }
+
+  // Geral
+
+  tabAlterada(index) {
+    this.router.navigate([`/professor/${this.tabs[index].id}`]);
+    this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
+  }
+
+  // Avaliações
 
   getStatusPorPrioridade() {
     return this.comumService.statusAvaliacao.concat().sort((a, b) => b.prioridade - a.prioridade);
@@ -149,23 +163,65 @@ export class ProfessorComponent implements OnInit {
             return true;
         }
       }
-
-
       return false;
-
     });
     this.selecionarStatusTabAdequada();
   }
 
-  tabAlterada(index) {
-    this.router.navigate([`/professor/${this.tabs[index].id}`]);
-    this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
-  }
+
+
+  // Alunos
 
   addAluno() {
     this.dialog.open(AlunoNovoComponent, {
 
     });
+  }
+
+  onBuscaAlunoKeyUp(texto: string) {
+    this.alunosFiltrados = this.alunos.filter(aluno => {
+
+      texto = this.comumService.normalizar(texto);
+      var nome = this.comumService.normalizar(aluno.nome);
+      var email = this.comumService.normalizar(aluno.email);
+
+      if (nome.includes(texto))
+        return true;
+
+      if (email.includes(texto))
+        return true;
+
+      for (let parteTexto of texto.split(" ")) {
+        if (nome.includes(parteTexto))
+          return true;
+      }
+
+      if (aluno.tags != null) {
+        for (let tag of aluno.tags) {
+          if (this.comumService.normalizar(tag).includes(texto))
+            return true;
+        }
+      }
+      return false;
+    });
+
+  }
+
+  selecionarTodos() {
+    if (this.alunosFiltrados.length == this.alunosSelecionados.length) {
+      this.alunosSelecionados = [];
+    }
+    else {
+      this.alunosSelecionados = [];
+      this.alunosFiltrados.forEach(aluno => {
+        this.alunosSelecionados.push(aluno.email);
+      })
+    }
+
+  }
+
+  removerAlunosSelecionados() {
+
   }
 
 

@@ -5,7 +5,7 @@ import { BuscarQuestaoComponent } from './../../dialogs/buscar-questao/buscar-qu
 import { AvaliacaoCriadaDialogComponent } from './../../dialogs/avaliacao-criada-dialog/avaliacao-criada-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UrlNode } from 'src/app/models/url-node';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
@@ -18,7 +18,7 @@ import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 })
 export class AvaliacaoNovaComponent implements OnInit {
 
-  constructor(public router: Router, public dialog: MatDialog, public comumService: ComumService) { }
+  constructor(public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public comumService: ComumService) { }
 
 
   public avaliacao: Avaliacao = {
@@ -63,10 +63,20 @@ export class AvaliacaoNovaComponent implements OnInit {
     { nome: `Avaliações`, url: `/professor` },
     { nome: `Nova Avaliação`, url: `/professor` },
   ];
+
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
 
   ngOnInit(): void {
     this.comumService.scrollToTop();
+    this.route.params.subscribe(params => {
+      if (params.id) {
+        console.log(params.id);
+        // TODO: Puxar informações da availiação que será editada no bd
+      }
+      else {
+        console.log("NOVO");
+      }
+    });
   }
 
 

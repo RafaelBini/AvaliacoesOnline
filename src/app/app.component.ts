@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ComumService } from './services/comum.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
-  constructor() { }
+  constructor(public comumService: ComumService) { }
 
   ngOnInit() {
 

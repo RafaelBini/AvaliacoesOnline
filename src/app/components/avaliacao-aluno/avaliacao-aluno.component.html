@@ -7,59 +7,35 @@
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Em Preparação</ng-template>
 
-        <div style="text-align: center; box-sizing: content-box; font-size: 23px; margin-top: 40px;">
-            A avaliação iniciará em
-        </div>
-        <div style="text-align: center; box-sizing: content-box; font-size: 30px; margin-top: 40px;">
-            3 minutos
+        <div style="position: fixed; top: 30%; right: 4%; width: 15%;">
+            <app-countdown></app-countdown>
         </div>
 
-        <br /><br />
-
-        <div style="text-align: justify; padding: 20px; margin: auto; width: 50%; background-color: whitesmoke;">
-            <table width="100%">
-                <tr>
-                    <td align="center">
-                        <b>
-                            <h2>Titulo da Avaliação</h2>
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Descrição da Avaliação, descrição da Avaliação, descrição da Avaliação, descrição da Avaliação,
-                        descrição da Avaliação, descrição da Avaliação, descrição da Avaliação, descrição da Avaliação,
-                        descrição da Avaliação, descrição da Avaliação.
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <br />
-                        <b>Professor</b>: Rafael Bini
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>Início da Avaliação</b>: 31/07/2020 18:00
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>Término da Avaliação</b>: 31/07/2020 19:00
-                    </td>
-                </tr>
-            </table>
-            <br />
-            <h1>Alunos Online</h1>
-            <table>
-                <tr *ngFor="let aluno of alunosOnline">
-                    <td>
-                        <li>{{aluno.nome}}</li>
-                    </td>
-                </tr>
-            </table>
+        <div style="width: 60%; margin: auto;">
+            <div class="cabecalho">
+                <span class="titulo">{{avaliacao.titulo}}</span>
+                <br /><br />
+                <div style="text-align: justify;">
+                    {{avaliacao.descricao}}
+                    <br /><br />
+                    Professor: Rafael Bini
+                    <br /><br />
+                    Inicio: 31/07/2020 18:00
+                    <br />
+                    Término: 31/07/2020 19:00
+                    <br />
+                </div>
+                <br />
+                <h1>Alunos Online</h1>
+                <table>
+                    <tr *ngFor="let aluno of alunosOnline">
+                        <td>
+                            <li>{{aluno.nome}}</li>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-
     </mat-step>
 
     <mat-step>
@@ -70,16 +46,14 @@
             <app-countdown></app-countdown>
         </div>
 
-        <div style="display: flex; flex-wrap: wrap; width: 60%; margin: auto; position: relative;">
+        <div style="width: 60%; margin: auto; position: relative;">
 
-            <div align="center"
-                style="padding: 20px; background-color: whitesmoke;  color: black; width: 100%; border-radius: 10px;">
-                <b style="font-size: 22px;">Titulo da Avaliação</b>
+
+            <div class="cabecalho">
+                <span class="titulo">{{avaliacao.titulo}}</span>
                 <br /><br />
                 <div style="text-align: justify;">
-                    Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
-                    Descrição da
-                    Avaliação
+                    {{avaliacao.descricao}}
                     <br /><br />
                     Professor: Rafael Bini
                     <br /><br />
@@ -95,67 +69,14 @@
                     <li>Thyago Vinicius</li>
                     <li>Marcos Kerchenr</li>
                 </div>
-
-
             </div>
 
+            <app-questoes-responder [avaliacao]="avaliacao">
 
-
-            <div class="questao" *ngFor="let questao of questoes; index as qi">
-
-                <table style="width: 100%;">
-
-                    <tr>
-                        <td style="padding-bottom: 20px; font-size: 15px;">
-                            <b>{{qi + 1}}</b>/{{questoes.length}}. {{questao.pergunta}}
-                        </td>
-                    </tr>
-
-                    <tr *ngIf="questao.tipo == 1">
-                        <td>
-
-                            <textarea placeholder="Escreva aqui a resposta" style="width: 100%" rows="3"></textarea>
-                            <br />
-                            <button mat-icon-button matTooltip="Adicionar Imagem">
-                                <mat-icon>insert_photo</mat-icon>
-                            </button>
-                            <button mat-icon-button matTooltip="Adicionar Anexo">
-                                <mat-icon>attach_file</mat-icon>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr *ngIf="questao.tipo == 3">
-                        <td>
-                            <table width="100%">
-                                <tr *ngFor="let alternativa of questao.alternativas; index as ai">
-                                    <td valign="top" width="5px">
-                                        <input [id]="alternativa.texto" type="checkbox" />
-                                    </td>
-                                    <td style="word-wrap: break-word;">
-                                        <label style="cursor: pointer;" [for]="alternativa.texto">{{alternativa.texto}}
-                                        </label>
-
-                                    </td>
-                                </tr>
-
-                            </table>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td align="left" style="position: relative; padding-top: 20px;">
-                            <div>
-                                Valor: {{questao.valor}}/100
-                            </div>
-
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            </app-questoes-responder>
 
         </div>
+
 
         <div style="width: 100%;">
             <button *ngIf="!finalizado" (click)="finalizado = true" mat-raised-button

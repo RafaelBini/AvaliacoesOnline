@@ -8,7 +8,7 @@
 
         <div cdkDropListGroup>
 
-            <table style="width: 100%; height: 60vh;">
+            <table style="width: 100%; height: 70vh;">
                 <tr>
                     <td width="70%" style="position: relative;">
                         <div
@@ -22,7 +22,28 @@
                                     GRUPO {{grupo.numero}}
                                 </div>
                                 <div *ngFor="let aluno of grupo.alunos" class="aluno" cdkDrag>
-                                    {{aluno.nome}}
+                                    <table>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <img src="assets/avatares/padrao.jpg"
+                                                    style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                {{aluno.nome}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div style="display: flex; flex-wrap: wrap;">
+                                                    <div *ngFor="let tag of aluno.tags" class="tag">
+                                                        {{tag}}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
 
 
@@ -35,37 +56,57 @@
                             style="background-color: var(--cor-primaria); color: white; padding: 5px; padding-left: 15px; padding-right: 15px; text-align: center; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; position: absolute; top: 0px; left: 45%;">
                             GRUPOS
                         </div>
-                        <button (click)="addGrupo()" mat-mini-fab
+                        <button (click)="addGrupo()" mat-mini-fab matTooltip="Adicionar grupo"
                             style="position: absolute; top: 0px; right: 32%; background-color: var(--cor-primaria);">
                             <mat-icon>add</mat-icon>
                         </button>
+
+                        <button mat-raised-button matStepperNext
+                            style="position: absolute; top: 0px; right: 10%; margin: auto; color: white; background-color: var(--cor-tranquila);">
+                            Iniciar Avaliação
+                        </button>
+
                     </td>
                     <td width="30%" style="position: relative;">
 
-
-                        <div style="width: 100%; height: 20%; padding: 12px; padding-top: 40px;">
-                            <input *ngIf="alunos.length > 0" type="text"
-                                style="margin: auto; display: block; width: 70%; font-size: 15px;"
-                                placeholder="Busque aqui um aluno" />
+                        <div
+                            style="width: 100%; height: 20%; padding: 12px; padding-top: 40px;padding-right: 0px; padding-left: 0px;">
+                            <input type="text" #buscaAluno class="input-clean" [(ngModel)]="textoFiltroAlunos"
+                                (keyup)="onBuscaAlunoKeyUp()"
+                                style="margin: auto; display: block; width: 90%; font-size: 15px;"
+                                placeholder="Busque por uma parte do nome, email ou tag..." />
                         </div>
+
                         <div cdkDropList [cdkDropListData]="alunos" (cdkDropListDropped)="drop($event)"
                             style="overflow: auto; display: flex; flex-wrap: wrap; width: 100%;  height: 80%;">
-                            <div *ngFor="let aluno of alunos" class="aluno" cdkDrag>
-                                {{aluno.nome}}
+
+                            <div *ngFor="let aluno of alunosFiltrados" class="aluno" cdkDrag>
+                                <table>
+                                    <tr>
+                                        <td rowspan="3">
+                                            <img src="assets/avatares/padrao.jpg"
+                                                style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{aluno.nome}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex; flex-wrap: wrap;">
+                                                <div *ngFor="let tag of aluno.tags" class="tag">
+                                                    {{tag}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
-                            <div *ngIf="alunos.length <= 0" style="color: darkblue; text-align: center; width: 100%;">
-                                <br />
-                                <mat-icon style="font-size: 40px; margin: auto; color: darkblue;">done_outline
-                                </mat-icon>
-                                <br />
-                                Todos os alunos já foram agrupados!
-                                <br /><br />
-                                <button mat-raised-button matStepperNext *ngIf="alunos.length <= 0"
-                                    style="margin: auto; color: white; background-color: var(--cor-tranquila);">
-                                    Iniciar Avaliação
-                                </button>
-                            </div>
+
                         </div>
+
                         <div
                             style="background-color: var(--cor-primaria); color: white;  padding: 5px; padding-left: 15px; padding-right: 15px; text-align: center; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; position: absolute; top: 0px; left: 43%;">
                             ALUNOS
@@ -74,6 +115,7 @@
 
                 </tr>
             </table>
+
 
 
 

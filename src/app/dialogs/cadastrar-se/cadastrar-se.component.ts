@@ -1,3 +1,4 @@
+import { ComumService } from './../../services/comum.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Usuario } from './../../models/usuario';
 import { Component, OnInit, Inject } from '@angular/core';
@@ -17,7 +18,7 @@ export class CadastrarSeComponent implements OnInit {
   };
 
   constructor(public dialogRef: MatDialogRef<CadastrarSeComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public snack: MatSnackBar) { }
+    @Inject(MAT_DIALOG_DATA) public data: any, public snack: MatSnackBar, public comumService: ComumService) { }
 
   ngOnInit(): void {
 

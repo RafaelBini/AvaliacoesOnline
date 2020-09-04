@@ -1,3 +1,19 @@
+.cabecalho {
+    padding: 20px; 
+    background-color: whitesmoke;  
+    color: black; 
+    border-radius: 10px;
+    margin: auto;
+}
+
+.titulo{
+    font-size: 22px; 
+    text-align: center; 
+    font-weight: bold; 
+    margin: auto;
+    display: block;
+}
+
 .questao {
     position: relative; 
     background-color: whitesmoke; 

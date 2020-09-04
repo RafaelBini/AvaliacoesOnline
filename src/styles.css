@@ -87,3 +87,11 @@ textarea {
 .mat-form-field-underline{
   background-color: var(--cor-primaria) !important;
 }
+
+.sem-bottom-border .mat-tab-header{
+  border-bottom: none !important;
+} 
+
+.mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate, .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate {
+  background-color: var(--cor-primaria);
+}

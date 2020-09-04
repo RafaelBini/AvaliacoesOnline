@@ -1,3 +1,16 @@
+/* GERAL */
+
+.input-clean{
+  border: 1px dashed gray;
+  padding: 7px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.input-clean:focus{
+  outline: none;
+  border: 1px dashed var(--cor-primaria);
+}
+
 /* Parte 01 - Preparação */
 
 .grupo{
@@ -5,7 +18,7 @@
     color: var(--cor-primaria);
     padding: 10px;
     width: 45%; 
-    min-height: 80px; 
+    min-height: 30px; 
     margin: auto;
     border-radius: 8px;
     margin-bottom: 6px;
@@ -16,7 +29,7 @@
 .aluno{
     z-index: 1000;
     width: 90%;
-    height: 50px;
+    height: fit-content;
     background-color: whitesmoke;
     border: 1px solid var(--cor-primaria);
     border-left: 12px solid var(--cor-primaria);
@@ -28,6 +41,20 @@
     margin-top: 6px;
     cursor: move
 }
+
+.tag{
+  padding: 5px;
+  background-color: var(--cor-primaria);
+  color: white;
+  margin-right: 4px;
+  border-radius: 7px;
+  font-size: 11px;
+  min-width: fit-content;
+  display: flexbox;
+  margin-top: 4px;
+}
+
+
 
 
 /* CDK DRAG & DROP */

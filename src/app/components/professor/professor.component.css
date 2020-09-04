@@ -21,32 +21,26 @@
 
 /* ALUNOS */
 
-.tabela-alunos{
-    width: 80%; margin: auto; margin-top: 20px;
-    border-collapse: collapse;    
-    border-radius: 10px;
-    padding: 8px;
+.tag{
+    padding: 5px;
+    background-color: var(--cor-primaria);
+    color: white;
+    margin-right: 4px;
+    border-radius: 7px;
+    font-size: 11px;
+    min-width: fit-content;
+    display: flexbox;
+    margin-top: 4px;
 }
 
-.tabela-alunos td{
-    background-color: whitesmoke;
-    border-bottom: 2px solid white;
-    padding: 6px;    
+.aluno{
+    border: 1px dashed var(--cor-primaria);
+    border-radius: 6px;
+    margin-bottom: 5px;
+    background-color: white;
+    padding: 7px;
+    height: fit-content !important;
 }
 
-.tabela-alunos b{
-    font-size: 17px;
-}
-
-/* PERFIL */
-
-.tabela-editar-perfil {
-    width: 90%; margin: auto; margin-top: 10px;
-
-}
-
-.tabela-editar-perfil td {
-    padding: 11px;
-}
 
 

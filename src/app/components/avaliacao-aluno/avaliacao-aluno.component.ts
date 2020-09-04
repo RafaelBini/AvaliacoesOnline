@@ -13,28 +13,6 @@ export class AvaliacaoAlunoComponent implements OnInit {
   constructor(public route: ActivatedRoute) { }
   public finalizado = false;
 
-  public questoes = [
-    {
-      pergunta: "Qual é a cor da grama?",
-      tipo: 1,
-      resposta: "Verde",
-      alternativas: [],
-      valor: 70
-    },
-    {
-      pergunta: "Qual é a cor da grama?",
-      tipo: 3,
-      resposta: "",
-      alternativas: [
-        { texto: "A cor é Vermelha.", correta: false },
-        { texto: "A cor é Verde.", correta: true },
-        { texto: "A cor é Rosa.", correta: false },
-        { texto: "A cor é Azul.", correta: false },
-      ],
-      valor: 30
-    },
-  ];
-
   alunosOnline = [
     { nome: "Rafael Bini" },
     { nome: "Matheus Leonardo" },
@@ -43,7 +21,30 @@ export class AvaliacaoAlunoComponent implements OnInit {
   ];
 
   public avaliacao = {
-    titulo: "Avaliacao 01"
+    titulo: "Titulo da Avaliação",
+    descricao: `Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
+    Descrição da Avaliação`,
+    questoes: [
+      {
+        pergunta: "Qual é a cor da grama?",
+        tipo: 1,
+        resposta: "Verde",
+        alternativas: [],
+        valor: 70
+      },
+      {
+        pergunta: "Qual é a cor da grama?",
+        tipo: 4,
+        resposta: "",
+        alternativas: [
+          { texto: "A cor é Vermelha.", correta: false },
+          { texto: "A cor é Verde.", correta: true },
+          { texto: "A cor é Rosa.", correta: false },
+          { texto: "A cor é Azul.", correta: false },
+        ],
+        valor: 30
+      },
+    ]
   }
 
   public caminho: Array<UrlNode> = [
