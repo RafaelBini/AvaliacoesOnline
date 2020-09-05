@@ -16,34 +16,17 @@
 
 
                             <div cdkDropList *ngFor="let grupo of grupos;  index as i;" class="grupo"
-                                [cdkDropListData]="grupo.alunos" (cdkDropListDropped)="drop($event)">
+                                [cdkDropListData]="grupo.alunos" (cdkDropListDropped)="drop($event, 'grupo')">
 
                                 <div>
                                     GRUPO {{grupo.numero}}
                                 </div>
-                                <div *ngFor="let aluno of grupo.alunos" class="aluno" cdkDrag>
-                                    <table>
-                                        <tr>
-                                            <td rowspan="3">
-                                                <img src="assets/avatares/padrao.jpg"
-                                                    style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                {{aluno.nome}}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div style="display: flex; flex-wrap: wrap;">
-                                                    <div *ngFor="let tag of aluno.tags" class="tag">
-                                                        {{tag}}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
+
+
+                                <div class="aluno" cdkDrag *ngFor="let aluno of grupo.alunos"
+                                    [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                                    </app-aluno-card-avaliacao-professor>
                                 </div>
 
 
@@ -62,7 +45,7 @@
                         </button>
 
                         <button mat-raised-button matStepperNext
-                            style="position: absolute; top: 0px; right: 10%; margin: auto; color: white; background-color: var(--cor-tranquila);">
+                            style="position: fixed; top: 9%; right: 4%; margin: auto; color: white; background-color: var(--cor-tranquila);">
                             Iniciar Avaliação
                         </button>
 
@@ -77,32 +60,13 @@
                                 placeholder="Busque por uma parte do nome, email ou tag..." />
                         </div>
 
-                        <div cdkDropList [cdkDropListData]="alunos" (cdkDropListDropped)="drop($event)"
+                        <div cdkDropList [cdkDropListData]="alunos" (cdkDropListDropped)="drop($event, 'alunos')"
                             style="overflow: auto; display: flex; flex-wrap: wrap; width: 100%;  height: 80%;">
 
-                            <div *ngFor="let aluno of alunosFiltrados" class="aluno" cdkDrag>
-                                <table>
-                                    <tr>
-                                        <td rowspan="3">
-                                            <img src="assets/avatares/padrao.jpg"
-                                                style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            {{aluno.nome}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div style="display: flex; flex-wrap: wrap;">
-                                                <div *ngFor="let tag of aluno.tags" class="tag">
-                                                    {{tag}}
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
+                            <div class="aluno" cdkDrag *ngFor="let aluno of alunosFiltrados"
+                                [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                                <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                                </app-aluno-card-avaliacao-professor>
                             </div>
 
                         </div>

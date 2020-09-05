@@ -9,7 +9,7 @@ export class ComumService {
   constructor() { }
 
   public loggedUser = {
-    id: '01',
+    id: null,
     nome: 'Rafael Bini',
     acesso: 'Professor',
 
@@ -35,6 +35,7 @@ export class ComumService {
       acaoProfessor: "Configurar grupos / Iniciar Avaliação",
       cor: "var(--em-preparacao)",
       prioridade: 1,
+      mensagemCountdown: "INCIANDO EM",
     },
     {
       id: 1,
@@ -42,6 +43,7 @@ export class ComumService {
       acaoProfessor: "Acompanhar os alunos",
       cor: "var(--em-avaliacao)",
       prioridade: 2,
+      mensagemCountdown: "ENCERRANDO EM",
     },
     {
       id: 2,
@@ -49,6 +51,7 @@ export class ComumService {
       acaoProfessor: "Corrigir / Revisar Avaliações",
       cor: "var(--em-correcao)",
       prioridade: 3,
+      mensagemCountdown: "FINALIZANDO EM",
     },
     {
       id: 3,

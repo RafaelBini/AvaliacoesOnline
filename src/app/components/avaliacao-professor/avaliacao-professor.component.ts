@@ -4,6 +4,7 @@ import { Avaliacao } from 'src/app/models/avaliacao';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Usuario } from 'src/app/models/usuario';
 
 @Component({
   selector: 'app-avaliacao-professor',
@@ -23,17 +24,24 @@ export class AvaliacaoProfessorComponent implements OnInit {
 
   public textoFiltroAlunos = "";
   public alunosFiltrados = [];
-  public alunos = [
-    { email: "godo@gmail.com", nome: "Godofredo", matricula: "grr20178700", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "rub@gmail.com", nome: "Ruberlinda", matricula: "grr20181110", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "cdnleon@outlook.com", nome: "Leon Martins", matricula: "grr20194580", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "nil@gmail.com", nome: "Nilce Moretto", matricula: "grr20171234", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "fredb12@hotmail.com", nome: "Fred Desimpedidos", matricula: "grr20184658", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "marilia@gmail.com", nome: "Marília Galvão", matricula: "grr20167755", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "bueno@gmail.com", nome: "Galvão Bueno", matricula: "grr20184848", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "alanzoka@hotmail.com", nome: "Alan Ferreira", matricula: "grr20178452", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "balga@outlook.com", nome: "Mari Balga", matricula: "grr20196658", tags: ['LPOO II', 'DAC'] },
-    { email: "clone@gmail.com", nome: "Henrique Grosse", matricula: "grr20184610", tags: ['Empreendedorismo e Inovação', 'Gestão Empresarial'] },
+  public alunos: Array<Usuario> = [
+    { email: "godo@gmail.com", senha: '', nome: "Godofredo", tags: ['Web II', 'Interação Humano Computador'], online: false },
+    { email: "rub@gmail.com", senha: '', nome: "Ruberlinda", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "cdnleon@outlook.com", senha: '', nome: "Leon Martins", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "nil@gmail.com", senha: '', nome: "Nilce Moretto", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "fredb12@hotmail.com", senha: '', nome: "Fred Desimpedidos", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "marilia@gmail.com", senha: '', nome: "Marília Galvão", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "bueno@gmail.com", senha: '', nome: "Galvão Bueno", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "alanzoka@hotmail.com", senha: '', nome: "Alan Ferreira", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "balga@outlook.com", senha: '', nome: "Mari Balga", tags: ['LPOO II', 'DAC'] },
+    { email: "clone@gmail.com", senha: '', nome: "Henrique Grosse", tags: ['Empreendedorismo e Inovação', 'Gestão Empresarial'] },
+  ];
+
+  public alunosOnline: Array<Usuario> = [
+    { email: "fredb12@hotmail.com", senha: '', nome: "Fred Desimpedidos", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "marilia@gmail.com", senha: '', nome: "Marília Galvão", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "bueno@gmail.com", senha: '', nome: "Galvão Bueno", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "rafaelbini@hotmail.com", senha: '', nome: "Rafael Bini" },
   ];
 
   public avaliacao: any = {
@@ -50,7 +58,9 @@ export class AvaliacaoProfessorComponent implements OnInit {
   constructor(public route: ActivatedRoute, public comumService: ComumService) { }
 
   ngOnInit(): void {
-    this.alunosFiltrados = this.alunos;
+
+    this.atualizarAlunosOnline();
+
   }
 
   // Parte 1 - Em Preparação
@@ -58,14 +68,23 @@ export class AvaliacaoProfessorComponent implements OnInit {
   addGrupo() {
     this.grupos.push({ numero: this.grupos.length + 1, alunos: [] });
   }
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<string[]>, onde: string) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+      if (onde == 'grupo') {
+        transferArrayItem(event.previousContainer.data,
+          event.container.data,
+          this.alunos.indexOf(this.alunos.filter(aluno => aluno.email == this.alunosFiltrados[event.previousIndex].email)[0]),
+          event.currentIndex);
+      }
+      else {
+        transferArrayItem(event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex);
+      }
+
     }
     this.onBuscaAlunoKeyUp();
   }
@@ -74,6 +93,22 @@ export class AvaliacaoProfessorComponent implements OnInit {
   }
   onBuscaAlunoKeyUp() {
     var texto = this.textoFiltroAlunos;
+    this.alunos.sort((a, b) => {
+      if (a.online && !b.online) {
+        return -1;
+      }
+      else if (!a.online && b.online) {
+        return 1;
+      }
+      else {
+        if (a.nome > b.nome) {
+          return 1;
+        }
+        else {
+          return -1;
+        }
+      }
+    });
     this.alunosFiltrados = this.alunos.filter(aluno => {
 
       texto = this.comumService.normalizar(texto);
@@ -100,6 +135,44 @@ export class AvaliacaoProfessorComponent implements OnInit {
       return false;
     });
 
+
   }
+  atualizarAlunosOnline() {
+    this.alunosOnline.forEach(alunoOnline => {
+
+      var estaEmUmGrupo = false;
+
+      this.grupos.forEach(grupo => {
+
+        const ALUNOS_ENCONTRADOS = grupo.alunos.concat().filter(aluno => aluno.email == alunoOnline.email);
+
+        if (ALUNOS_ENCONTRADOS.length > 0) {
+          const ALUNO_ENCONTRADO_INDEX = grupo.alunos.indexOf(ALUNOS_ENCONTRADOS[0]);
+          grupo.alunos[ALUNO_ENCONTRADO_INDEX].online = true;
+          estaEmUmGrupo = true;
+        }
+
+      });
+
+      if (!estaEmUmGrupo) {
+        const ALUNOS_ENCONTRADOS = this.alunos.concat().filter(aluno => aluno.email == alunoOnline.email);
+
+        if (ALUNOS_ENCONTRADOS.length > 0) {
+          const ALUNO_ENCONTRADO_INDEX = this.alunos.indexOf(ALUNOS_ENCONTRADOS[0]);
+          this.alunos[ALUNO_ENCONTRADO_INDEX].online = true;
+        }
+
+        else {
+          alunoOnline.online = true;
+          this.alunos.push(alunoOnline);
+        }
+      }
+
+    });
+
+    this.onBuscaAlunoKeyUp();
+
+  }
+
 
 }

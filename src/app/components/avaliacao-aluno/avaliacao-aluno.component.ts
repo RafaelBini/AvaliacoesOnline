@@ -1,3 +1,4 @@
+import { ComumService } from './../../services/comum.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
@@ -10,7 +11,7 @@ import { UrlNode } from 'src/app/models/url-node';
 })
 export class AvaliacaoAlunoComponent implements OnInit {
 
-  constructor(public route: ActivatedRoute) { }
+  constructor(public route: ActivatedRoute, public comumService: ComumService) { }
   public finalizado = false;
 
   alunosOnline = [
@@ -24,6 +25,7 @@ export class AvaliacaoAlunoComponent implements OnInit {
     titulo: "Titulo da Avaliação",
     descricao: `Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
     Descrição da Avaliação`,
+    status: 0,
     questoes: [
       {
         pergunta: "Qual é a cor da grama?",

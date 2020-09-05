@@ -36,7 +36,7 @@
         <a [routerLink]="'/professor/avaliacao/editar/' + avaliacao.id" mat-menu-item>
             <mat-icon>create</mat-icon>Editar
         </a>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="deletar(avaliacao)">
             <mat-icon>cancel</mat-icon>Excluir
         </button>
     </mat-menu>

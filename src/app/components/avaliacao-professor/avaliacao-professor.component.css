@@ -27,35 +27,20 @@
 }
     
 .aluno{
-    z-index: 1000;
-    width: 90%;
-    height: fit-content;
-    background-color: whitesmoke;
-    border: 1px solid var(--cor-primaria);
-    border-left: 12px solid var(--cor-primaria);
-    color: black;
-    padding: 7px;
-    border-radius: 8px;
-    margin: auto;
-    margin-bottom: 6px;
-    margin-top: 6px;
-    cursor: move
+  z-index: 1000;
+  width: 90%;
+  height: fit-content;
+  background-color: whitesmoke;
+  border: 1px solid var(--cor-primaria);
+  border-left: 12px solid var(--cor-primaria);
+  color: black;
+  padding: 7px;
+  border-radius: 8px;
+  margin: auto;
+  margin-bottom: 6px;
+  margin-top: 6px;
+  cursor: move
 }
-
-.tag{
-  padding: 5px;
-  background-color: var(--cor-primaria);
-  color: white;
-  margin-right: 4px;
-  border-radius: 7px;
-  font-size: 11px;
-  min-width: fit-content;
-  display: flexbox;
-  margin-top: 4px;
-}
-
-
-
 
 /* CDK DRAG & DROP */
 
@@ -88,5 +73,5 @@
     position: relative;
     width: 60%;
     border: 1px solid black;
-    border-left: 12px solid black;
+    border-left: 12px solid black;    
   }

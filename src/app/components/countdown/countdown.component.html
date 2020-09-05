@@ -1,13 +1,13 @@
-<div class="painel">
+<div *ngIf="tempoRestante != '-'" class="painel">
     <table style="width: 100%; height: 100%;">
         <tr>
             <td>
-                Tempo Restante:
+                <span style="font-size: 12px;">{{mensagem}}</span>
             </td>
         </tr>
         <tr>
             <td>
-                <span class="tempo">3 min</span>
+                <span class="tempo">{{tempoRestante}}</span>
             </td>
         </tr>
     </table>

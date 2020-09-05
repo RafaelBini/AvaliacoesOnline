@@ -7,9 +7,6 @@
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Em Preparação</ng-template>
 
-        <div style="position: fixed; top: 30%; right: 4%; width: 15%;">
-            <app-countdown></app-countdown>
-        </div>
 
         <div style="width: 60%; margin: auto;">
             <div class="cabecalho">
@@ -42,9 +39,6 @@
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Durante Avaliação</ng-template>
 
-        <div style="position: fixed; top: 30%; right: 4%; width: 15%;">
-            <app-countdown></app-countdown>
-        </div>
 
         <div style="width: 60%; margin: auto; position: relative;">
 
@@ -95,11 +89,6 @@
     <mat-step>
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Em Correção</ng-template>
-
-        <div style="position: fixed; top: 30%; right: 4%; width: 15%;">
-            <app-countdown></app-countdown>
-        </div>
-
 
         <div align="center"
             style="padding: 20px; margin: auto; background-color: whitesmoke;  color: black; width: 55%; border-radius: 10px;">
@@ -206,3 +195,7 @@
 
 
 </mat-horizontal-stepper>
+
+<div *ngIf="avaliacao.status <= 2" style="position: fixed; top: 30%; right: 4%; width: 15%;">
+    <app-countdown [mensagem]="comumService.statusAvaliacao[avaliacao.status].mensagemCountdown"></app-countdown>
+</div>

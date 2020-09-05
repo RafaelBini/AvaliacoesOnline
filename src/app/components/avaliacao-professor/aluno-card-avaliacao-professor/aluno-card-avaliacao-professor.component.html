@@ -1,0 +1,30 @@
+<div>
+    <table>
+        <tr>
+            <td rowspan="3">
+                <div style="position: relative;">
+                    <img src="assets/avatares/padrao.jpg"
+                        style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
+                    <span *ngIf="aluno.online" class="etiqueta status-online">online</span>
+                    <span *ngIf="!aluno.online" class="etiqueta status-offline">offline</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{aluno.nome}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="display: flex; flex-wrap: wrap;">
+                    <div *ngFor="let tag of aluno.tags"
+                        [style.backgroundColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'"
+                        class="tag">
+                        {{tag}}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

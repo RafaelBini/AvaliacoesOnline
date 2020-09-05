@@ -1,0 +1,37 @@
+
+
+.tag{
+  padding: 5px;
+  background-color: var(--cor-primaria);
+  color: white;
+  margin-right: 4px;
+  border-radius: 7px;
+  font-size: 11px;
+  min-width: fit-content;
+  display: flexbox;
+  margin-top: 4px;
+}
+
+.etiqueta{
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 7vh;
+  font-size: 8px;
+  color: white;
+  text-align: center;
+  margin: auto;
+  padding: 3px;  
+  line-height: 8px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  opacity: 0.95;
+}
+
+.status-online {
+    background-color: var(--cor-tranquila);
+  }
+  
+  .status-offline {
+    background-color: var(--cor-primaria);
+  }

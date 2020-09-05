@@ -46,6 +46,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AvaliacaoCardProfessorComponent } from './components/avaliacao-card-professor/avaliacao-card-professor.component';
 import { MatListModule } from '@angular/material/list';
 import { UsuarioPerfilEditarComponent } from './components/usuario-perfil-editar/usuario-perfil-editar.component';
+import { AlunoCardAvaliacaoProfessorComponent } from './components/avaliacao-professor/aluno-card-avaliacao-professor/aluno-card-avaliacao-professor.component';
+import { ConfirmarComponent } from './dialogs/confirmar/confirmar.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,8 @@ import { UsuarioPerfilEditarComponent } from './components/usuario-perfil-editar
     QuestoesResponderComponent,
     AvaliacaoCardProfessorComponent,
     UsuarioPerfilEditarComponent,
+    AlunoCardAvaliacaoProfessorComponent,
+    ConfirmarComponent,
   ],
   imports: [
     BrowserModule,
