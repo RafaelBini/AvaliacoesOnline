@@ -12,7 +12,9 @@ export class ComumService {
     id: null,
     nome: 'Rafael Bini',
     acesso: 'Professor',
-
+    email: 'rfabini1996@gmail.com',
+    online: true,
+    instanciaStatusId: null,
   }
 
   public fazerLogout() {

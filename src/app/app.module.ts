@@ -48,6 +48,7 @@ import { MatListModule } from '@angular/material/list';
 import { UsuarioPerfilEditarComponent } from './components/usuario-perfil-editar/usuario-perfil-editar.component';
 import { AlunoCardAvaliacaoProfessorComponent } from './components/avaliacao-professor/aluno-card-avaliacao-professor/aluno-card-avaliacao-professor.component';
 import { ConfirmarComponent } from './dialogs/confirmar/confirmar.component';
+import { AlunoCardAvaliacaoAlunoComponent } from './components/avaliacao-aluno/aluno-card-avaliacao-aluno/aluno-card-avaliacao-aluno.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { ConfirmarComponent } from './dialogs/confirmar/confirmar.component';
     UsuarioPerfilEditarComponent,
     AlunoCardAvaliacaoProfessorComponent,
     ConfirmarComponent,
+    AlunoCardAvaliacaoAlunoComponent,
   ],
   imports: [
     BrowserModule,

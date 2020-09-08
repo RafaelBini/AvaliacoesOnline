@@ -11,6 +11,17 @@
   border: 1px dashed var(--cor-primaria);
 }
 
+.container {
+  width: 60%;
+  margin: auto;
+}
+
+.head {
+  width: 95%;
+  text-align: center;
+  margin: auto;
+}
+
 /* Parte 01 - Preparação */
 
 .grupo{
@@ -24,10 +35,11 @@
     margin-bottom: 6px;
     margin-top: 6px;
     border: 1px dashed var(--cor-primaria);
+    position: relative;
 }
     
 .aluno{
-  z-index: 1000;
+  z-index: 900;
   width: 90%;
   height: fit-content;
   background-color: whitesmoke;
@@ -39,7 +51,40 @@
   margin: auto;
   margin-bottom: 6px;
   margin-top: 6px;
-  cursor: move
+  cursor: move;
+  position: relative;
+}
+
+.main-btn{
+  position: fixed; 
+  top: 9%; 
+  right: 4%; 
+  margin: auto; 
+  text-align: center;
+}
+
+.btn-novo-grupo:hover{
+  cursor: pointer;
+  color: var(--cor-secundaria);;
+}
+
+.btn-corrigir{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 1000;
+
+  color: var(--cor-primaria);
+  border: 1px dashed var(--cor-primaria);
+  border-radius: 7px;
+}
+.btn-corrigir:hover{
+  background-color: var(--cor-secundaria);
+  color: white;
+}
+
+.grupo-title{
+  padding: 5px;
 }
 
 /* CDK DRAG & DROP */
@@ -75,3 +120,4 @@
     border: 1px solid black;
     border-left: 12px solid black;    
   }
+

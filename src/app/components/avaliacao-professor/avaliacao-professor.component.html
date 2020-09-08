@@ -2,53 +2,65 @@
 
 <mat-horizontal-stepper #stepper>
 
+    <!-- EM PREPARAÇÃO -->
     <mat-step style="height: 100%;" [editable]="true">
 
         <ng-template matStepLabel>Em Preparação</ng-template>
 
-        <div cdkDropListGroup>
+        <!-- INDIVIDUAL -->
+        <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
+            <div class="head">
+                <h2>Alunos Online ({{avaliacao.alunos.length}})</h2>
+                <h3>Os alunos abaixo estão aguardando que a Avaliação seja iniciada</h3>
+            </div>
+            <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
+                style="border-color: var(--cor-tranquila); cursor: default">
+                <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                </app-aluno-card-avaliacao-professor>
+            </div>
+        </div>
 
+        <!-- EM GRUPO -->
+        <div *ngIf="avaliacao.tipoDisposicao != 0" cdkDropListGroup>
             <table style="width: 100%; height: 70vh;">
                 <tr>
                     <td width="70%" style="position: relative;">
-                        <div
+                        <div #gruposContainerDiv
                             style="padding-top: 40px; overflow: auto; height: 100%; width: 100%; display: flex; flex-wrap: wrap;">
 
-
-                            <div cdkDropList *ngFor="let grupo of grupos;  index as i;" class="grupo"
+                            <div cdkDropList *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo"
                                 [cdkDropListData]="grupo.alunos" (cdkDropListDropped)="drop($event, 'grupo')">
 
-                                <div>
+                                <div class="grupo-title">
                                     GRUPO {{grupo.numero}}
                                 </div>
-
-
                                 <div class="aluno" cdkDrag *ngFor="let aluno of grupo.alunos"
                                     [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
                                     <app-aluno-card-avaliacao-professor [aluno]="aluno">
                                     </app-aluno-card-avaliacao-professor>
                                 </div>
+                            </div>
+                            <div class="grupo btn-novo-grupo" matTooltip="Adicionar grupo" (click)="addGrupo()">
 
+                                <mat-icon style="font-size: 35px; display: block; margin: auto;">add
+                                </mat-icon>
+
+                            </div>
+                        </div>
+                        <div (mouseover)="scrollUp(gruposContainerDiv)" (mouseleave)="scrolling=false"
+                            style="width: 100%; height: 15px; position: absolute; top: 0px; z-index: 1000;">
+                            <div style="position: relative;">
+                                <div
+                                    style="background-color: var(--cor-primaria); color: white; padding: 5px; padding-left: 15px; padding-right: 15px; text-align: center; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; position: absolute; top: 0px; left: 45%;">
+                                    GRUPOS ({{avaliacao.grupos.length}})
+                                </div>
 
                             </div>
 
-
-
                         </div>
-                        <div
-                            style="background-color: var(--cor-primaria); color: white; padding: 5px; padding-left: 15px; padding-right: 15px; text-align: center; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; position: absolute; top: 0px; left: 45%;">
-                            GRUPOS
+                        <div (mouseover)="scrollDown(gruposContainerDiv)" (mouseleave)="scrolling=false"
+                            style="user-select: none; position: absolute; height: 30px; z-index: 1000; bottom: -5px; width: 100%;">
                         </div>
-                        <button (click)="addGrupo()" mat-mini-fab matTooltip="Adicionar grupo"
-                            style="position: absolute; top: 0px; right: 32%; background-color: var(--cor-primaria);">
-                            <mat-icon>add</mat-icon>
-                        </button>
-
-                        <button mat-raised-button matStepperNext
-                            style="position: fixed; top: 9%; right: 4%; margin: auto; color: white; background-color: var(--cor-tranquila);">
-                            Iniciar Avaliação
-                        </button>
-
                     </td>
                     <td width="30%" style="position: relative;">
 
@@ -60,7 +72,8 @@
                                 placeholder="Busque por uma parte do nome, email ou tag..." />
                         </div>
 
-                        <div cdkDropList [cdkDropListData]="alunos" (cdkDropListDropped)="drop($event, 'alunos')"
+                        <div cdkDropList [cdkDropListData]="professor.alunos"
+                            (cdkDropListDropped)="drop($event, 'alunos')"
                             style="overflow: auto; display: flex; flex-wrap: wrap; width: 100%;  height: 80%;">
 
                             <div class="aluno" cdkDrag *ngFor="let aluno of alunosFiltrados"
@@ -79,146 +92,164 @@
 
                 </tr>
             </table>
-
-
-
-
         </div>
 
+        <button mat-raised-button matStepperNext matTooltip="Clique aqui para iniciar a avaliação" class="main-btn"
+            style="color: white; background-color: var(--cor-tranquila);">
+            Iniciar Avaliação
+        </button>
+
     </mat-step>
+
+    <!-- DURANTE AVALIAÇÃO -->
     <mat-step>
         <ng-template matStepLabel>Durante Avaliação</ng-template>
-        <div style="margin: auto; text-align: center;">
+
+        <div class="head">
             <h2>Avaliações em Andamento</h2>
-            <br />
-            As Avaliações serão encerradas automaticamente em <input type="datetime-local" value="2020-07-31T19:00" />
         </div>
 
-        <div style="margin: auto; margin-top: 30px; width: 100%; font-size: 22px; height: 40vh; overflow: auto; ">
-            <div class="individuo" style="border-color: var(--em-avaliacao);">
-                Grupo 01 - Fazendo Avaliação
-            </div>
-            <div class="individuo" style="border-color:  var(--em-avaliacao);">
-                Grupo 02 - Fazendo Avaliação
-            </div>
-            <div class="individuo" style="border-color: var(--encerrada);">
-                Grupo 03 - Avaliação Encerrada
+        <!-- INDIVIDUAL -->
+        <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
+            <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
+                style="border-color: var(--cor-tranquila); cursor: default">
+                <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                </app-aluno-card-avaliacao-professor>
+                <div *ngIf="aluno.statusId" style="position: absolute; top: 30%; right: 20px;">
+                    <span *ngIf="aluno.statusId > 2">
+                        <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">done</mat-icon>
+                    </span>
+                    <div *ngIf="aluno.statusId <= 2">
+                        <mat-icon matTooltip="O aluno está relizando as questões">query_builder</mat-icon>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div style="margin: auto; text-align: center;">
-            <button mat-button matStepperNext style="background-color: var(--cor-perigosa); color: white;">Encerrar
-                Avaliação Agora</button>
+        <!-- EM GRUPO -->
+        <div *ngIf="avaliacao.tipoDisposicao != 0" class="container">
+
+            <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 100%">
+                <div class="grupo-title">
+                    GRUPO {{grupo.numero}}
+                </div>
+                <div class="aluno" *ngFor="let aluno of grupo.alunos"
+                    [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'"
+                    style="cursor: default">
+                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                    </app-aluno-card-avaliacao-professor>
+                    <div *ngIf="aluno.statusId != null" style="position: absolute; top: 30%; right: 20px;">
+                        <span *ngIf="aluno.statusId > 2">
+                            <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">done</mat-icon>
+                        </span>
+                        <div *ngIf="aluno.statusId <= 2">
+                            <mat-icon matTooltip="O aluno está relizando as questões">query_builder</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
+        <button class="main-btn" mat-button matStepperNext style="background-color: var(--cor-perigosa); color: white;">
+            Encerrar Avaliação Agora
+        </button>
 
     </mat-step>
+
+    <!-- EM CORREÇÃO -->
     <mat-step [editable]="true">
         <ng-template matStepLabel>Em Correção</ng-template>
 
-        <div style="margin: auto; text-align: center;">
+        <div class="head">
             <h2>Correções em Andamento</h2>
         </div>
 
-        <div
-            style="margin: auto; margin-top: 30px; width: 100%; font-size: 22px; height: 50vh; overflow: auto; margin-bottom: 20px;">
-            <div class="individuo" style="border-color: var(--encerrada)">
-                Grupo 01 - Avaliação Corrigida
-                <br /><br />
-                <div style="font-size: 15px;">
-                    Nota: 96/100
-                </div>
-                <a routerLink="/professor/avaliacao/correcao/1" mat-button
-                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
-                    Revisar
-                </a>
-            </div>
+        <!-- INDIVIDUAL -->
+        <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
+            <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
+                style="border-color: var(--cor-tranquila); cursor: default">
+                <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                </app-aluno-card-avaliacao-professor>
 
-            <div class="individuo" style="border-color: var(--em-correcao);">
-                Grupo 02 - Avaliação Aguardando Correção
-                <br /><br />
-                <div style="font-size: 15px;">
-                    Nota: 0/100
-                </div>
-                <a routerLink="/professor/avaliacao/correcao/1" mat-button
-                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
-                    Corrigir
-                </a>
-            </div>
-            <div class="individuo" style="border-color: var(--em-correcao);">
-                Grupo 03 - Avaliação Aguardando Correção
-                <br /><br />
-                <div style="font-size: 15px;">
-                    Nota: 0/100
-                </div>
-                <a routerLink="/professor/avaliacao/correcao/1" mat-button
-                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
-                    Corrigir
+                <a mat-button class="btn-corrigir" [routerLink]="'/professor/avaliacao/correcao/' + aluno.id">
+                    CORRIGIR
                 </a>
             </div>
         </div>
 
-        <div style="margin: auto; text-align: center;">
-            <button mat-button matStepperNext style="background-color: rgb(15, 185, 15); color: white;">Encerrar
-                Correções</button>
+        <!-- EM GRUPO -->
+        <div *ngIf="avaliacao.tipoDisposicao != 0" class="container">
+            <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 100%">
+                <div class="grupo-title">
+                    GRUPO {{grupo.numero}} - {{grupo.instanciaStatusId > 2 ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
+                </div>
+
+                <div class="aluno" *ngFor="let aluno of grupo.alunos"
+                    [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'"
+                    style="cursor: default">
+                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                    </app-aluno-card-avaliacao-professor>
+                </div>
+                <div class="btn-corrigir">
+                    <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.instanciaId">
+                        {{grupo.instanciaStatusId > 2 ? "REVISAR" : "CORRIGIR"}}
+                    </a>
+                </div>
+            </div>
         </div>
+
+
+        <button mat-button matStepperNext class="main-btn"
+            style="background-color: rgb(15, 185, 15); color: white;">Encerrar
+            Correções</button>
+
 
     </mat-step>
+
+    <!-- ENCERRADA -->
     <mat-step [editable]="true">
         <ng-template matStepLabel>Avaliação Encerrada</ng-template>
 
-        <div style="margin: auto; text-align: center;">
+        <div class="head">
             <h2>Avaliações Encerradas</h2>
         </div>
 
-        <div
-            style="margin: auto; margin-top: 30px; width: 100%; font-size: 22px; height: 50vh; overflow: auto; margin-bottom: 20px;">
-            <div class="individuo" style="border-color: var(--cor-primaria);">
-                Grupo 01
-                <br /><br /><br />
-                <p>- Rafael Bini</p>
-                <p>- Matheus Leonardo</p>
-                <p>- Thyago Vinicius</p>
-                <br /><br />
-                <div>
-                    Nota: 96/100
-                </div>
-                <a routerLink="/professor/avaliacao/correcao/1" mat-button
-                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
-                    Revisar
+        <!-- INDIVIDUAL -->
+        <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
+            <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
+                style="border-color: var(--cor-tranquila); cursor: default">
+                <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                </app-aluno-card-avaliacao-professor>
+
+                <a mat-button class=" btn-corrigir" [routerLink]="'/professor/avaliacao/correcao/' + aluno.id">
+                    NOTA: {{100}}% - REVISAR
                 </a>
+
+            </div>
+        </div>
+
+        <!-- EM GRUPO -->
+        <div *ngIf="avaliacao.tipoDisposicao != 0" class="container">
+            <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 100%">
+                <div class="grupo-title">
+                    GRUPO {{grupo.numero}}
+                </div>
+
+                <div class="aluno" *ngFor="let aluno of grupo.alunos"
+                    [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'"
+                    style="cursor: default">
+                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                    </app-aluno-card-avaliacao-professor>
+                </div>
+
+                <div class="btn-corrigir">
+                    <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.instanciaId">
+                        NOTA: {{100}}% - REVISAR
+                    </a>
+                </div>
             </div>
 
-            <div class="individuo" style="border-color: var(--cor-primaria);">
-                Grupo 02
-                <br /><br /><br />
-                <p>- Rafael Bini</p>
-                <p>- Matheus Leonardo</p>
-                <p>- Thyago Vinicius</p>
-                <br /><br />
-                <div>
-                    Nota: 96/100
-                </div>
-                <a routerLink="/professor/avaliacao/correcao/1" mat-button
-                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
-                    Revisar
-                </a>
-            </div>
-            <div class="individuo" style="border-color: var(--cor-primaria);">
-                Grupo 03
-                <br /><br /><br />
-                <p>- Rafael Bini</p>
-                <p>- Matheus Leonardo</p>
-                <p>- Thyago Vinicius</p>
-                <br /><br />
-                <div>
-                    Nota: 96/100
-                </div>
-                <a routerLink="/professor/avaliacao/correcao/1" mat-button
-                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
-                    Revisar
-                </a>
-            </div>
         </div>
 
         <div style="margin: auto; text-align: center;">

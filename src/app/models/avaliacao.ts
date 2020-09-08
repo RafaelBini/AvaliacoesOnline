@@ -1,4 +1,6 @@
 import { Questao } from './questao';
+import { Grupo } from './grupo';
+import { Usuario } from './usuario';
 
 export interface Avaliacao {
     id?: string,
@@ -19,5 +21,7 @@ export interface Avaliacao {
     tipoPontuacao: number,
     questoes: Array<Questao>,
     tags?: Array<string>,
-    status: number
+    status: number,
+    alunos?: Array<Usuario>;
+    grupos?: Array<Grupo>;
 }

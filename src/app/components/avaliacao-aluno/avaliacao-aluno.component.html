@@ -7,7 +7,6 @@
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Em Preparação</ng-template>
 
-
         <div style="width: 60%; margin: auto;">
             <div class="cabecalho">
                 <span class="titulo">{{avaliacao.titulo}}</span>
@@ -23,14 +22,39 @@
                     <br />
                 </div>
                 <br />
-                <h1>Alunos Online</h1>
-                <table>
-                    <tr *ngFor="let aluno of alunosOnline">
-                        <td>
-                            <li>{{aluno.nome}}</li>
-                        </td>
-                    </tr>
-                </table>
+
+
+                <div *ngIf="avaliacao.tipoDisposicao != 2">
+                    <h1>Alunos Online</h1>
+                    <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
+                        style="border-color: var(--cor-tranquila); cursor: default">
+                        <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                        </app-aluno-card-avaliacao-professor>
+                    </div>
+                </div>
+
+                <!-- ALUNOS ESCOLHEM OS GRUPOS-->
+                <div *ngIf="avaliacao.tipoDisposicao == 2">
+                    Clique em um grupo abaixo para participar
+                    <div *ngFor="let grupo of avaliacao.grupos;  index as i;" (click)="entrarNoGrupo(grupo)"
+                        class="grupo btn-novo-grupo" style="width: 95%">
+                        <div class="grupo-title">
+                            GRUPO {{grupo.numero}}
+                        </div>
+                        <div class="aluno" style="cursor: pointer;" *ngFor="let aluno of grupo.alunos"
+                            [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                            <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                            </app-aluno-card-avaliacao-professor>
+
+                        </div>
+                    </div>
+                    <div *ngIf="temGrupoVazio() == false" class="grupo btn-novo-grupo" style="width: 95%"
+                        matTooltip="Adicionar grupo" (click)="addGrupo()">
+                        <mat-icon style="font-size: 35px; display: block; margin: auto;">add
+                        </mat-icon>
+                    </div>
+                </div>
+
             </div>
         </div>
     </mat-step>

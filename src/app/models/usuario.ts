@@ -5,4 +5,6 @@ export interface Usuario {
     tipo?: string;
     tags?: Array<string>;
     online?: boolean;
+    statusId?: number;
+    instanciaId?: string;
 }
