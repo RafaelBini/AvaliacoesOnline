@@ -1,18 +1,19 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
-<mat-horizontal-stepper linear #stepper>
+<mat-horizontal-stepper #stepper>
     <!-- <mat-horizontal-stepper linear [selectedIndex]="1" #stepper> -->
 
+    <!-- EM PREPARAÇÃO -->
     <mat-step>
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Em Preparação</ng-template>
 
         <div style="width: 60%; margin: auto;">
             <div class="cabecalho">
-                <span class="titulo">{{avaliacao.titulo}}</span>
+                <span class="titulo">{{instancia.titulo}}</span>
                 <br /><br />
                 <div style="text-align: justify;">
-                    {{avaliacao.descricao}}
+                    {{instancia.descricao}}
                     <br /><br />
                     Professor: Rafael Bini
                     <br /><br />
@@ -23,13 +24,26 @@
                 </div>
                 <br />
 
-
-                <div *ngIf="avaliacao.tipoDisposicao != 2">
-                    <h1>Alunos Online</h1>
+                <!-- INDIVIDUAL-->
+                <div *ngIf="avaliacao.tipoDisposicao == 0">
                     <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
                         style="border-color: var(--cor-tranquila); cursor: default">
                         <app-aluno-card-avaliacao-professor [aluno]="aluno">
                         </app-aluno-card-avaliacao-professor>
+                    </div>
+                </div>
+
+                <!-- EM GRUPOS - ALUNOS NÃO ESCOLHEM -->
+                <div *ngIf="avaliacao.tipoDisposicao != 2 && avaliacao.tipoDisposicao != 0">
+                    <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 95%">
+                        <div class="grupo-title">
+                            GRUPO {{grupo.numero}}
+                        </div>
+                        <div class="aluno" style="cursor: default;" *ngFor="let aluno of grupo.alunos"
+                            [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                            <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                            </app-aluno-card-avaliacao-professor>
+                        </div>
                     </div>
                 </div>
 
@@ -59,6 +73,7 @@
         </div>
     </mat-step>
 
+    <!-- DURANTE AVALIAÇÃO -->
     <mat-step>
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Durante Avaliação</ng-template>
@@ -68,10 +83,10 @@
 
 
             <div class="cabecalho">
-                <span class="titulo">{{avaliacao.titulo}}</span>
+                <span class="titulo">{{instancia.titulo}}</span>
                 <br /><br />
                 <div style="text-align: justify;">
-                    {{avaliacao.descricao}}
+                    {{instancia.descricao}}
                     <br /><br />
                     Professor: Rafael Bini
                     <br /><br />
@@ -81,15 +96,31 @@
                     <br />
                 </div>
                 <br />
-                <div style="text-align: justify; ">
-                    Meu Grupo:
-                    <li>Matheus Cabral - <b>Finalizou</b></li>
-                    <li>Thyago Vinicius</li>
-                    <li>Marcos Kerchenr</li>
+
+                <!-- EM GRUPO -->
+                <div *ngIf="instancia.tipoDisposicao != 0" style="text-align: justify; ">
+
+                    <div style="text-align: center;">
+                        MEU GRUPO
+                    </div>
+                    <div class="aluno" style="cursor: default;" *ngFor="let aluno of instancia.alunos"
+                        [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                        <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                        </app-aluno-card-avaliacao-professor>
+                        <div *ngIf="aluno.statusId" style="position: absolute; top: 30%; right: 20px;">
+                            <span *ngIf="aluno.statusId > 2">
+                                <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">done</mat-icon>
+                            </span>
+                            <div *ngIf="aluno.statusId <= 2">
+                                <mat-icon matTooltip="O aluno está respondendo as questões">query_builder</mat-icon>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
-            <app-questoes-responder [avaliacao]="avaliacao">
+            <app-questoes-responder [avaliacao]="instancia">
 
             </app-questoes-responder>
 
@@ -97,31 +128,32 @@
 
 
         <div style="width: 100%;">
-            <button *ngIf="!finalizado" (click)="finalizado = true" mat-raised-button
+            <button *ngIf="!finalizado" (click)="sinalizarFinalizacao()" mat-raised-button
                 style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
                 Sinalizar Finalização
             </button>
             <div *ngIf="finalizado"
                 style="margin: auto; text-align: center; width: 60%; background-color: whitesmoke; border-radius: 10px; margin-top: 15px; margin-bottom: 40px; font-size: 14px; padding: 10px; display: block;">
                 <h2>Finalização sinalizada!</h2>
-                Esta avaliação será finalizada quando todos do seu grupo sinalizarem também.
+                <span *ngIf="avaliacao.tipoDisposicao != 0">Esta avaliação será finalizada quando todos do seu grupo
+                    sinalizarem
+                    também.</span>
             </div>
         </div>
 
     </mat-step>
 
+    <!-- EM CORREÇÃO -->
     <mat-step>
         <!-- <mat-step [editable]="false" [completed]="false"> -->
         <ng-template matStepLabel>Em Correção</ng-template>
 
         <div align="center"
             style="padding: 20px; margin: auto; background-color: whitesmoke;  color: black; width: 55%; border-radius: 10px;">
-            <b style="font-size: 22px;">Titulo da Avaliação</b>
+            <b style="font-size: 22px;">{{instancia.titulo}}</b>
             <br /><br />
             <div style="text-align: justify;">
-                Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
-                Descrição da
-                Avaliação
+                {{instancia.descricao}}
                 <br /><br />
                 Professor: Rafael Bini
                 <br /><br />
@@ -131,79 +163,102 @@
                 <br />
             </div>
             <br />
-            <div style="text-align: justify; ">
-                Meu Grupo:
-                <li>Matheus Cabral</li>
-                <li>Thyago Vinicius</li>
-                <li>Marcos Kerchenr</li>
+
+            <!-- ALUNOS NÃO CORRIGEM -->
+            <div *ngIf="instancia.tipoCorrecao == 0"
+                style="padding: 35px; font-size: 16px; text-decoration: underline solid black;">
+                Aguarde a correção do professor para saber sua nota
+            </div>
+
+            <!-- EM GRUPO - AUTOAVALIAÇÃO -->
+
+            <div *ngIf="instancia.tipoCorrecao == 3" class="btn-corrigir" style="position: relative;">
+                <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + instancia.id">
+                    CORRIGIR MINHA PRÓPRIA AVALIAÇÃO
+                </a>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <!-- EM GRUPO -->
+            <div *ngIf="instancia.tipoDisposicao != 0" style="text-align: justify; ">
+
+                <div style="text-align: center;">
+                    MEU GRUPO
+                </div>
+                <div class="aluno" style="cursor: default;" *ngFor="let aluno of instancia.alunos"
+                    [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                    </app-aluno-card-avaliacao-professor>
+                </div>
             </div>
 
 
         </div>
         <br />
-        <div style="margin: auto; text-align: center;">
-            <h2>Corrija as avaliações abaixo:</h2>
+
+        <!-- EM GRUPO - ALUNOS CORRIGEM -->
+        <div *ngIf="instancia.tipoDisposicao != 0 && instancia.tipoCorrecao == 2" class="container">
+            <div style="margin: auto; text-align: center;">
+                <h2>Corrija as avaliações abaixo:</h2>
+            </div>
+            <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 100%">
+                <div class="grupo-title">
+                    GRUPO {{grupo.numero}} - {{grupo.instanciaStatusId > 2 ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
+                </div>
+                <div class="btn-corrigir">
+                    <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + grupo.instanciaId">
+                        {{grupo.instanciaStatusId > 2 ? "REVISAR" : "CORRIGIR"}}
+                    </a>
+                </div>
+            </div>
         </div>
 
-        <div style="margin: auto; margin-top: 30px; width: 100%; font-size: 22px; height: 50vh; margin-bottom: 20px;">
-            <div class="individuo" style="border-color: var(--encerrada)">
-                Grupo 01 - Avaliação Corrigida
-                <br /><br />
-                <div style="font-size: 15px;">
-                    Nota: 96/100
-                </div>
-                <a routerLink="/aluno/avaliacao/correcao/1" mat-button
-                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
-                    Revisar
-                </a>
+        <!-- INDIVIDUAL - ALUNOS CORRIGEM -->
+        <div *ngIf="avaliacao.tipoDisposicao == 0 && avaliacao.tipoCorrecao == 2" class="container">
+            <div style="margin: auto; text-align: center;">
+                <h2>Corrija as avaliações abaixo:</h2>
             </div>
+            <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 100%">
+                <div class="grupo-title">
+                    ALUNO {{grupo.numero}} - {{grupo.instanciaStatusId > 2 ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
+                </div>
+                <div class="btn-corrigir">
+                    <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + grupo.instanciaId">
+                        {{grupo.instanciaStatusId > 2 ? "REVISAR" : "CORRIGIR"}}
+                    </a>
+                </div>
+            </div>
+        </div>
 
-            <div class="individuo" style="border-color: var(--em-correcao);">
-                Grupo 02 - Avaliação Aguardando Correção
-                <br /><br />
-                <div style="font-size: 15px;">
-                    Nota: 0/100
-                </div>
-                <a routerLink="/aluno/avaliacao/correcao/1" mat-button
-                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
-                    Corrigir
-                </a>
-            </div>
-            <div class="individuo" style="border-color: var(--em-correcao);">
-                Grupo 03 - Avaliação Aguardando Correção
-                <br /><br />
-                <div style="font-size: 15px;">
-                    Nota: 0/100
-                </div>
-                <a routerLink="/aluno/avaliacao/correcao/1" mat-button
-                    style="background-color: white; color: black; position: absolute; top: 30%; right: 20px;">
-                    Corrigir
-                </a>
-            </div>
-        </div>
-        <br />
-        <div
-            style="background-color: whitesmoke; padding: 17px; border-radius: 8px; margin: auto; width: 60%; text-align: center;">
-            <span style="font-size: 18px;">Aguardando os outros alunos corrigirem as avaliações...</span>
-            <div style="background-color: white; position: relative; border-radius: 4px; height: 30px;">
-                <span
-                    style="position: absolute; top: 0px; color: var(--cor-primaria); font-size: 22px; line-height: 30px;">75%</span>
-                <div style="background-color: var(--em-correcao); width: 75%; height: 30px; border-radius: 4px;"></div>
-            </div>
-        </div>
         <br />
         <br />
         <br />
 
     </mat-step>
 
+    <!-- ENCERRADA -->
     <mat-step>
 
         <ng-template matStepLabel>Avaliação Encerrada</ng-template>
 
         <div
-            style="text-align: center; margin: auto; width: 60%; background-color: whitesmoke; border-radius: 10px; padding: 30px; box-sizing: content-box; font-size: 23px; margin-top: 40px;">
-            <h2>Avaliação Encerrada</h2>
+            style="text-align: center; margin: auto; width: 60%; background-color: whitesmoke; border-radius: 10px; padding: 30px; box-sizing: content-box; ">
+            <b style="font-size: 22px;">{{instancia.titulo}}</b>
+            <br /><br />
+            <div style="text-align: justify;">
+                {{instancia.descricao}}
+                <br /><br />
+                Professor: Rafael Bini
+                <br /><br />
+                Inicio: 31/07/2020 18:00
+                <br />
+                Término: 31/07/2020 19:00
+                <br />
+            </div>
+            <br />
             <br />
             <span
                 style="font-size: 16px; background-color: var(--cor-primaria); padding: 20px; color: white; border-radius: 10px;">Sua
@@ -212,7 +267,21 @@
             <a mat-raised-button routerLink="/aluno/avaliacao/consulta/1">
                 Consultar Correção
             </a>
+            <br />
+            <br />
+            <br />
+            <!-- EM GRUPO -->
+            <div *ngIf="instancia.tipoDisposicao != 0">
+
+                <div class="aluno" style="cursor: default;" *ngFor="let aluno of instancia.alunos"
+                    [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                    </app-aluno-card-avaliacao-professor>
+                </div>
+            </div>
         </div>
+
+
 
 
     </mat-step>

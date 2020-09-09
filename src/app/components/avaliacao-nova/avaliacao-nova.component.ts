@@ -50,7 +50,8 @@ export class AvaliacaoNovaComponent implements OnInit {
         tags: [],
         associacoes: [],
         textoParaPreencher: "",
-        opcoesParaPreencher: []
+        opcoesParaPreencher: [],
+        tentativas: 0
       },
     ],
 
@@ -121,7 +122,8 @@ export class AvaliacaoNovaComponent implements OnInit {
       tags: [],
       associacoes: [],
       textoParaPreencher: "",
-      opcoesParaPreencher: []
+      opcoesParaPreencher: [],
+      tentativas: 0,
     });
 
     this.comumService.scrollToBottom();

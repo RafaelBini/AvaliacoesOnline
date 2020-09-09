@@ -1,11 +1,10 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
-
-
 
 
 @Component({
@@ -17,7 +16,7 @@ export class QuestoesResponderComponent implements OnInit {
   @Input() avaliacao: Avaliacao;
 
 
-  constructor(public comumService: ComumService, private dialog: MatDialog, private elementRef: ElementRef) { }
+  constructor(public comumService: ComumService, private dialog: MatDialog, private snack: MatSnackBar) { }
 
   ngOnInit(): void {
 
@@ -40,14 +39,59 @@ export class QuestoesResponderComponent implements OnInit {
     });
     return pontuacaoMaxima;
   }
+  estaNoContextoCerto(questao) {
+    const PRECISA_CORRECAO_AUTOMATICA = this.comumService.pontuacoes[this.avaliacao.tipoPontuacao].correcaoAutomatica || this.comumService.correcoes[this.avaliacao.tipoCorrecao].correcaoAutomatica;
+
+    if (!PRECISA_CORRECAO_AUTOMATICA) {
+      return true;
+    }
+
+    const QUESTAO_EH_DE_CORRECAO_AUTOMATICA = this.comumService.questaoTipos[questao.tipo].temCorrecaoAutomatica;
+
+    if (QUESTAO_EH_DE_CORRECAO_AUTOMATICA && PRECISA_CORRECAO_AUTOMATICA) {
+      return true;
+    }
+
+    return false;
+
+  }
+
 
   // ASSOCIACAO
   getAssociacoesOrdenadas(questao: Questao) {
     return questao.associacoes.concat().sort((a, b) => a.texto > b.texto ? 1 : -1);
   }
+  onAssociativaChange(questao: Questao) {
+
+    if (this.avaliacao.tipoPontuacao != 2)
+      return;
+    for (let associacao of questao.associacoes) {
+      if (associacao.opcaoSelecionada != associacao.opcaoCorreta && associacao.opcaoSelecionada != null && associacao.opcaoSelecionada != '') {
+        if (questao.tentativas < 3) {
+          questao.tentativas++;
+          this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
+            duration: 4000
+          });
+        } else {
+          this.snack.open(`Resposta incorreta!`, null, {
+            duration: 4000
+          });
+        }
+        setTimeout(() => {
+          associacao.opcaoSelecionada = null;
+        }, 1200);
+        return;
+      }
+    }
+  }
 
 
   // ALTERNATIVAS
+  onMultiplaEscolhaChange(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
+    this.desmarcarTudoMenosUma(questao, alternativaIndex, isEditavel);
+    this.registrarTentativaMultiplaEscolha(questao);
+    //console.log(this.comumService.questaoTipos[questao.tipo].getNota(questao));
+  }
   desmarcarTudoMenosUma(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
     if (questao.tipo != 4)
       return;
@@ -57,6 +101,28 @@ export class QuestoesResponderComponent implements OnInit {
       }
       else if (i != alternativaIndex && !isEditavel) {
         questao.alternativas[i].selecionada = false;
+      }
+    }
+  }
+  registrarTentativaMultiplaEscolha(questao: Questao) {
+    if (this.avaliacao.tipoPontuacao != 2)
+      return;
+    for (let alternativa of questao.alternativas) {
+      if (!alternativa.correta && alternativa.selecionada) {
+        if (questao.tentativas < 3) {
+          questao.tentativas++;
+          this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
+            duration: 4000
+          });
+        } else {
+          this.snack.open(`Resposta incorreta!`, null, {
+            duration: 4000
+          });
+        }
+        setTimeout(() => {
+          alternativa.selecionada = false;
+        }, 1200);
+        return;
       }
     }
   }
@@ -96,6 +162,56 @@ export class QuestoesResponderComponent implements OnInit {
 
     return partes;
 
+  }
+  onPreenchimentoChange(questao: Questao) {
+
+    if (this.avaliacao.tipoPontuacao != 2)
+      return;
+
+    for (let opcao of questao.opcoesParaPreencher) {
+      if (opcao.opcaoSelecionada != opcao.texto && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
+        if (questao.tentativas < 3) {
+          questao.tentativas++;
+          this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
+            duration: 4000
+          });
+        } else {
+          this.snack.open(`Resposta incorreta!`, null, {
+            duration: 4000
+          });
+        }
+        setTimeout(() => {
+          opcao.opcaoSelecionada = null;
+        }, 1200);
+        return;
+      }
+    }
+  }
+
+  // VERDADEIRO OU FALSO
+  onVerdadeiroFalsoChange(questao: Questao) {
+
+    if (this.avaliacao.tipoPontuacao != 2)
+      return;
+
+    for (let alternativa of questao.alternativas) {
+      if ((alternativa.correta != alternativa.selecionada) && alternativa.selecionada != null) {
+        if (questao.tentativas < 3) {
+          questao.tentativas++;
+          this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
+            duration: 4000
+          });
+        } else {
+          this.snack.open(`Resposta incorreta!`, null, {
+            duration: 4000
+          });
+        }
+        setTimeout(() => {
+          alternativa.selecionada = null;
+        }, 1200);
+        return;
+      }
+    }
   }
 
 }

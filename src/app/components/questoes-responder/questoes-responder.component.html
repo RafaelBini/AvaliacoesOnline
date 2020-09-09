@@ -1,8 +1,7 @@
 <div>
     <div style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
         <div class="questao" *ngFor="let questao of avaliacao.questoes; index as qi">
-
-            <table style="width: 100%;">
+            <table style="width: 100%;" *ngIf="estaNoContextoCerto(questao)">
 
                 <!-- PERGUNTA -->
                 <tr>
@@ -18,7 +17,8 @@
                             <tr *ngFor="let associacao of questao.associacoes; index as ai">
                                 <td width="20%" style="cursor:default;">
                                     <mat-select class="select-basico" style="width: 82%;"
-                                        [(ngModel)]="associacao.opcaoSelecionada">
+                                        [(ngModel)]="associacao.opcaoSelecionada"
+                                        (ngModelChange)="onAssociativaChange(questao)">
                                         <mat-option [value]="_associacao.opcaoCorreta"
                                             *ngFor="let _associacao of getAssociacoesOrdenadas(questao)">
                                             {{_associacao.opcaoCorreta}}
@@ -78,7 +78,7 @@
                             <tr *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td valign="middle" class="alternativa">
                                     <mat-checkbox [(ngModel)]="alternativa.selecionada"
-                                        (ngModelChange)="desmarcarTudoMenosUma(questao, ai, false)">
+                                        (ngModelChange)="onMultiplaEscolhaChange(questao, ai, false)">
                                         <span style="white-space: pre-line;">{{alternativa.texto}}</span>
                                     </mat-checkbox>
                                 </td>
@@ -93,7 +93,8 @@
                         <span style="white-space: pre-line;" *ngFor="let parte of questao.partesPreencher">
                             <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
                             <select *ngIf="parte.tipo == 'select'" class="select-basico"
-                                [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada">
+                                [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada"
+                                (ngModelChange)="onPreenchimentoChange(questao)">
                                 <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao)"
                                     [value]="opcaoPreencher.texto">
                                     {{opcaoPreencher.texto}}
@@ -112,8 +113,9 @@
                                     <table>
                                         <tr>
                                             <td width="5%" class="alternativa">
-                                                <mat-button-toggle-group [(ngModel)]="alternativa.selecionada">
-                                                    <mat-button-toggle matTooltip="Marcar como verdadeiro"
+                                                <mat-button-toggle-group [(ngModel)]="alternativa.selecionada"
+                                                    (ngModelChange)="onVerdadeiroFalsoChange(questao)">
+                                                    <mat-button-toggle matTooltip=" Marcar como verdadeiro"
                                                         [value]="true">V
                                                     </mat-button-toggle>
                                                     <mat-button-toggle matTooltip="Marcar como falso" [value]="false">F
@@ -149,8 +151,17 @@
                 <!-- VALOR DA QUESTÃO -->
                 <tr *ngIf="avaliacao.tipoPontuacao != 3">
                     <td align="left" style="position: relative; padding-top: 20px;">
-                        <div>
-                            Valor: {{questao.valor}}/100
+
+                        <!-- NORMAL -->
+                        <div *ngIf="questao.tentativas == null || questao.tentativas <= 0">
+                            Valor: {{questao.valor}}/{{getPontuacaoMaxima()}}
+                        </div>
+
+                        <!-- POR TENTATIVAS -->
+                        <div *ngIf="questao.tentativas > 0">
+                            Valor:
+                            {{comumService.getRounded(questao.valor - (questao.tentativas * (questao.valor/3)))}}/{{getPontuacaoMaxima()}}
+
                         </div>
                     </td>
                 </tr>

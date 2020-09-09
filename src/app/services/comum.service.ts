@@ -1,3 +1,4 @@
+import { Questao } from './../models/questao';
 import { Injectable } from '@angular/core';
 import { animationFrameScheduler } from 'rxjs';
 
@@ -96,25 +97,29 @@ export class ComumService {
       codigo: 0,
       nome: "Professor Corrige",
       descricao: "Este é o método de correção tradicional. O Professor corrige todas as Avaliações dos Alunos.",
-      icone: "grading"
+      icone: "grading",
+      correcaoAutomatica: false,
     },
     {
       codigo: 1,
       nome: "Correção Automática",
       descricao: "Neste método de correção o sistema corrige as Avaliações de forma automática, permitindo que o Professor revise posteriormente.",
-      icone: "rule"
+      icone: "rule",
+      correcaoAutomatica: true,
     },
     {
       codigo: 2,
       nome: "Alunos Corrigem",
       descricao: "Neste método de correção os próprios alunos corrigem as avaliações uns dos outros.",
-      icone: "sync_alt"
+      icone: "sync_alt",
+      correcaoAutomatica: false,
     },
     {
       codigo: 3,
       nome: "Autoavaliação",
       descricao: "Neste método de correção o Aluno recebe a resposta correta logo depois de finalizar a Avaliação.",
-      icone: "sync"
+      icone: "sync",
+      correcaoAutomatica: true,
     }
   ];
 
@@ -123,25 +128,29 @@ export class ComumService {
       codigo: 0,
       nome: "Fixa Por Questão",
       descricao: "Neste modo o Professor determina um valor fixo para cada questão. A nota máxima é a somatória dos valores de todas as questões.",
-      icone: "exposure_plus_1"
+      icone: "exposure_plus_1",
+      correcaoAutomatica: false,
     },
     {
       codigo: 1,
       nome: "Comparativa",
       descricao: "Neste modo o Professor determina um valor fixo para cada questão. A nota máxima é a maior nota dentre todos os alunos. Portanto, a nota de cada Aluno é definida pelo percentual da maior nota.",
-      icone: "insert_chart_outlined"
+      icone: "insert_chart_outlined",
+      correcaoAutomatica: false,
     },
     {
       codigo: 2,
       nome: "Por Tentativa",
       descricao: "Neste modo o Professor determina um valor fixo para cada questão. O Aluno pode tentar acertar a questão três vezes. A cada tentativa incorreta o Aluno perde 1/3 do valor total da questão. ",
-      icone: "filter_3"
+      icone: "filter_3",
+      correcaoAutomatica: true,
     },
     {
       codigo: 3,
       nome: "Por Participação",
       descricao: "Neste modo o Professor não determina um valor para cada questão. Se o Aluno participar respondendo a questão já recebe a nota máxima.",
-      icone: "star_rate"
+      icone: "star_rate",
+      correcaoAutomatica: false,
     }
   ];
 
@@ -150,6 +159,15 @@ export class ComumService {
       codigo: 0,
       nome: "Associativa",
       temCorrecaoAutomatica: true,
+      getNota(questao): number {
+        var nota = questao.valor;
+        for (let associacao of questao.associacoes) {
+          if (associacao.opcaoCorreta != associacao.opcaoSelecionada) {
+            nota -= (questao.valor / questao.associacoes.length);
+          }
+        }
+        return nota - (questao.tentativas * (questao.valor / 3));
+      },
     },
     {
       codigo: 1,
@@ -165,26 +183,73 @@ export class ComumService {
       codigo: 3,
       nome: "Multipla Escolha - Multipla Resposta",
       temCorrecaoAutomatica: true,
+      getNota(questao): number {
+        for (let alternativa of questao.alternativas) {
+          if (alternativa.selecionada == null)
+            alternativa.selecionada = false;
+          if (alternativa.correta != alternativa.selecionada) {
+            return 0;
+          }
+        }
+        return questao.valor - (questao.tentativas * (questao.valor / 3));
+      },
     },
     {
       codigo: 4,
       nome: "Multipla Escolha - Unica Resposta",
       temCorrecaoAutomatica: true,
+      getNota(questao): number {
+        for (let alternativa of questao.alternativas) {
+          if (alternativa.selecionada == null)
+            alternativa.selecionada = false;
+          if (alternativa.correta != alternativa.selecionada) {
+            return 0;
+          }
+        }
+        return questao.valor - (questao.tentativas * (questao.valor / 3));
+      },
     },
     {
       codigo: 5,
       nome: "Preenchimento",
       temCorrecaoAutomatica: true,
+      getNota(questao): number {
+        var nota = questao.valor;
+        for (let opcao of questao.opcoesParaPreencher) {
+          if (opcao.texto != opcao.opcaoSelecionada) {
+            nota -= (questao.valor / questao.opcoesParaPreencher.length);
+          }
+        }
+        return nota - (questao.tentativas * (questao.valor / 3));
+      },
     },
     {
       codigo: 6,
       nome: "Veradadeiro ou Falso",
       temCorrecaoAutomatica: true,
+      getNota(questao): number {
+        var nota = questao.valor;
+        for (let alternativa of questao.alternativas) {
+          if (alternativa.correta != alternativa.selecionada) {
+            nota -= (questao.valor / questao.alternativas.length);
+          }
+        }
+        return nota - (questao.tentativas * (questao.valor / 3));
+      },
     },
     {
       codigo: 7,
       nome: "Veradadeiro ou Falso - Justificativa",
       temCorrecaoAutomatica: false,
+      getNota(questao: Questao): number {
+        var nota = questao.valor;
+        for (let alternativa of questao.alternativas) {
+          if (alternativa.correta != alternativa.selecionada) {
+            nota -= (questao.valor / questao.alternativas.length);
+          }
+        }
+        return nota;
+      },
     },
   ];
 
@@ -242,6 +307,10 @@ export class ComumService {
         top: 0
       });
     }, 1);
+  }
+
+  getRounded(numero: number) {
+    return Math.round(numero);
   }
 
 }

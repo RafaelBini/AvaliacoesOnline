@@ -22,5 +22,5 @@ export interface Questao {
     correcoes?: Array<Correcao>;
     correcaoProfessor?: Correcao;
     respostaAluno?: string;
-
+    tentativas?: number;
 }
