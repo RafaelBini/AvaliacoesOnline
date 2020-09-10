@@ -43,20 +43,45 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
         nivelDificuldade: 1,
         extensoes: [".pdf"],
         respostaAluno: "A cor da grama é laranja.",
+        resposta: "A cor da grama é verde",
         correcaoProfessor: {
           nota: null,
           observacao: null,
         },
         correcoes: [
           {
+            instancia: {
+              id: '01',
+              alunos: [
+                { nome: "Rodolfo Arnold" },
+                { nome: "Bruno Marques" },
+                { nome: "José da Silva" },
+              ]
+            },
             nota: 1,
             observacao: "Na verdade a cor da grama é verde"
           },
           {
+            instancia: {
+              id: '02',
+              alunos: [
+                { nome: "Joaquim Almeida" },
+                { nome: "Murilo Gonçalves" },
+                { nome: "Mario Andrade" },
+              ]
+            },
             nota: 3,
             observacao: "A cor da grama é laranja escuro..."
           },
           {
+            instancia: {
+              id: '03',
+              alunos: [
+                { nome: "Renan Carvalho" },
+                { nome: "Julio Mendonça" },
+                { nome: "Matheus Leonardo" },
+              ]
+            },
             nota: 0,
             observacao: "É verde!!"
           }
@@ -74,6 +99,14 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
         },
         correcoes: [
           {
+            instancia: {
+              id: '01',
+              alunos: [
+                { nome: "Rodolfo Arnold" },
+                { nome: "Bruno Marques" },
+                { nome: "José da Silva" },
+              ]
+            },
             nota: 1,
             observacao: "Na verdade a cor do céu é azul e a cor do sol é amarelo"
           }
@@ -104,7 +137,18 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
           nota: null,
           observacao: null,
         },
-        correcoes: [],
+        correcoes: [
+          {
+            instancia: {
+              id: '04',
+              alunos: [
+                { nome: "Camila Bini" },
+              ]
+            },
+            nota: 5,
+            observacao: "Está certinho!"
+          }
+        ],
       },
       {
         valor: 5,

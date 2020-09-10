@@ -17,16 +17,16 @@ export class AvaliacaoProfessorComponent implements OnInit {
   public alunosFiltrados = [];
   public professor = {
     alunos: [
-      { email: "godo@gmail.com", senha: '', nome: "Godofredo", tags: ['Web II', 'Interação Humano Computador'], online: false },
-      { email: "rub@gmail.com", senha: '', nome: "Ruberlinda", tags: ['Web II', 'Interação Humano Computador'] },
-      { email: "cdnleon@outlook.com", senha: '', nome: "Leon Martins", tags: ['Web II', 'Interação Humano Computador'] },
-      { email: "nil@gmail.com", senha: '', nome: "Nilce Moretto", tags: ['Web II', 'Interação Humano Computador'] },
-      { email: "fredb12@hotmail.com", senha: '', nome: "Fred Desimpedidos", tags: ['Web II', 'Interação Humano Computador'] },
-      { email: "marilia@gmail.com", senha: '', nome: "Marília Galvão", tags: ['Web II', 'Interação Humano Computador'] },
-      { email: "bueno@gmail.com", senha: '', nome: "Galvão Bueno", tags: ['Web II', 'Interação Humano Computador'] },
-      { email: "alanzoka@hotmail.com", senha: '', nome: "Alan Ferreira", tags: ['Web II', 'Interação Humano Computador'] },
-      { email: "balga@outlook.com", senha: '', nome: "Mari Balga", tags: ['LPOO II', 'DAC'] },
-      { email: "clone@gmail.com", senha: '', nome: "Henrique Grosse", tags: ['Empreendedorismo e Inovação', 'Gestão Empresarial'] },
+      { email: "godo@gmail.com", senha: '', nome: "Godofredo", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, online: false },
+      { email: "rub@gmail.com", senha: '', nome: "Ruberlinda", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
+      { email: "cdnleon@outlook.com", senha: '', nome: "Leon Martins", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
+      { email: "nil@gmail.com", senha: '', nome: "Nilce Moretto", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
+      { email: "fredb12@hotmail.com", senha: '', nome: "Fred Desimpedidos", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
+      { email: "marilia@gmail.com", senha: '', nome: "Marília Galvão", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
+      { email: "bueno@gmail.com", senha: '', nome: "Galvão Bueno", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
+      { email: "alanzoka@hotmail.com", senha: '', nome: "Alan Ferreira", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
+      { email: "balga@outlook.com", senha: '', nome: "Mari Balga", tags: ['LPOO II', 'DAC'], statusId: 0, },
+      { email: "clone@gmail.com", senha: '', nome: "Henrique Grosse", tags: ['Empreendedorismo e Inovação', 'Gestão Empresarial'], statusId: 0, },
     ]
   };
 

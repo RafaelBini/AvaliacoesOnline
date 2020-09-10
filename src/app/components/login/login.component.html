@@ -13,12 +13,12 @@
     <button class="botao-entrar" (click)="abrirCadastrar()" mat-button>CADASTRAR-SE</button>
 
     <a *ngIf="!id && tipoUsuario == 'aluno'" class="botao-entrar" style="margin-left: 30px;" routerLink="/aluno"
-        (click)="comumService.fazerLogin()" mat-button>ENTRAR</a>
+        (click)="credencialService.fazerLogin()" mat-button>ENTRAR</a>
     <a *ngIf="!id && tipoUsuario == 'professor'" class="botao-entrar" style="margin-left: 30px;" routerLink="/professor"
-        (click)="comumService.fazerLogin()" mat-button>ENTRAR</a>
+        (click)="credencialService.fazerLogin()" mat-button>ENTRAR</a>
     <a *ngIf="id && tipoUsuario == 'aluno'" class="botao-entrar" style="margin-left: 30px;"
-        [routerLink]="'/aluno/avaliacao/' + id" (click)="comumService.fazerLogin()" mat-button>ENTRAR</a>
+        [routerLink]="'/aluno/avaliacao/' + id" (click)="credencialService.fazerLogin()" mat-button>ENTRAR</a>
     <a *ngIf="id && tipoUsuario == 'professor'" class="botao-entrar" style="margin-left: 30px;"
-        [routerLink]="'/professor/avaliacao/' + id" (click)="comumService.fazerLogin()" mat-button>ENTRAR</a>
+        [routerLink]="'/professor/avaliacao/' + id" (click)="credencialService.fazerLogin()" mat-button>ENTRAR</a>
 
 </div>

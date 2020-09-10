@@ -24,4 +24,6 @@ export interface Avaliacao {
     status: number,
     alunos?: Array<Usuario>;
     grupos?: Array<Grupo>;
+    maxIntegrantes?: number;
+    limitarNumIntegrantes?: boolean;
 }

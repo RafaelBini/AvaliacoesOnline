@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
 import { Avaliacao } from 'src/app/models/avaliacao';
+import { CredencialService } from 'src/app/services/credencial.service';
 
 
 @Component({
@@ -96,11 +97,11 @@ export class ProfessorComponent implements OnInit {
     { nome: this.tabs[0].nome, url: `#` },
   ];
 
-  constructor(private dialog: MatDialog, private route: ActivatedRoute, private router: Router, public comumService: ComumService) { }
+  constructor(private dialog: MatDialog, public credencialService: CredencialService, private route: ActivatedRoute, private router: Router, public comumService: ComumService) { }
 
   ngOnInit(): void {
 
-    this.comumService.loggedUser.acesso = "Professor";
+    this.credencialService.loggedUser.acesso = "Professor";
     this.route.params.subscribe(params => {
       if (params.tab) {
         const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);

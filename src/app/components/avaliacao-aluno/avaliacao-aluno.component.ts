@@ -1,7 +1,10 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Avaliacao } from 'src/app/models/avaliacao';
 import { ComumService } from './../../services/comum.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
+import { CredencialService } from 'src/app/services/credencial.service';
 
 
 @Component({
@@ -11,7 +14,7 @@ import { UrlNode } from 'src/app/models/url-node';
 })
 export class AvaliacaoAlunoComponent implements OnInit {
 
-  constructor(public route: ActivatedRoute, public comumService: ComumService) { }
+  constructor(public route: ActivatedRoute, public credencialService: CredencialService, public comumService: ComumService, private snack: MatSnackBar) { }
   public finalizado = false;
 
   public avaliacao = {
@@ -19,6 +22,8 @@ export class AvaliacaoAlunoComponent implements OnInit {
     descricao: `Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
     Descrição da Avaliação`,
     status: 0,
+    limitarNumIntegrantes: true,
+    maxIntegrantes: 3,
     tipoDisposicao: 2,
     tipoCorrecao: 3,
     tipoPontuacao: 2,
@@ -57,6 +62,7 @@ export class AvaliacaoAlunoComponent implements OnInit {
         alunos: [
           { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, instanciaStatusId: null },
           { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, instanciaStatusId: null },
+          { nome: "Junqueira Bini", email: 'Junqueirasx@gmail.com', online: true, instanciaStatusId: null },
         ]
       },
       {
@@ -78,8 +84,10 @@ export class AvaliacaoAlunoComponent implements OnInit {
     descricao: `Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
     Descrição da Avaliação`,
     status: 0,
+    correcaoParesQtdTipo: '1',
+    correcaoParesQtdNumero: 1,
     tipoDisposicao: 3,
-    tipoCorrecao: 3,
+    tipoCorrecao: 2,
     tipoPontuacao: 3,
     questoes: [
       /*{
@@ -148,6 +156,9 @@ export class AvaliacaoAlunoComponent implements OnInit {
       { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, statusId: 1, instanciaStatusId: null },
       { nome: "Rafael Bini", email: 'rfabini1996@gmail.com', online: true, statusId: 1, instanciaStatusId: null },
     ],
+    instanciasParaCorrigir: [
+
+    ]
   }
 
   public caminho: Array<UrlNode> = [
@@ -157,6 +168,12 @@ export class AvaliacaoAlunoComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+
+    // Se o tipo de disposição é grupos aleatórios,
+    if (this.avaliacao.tipoDisposicao == 3) {
+      this.entrarEmGrupoAleatorio();
+    }
+    this.receberInstanciasCorrigir();
 
   }
 
@@ -171,7 +188,15 @@ export class AvaliacaoAlunoComponent implements OnInit {
     }, 200);
   }
   entrarNoGrupo(grupo) {
-    const me = this.comumService.loggedUser;
+    const me = this.credencialService.loggedUser;
+
+    // Se o grupo já tem o máximo de integrantes
+    if (grupo.alunos.length >= this.avaliacao.maxIntegrantes) {
+      this.snack.open("Este grupo já está cheio", null, {
+        duration: 3000
+      });
+      return;
+    }
 
     // Passa por cada grupo da avaliação
     this.avaliacao.grupos.forEach(g => {
@@ -191,16 +216,63 @@ export class AvaliacaoAlunoComponent implements OnInit {
     };
     return false;
   }
+  entrarEmGrupoAleatorio() {
+    // Passa por cada grupo
+    var foiAlocado = false;
+    for (let grupo of this.avaliacao.grupos) {
+      if (grupo.alunos.length < this.avaliacao.maxIntegrantes) {
+        this.entrarNoGrupo(grupo);
+        foiAlocado = true;
+      }
+    }
+
+    // Se não consegui nenhum grupo,
+    if (!foiAlocado) {
+      // Cria um novo grupo
+      this.addGrupo();
+
+      // Entra nele
+      this.entrarNoGrupo(this.avaliacao.grupos[this.avaliacao.grupos.length - 1]);
+    }
+  }
 
   // DURANTE AVALIAÇÃO
   sinalizarFinalizacao() {
     this.finalizado = true;
-    const EU = this.comumService.loggedUser;
+    const EU = this.credencialService.loggedUser;
     const MEU_INDEX_INSTANCIA = this.instancia.alunos.indexOf(this.instancia.alunos.filter(a => a.email == EU.email)[0]);
     this.instancia.alunos[MEU_INDEX_INSTANCIA].statusId = 3;
     console.log(this.getMinhaNota());
   }
 
+  // EM CORREÇÃO
+  receberInstanciasCorrigir() {
+    if (this.instancia.tipoCorrecao != 2 || this.instancia.instanciasParaCorrigir.length > 0)
+      return;
+
+    if (this.instancia.correcaoParesQtdTipo == 'TODOS') {
+      for (let grupo of this.avaliacao.grupos) {
+        this.instancia.instanciasParaCorrigir.push({
+          id: grupo.instanciaId,
+          corrigida: false
+        });
+      }
+    }
+    else {
+      while (this.instancia.instanciasParaCorrigir.length < this.instancia.correcaoParesQtdNumero) {
+        for (let grupo of this.avaliacao.grupos) {
+          if (Math.random() > 0.7 && this.instancia.id != grupo.instanciaId) {
+            this.instancia.instanciasParaCorrigir.push({
+              id: grupo.instanciaId,
+              corrigida: false
+            });
+            if (this.instancia.instanciasParaCorrigir.length < this.instancia.correcaoParesQtdNumero)
+              return;
+          }
+        }
+      }
+    }
+  }
 
   // ENCERRADA
   getMinhaNota() {

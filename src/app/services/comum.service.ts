@@ -1,6 +1,7 @@
 import { Questao } from './../models/questao';
 import { Injectable } from '@angular/core';
 import { animationFrameScheduler } from 'rxjs';
+import { Avaliacao } from '../models/avaliacao';
 
 @Injectable({
   providedIn: 'root'
@@ -8,23 +9,6 @@ import { animationFrameScheduler } from 'rxjs';
 export class ComumService {
 
   constructor() { }
-
-  public loggedUser = {
-    id: null,
-    nome: 'Rafael Bini',
-    acesso: 'Professor',
-    email: 'rfabini1996@gmail.com',
-    online: true,
-    instanciaStatusId: null,
-  }
-
-  public fazerLogout() {
-    this.loggedUser.id = null;
-  }
-
-  public fazerLogin() {
-    this.loggedUser.id = "01";
-  }
 
   getStringFromDate(date: Date) {
     return date.toISOString().substr(0, 10) + "T00:00";
@@ -119,7 +103,7 @@ export class ComumService {
       nome: "Autoavaliação",
       descricao: "Neste método de correção o Aluno recebe a resposta correta logo depois de finalizar a Avaliação.",
       icone: "sync",
-      correcaoAutomatica: true,
+      correcaoAutomatica: false,
     }
   ];
 
@@ -311,6 +295,19 @@ export class ComumService {
 
   getRounded(numero: number) {
     return Math.round(numero);
+  }
+
+  precisaDeCorrecaoAutomatica(avaliacao): boolean {
+    return this.pontuacoes[avaliacao.tipoPontuacao].correcaoAutomatica || this.correcoes[avaliacao.tipoCorrecao].correcaoAutomatica;
+  }
+
+  podeSerDeCorrecaoAutomatica(avaliacao): boolean {
+    for (let questao of avaliacao.questoes) {
+      if (!this.questaoTipos[questao.tipo].temCorrecaoAutomatica) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }

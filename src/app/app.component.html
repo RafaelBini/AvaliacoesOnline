@@ -1,62 +1,66 @@
 <mat-toolbar style="height: 7vh;">
   <table style="width: 100%;">
     <tr>
-      <td width="95%">Projeto TCC</td>
+      <td width="95%">
+        AVALIARTE
+        <!--<img src="assets/logos/logo01.png" style="height: 10vh;" />-->
+      </td>
       <td width="5%" align="center" valign="middle" style="position: relative;">
 
-        <img *ngIf="comumService.loggedUser.id" class="minha-conta" src="assets/avatares/padrao.jpg"
+        <img *ngIf="credencialService.estouLogado()" class="minha-conta" src="assets/avatares/padrao.jpg"
           [matMenuTriggerFor]="userMenu" />
-
         <mat-menu #userMenu="matMenu">
-
           <div style="text-align: center;">
-            <b>{{comumService.loggedUser.acesso}}</b>
+            <b>{{credencialService.loggedUser.acesso}}</b>
           </div>
           <hr />
           <div style="text-align: center;">
-            {{comumService.loggedUser.nome}}
+            {{credencialService.loggedUser.nome}}
           </div>
-
           <hr />
+
           <!-- ALUNO -->
-
-          <a routerLink="/professor" (click)="comumService.loggedUser.acesso='Professor'" mat-menu-item
-            *ngIf="comumService.loggedUser.acesso == 'Aluno'">
+          <a routerLink="/professor" (click)="credencialService.loggedUser.acesso='Professor'" mat-menu-item
+            *ngIf="credencialService.loggedUser.acesso == 'Aluno'">
             <mat-icon>swap_horiz</mat-icon>Mudar para Professor
           </a>
-          <a routerLink="/aluno/avaliacoes" mat-menu-item *ngIf="comumService.loggedUser.acesso == 'Aluno'">
+          <a routerLink="/aluno/avaliacoes" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Aluno'">
             <mat-icon>description</mat-icon>Minhas Avaliações
           </a>
-          <a routerLink="/aluno/perfil" mat-menu-item *ngIf="comumService.loggedUser.acesso == 'Aluno'">
+          <a routerLink="/aluno/perfil" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Aluno'">
             <mat-icon>account_circle</mat-icon>Meu Perfil
           </a>
 
           <!-- PROFESSOR -->
-
-          <a routerLink="/aluno" (click)="comumService.loggedUser.acesso='Aluno'" mat-menu-item
-            *ngIf="comumService.loggedUser.acesso == 'Professor'">
+          <a routerLink="/aluno" (click)="credencialService.loggedUser.acesso='Aluno'" mat-menu-item
+            *ngIf="credencialService.loggedUser.acesso == 'Professor'">
             <mat-icon>swap_horiz</mat-icon>Mudar para Aluno
           </a>
-          <a routerLink="/professor/avaliacoes" mat-menu-item *ngIf="comumService.loggedUser.acesso == 'Professor'">
+          <a routerLink="/professor/avaliacoes" mat-menu-item
+            *ngIf="credencialService.loggedUser.acesso == 'Professor'">
             <mat-icon>description</mat-icon>Minhas Avaliações
           </a>
-          <a routerLink="/professor/alunos" mat-menu-item *ngIf="comumService.loggedUser.acesso == 'Professor'">
+          <a routerLink="/professor/alunos" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Professor'">
             <mat-icon>recent_actors</mat-icon>Alunos
           </a>
-          <a routerLink="/professor/perfil" mat-menu-item *ngIf="comumService.loggedUser.acesso == 'Professor'">
+          <a routerLink="/professor/perfil" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Professor'">
             <mat-icon>account_circle</mat-icon>Meu Perfil
           </a>
-          <a routerLink="/professor/dashboard" mat-menu-item *ngIf="comumService.loggedUser.acesso == 'Professor'">
+          <a routerLink="/professor/dashboard" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Professor'">
             <mat-icon>dashboard</mat-icon>Dashboard
           </a>
 
           <!-- GERAL -->
-
-          <a routerLink="/" (click)="comumService.fazerLogout()" mat-menu-item style="color: var(--cor-perigosa);">
+          <a routerLink="/" (click)="credencialService.fazerLogout()" mat-menu-item style="color: var(--cor-perigosa);">
             <mat-icon style="color: var(--cor-perigosa);">exit_to_app</mat-icon>Sair
           </a>
 
         </mat-menu>
+
+        <div *ngIf="!credencialService.estouLogado()">
+          <a mat-button routerLink="/login">ENTRAR</a>
+          <button mat-button class="btn-cadastrar" (click)="abrirDialogoCadastro()">CADASTRAR-SE</button>
+        </div>
 
       </td>
     </tr>

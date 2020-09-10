@@ -163,12 +163,12 @@
 
                                             </td>
                                             <td align='left' width='30%'>
-                                                GRUPO 02
+                                                {{correcao.instancia.alunos.length > 1 ? 'GRUPO' : 'ALUNO'}}
+                                                {{correcao.instancia.id}}
                                                 <ul *ngIf="userTipo == 'professor'">
-                                                    <li>Rafael Bini</li>
-                                                    <li>Matheus Leonardo</li>
-                                                    <li>Joaquim Gonçalves</li>
-                                                    <li>Lucas Cristopher</li>
+                                                    <li *ngFor="let aluno of correcao.instancia.alunos">
+                                                        {{aluno.nome}}
+                                                    </li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -203,8 +203,10 @@
                                         mat-icon-button>
                                         <mat-icon>done</mat-icon>
                                     </button>
-
-                                    <br /><br />
+                                    <div *ngIf="questao.tipo == 1 && userTipo == 'professor'"
+                                        class="dica-resposta-dissertativa">
+                                        {{questao.resposta}}
+                                    </div>
                                     Observação (opcional):
                                 </td>
                                 <td align='Left' valign='top' width='30%'>

@@ -1,3 +1,4 @@
+import { CredencialService } from './../../services/credencial.service';
 import { ComumService } from './../../services/comum.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,10 +35,10 @@ export class AlunoComponent implements OnInit {
     { nome: this.tabs[0].nome, url: "#" }
   ];
 
-  constructor(public comumService: ComumService, public route: ActivatedRoute, private router: Router) { }
+  constructor(public comumService: ComumService, public credencialService: CredencialService, public route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.comumService.loggedUser.acesso = "Aluno";
+    this.credencialService.loggedUser.acesso = "Aluno";
     this.route.params.subscribe(params => {
       if (params.tab) {
         const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);

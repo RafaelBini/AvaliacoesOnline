@@ -42,17 +42,17 @@
             <td colspan="2" align="center">
                 <a mat-dialog-close *ngIf="!data.id && data.tipoUsuario == 'aluno'"
                     style="background-color: var(--cor-primaria); color: white; margin-top: 5px;" routerLink="/aluno"
-                    (click)="comumService.fazerLogin()" mat-button>CADASTRAR</a>
+                    (click)="credencialService.fazerLogin()" mat-button>CADASTRAR</a>
                 <a mat-dialog-close *ngIf="!data.id && data.tipoUsuario == 'professor'"
                     style="background-color: var(--cor-primaria); color: white; margin-top: 5px;"
-                    routerLink="/professor" (click)="comumService.fazerLogin()" mat-button>CADASTRAR</a>
+                    routerLink="/professor" (click)="credencialService.fazerLogin()" mat-button>CADASTRAR</a>
                 <a mat-dialog-close *ngIf="data.id && data.tipoUsuario == 'aluno'"
                     style="background-color: var(--cor-primaria); color: white; margin-top: 5px;"
-                    [routerLink]="'/aluno/avaliacao/' + data.id" (click)="comumService.fazerLogin()"
+                    [routerLink]="'/aluno/avaliacao/' + data.id" (click)="credencialService.fazerLogin()"
                     mat-button>CADASTRAR</a>
                 <a mat-dialog-close *ngIf="data.id && data.tipoUsuario == 'professor'"
                     style="background-color: var(--cor-primaria); color: white; margin-top: 5px;"
-                    [routerLink]="'/professor/avaliacao/' + data.id" (click)="comumService.fazerLogin()"
+                    [routerLink]="'/professor/avaliacao/' + data.id" (click)="credencialService.fazerLogin()"
                     mat-button>CADASTRAR</a>
 
             </td>

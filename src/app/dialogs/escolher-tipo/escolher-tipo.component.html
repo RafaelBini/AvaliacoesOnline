@@ -9,21 +9,32 @@
         <td class="default-td" rowspan="6" width='300px' align="center" valign="top" height="300px"
             style="padding: 12px; opacity: 1;  font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
             <mat-icon style="color: var(--cor-primaria); height: 200px; width: 200px; font-size: 150px; margin: auto;">
-                {{comumService.disposicoes[data.avaliacao.tipoDisposicao].icone}}
+                {{comumService.disposicoes[codigoDisposicaoSelecionado].icone}}
             </mat-icon>
+
+            <div *ngIf="codigoDisposicaoSelecionado != 0" class="box-especial"
+                style="background-color: whitesmoke; text-align: center; color: var(--cor-primaria);">
+                <mat-checkbox [(ngModel)]="data.avaliacao.limitarNumIntegrantes">
+                    Limitar número de integrantes
+                </mat-checkbox>
+                <div *ngIf="data.avaliacao.limitarNumIntegrantes" class="box-especial">
+                    <input type="number" [(ngModel)]="data.avaliacao.maxIntegrantes" />
+                </div>
+            </div>
             <br />
-            {{comumService.disposicoes[data.avaliacao.tipoDisposicao].descricao}}
+
+            {{comumService.disposicoes[codigoDisposicaoSelecionado].descricao}}
         </td>
     </tr>
     <tr *ngFor="let disposicao of comumService.disposicoes; index as i;">
         <td class="choose-btn" (click)="selecionarDisposicao(disposicao.codigo)"
-            [style.borderColor]="data.avaliacao.tipoDisposicao == i ? 'var(--cor-primaria)' : 'transparent'">
+            [style.borderColor]="codigoDisposicaoSelecionado == i ? 'var(--cor-primaria)' : 'transparent'">
             {{disposicao.nome}}
         </td>
     </tr>
     <tr>
         <td align="center" colspan="2" style="background-color: whitesmoke;">
-            <button mat-raised-button mat-dialog-close>OK</button>
+            <button mat-raised-button mat-dialog-close (click)="escolher()">OK</button>
         </td>
     </tr>
 </table>
@@ -40,11 +51,10 @@
         <td class="default-td" rowspan="6" width='300px' align="center" valign="top" height="300px"
             style="padding: 12px; opacity: 1;  font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
             <mat-icon style="color: var(--cor-primaria); height: 200px; width: 200px; font-size: 150px; margin: auto;">
-                {{comumService.correcoes[data.avaliacao.tipoCorrecao].icone}}
+                {{comumService.correcoes[codigoCorrecaoSelecionado].icone}}
             </mat-icon>
             <br />
-            <div *ngIf="data.avaliacao.tipoCorrecao == 2"
-                style="width: 90%; padding: 4px; border-radius: 4px; color: white; background-color: var(--cor-primaria);">
+            <div *ngIf="codigoCorrecaoSelecionado == 2" class="box-especial">
                 <table style="width: 100%; text-align: center;">
                     <tr *ngIf="data.avaliacao.tipoDisposicao == 0">
                         <td>CADA ALUNO</td>
@@ -89,20 +99,20 @@
                 </table>
             </div>
             <br />
-            {{comumService.correcoes[data.avaliacao.tipoCorrecao].descricao}}
+            {{comumService.correcoes[codigoCorrecaoSelecionado].descricao}}
             <br />
 
         </td>
     </tr>
     <tr *ngFor="let correcao of comumService.correcoes; index as i;">
         <td class="choose-btn" (click)="selecionarCorrecao(correcao.codigo)"
-            [style.borderColor]="data.avaliacao.tipoCorrecao == i ? 'var(--cor-primaria)' : 'transparent'">
+            [style.borderColor]="codigoCorrecaoSelecionado == i ? 'var(--cor-primaria)' : 'transparent'">
             {{correcao.nome}}
         </td>
     </tr>
     <tr>
         <td align="center" colspan="2" style="background-color: whitesmoke;">
-            <button mat-raised-button mat-dialog-close>OK</button>
+            <button mat-raised-button mat-dialog-close (click)="escolher()">OK</button>
         </td>
     </tr>
 
@@ -120,21 +130,21 @@
         <td class="default-td" rowspan="6" width='300px' align="center" valign="top" height="300px"
             style="padding: 12px; opacity: 1;  font-size: 13px; background-color: white; border: 3px solid whitesmoke; cursor: default; color: black;">
             <mat-icon style="color: var(--cor-primaria); height: 200px; width: 200px; font-size: 150px; margin: auto;">
-                {{comumService.pontuacoes[data.avaliacao.tipoPontuacao].icone}}
+                {{comumService.pontuacoes[codigoPontuacaoSelecionado].icone}}
             </mat-icon>
             <br />
-            {{comumService.pontuacoes[data.avaliacao.tipoPontuacao].descricao}}
+            {{comumService.pontuacoes[codigoPontuacaoSelecionado].descricao}}
         </td>
     </tr>
     <tr *ngFor="let pontuacao of comumService.pontuacoes; index as i;">
         <td class="choose-btn" (click)="selecionarPontuacao(pontuacao.codigo)"
-            [style.borderColor]="data.avaliacao.tipoPontuacao == i ? 'var(--cor-primaria)' : 'transparent'">
+            [style.borderColor]="codigoPontuacaoSelecionado == i ? 'var(--cor-primaria)' : 'transparent'">
             {{pontuacao.nome}}
         </td>
     </tr>
     <tr>
         <td align="center" colspan="2" style="background-color: whitesmoke;">
-            <button mat-raised-button mat-dialog-close>OK</button>
+            <button mat-raised-button mat-dialog-close (click)="escolher()">OK</button>
         </td>
     </tr>
 

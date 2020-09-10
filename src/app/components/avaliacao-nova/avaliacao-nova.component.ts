@@ -25,6 +25,8 @@ export class AvaliacaoNovaComponent implements OnInit {
     status: 0,
     titulo: "",
     descricao: "",
+    limitarNumIntegrantes: true,
+    maxIntegrantes: 3,
     dtInicio: this.comumService.getStringFromDate(new Date()),
     isInicioIndeterminado: false,
     dtInicioCorrecao: this.comumService.getStringFromDate(new Date()),

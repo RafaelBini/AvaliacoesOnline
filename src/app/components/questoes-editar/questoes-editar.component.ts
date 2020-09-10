@@ -64,7 +64,7 @@ export class QuestoesEditarComponent implements OnInit {
   }
   getQuestaoTiposAdequados() {
 
-    if (this.avaliacao.tipoCorrecao == 1) {
+    if (this.comumService.precisaDeCorrecaoAutomatica(this.avaliacao)) {
       return this.comumService.questaoTipos.concat().filter(tipo => tipo.temCorrecaoAutomatica);
     }
 

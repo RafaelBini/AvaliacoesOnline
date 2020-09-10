@@ -5,4 +5,5 @@ h2{
 .btn{
     margin: auto;
     display: block;
+    text-align: center;
 }

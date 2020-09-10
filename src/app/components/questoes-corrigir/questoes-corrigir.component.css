@@ -66,6 +66,18 @@
   right: 7px;
 }
 
+/* QUESTÕES DISSERTATIVAS */
+
+.dica-resposta-dissertativa{
+  padding: 7px;
+  width: 95%;  
+  color: white;
+  border: 1px dashed white;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 /* QUESTÕES MULTIPLA ESCOLHA */
 
 .invisible-input{

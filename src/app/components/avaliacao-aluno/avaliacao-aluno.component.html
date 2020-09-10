@@ -10,10 +10,10 @@
 
         <div style="width: 60%; margin: auto;">
             <div class="cabecalho">
-                <span class="titulo">{{instancia.titulo}}</span>
+                <span class="titulo">{{avaliacao.titulo}}</span>
                 <br /><br />
                 <div style="text-align: justify;">
-                    {{instancia.descricao}}
+                    {{avaliacao.descricao}}
                     <br /><br />
                     Professor: Rafael Bini
                     <br /><br />
@@ -53,7 +53,8 @@
                     <div *ngFor="let grupo of avaliacao.grupos;  index as i;" (click)="entrarNoGrupo(grupo)"
                         class="grupo btn-novo-grupo" style="width: 95%">
                         <div class="grupo-title">
-                            GRUPO {{grupo.numero}}
+                            GRUPO {{grupo.numero}} <span
+                                *ngIf="avaliacao.limitarNumIntegrantes">({{grupo.alunos.length}}/{{avaliacao.maxIntegrantes}})</span>
                         </div>
                         <div class="aluno" style="cursor: pointer;" *ngFor="let aluno of grupo.alunos"
                             [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
@@ -179,8 +180,6 @@
             </div>
             <br />
             <br />
-            <br />
-            <br />
 
             <!-- EM GRUPO -->
             <div *ngIf="instancia.tipoDisposicao != 0" style="text-align: justify; ">
@@ -204,13 +203,14 @@
             <div style="margin: auto; text-align: center;">
                 <h2>Corrija as avaliações abaixo:</h2>
             </div>
-            <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 100%">
+            <div *ngFor="let instanciaCorrigir of instancia.instanciasParaCorrigir;  index as i;" class="grupo"
+                style="width: 100%">
                 <div class="grupo-title">
-                    GRUPO {{grupo.numero}} - {{grupo.instanciaStatusId > 2 ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
+                    GRUPO {{i+1}} - {{instanciaCorrigir.corrigida ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
                 </div>
                 <div class="btn-corrigir">
-                    <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + grupo.instanciaId">
-                        {{grupo.instanciaStatusId > 2 ? "REVISAR" : "CORRIGIR"}}
+                    <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + instanciaCorrigir.id">
+                        {{instanciaCorrigir.corrigida ? "REVISAR" : "CORRIGIR"}}
                     </a>
                 </div>
             </div>

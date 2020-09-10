@@ -1,3 +1,5 @@
+
+
 .minha-conta{
     height: 5vh;
     height: 5vh;
@@ -10,4 +12,8 @@
 }
 .minha-conta:hover{
     opacity: 0.75;
+}
+
+.btn-cadastrar{
+    border: 1px solid var(--cor-primaria)
 }

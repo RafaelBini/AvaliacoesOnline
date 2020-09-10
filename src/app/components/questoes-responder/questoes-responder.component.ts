@@ -40,7 +40,7 @@ export class QuestoesResponderComponent implements OnInit {
     return pontuacaoMaxima;
   }
   estaNoContextoCerto(questao) {
-    const PRECISA_CORRECAO_AUTOMATICA = this.comumService.pontuacoes[this.avaliacao.tipoPontuacao].correcaoAutomatica || this.comumService.correcoes[this.avaliacao.tipoCorrecao].correcaoAutomatica;
+    const PRECISA_CORRECAO_AUTOMATICA = this.comumService.precisaDeCorrecaoAutomatica(this.avaliacao);
 
     if (!PRECISA_CORRECAO_AUTOMATICA) {
       return true;

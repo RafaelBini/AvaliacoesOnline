@@ -1,3 +1,7 @@
+import { LoginComponent } from './components/login/login.component';
+import { CadastrarSeComponent } from './dialogs/cadastrar-se/cadastrar-se.component';
+import { MatDialog } from '@angular/material/dialog';
+import { CredencialService } from './services/credencial.service';
 import { Component, OnInit } from '@angular/core';
 import { ComumService } from './services/comum.service';
 
@@ -8,10 +12,17 @@ import { ComumService } from './services/comum.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(public comumService: ComumService) { }
+  constructor(private dialog: MatDialog, public credencialService: CredencialService) { }
 
   ngOnInit() {
 
   }
+
+  abrirDialogoCadastro() {
+    this.dialog.open(CadastrarSeComponent, {
+      data: { tipoUsuario: 'professor' }
+    });
+  }
+
 
 }
