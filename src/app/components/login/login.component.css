@@ -1,29 +1,61 @@
-input[type=text], input[type=password] {
-    padding: 5px;
-    font-size: 16pxs;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    width: 50%;
+.body{
+    background-color: var(--cor-secundaria);
+    height: 93vh;
 }
 
-label {
+input {
+    border: 1px dashed var(--cor-primaria);
+    border-radius: 5px;
+    padding: 10px;
+    margin: auto;
+    display: block;
+    margin-bottom: 5%;
+    width: 90%;
+    font-size: large;
+    background-color: whitesmoke;
+}
+input:focus{
+    outline: none;
+    background-color: white;
+    border: 1px solid var(--cor-primaria);
+}
+
+
+.label{
+    padding: 8px;
+    padding-left: 10px;
     font-size: 16px;
-    margin-right: 16px;
+    color: var(--cor-primaria);
 }
 
 .container {
-    margin: auto; margin-top: 1%; 
-    padding: 50px; padding-top: 20px;
-    text-align: center; 
-    width: 40%; 
-    background-color: whitesmoke;
-    border: 1px dashed var(--cor-primaria); 
-
-    color: black;
+    margin: auto; 
+    padding: 3%; 
+    width: 30%; 
+    background-color: white;
     border-radius: 10px;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.438);
 }
 
 .botao-entrar {
     background-color: var(--cor-primaria);
+    width: 60%;
+    font-size: 20px;
+    display: block;
+    margin: auto;
     color: white;
+}
+
+.container-cadastrar {
+    font-size: 20px;
+    display: block;
+    margin: auto;
+    text-align: center;
+    color: var(--cor-primaria);
+}
+
+.botao-cadastrar {
+    border: 1px solid var(--cor-primaria);
+    font-size: 20px;
+    color: var(--cor-primaria);
 }

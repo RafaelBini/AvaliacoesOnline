@@ -1,4 +1,7 @@
-
+.logo{
+    text-decoration: none;
+    color: black
+}
 
 .minha-conta{
     height: 5vh;
@@ -16,4 +19,15 @@
 
 .btn-cadastrar{
     border: 1px solid var(--cor-primaria)
+}
+
+.tipo-acesso-card {
+    font-size: 13px;
+    color: white;
+    background-color: var(--cor-primaria);
+    height: fit-content;
+    box-sizing: border-box;
+    padding: 4px;
+    line-height: 1.2;
+    border-radius: 3px;
 }

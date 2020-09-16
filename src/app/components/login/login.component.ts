@@ -1,5 +1,5 @@
 import { ComumService } from './../../services/comum.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CadastrarSeComponent } from './../../dialogs/cadastrar-se/cadastrar-se.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
@@ -12,9 +12,8 @@ import { CredencialService } from 'src/app/services/credencial.service';
 })
 export class LoginComponent implements OnInit {
   public id: string = null;
-  public tipoUsuario: String = "professor";
 
-  constructor(private dialog: MatDialog, public credencialService: CredencialService, private route: ActivatedRoute, public comumService: ComumService) { }
+  constructor(private dialog: MatDialog, public credencialService: CredencialService, private route: ActivatedRoute, public router: Router) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
@@ -24,12 +23,22 @@ export class LoginComponent implements OnInit {
 
   abrirCadastrar() {
     this.dialog.open(CadastrarSeComponent, {
-      data: { tipoUsuario: this.tipoUsuario, id: this.id }
     });
   }
 
   fazerLogin() {
     this.credencialService.fazerLogin();
+
+    if (this.id) {
+      this.router.navigate([`/aluno/avaliacao/${this.id}`]);
+    }
+    else {
+      this.router.navigate(['/professor']);
+    }
+
+
   }
+
+
 
 }

@@ -49,6 +49,7 @@ import { UsuarioPerfilEditarComponent } from './components/usuario-perfil-editar
 import { AlunoCardAvaliacaoProfessorComponent } from './components/avaliacao-professor/aluno-card-avaliacao-professor/aluno-card-avaliacao-professor.component';
 import { ConfirmarComponent } from './dialogs/confirmar/confirmar.component';
 import { AlunoCardAvaliacaoAlunoComponent } from './components/avaliacao-aluno/aluno-card-avaliacao-aluno/aluno-card-avaliacao-aluno.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { AlunoCardAvaliacaoAlunoComponent } from './components/avaliacao-aluno/a
     AlunoCardAvaliacaoProfessorComponent,
     ConfirmarComponent,
     AlunoCardAvaliacaoAlunoComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

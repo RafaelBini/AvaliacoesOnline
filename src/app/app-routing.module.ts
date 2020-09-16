@@ -1,3 +1,4 @@
+import { HomeComponent } from './components/home/home.component';
 import { AvaliacaoAlunoComponent } from './components/avaliacao-aluno/avaliacao-aluno.component';
 import { LoginComponent } from './components/login/login.component';
 import { AvaliacaoCorrecaoComponent } from './components/avaliacao-correcao/avaliacao-correcao.component';
@@ -25,7 +26,7 @@ const routes: Routes = [
   { path: "aluno/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent },
   { path: "aluno/avaliacao/consulta/:id", component: AvaliacaoCorrecaoComponent },
   { path: ":id", component: LoginComponent },
-  { path: "", component: LoginComponent },
+  { path: "", component: HomeComponent },
 ];
 
 @NgModule({

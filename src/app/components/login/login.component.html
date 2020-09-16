@@ -1,24 +1,24 @@
-<div class="container">
+<div class="body">
     <br /><br />
-    <input type="text" autofocus placeholder="Email" />
-    <br /><br />
-    <input type="password" placeholder="Senha" />
-    <br /><br />
-    <mat-radio-group [(ngModel)]="tipoUsuario">
-        <mat-radio-button value="aluno">Sou Aluno</mat-radio-button>
-        <mat-radio-button value="professor" style="margin-left: 30px;">Sou Professor</mat-radio-button>
-    </mat-radio-group>
-    <br /><br />
+    <div class="container">
 
-    <button class="botao-entrar" (click)="abrirCadastrar()" mat-button>CADASTRAR-SE</button>
+        <span class="label">Email</span>
+        <input type="text" autofocus />
+        <span class="label">Senha</span>
+        <input type="password" />
+        <br />
 
-    <a *ngIf="!id && tipoUsuario == 'aluno'" class="botao-entrar" style="margin-left: 30px;" routerLink="/aluno"
-        (click)="credencialService.fazerLogin()" mat-button>ENTRAR</a>
-    <a *ngIf="!id && tipoUsuario == 'professor'" class="botao-entrar" style="margin-left: 30px;" routerLink="/professor"
-        (click)="credencialService.fazerLogin()" mat-button>ENTRAR</a>
-    <a *ngIf="id && tipoUsuario == 'aluno'" class="botao-entrar" style="margin-left: 30px;"
-        [routerLink]="'/aluno/avaliacao/' + id" (click)="credencialService.fazerLogin()" mat-button>ENTRAR</a>
-    <a *ngIf="id && tipoUsuario == 'professor'" class="botao-entrar" style="margin-left: 30px;"
-        [routerLink]="'/professor/avaliacao/' + id" (click)="credencialService.fazerLogin()" mat-button>ENTRAR</a>
+        <button (click)="fazerLogin()" class="botao-entrar" mat-button>Entrar</button>
 
+    </div>
+    <br /><br />
+    <div class="container">
+        <div class="container-cadastrar">
+            Não tem uma conta?
+            <button (click)="abrirCadastrar()" class="botao-cadastrar" mat-button>
+                Cadastre-se
+            </button>
+        </div>
+
+    </div>
 </div>

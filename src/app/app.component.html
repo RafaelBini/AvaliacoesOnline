@@ -2,18 +2,23 @@
   <table style="width: 100%;">
     <tr>
       <td width="95%">
-        AVALIARTE
+        <a routerLink="/" class="logo">Avaliações Online</a>
         <!--<img src="assets/logos/logo01.png" style="height: 10vh;" />-->
       </td>
+      <td *ngIf="credencialService.estouLogado()">
+        <div class="tipo-acesso-card">
+          {{credencialService.loggedUser.acesso}}
+        </div>
+      </td>
       <td width="5%" align="center" valign="middle" style="position: relative;">
-
         <img *ngIf="credencialService.estouLogado()" class="minha-conta" src="assets/avatares/padrao.jpg"
           [matMenuTriggerFor]="userMenu" />
         <mat-menu #userMenu="matMenu">
-          <div style="text-align: center;">
+
+          <!--div style="text-align: center;">
             <b>{{credencialService.loggedUser.acesso}}</b>
           </div>
-          <hr />
+          <hr /-->
           <div style="text-align: center;">
             {{credencialService.loggedUser.nome}}
           </div>
