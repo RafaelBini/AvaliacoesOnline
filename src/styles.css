@@ -4,10 +4,13 @@
   --encerrada: rgb(95, 209, 95);
   --em-correcao: rgb(255, 127, 52);
   --em-avaliacao: rgb(238, 63, 63);
-  --cor-primaria: rgb(18, 97, 128);
-  --cor-secundaria: rgb(28, 116, 151);  
+  --cor-primaria:  rgb(18, 97, 128);
+  --cor-primaria-letra: rgb(255, 255, 255);
+  --cor-secundaria: rgb(28, 116, 151);
   --cor-tranquila: rgb(95, 209, 95);
   --cor-perigosa: rgb(199, 50, 30);
+  --cor-bloco: whitesmoke;
+  --cor-bloco-letra: black;
 }
 
 

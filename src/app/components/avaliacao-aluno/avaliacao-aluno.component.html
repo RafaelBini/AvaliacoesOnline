@@ -27,7 +27,7 @@
                 <!-- INDIVIDUAL-->
                 <div *ngIf="avaliacao.tipoDisposicao == 0">
                     <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
-                        style="border-color: var(--cor-tranquila); cursor: default">
+                        style="border-color: var(--cor-secundaria); cursor: default">
                         <app-aluno-card-avaliacao-professor [aluno]="aluno">
                         </app-aluno-card-avaliacao-professor>
                     </div>
@@ -40,7 +40,7 @@
                             GRUPO {{grupo.numero}}
                         </div>
                         <div class="aluno" style="cursor: default;" *ngFor="let aluno of grupo.alunos"
-                            [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                            [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                             <app-aluno-card-avaliacao-professor [aluno]="aluno">
                             </app-aluno-card-avaliacao-professor>
                         </div>
@@ -57,7 +57,7 @@
                                 *ngIf="avaliacao.limitarNumIntegrantes">({{grupo.alunos.length}}/{{avaliacao.maxIntegrantes}})</span>
                         </div>
                         <div class="aluno" style="cursor: pointer;" *ngFor="let aluno of grupo.alunos"
-                            [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                            [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                             <app-aluno-card-avaliacao-professor [aluno]="aluno">
                             </app-aluno-card-avaliacao-professor>
 
@@ -105,7 +105,7 @@
                         MEU GRUPO
                     </div>
                     <div class="aluno" style="cursor: default;" *ngFor="let aluno of instancia.alunos"
-                        [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                        [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                         <app-aluno-card-avaliacao-professor [aluno]="aluno">
                         </app-aluno-card-avaliacao-professor>
                         <div *ngIf="aluno.statusId" style="position: absolute; top: 30%; right: 20px;">
@@ -188,7 +188,7 @@
                     MEU GRUPO
                 </div>
                 <div class="aluno" style="cursor: default;" *ngFor="let aluno of instancia.alunos"
-                    [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                    [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                     <app-aluno-card-avaliacao-professor [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
                 </div>
@@ -274,7 +274,7 @@
             <div *ngIf="instancia.tipoDisposicao != 0">
 
                 <div class="aluno" style="cursor: default;" *ngFor="let aluno of instancia.alunos"
-                    [style.borderColor]="aluno.online ? 'var(--cor-tranquila)' : 'var(--cor-primaria)'">
+                    [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                     <app-aluno-card-avaliacao-professor [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
                 </div>
