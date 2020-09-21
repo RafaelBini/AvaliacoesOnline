@@ -57,7 +57,7 @@
                                 <td width="15%" class="alternativa">
                                     <div style="display: inline-flex; width: 100%;">
                                         <textarea (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
-                                            [(ngModel)]="associacao.opcaoCorreta" class="invisible-input"
+                                            [(ngModel)]="associacao.opcaoSelecionada" class="invisible-input"
                                             style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                     </div>
                                 </td>
@@ -184,7 +184,7 @@
                             <!-- LISTA DE ALTERNATIVAS -->
                             <tr cdkDrag *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td width="95%" class="alternativa">
-                                    <mat-checkbox [(ngModel)]="alternativa.correta"
+                                    <mat-checkbox [(ngModel)]="alternativa.selecionada"
                                         (ngModelChange)="desmarcarTudoMenosUma(questao, ai, true)">
                                         <textarea #alternativaTextarea maxlength="500" (input)="ajustarAltura($event)"
                                             (click)="ajustarAltura($event)" [(ngModel)]="alternativa.texto"
@@ -324,7 +324,7 @@
                             <!-- LISTA DE ALTERNATIVAS -->
                             <tr cdkDrag *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td width="5%" class="alternativa">
-                                    <mat-button-toggle-group [(ngModel)]="alternativa.correta">
+                                    <mat-button-toggle-group [(ngModel)]="alternativa.selecionada">
                                         <mat-button-toggle matTooltip="Marcar como verdadeiro" [value]="true">V
                                         </mat-button-toggle>
                                         <mat-button-toggle matTooltip="Marcar como falso" [value]="false">F
@@ -336,7 +336,7 @@
                                         <textarea #verdadeiroFalsoAlternativaTextarea maxlength="2500"
                                             (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
                                             [(ngModel)]="alternativa.texto" class="invisible-input"
-                                            [style.color]="alternativa.correta ? 'green' : 'red'"
+                                            [style.color]="alternativa.selecionada ? 'green' : 'red'"
                                             style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                         <span *ngIf="estaEmFoco(verdadeiroFalsoAlternativaTextarea)"
                                             class="contador-caracteres">{{verdadeiroFalsoAlternativaTextarea.value.length}}/2500</span>

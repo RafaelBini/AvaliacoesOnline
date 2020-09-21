@@ -21,6 +21,5 @@ export interface Questao {
     partesPreencher?: Array<any>;
     correcoes?: Array<Correcao>;
     correcaoProfessor?: Correcao;
-    respostaAluno?: string;
     tentativas?: number;
 }

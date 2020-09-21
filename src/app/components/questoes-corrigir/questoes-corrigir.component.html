@@ -40,7 +40,7 @@
                         <div style="position: relative;">
                             <textarea disabled="true" #respostaAlunoTextarea maxlength="2500" rows="4"
                                 (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
-                                [(ngModel)]="questao.respostaAluno" class="input-basico"
+                                [(ngModel)]="questao.resposta" class="input-basico"
                                 placeholder="Escreva aqui a resposta"
                                 style="width: 98%; margin: auto; padding: 5px; padding-top: 14px; "></textarea>
                             <span *ngIf="estaEmFoco(respostaAlunoTextarea)"

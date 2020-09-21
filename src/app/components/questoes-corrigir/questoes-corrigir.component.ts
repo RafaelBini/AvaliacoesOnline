@@ -51,10 +51,7 @@ export class QuestoesCorrigirComponent implements OnInit {
     if (questao.tipo != 4)
       return;
     for (var i = 0; i < questao.alternativas.length; i++) {
-      if (i != alternativaIndex && isEditavel) {
-        questao.alternativas[i].correta = false;
-      }
-      else if (i != alternativaIndex && !isEditavel) {
+      if (i != alternativaIndex) {
         questao.alternativas[i].selecionada = false;
       }
     }

@@ -1,3 +1,4 @@
+import { Associacao } from './../../models/associacao';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -14,6 +15,7 @@ import { Avaliacao } from 'src/app/models/avaliacao';
 })
 export class QuestoesResponderComponent implements OnInit {
   @Input() avaliacao: Avaliacao;
+  @Input() gabarito: Avaliacao;
 
 
   constructor(public comumService: ComumService, private dialog: MatDialog, private snack: MatSnackBar) { }
@@ -58,15 +60,15 @@ export class QuestoesResponderComponent implements OnInit {
 
 
   // ASSOCIACAO
-  getAssociacoesOrdenadas(questao: Questao) {
-    return questao.associacoes.concat().sort((a, b) => a.texto > b.texto ? 1 : -1);
+  getAssociacoesOrdenadas(questaoIndex: number) {
+    return this.gabarito.questoes[questaoIndex].associacoes.concat().sort((a, b) => a.texto > b.texto ? 1 : -1);
   }
-  onAssociativaChange(questao: Questao) {
+  onAssociativaChange(questao: Questao, questaoIndex: number) {
 
     if (this.avaliacao.tipoPontuacao != 2)
       return;
-    for (let associacao of questao.associacoes) {
-      if (associacao.opcaoSelecionada != associacao.opcaoCorreta && associacao.opcaoSelecionada != null && associacao.opcaoSelecionada != '') {
+    for (let [i, associacao] of questao.associacoes.entries()) {
+      if (associacao.opcaoSelecionada != this.gabarito.questoes[questaoIndex].associacoes[i].opcaoSelecionada && associacao.opcaoSelecionada != null && associacao.opcaoSelecionada != '') {
         if (questao.tentativas < 3) {
           questao.tentativas++;
           this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
@@ -87,28 +89,25 @@ export class QuestoesResponderComponent implements OnInit {
 
 
   // ALTERNATIVAS
-  onMultiplaEscolhaChange(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
+  onMultiplaEscolhaChange(questao: Questao, alternativaIndex: number, isEditavel: boolean, questaoIndex: number) {
     this.desmarcarTudoMenosUma(questao, alternativaIndex, isEditavel);
-    this.registrarTentativaMultiplaEscolha(questao);
+    this.registrarTentativaMultiplaEscolha(questao, questaoIndex);
     //console.log(this.comumService.questaoTipos[questao.tipo].getNota(questao));
   }
   desmarcarTudoMenosUma(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
     if (questao.tipo != 4)
       return;
     for (var i = 0; i < questao.alternativas.length; i++) {
-      if (i != alternativaIndex && isEditavel) {
-        questao.alternativas[i].correta = false;
-      }
-      else if (i != alternativaIndex && !isEditavel) {
+      if (i != alternativaIndex) {
         questao.alternativas[i].selecionada = false;
       }
     }
   }
-  registrarTentativaMultiplaEscolha(questao: Questao) {
+  registrarTentativaMultiplaEscolha(questao: Questao, questaoIndex: number) {
     if (this.avaliacao.tipoPontuacao != 2)
       return;
-    for (let alternativa of questao.alternativas) {
-      if (!alternativa.correta && alternativa.selecionada) {
+    for (let [i, alternativa] of questao.alternativas.entries()) {
+      if (!this.gabarito.questoes[questaoIndex].alternativas[i].selecionada && alternativa.selecionada) {
         if (questao.tentativas < 3) {
           questao.tentativas++;
           this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
@@ -189,13 +188,13 @@ export class QuestoesResponderComponent implements OnInit {
   }
 
   // VERDADEIRO OU FALSO
-  onVerdadeiroFalsoChange(questao: Questao) {
+  onVerdadeiroFalsoChange(questao: Questao, questaoIndex: number) {
 
     if (this.avaliacao.tipoPontuacao != 2)
       return;
 
-    for (let alternativa of questao.alternativas) {
-      if ((alternativa.correta != alternativa.selecionada) && alternativa.selecionada != null) {
+    for (let [i, alternativa] of questao.alternativas.entries()) {
+      if ((this.gabarito.questoes[questaoIndex].alternativas[i].selecionada != alternativa.selecionada) && alternativa.selecionada != null) {
         if (questao.tentativas < 3) {
           questao.tentativas++;
           this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {

@@ -1,3 +1,4 @@
+import { AvaliacaoService } from './../../services/avaliacao.service';
 import { EscolherTipoComponent } from './../../dialogs/escolher-tipo/escolher-tipo.component';
 import { ComumService } from './../../services/comum.service';
 import { Avaliacao } from './../../models/avaliacao';
@@ -18,7 +19,7 @@ import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 })
 export class AvaliacaoNovaComponent implements OnInit {
 
-  constructor(public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public comumService: ComumService) { }
+  constructor(public router: Router, public route: ActivatedRoute, public dialog: MatDialog, public comumService: ComumService, public avaliacaoService: AvaliacaoService) { }
 
 
   public avaliacao: Avaliacao = {
@@ -44,10 +45,10 @@ export class AvaliacaoNovaComponent implements OnInit {
     questoes: [
       {
         pergunta: "",
-        tipo: 1,
+        tipo: 4,
         resposta: "",
         alternativas: [],
-        valor: 1,
+        valor: 10,
         nivelDificuldade: 2,
         tags: [],
         associacoes: [],
@@ -58,6 +59,8 @@ export class AvaliacaoNovaComponent implements OnInit {
     ],
 
   };
+
+  public avaliacaoAluno: Avaliacao;
 
   public visao = "professor";
 
@@ -116,10 +119,10 @@ export class AvaliacaoNovaComponent implements OnInit {
   addQuestao() {
     this.avaliacao.questoes.push({
       pergunta: "",
-      tipo: 1,
+      tipo: 4,
       resposta: "",
       alternativas: [],
-      valor: 1,
+      valor: 10,
       nivelDificuldade: 2,
       tags: [],
       associacoes: [],
@@ -152,6 +155,11 @@ export class AvaliacaoNovaComponent implements OnInit {
       },
       width: '75%'
     });
+  }
+
+  mudarVisao(tipoVisao) {
+    this.avaliacaoAluno = this.avaliacaoService.getAvaliacaoFromGabarito(this.avaliacao);
+    this.visao = tipoVisao;
   }
 
 }

@@ -18,10 +18,10 @@
                                 <td width="20%" style="cursor:default;">
                                     <mat-select class="select-basico" style="width: 82%;"
                                         [(ngModel)]="associacao.opcaoSelecionada"
-                                        (ngModelChange)="onAssociativaChange(questao)">
-                                        <mat-option [value]="_associacao.opcaoCorreta"
-                                            *ngFor="let _associacao of getAssociacoesOrdenadas(questao)">
-                                            {{_associacao.opcaoCorreta}}
+                                        (ngModelChange)="onAssociativaChange(questao, qi)">
+                                        <mat-option [value]="_associacao.opcaoSelecionada"
+                                            *ngFor="let _associacao of getAssociacoesOrdenadas(qi)">
+                                            {{_associacao.opcaoSelecionada}}
                                         </mat-option>
                                     </mat-select>
                                 </td>
@@ -39,7 +39,7 @@
                     <td align="right">
                         <div style="position: relative;">
                             <textarea #respostaAlunoTextarea maxlength="2500" rows="4" (input)="ajustarAltura($event)"
-                                (click)="ajustarAltura($event)" [(ngModel)]="questao.respostaAluno" class="input-basico"
+                                (click)="ajustarAltura($event)" [(ngModel)]="questao.resposta" class="input-basico"
                                 placeholder="Escreva aqui a resposta"
                                 style="width: 98%; margin: auto; padding: 5px; padding-top: 14px; "></textarea>
                             <span *ngIf="estaEmFoco(respostaAlunoTextarea)"
@@ -78,7 +78,7 @@
                             <tr *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td valign="middle" class="alternativa">
                                     <mat-checkbox [(ngModel)]="alternativa.selecionada"
-                                        (ngModelChange)="onMultiplaEscolhaChange(questao, ai, false)">
+                                        (ngModelChange)="onMultiplaEscolhaChange(questao, ai, false, qi)">
                                         <span style="white-space: pre-line;">{{alternativa.texto}}</span>
                                     </mat-checkbox>
                                 </td>
@@ -114,7 +114,7 @@
                                         <tr>
                                             <td width="5%" class="alternativa">
                                                 <mat-button-toggle-group [(ngModel)]="alternativa.selecionada"
-                                                    (ngModelChange)="onVerdadeiroFalsoChange(questao)">
+                                                    (ngModelChange)="onVerdadeiroFalsoChange(questao, qi)">
                                                     <mat-button-toggle matTooltip=" Marcar como verdadeiro"
                                                         [value]="true">V
                                                     </mat-button-toggle>
@@ -123,8 +123,7 @@
                                                 </mat-button-toggle-group>
                                             </td>
                                             <td valign="middle" class="alternativa"
-                                                style="cursor: default; white-space: pre-line;"
-                                                [style.color]="alternativa.selecionada == null ? 'black' : (alternativa.selecionada == true ? 'green' : 'red')">
+                                                style="cursor: default; white-space: pre-line;">
                                                 {{alternativa.texto}}
                                             </td>
                                         </tr>

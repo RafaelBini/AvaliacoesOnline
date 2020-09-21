@@ -143,10 +143,10 @@ export class ComumService {
       codigo: 0,
       nome: "Associativa",
       temCorrecaoAutomatica: true,
-      getNota(questao): number {
+      getNota(questao, questaoGabarito): number {
         var nota = questao.valor;
-        for (let associacao of questao.associacoes) {
-          if (associacao.opcaoCorreta != associacao.opcaoSelecionada) {
+        for (let [i, associacao] of questao.associacoes.entries()) {
+          if (questaoGabarito.associacoes[i].opcaoSelecionada != associacao.opcaoSelecionada) {
             nota -= (questao.valor / questao.associacoes.length);
           }
         }
@@ -167,11 +167,11 @@ export class ComumService {
       codigo: 3,
       nome: "Multipla Escolha - Multipla Resposta",
       temCorrecaoAutomatica: true,
-      getNota(questao): number {
-        for (let alternativa of questao.alternativas) {
+      getNota(questao, questaoGabarito): number {
+        for (let [i, alternativa] of questao.alternativas.entries()) {
           if (alternativa.selecionada == null)
             alternativa.selecionada = false;
-          if (alternativa.correta != alternativa.selecionada) {
+          if (questaoGabarito.alternativas[i].selecionada != alternativa.selecionada) {
             return 0;
           }
         }
@@ -182,11 +182,11 @@ export class ComumService {
       codigo: 4,
       nome: "Multipla Escolha - Unica Resposta",
       temCorrecaoAutomatica: true,
-      getNota(questao): number {
-        for (let alternativa of questao.alternativas) {
+      getNota(questao, questaoGabarito): number {
+        for (let [i, alternativa] of questao.alternativas.entries()) {
           if (alternativa.selecionada == null)
             alternativa.selecionada = false;
-          if (alternativa.correta != alternativa.selecionada) {
+          if (questaoGabarito.alternativas[i].selecionada != alternativa.selecionada) {
             return 0;
           }
         }
@@ -197,7 +197,7 @@ export class ComumService {
       codigo: 5,
       nome: "Preenchimento",
       temCorrecaoAutomatica: true,
-      getNota(questao): number {
+      getNota(questao, questaoGabarito): number {
         var nota = questao.valor;
         for (let opcao of questao.opcoesParaPreencher) {
           if (opcao.texto != opcao.opcaoSelecionada) {
@@ -211,10 +211,10 @@ export class ComumService {
       codigo: 6,
       nome: "Veradadeiro ou Falso",
       temCorrecaoAutomatica: true,
-      getNota(questao): number {
+      getNota(questao, questaoGabarito): number {
         var nota = questao.valor;
-        for (let alternativa of questao.alternativas) {
-          if (alternativa.correta != alternativa.selecionada) {
+        for (let [i, alternativa] of questao.alternativas.entries()) {
+          if (questaoGabarito.alternativas[i].selecionada != alternativa.selecionada) {
             nota -= (questao.valor / questao.alternativas.length);
           }
         }
@@ -225,10 +225,10 @@ export class ComumService {
       codigo: 7,
       nome: "Veradadeiro ou Falso - Justificativa",
       temCorrecaoAutomatica: false,
-      getNota(questao: Questao): number {
+      getNota(questao: Questao, questaoGabarito): number {
         var nota = questao.valor;
-        for (let alternativa of questao.alternativas) {
-          if (alternativa.correta != alternativa.selecionada) {
+        for (let [i, alternativa] of questao.alternativas.entries()) {
+          if (questaoGabarito.alternativas[i].selecionada != alternativa.selecionada) {
             nota -= (questao.valor / questao.alternativas.length);
           }
         }

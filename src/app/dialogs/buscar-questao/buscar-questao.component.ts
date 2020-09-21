@@ -20,6 +20,7 @@ export class BuscarQuestaoComponent implements OnInit {
       pergunta: "Qual é a cor da grama?",
       tags: ["grama", "botânica"],
       tipo: 1,
+      valor: 10,
       nivelDificuldade: 1,
       alternativas: [],
       resposta: "A cor da Grama é verde."
@@ -28,18 +29,20 @@ export class BuscarQuestaoComponent implements OnInit {
       pergunta: "Quanto é 2 + 2?",
       tags: ["matemática", "soma", "cálculo", "números"],
       tipo: 3,
+      valor: 10,
       nivelDificuldade: 1,
       alternativas: [
-        { texto: "1", correta: false, selecionada: false },
-        { texto: "2", correta: false, selecionada: false },
-        { texto: "3", correta: false, selecionada: false },
-        { texto: "4", correta: true, selecionada: false },
+        { texto: "1", selecionada: false },
+        { texto: "2", selecionada: false },
+        { texto: "3", selecionada: false },
+        { texto: "4", selecionada: true },
       ]
     },
     {
       pergunta: "Por que o céu é azul?",
       tags: ["astronomia", "cores", "química"],
       tipo: 1,
+      valor: 10,
       nivelDificuldade: 4,
       alternativas: [],
       resposta: "É a luz azul — que tem o comprimento mais curto — que se espalha mais por essas pequenas partículas, o que leva à coloração azulada que observamos.\nAvaliar a forma como explicou. Verificar se conhece (...)"
@@ -48,6 +51,7 @@ export class BuscarQuestaoComponent implements OnInit {
       pergunta: "Qual é o país mais populoso do mundo?",
       tags: ["geografia", "população", "conhecimentos gerais"],
       tipo: 1,
+      valor: 10,
       nivelDificuldade: 3,
       alternativas: [],
       resposta: "O país mais populoso é a China."
@@ -56,6 +60,7 @@ export class BuscarQuestaoComponent implements OnInit {
       pergunta: "Quais são os nomes continentes do planeta Terra?",
       tags: ["geografia", "território"],
       tipo: 1,
+      valor: 10,
       nivelDificuldade: 3,
       alternativas: [],
       resposta: "África, Ásia, Europa, Oceania, América e Antártida."

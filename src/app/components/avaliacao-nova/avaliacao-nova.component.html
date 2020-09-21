@@ -194,7 +194,7 @@
 
 
 
-    <button mat-fab (click)="visao='aluno'" matTooltip="Ver como aluno"
+    <button mat-fab (click)="mudarVisao('aluno')" matTooltip="Ver como aluno"
         style="position: fixed; bottom: 175px; right: 30px; color: white; background-color: var(--cor-primaria);">
         <mat-icon>visibility</mat-icon>
     </button>
@@ -240,18 +240,18 @@
 
     <div style="width: 100%;">
 
-        <app-questoes-responder [avaliacao]="avaliacao">
+        <app-questoes-responder [gabarito]="avaliacao" [avaliacao]="avaliacaoAluno">
 
         </app-questoes-responder>
 
-        <button (click)="visao='professor'" mat-raised-button
+        <button (click)="mudarVisao('professor')" mat-raised-button
             style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
             Sair da visão de Aluno
         </button>
     </div>
 
 
-    <button mat-fab (click)="visao='professor'" matTooltip="Sair da visão do aluno"
+    <button mat-fab (click)="mudarVisao('professor')" matTooltip="Sair da visão do aluno"
         style="position: fixed; bottom: 30px; right: 30px; color: white; background-color: var(--cor-primaria);">
         <mat-icon>close</mat-icon>
     </button>

@@ -77,7 +77,7 @@ export class QuestoesEditarComponent implements OnInit {
     questao.alternativas.splice(alternativaIndesejadaIndex, 1);
   }
   addAlternativa(questao, novaAlternativInput) {
-    questao.alternativas.push({ texto: novaAlternativInput.value, correta: false, selecionada: null });
+    questao.alternativas.push({ texto: novaAlternativInput.value, selecionada: false });
     novaAlternativInput.value = "";
   }
   onNovaAlterKeyUp(event, questao, novaAlternativInput) {
@@ -90,10 +90,7 @@ export class QuestoesEditarComponent implements OnInit {
     if (questao.tipo != 4)
       return;
     for (var i = 0; i < questao.alternativas.length; i++) {
-      if (i != alternativaIndex && isEditavel) {
-        questao.alternativas[i].correta = false;
-      }
-      else if (i != alternativaIndex && !isEditavel) {
+      if (i != alternativaIndex) {
         questao.alternativas[i].selecionada = false;
       }
     }
@@ -106,8 +103,7 @@ export class QuestoesEditarComponent implements OnInit {
   addAssociacao(questao, novaAssociacaoInput, novaAssociacaoOpcaoInput) {
     questao.associacoes.push({
       texto: novaAssociacaoInput.value,
-      opcaoCorreta: novaAssociacaoOpcaoInput.value,
-      opcaoSelecionada: ""
+      opcaoSelecionada: novaAssociacaoOpcaoInput.value,
     });
     novaAssociacaoInput.value = "";
     novaAssociacaoOpcaoInput.value = "";

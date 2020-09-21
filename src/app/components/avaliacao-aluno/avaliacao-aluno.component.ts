@@ -25,27 +25,57 @@ export class AvaliacaoAlunoComponent implements OnInit {
     limitarNumIntegrantes: true,
     maxIntegrantes: 3,
     tipoDisposicao: 2,
-    tipoCorrecao: 3,
-    tipoPontuacao: 2,
+    tipoCorrecao: 0,
+    tipoPontuacao: 0,
     questoes: [
-      {
-        pergunta: "Qual é a cor da grama?",
-        tipo: 1,
-        resposta: "Verde",
-        alternativas: [],
-        valor: 70
-      },
       {
         pergunta: "Qual é a cor da grama?",
         tipo: 4,
         resposta: "",
         alternativas: [
-          { texto: "A cor é Vermelha.", correta: false },
-          { texto: "A cor é Verde.", correta: true },
-          { texto: "A cor é Rosa.", correta: false },
-          { texto: "A cor é Azul.", correta: false },
+          { texto: "A cor é Vermelha.", selecionada: false },
+          { texto: "A cor é Verde.", selecionada: true },
+          { texto: "A cor é Rosa.", selecionada: false },
+          { texto: "A cor é Azul.", selecionada: false },
         ],
         valor: 30
+      },
+      {
+        pergunta: "Qual(is) deste(s) tem quatro patas?",
+        tipo: 3,
+        resposta: "",
+        alternativas: [
+          { texto: "Cachorro.", selecionada: true },
+          { texto: "Pássaro.", selecionada: false },
+          { texto: "Gato.", selecionada: true },
+          { texto: "Centopéia.", selecionada: false },
+        ],
+        valor: 10,
+        tentativas: 0,
+      },
+      {
+        valor: 5,
+        pergunta: "Complete a frase abaixo:",
+        tags: ["astronomia", "cores", "química"],
+        tipo: 5,
+        nivelDificuldade: 4,
+        opcoesParaPreencher: [
+          { texto: "grama", opcaoSelecionada: null, ativa: true },
+          { texto: "verde", opcaoSelecionada: null, ativa: true }
+        ],
+        textoParaPreencher: "A (1) geralemnte é da cor (2).",
+        partesPreencher: [
+          { conteudo: "A ", tipo: "texto" },
+          { conteudo: 0, tipo: "select" },
+          { conteudo: " geralmente é da cor ", tipo: "texto" },
+          { conteudo: 1, tipo: "select" },
+          { conteudo: ".", tipo: "texto" },
+        ], correcaoProfessor: {
+          nota: null,
+          observacao: null,
+        },
+        correcoes: [],
+        tentativas: 0,
       },
     ],
     alunos: [
@@ -88,7 +118,7 @@ export class AvaliacaoAlunoComponent implements OnInit {
     correcaoParesQtdNumero: 1,
     tipoDisposicao: 3,
     tipoCorrecao: 2,
-    tipoPontuacao: 3,
+    tipoPontuacao: 0,
     questoes: [
       /*{
         pergunta: "Qual é a cor da grama?",
@@ -103,10 +133,10 @@ export class AvaliacaoAlunoComponent implements OnInit {
         tipo: 4,
         resposta: "",
         alternativas: [
-          { texto: "A cor é Vermelha.", correta: false },
-          { texto: "A cor é Verde.", correta: true },
-          { texto: "A cor é Rosa.", correta: false },
-          { texto: "A cor é Azul.", correta: false },
+          { texto: "A cor é Vermelha.", selecionada: false },
+          { texto: "A cor é Verde.", selecionada: false },
+          { texto: "A cor é Rosa.", selecionada: false },
+          { texto: "A cor é Azul.", selecionada: false },
         ],
         valor: 30,
         tentativas: 0,
@@ -116,10 +146,10 @@ export class AvaliacaoAlunoComponent implements OnInit {
         tipo: 3,
         resposta: "",
         alternativas: [
-          { texto: "Cachorro.", correta: true },
-          { texto: "Pássaro.", correta: false },
-          { texto: "Gato.", correta: true },
-          { texto: "Centopéia.", correta: false },
+          { texto: "Cachorro.", selecionada: false },
+          { texto: "Pássaro.", selecionada: false },
+          { texto: "Gato.", selecionada: false },
+          { texto: "Centopéia.", selecionada: false },
         ],
         valor: 10,
         tentativas: 0,
@@ -277,10 +307,10 @@ export class AvaliacaoAlunoComponent implements OnInit {
   // ENCERRADA
   getMinhaNota() {
     var nota = 0;
-    for (let questao of this.instancia.questoes) {
+    for (let [i, questao] of this.instancia.questoes.entries()) {
       const questaoTipo = this.comumService.questaoTipos[questao.tipo];
       if (questaoTipo.temCorrecaoAutomatica)
-        nota += questaoTipo.getNota(questao);
+        nota += questaoTipo.getNota(questao, this.avaliacao.questoes[i]);
     }
     return nota;
   }
