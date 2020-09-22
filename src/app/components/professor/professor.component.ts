@@ -1,10 +1,10 @@
+import { Avaliacao } from './../../models/avaliacao';
 import { ComumService } from './../../services/comum.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlunoNovoComponent } from './../aluno-novo/aluno-novo.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
-import { Avaliacao } from 'src/app/models/avaliacao';
 import { CredencialService } from 'src/app/services/credencial.service';
 
 
@@ -17,6 +17,7 @@ export class ProfessorComponent implements OnInit {
 
   public selectedTab = 0;
   public agruparAvaliacoes = true;
+  public mostrarArquivadas = false;
   public selectedStatusTab = 0;
 
   public alunosSelecionados = [];
@@ -38,46 +39,56 @@ export class ProfessorComponent implements OnInit {
   public avaliacoes: Array<any> = [
     {
       id: "0000001",
-      titulo: "Avaliação 01",
+      titulo: "DS250 - Interação Humano Computador",
       descricao: "Uma avaliação para Teste",
       status: 0,
       dtInicio: '31/07/2020 18:00',
       dtTermino: '01/08/2020 18:00',
       tags: [
-        'IHC',
-        'Interação Humano Computador'
-      ]
+        'Avaliação 01',
+        'Tarde'
+      ],
+
     },
     {
       id: "0000002",
-      titulo: "Avaliação 02",
+      titulo: "DS250 - Interação Humano Computador",
       descricao: "Uma avaliação para Teste",
       status: 1,
       dtInicio: '31/07/2020 18:00',
       dtTermino: '01/08/2020 18:00',
       tags: [
-        'Web II'
+        'Avaliação 02',
+        'Tarde'
       ]
     },
     {
       id: "0000003",
-      titulo: "Avaliação 03",
+      titulo: "DS250 - Interação Humano Computador",
       descricao: "Uma avaliação para Teste",
       status: 2,
       dtInicio: '31/07/2020 18:00',
       dtTermino: '01/08/2020 18:00',
+      tags: [
+        'Avaliação 01',
+        'Noite'
+      ]
     },
     {
       id: "0000004",
-      titulo: "Avaliação 04",
+      titulo: "DS250 - Interação Humano Computador",
       descricao: "Uma avaliação para Teste",
       status: 3,
       dtInicio: '31/07/2020 18:00',
       dtTermino: '01/08/2020 18:00',
+      tags: [
+        'Avaliação 02',
+        'Noite'
+      ]
     },
     {
       id: "0000005",
-      titulo: "Avaliação 05",
+      titulo: "DS130 - Web II",
       descricao: "Uma avaliação para Teste",
       status: 3,
       dtInicio: '31/07/2020 18:00',
@@ -126,49 +137,66 @@ export class ProfessorComponent implements OnInit {
   getStatusPorPrioridade() {
     return this.comumService.statusAvaliacao.concat().sort((a, b) => b.prioridade - a.prioridade);
   }
-
   getAvaliacoesNoStatus(status) {
-    return this.avaliacoesFiltradas.concat().filter(avaliacao => avaliacao.status == status);
+    return this.avaliacoesFiltradas.concat().filter(avaliacao => avaliacao.status == status && (!avaliacao.isArquivada || this.mostrarArquivadas));
   }
-
   selecionarStatusTabAdequada() {
     for (let status of this.comumService.statusAvaliacao) {
-      if (this.avaliacoesFiltradas.concat().filter(ava => ava.status == status.id).length > 0) {
+      if (this.avaliacoesFiltradas.concat().filter(ava => ava.status == status.id && (!ava.isArquivada || this.mostrarArquivadas)).length > 0) {
         this.selectedStatusTab = status.id;
         return;
       }
     }
   }
-
   onBuscaKeyUp(texto: string) {
     this.avaliacoesFiltradas = this.avaliacoes.filter(avaliacao => {
 
+      if (avaliacao.isArquivada && !this.mostrarArquivadas)
+        return false;
+
       texto = this.comumService.normalizar(texto);
-      var titulo = this.comumService.normalizar(avaliacao.titulo);
-      var descricao = this.comumService.normalizar(avaliacao.descricao);
 
-      if (titulo.includes(texto))
-        return true;
+      for (let parteTexto of texto.split(" ")) {
+        var titulo = this.comumService.normalizar(avaliacao.titulo);
+        var descricao = this.comumService.normalizar(avaliacao.descricao);
 
-      if (descricao.includes(texto))
-        return true;
+        const FOI_ENCONTRADO = this.estaEmAlgumLugar(parteTexto, titulo, descricao, avaliacao.tags);
 
-      for (let parteTitulo of titulo.split(" ")) {
-        if (parteTitulo.includes(texto))
-          return true;
+        if (!FOI_ENCONTRADO)
+          return false;
+
       }
 
-      if (avaliacao.tags != null) {
-        for (let tag of avaliacao.tags) {
-          if (this.comumService.normalizar(tag).includes(texto))
-            return true;
-        }
-      }
-      return false;
+
+      return true;
     });
     this.selecionarStatusTabAdequada();
   }
+  estaEmAlgumLugar(parteTexto, titulo, descricao, tags) {
 
+    // Titulo
+    for (let parteTitulo of titulo.split(" ")) {
+      if (parteTitulo.includes(parteTexto))
+        return true;
+    }
+
+    // Descrição
+    for (let parteDescricao of descricao.split(" ")) {
+      if (parteDescricao.includes(parteTexto))
+        return true;
+    }
+
+    // Tags
+    if (tags != null) {
+      for (let tag of tags) {
+        if (this.comumService.normalizar(tag).includes(parteTexto))
+          return true;
+      }
+    }
+  }
+  getTodasAvaliacoes() {
+    return this.avaliacoesFiltradas.concat().filter(avaliacao => (!avaliacao.isArquivada || this.mostrarArquivadas));
+  }
 
 
   // Alunos

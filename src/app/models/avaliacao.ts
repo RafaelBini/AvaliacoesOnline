@@ -26,4 +26,6 @@ export interface Avaliacao {
     grupos?: Array<Grupo>;
     maxIntegrantes?: number;
     limitarNumIntegrantes?: boolean;
+    avaliacoesParaCorrigir?: Array<Avaliacao>;
+    isArquivada?: boolean;
 }

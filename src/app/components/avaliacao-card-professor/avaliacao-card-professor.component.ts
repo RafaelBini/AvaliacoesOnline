@@ -34,4 +34,13 @@ export class AvaliacaoCardProfessorComponent implements OnInit {
     });
   }
 
+  arquivar(avaliacao) {
+    avaliacao.isArquivada = true;
+  }
+
+  desarquivar(avaliacao) {
+    avaliacao.isArquivada = false;
+  }
+
+
 }

@@ -42,8 +42,7 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
         tipo: 1,
         nivelDificuldade: 1,
         extensoes: [".pdf"],
-        respostaAluno: "A cor da grama é laranja.",
-        resposta: "A cor da grama é verde",
+        resposta: "A cor da grama é laranja.",
         correcaoProfessor: {
           nota: null,
           observacao: null,
@@ -92,7 +91,7 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
         pergunta: "Associe as cores",
         tipo: 0,
         nivelDificuldade: 1,
-        respostaAluno: "A cor da grama é laranja.",
+        resposta: "A cor da grama é laranja.",
         correcaoProfessor: {
           nota: null,
           observacao: null,
@@ -114,10 +113,10 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
         associacoes: [
           {
             texto: "Cor do sol",
-            opcaoCorreta: "Amarelo", opcaoSelecionada: "Azul"
+            opcaoSelecionada: "Amarelo",
           },
-          { texto: "Cor da grama", opcaoCorreta: "Verde", opcaoSelecionada: "Verde" },
-          { texto: "Cor do céu", opcaoCorreta: "Azul", opcaoSelecionada: "Amarelo" }
+          { texto: "Cor da grama", opcaoSelecionada: "Verde", },
+          { texto: "Cor do céu", opcaoSelecionada: "Azul", }
         ]
       },
 
@@ -128,10 +127,10 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
         tipo: 3,
         nivelDificuldade: 1,
         alternativas: [
-          { texto: "1", correta: false, selecionada: false },
-          { texto: "2", correta: false, selecionada: false },
-          { texto: "3", correta: false, selecionada: false },
-          { texto: "4", correta: true, selecionada: true },
+          { texto: "1", selecionada: false, },
+          { texto: "2", selecionada: false, },
+          { texto: "3", selecionada: false, },
+          { texto: "4", selecionada: true, },
         ],
         correcaoProfessor: {
           nota: null,

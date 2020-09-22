@@ -16,10 +16,12 @@ export interface Questao {
     nivelDificuldade: number;
     tags?: Array<string>;
     extensoes?: Array<string>;
+    arquivosEntregues?: Array<string>;
     textoParaPreencher?: string;
     opcoesParaPreencher?: Array<OpcaoPreencher>;
     partesPreencher?: Array<any>;
     correcoes?: Array<Correcao>;
     correcaoProfessor?: Correcao;
     tentativas?: number;
+
 }

@@ -33,6 +33,7 @@
                 </table>
             </div>
 
+            <!-- AVALIAÇÕES AGRUPADAS -->
             <mat-tab-group mat-align-tabs="center" *ngIf="agruparAvaliacoes" [selectedIndex]="selectedStatusTab"
                 class="sem-bottom-border">
 
@@ -52,8 +53,9 @@
                 </mat-tab>
             </mat-tab-group>
 
+            <!-- AVALIAÇÕES DESAGRUPADAS -->
             <table *ngIf="agruparAvaliacoes == false" style="width: 100%; margin-top: 20px;">
-                <tr *ngFor="let avaliacao of avaliacoesFiltradas">
+                <tr *ngFor="let avaliacao of getTodasAvaliacoes()">
                     <td>
                         <app-avaliacao-card-professor [avaliacao]="avaliacao"></app-avaliacao-card-professor>
                     </td>
@@ -70,6 +72,9 @@
         <mat-menu #menu="matMenu" yPosition="above" xPosition="before">
             <button mat-menu-item (click)="agruparAvaliacoes = !agruparAvaliacoes">
                 {{agruparAvaliacoes ? 'Desagrupar' : 'Agrupar'}}
+            </button>
+            <button mat-menu-item (click)="mostrarArquivadas = !mostrarArquivadas">
+                {{mostrarArquivadas ? 'Esconder Arquivadas' : 'Mostrar Arquivadas'}}
             </button>
         </mat-menu>
 
