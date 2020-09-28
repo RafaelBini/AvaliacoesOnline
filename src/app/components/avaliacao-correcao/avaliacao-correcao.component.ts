@@ -1,8 +1,10 @@
+import { ComumService } from 'src/app/services/comum.service';
 import { Questao } from './../../models/questao';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UrlNode } from 'src/app/models/url-node';
+import { Prova } from 'src/app/models/prova';
 
 @Component({
   selector: 'app-avaliacao-correcao',
@@ -11,7 +13,7 @@ import { UrlNode } from 'src/app/models/url-node';
 })
 export class AvaliacaoCorrecaoComponent implements OnInit {
 
-  constructor(public route: ActivatedRoute) { }
+  constructor(public route: ActivatedRoute, public comumService: ComumService) { }
 
   public visaoTipo = "correcao";
   public userTipo = "aluno"
@@ -35,6 +37,10 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
     correcaoParesQtdNumero: 1,
     tipoPontuacao: 1,
     isTerminoIndeterminado: true,
+
+  }
+
+  public prova: Prova = {
     questoes: [
       {
         valor: 4,
@@ -175,10 +181,96 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
 
       },
 
-    ]
-
+    ],
   }
 
+  public gabarito: Prova = {
+    questoes: [
+      {
+        valor: 4,
+        pergunta: "Qual é a cor da grama?",
+        tipo: 1,
+        nivelDificuldade: 1,
+        extensoes: [".pdf"],
+        resposta: "A cor da grama é verde.",
+        correcaoProfessor: {
+          nota: null,
+          observacao: null,
+        },
+
+      },
+      {
+        valor: 3,
+        pergunta: "Associe as cores",
+        tipo: 0,
+        nivelDificuldade: 1,
+        associacoes: [
+          {
+            texto: "Cor do sol",
+            opcaoSelecionada: "Amarelo",
+          },
+          { texto: "Cor da grama", opcaoSelecionada: "Verde", },
+          { texto: "Cor do céu", opcaoSelecionada: "Azul", }
+        ]
+      },
+
+      {
+        valor: 5,
+        pergunta: "Quanto é 2 + 2?",
+        tags: ["matemática", "soma", "cálculo", "números"],
+        tipo: 3,
+        nivelDificuldade: 1,
+        alternativas: [
+          { texto: "1", selecionada: false, },
+          { texto: "2", selecionada: false, },
+          { texto: "3", selecionada: false, },
+          { texto: "4", selecionada: true, },
+        ],
+        correcaoProfessor: {
+          nota: null,
+          observacao: null,
+        },
+        correcoes: [
+          {
+            instancia: {
+              id: '04',
+              alunos: [
+                { nome: "Camila Bini" },
+              ]
+            },
+            nota: 5,
+            observacao: "Está certinho!"
+          }
+        ],
+      },
+      {
+        valor: 5,
+        pergunta: "Complete a frase abaixo:",
+        tags: ["astronomia", "cores", "química"],
+        tipo: 5,
+        nivelDificuldade: 4,
+        opcoesParaPreencher: [
+          { texto: "grama", opcaoSelecionada: "verde", ativa: true },
+          { texto: "verde", opcaoSelecionada: "grama", ativa: true }
+        ],
+        textoParaPreencher: "A (1) geralemnte é da cor (2).",
+        partesPreencher: [
+          { conteudo: "A ", tipo: "texto" },
+          { conteudo: 0, tipo: "select" },
+          { conteudo: " geralmente é da cor ", tipo: "texto" },
+          { conteudo: 1, tipo: "select" },
+          { conteudo: ".", tipo: "texto" },
+        ],
+        correcaoProfessor: {
+          nota: null,
+          observacao: null,
+        },
+        correcoes: [],
+
+      },
+
+    ],
+  }
 
 
   ngOnInit(): void {
@@ -218,15 +310,29 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
     if (this.avaliacao.tipoCorrecao != 2)
       return;
 
-    for (var questao of this.avaliacao.questoes) {
+    for (var questao of this.prova.questoes) {
       if (questao.correcaoProfessor.nota != null)
         continue;
 
       var soma = 0;
-      for (let correcao of questao.correcoes) {
-        soma += correcao.nota;
+      const questaoTipo = this.comumService.questaoTipos[questao.tipo];
+
+      // VERIFICA CORREÇÕES DOS ALUNOS
+      if (questao.correcoes.length > 0) {
+        for (let correcao of questao.correcoes) {
+          soma += correcao.nota;
+        }
+        questao.correcaoProfessor.nota = Math.round((soma / questao.correcoes.length));
       }
-      questao.correcaoProfessor.nota = Math.round((soma / questao.correcoes.length));
+
+      // VERIFICA CORREÇÃO AUTOMÁTICA      
+      else if (soma <= 0 && questaoTipo.temCorrecaoAutomatica) {
+        soma = questaoTipo.getNota(questao, this.gabarito.questoes[this.prova.questoes.indexOf(questao)]);
+        questao.correcaoProfessor.nota = Math.round(soma);
+      }
+
+
+
     }
   }
 

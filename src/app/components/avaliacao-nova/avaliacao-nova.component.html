@@ -167,7 +167,7 @@
 
     </div>
 
-    <app-questoes-editar [avaliacao]="avaliacao">
+    <app-questoes-editar [avaliacao]="avaliacao" [prova]="provaGabarito">
 
     </app-questoes-editar>
 
@@ -240,7 +240,7 @@
 
     <div style="width: 100%;">
 
-        <app-questoes-responder [gabarito]="avaliacao" [avaliacao]="avaliacaoAluno">
+        <app-questoes-responder [gabarito]="provaGabarito" [prova]="provaExemplo" [avaliacao]="avaliacao">
 
         </app-questoes-responder>
 

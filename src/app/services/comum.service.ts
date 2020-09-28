@@ -20,6 +20,7 @@ export class ComumService {
       nome: "Em Preparação",
       descricao: "A avaliação ainda não iniciou. Nesta fase os grupos podem estar sendo definidos.",
       acaoProfessor: "Configurar grupos / Iniciar Avaliação",
+      acaoAluno: "Aguardar inicio da Avaliação",
       cor: "var(--em-preparacao)",
       prioridade: 1,
       mensagemCountdown: "INCIANDO EM",
@@ -28,6 +29,7 @@ export class ComumService {
       id: 1,
       nome: "Durante Avaliação",
       acaoProfessor: "Acompanhar os alunos",
+      acaoAluno: "Responder Questões",
       cor: "var(--em-avaliacao)",
       prioridade: 2,
       mensagemCountdown: "ENCERRANDO EM",
@@ -36,6 +38,7 @@ export class ComumService {
       id: 2,
       nome: "Em Correção",
       acaoProfessor: "Corrigir / Revisar Avaliações",
+      acaoAluno: "Aguardar/Realizar Correções",
       cor: "var(--em-correcao)",
       prioridade: 3,
       mensagemCountdown: "FINALIZANDO EM",
@@ -44,6 +47,7 @@ export class ComumService {
       id: 3,
       nome: "Encerrada",
       acaoProfessor: "Consultar / Alterar notas dos alunos",
+      acaoAluno: "Consultar Avaliação",
       cor: "var(--encerrada)",
       prioridade: 0,
     }
@@ -150,7 +154,7 @@ export class ComumService {
             nota -= (questao.valor / questao.associacoes.length);
           }
         }
-        return nota - (questao.tentativas * (questao.valor / 3));
+        return nota - ComumService.getDescontoTentativas(questao);
       },
     },
     {
@@ -175,7 +179,7 @@ export class ComumService {
             return 0;
           }
         }
-        return questao.valor - (questao.tentativas * (questao.valor / 3));
+        return questao.valor - ComumService.getDescontoTentativas(questao);
       },
     },
     {
@@ -190,7 +194,7 @@ export class ComumService {
             return 0;
           }
         }
-        return questao.valor - (questao.tentativas * (questao.valor / 3));
+        return questao.valor - ComumService.getDescontoTentativas(questao);
       },
     },
     {
@@ -204,7 +208,7 @@ export class ComumService {
             nota -= (questao.valor / questao.opcoesParaPreencher.length);
           }
         }
-        return nota - (questao.tentativas * (questao.valor / 3));
+        return nota - ComumService.getDescontoTentativas(questao);
       },
     },
     {
@@ -218,7 +222,7 @@ export class ComumService {
             nota -= (questao.valor / questao.alternativas.length);
           }
         }
-        return nota - (questao.tentativas * (questao.valor / 3));
+        return nota - ComumService.getDescontoTentativas(questao);
       },
     },
     {
@@ -268,6 +272,11 @@ export class ComumService {
     },
   ]
 
+  public static getDescontoTentativas(questao: Questao): number {
+    if (questao.tentativas == null)
+      questao.tentativas = 0;
+    return (questao.tentativas * (questao.valor / 3))
+  }
 
   normalizar(valor: string): string {
     if (valor != null)
@@ -301,8 +310,8 @@ export class ComumService {
     return this.pontuacoes[avaliacao.tipoPontuacao].correcaoAutomatica || this.correcoes[avaliacao.tipoCorrecao].correcaoAutomatica;
   }
 
-  podeSerDeCorrecaoAutomatica(avaliacao): boolean {
-    for (let questao of avaliacao.questoes) {
+  podeSerDeCorrecaoAutomatica(prova): boolean {
+    for (let questao of prova.questoes) {
       if (!this.questaoTipos[questao.tipo].temCorrecaoAutomatica) {
         return false;
       }

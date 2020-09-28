@@ -1,7 +1,7 @@
 export interface Usuario {
-    nome: string,
-    email: string,
-    senha: string,
+    nome?: string,
+    email?: string,
+    senha?: string,
     tipo?: string;
     tags?: Array<string>;
     online?: boolean;

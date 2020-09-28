@@ -1,7 +1,8 @@
 import { Usuario } from './usuario';
 
 export interface Grupo {
-    instanciaId?: number;
+    instanciaId?: string;
     instanciaStatusId?: string;
     alunos?: Array<Usuario>;
+    numero?: number;
 }

@@ -6,14 +6,14 @@ import { Correcao } from './correcao';
 
 export interface Questao {
     id?: string,
-    pergunta: string;
+    pergunta?: string;
     perguntaPlaceholder?: string;
-    tipo: number;
+    tipo?: number;
     resposta?: string;
     alternativas?: Array<Alternativa>;
     associacoes?: Array<Associacao>;
     valor?: number;
-    nivelDificuldade: number;
+    nivelDificuldade?: number;
     tags?: Array<string>;
     extensoes?: Array<string>;
     arquivosEntregues?: Array<string>;

@@ -3,6 +3,7 @@ import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
+import { Prova } from 'src/app/models/prova';
 
 
 @Component({
@@ -12,6 +13,8 @@ import { Avaliacao } from 'src/app/models/avaliacao';
 })
 export class QuestoesCorrigirComponent implements OnInit {
   @Input() avaliacao: Avaliacao;
+  @Input() prova: Prova;
+  @Input() gabarito: Prova;
   @Input() userTipo: string;
   @Input() visaoTipo: string;
 
@@ -34,7 +37,7 @@ export class QuestoesCorrigirComponent implements OnInit {
   }
   getPontuacaoMaxima() {
     var pontuacaoMaxima = 0;
-    this.avaliacao.questoes.forEach(questao => {
+    this.prova.questoes.forEach(questao => {
       pontuacaoMaxima += questao.valor;
     });
     return pontuacaoMaxima;

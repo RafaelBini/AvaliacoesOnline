@@ -1,13 +1,13 @@
 <div>
     <div style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
-        <div class="questao" *ngFor="let questao of avaliacao.questoes; index as qi">
+        <div class="questao" *ngFor="let questao of prova.questoes; index as qi">
 
             <table style="width: 100%;">
 
                 <!-- PERGUNTA -->
                 <tr>
                     <td style="padding-bottom: 20px; font-size: 15px; white-space: pre-line;">
-                        <b>Questão {{qi + 1}}</b>/{{avaliacao.questoes.length}}. {{questao.pergunta}}
+                        <b>Questão {{qi + 1}}</b>/{{prova.questoes.length}}. {{questao.pergunta}}
                     </td>
                 </tr>
 
@@ -205,7 +205,7 @@
                                     </button>
                                     <div *ngIf="questao.tipo == 1 && userTipo == 'professor'"
                                         class="dica-resposta-dissertativa">
-                                        {{questao.resposta}}
+                                        {{gabarito.questoes[qi].resposta}}
                                     </div>
                                     Observação (opcional):
                                 </td>

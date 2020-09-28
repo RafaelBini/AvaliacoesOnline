@@ -1,9 +1,10 @@
-import { Avaliacao } from './../../models/avaliacao';
+
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Prova } from 'src/app/models/prova';
 
 @Component({
   selector: 'app-buscar-questao',
@@ -13,7 +14,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class BuscarQuestaoComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<BuscarQuestaoComponent>,
-    @Inject(MAT_DIALOG_DATA) public avaliacao: Avaliacao, private snack: MatSnackBar, public comumService: ComumService) { }
+    @Inject(MAT_DIALOG_DATA) public prova: Prova, private snack: MatSnackBar, public comumService: ComumService) { }
 
   public questoes: Questao[] = [
     {
@@ -79,7 +80,7 @@ export class BuscarQuestaoComponent implements OnInit {
 
   add(index) {
     var questaoParaAdicionar = this.questoesFiltradas.splice(index, 1);
-    this.avaliacao.questoes.push(questaoParaAdicionar[0]);
+    this.prova.questoes.push(questaoParaAdicionar[0]);
     this.snack.open("Questão adicionada", null, {
       duration: 3000
     });

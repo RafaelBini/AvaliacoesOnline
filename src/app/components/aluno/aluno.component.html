@@ -6,37 +6,8 @@
             <mat-icon style="margin-right: 8px;">description</mat-icon>
             Avaliações e Notas
         </ng-template>
-        <table style="width: 100%; margin: auto; margin-top: 20px;">
-            <tr>
-                <td align="center">
-                    <h2>Minhas Avaliações</h2>
-                </td>
-            </tr>
-            <tr *ngFor="let avaliacao of avaliacoes">
-                <td>
-                    <div class="avalicao-card" [style.borderColor]="avaliacao.color">
-                        <h3><b>{{avaliacao.nomeAvaliacao}}</b></h3>
-                        Nota: {{avaliacao.nota}}
-                        <br />
-                        <br />
-                        <span class="linkCompartilhavel" matTooltip="Entrar na Avaliação"
-                            [style.backgroundColor]="avaliacao.color"><a href="/001001">avaliacao.com/001001</a></span>
 
-                        <br /><br />
-                        Inicio: 31/07/2020 18:00
-                        <br />
-                        Término: 31/07/2020 21:00
-
-                        <a routerLink="/aluno/avaliacao/1" class="info-box">
-                            Status: {{avaliacao.status}}
-                        </a>
-
-                    </div>
-                </td>
-            </tr>
-        </table>
-
-
+        <app-avaliacao-lista [avaliacoes]="avaliacoes" tipoAcesso="aluno"></app-avaliacao-lista>
 
 
     </mat-tab>

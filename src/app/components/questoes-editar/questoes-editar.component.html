@@ -1,8 +1,8 @@
 <div>
-    <div cdkDropList [cdkDropListData]="avaliacao.questoes" (cdkDropListDropped)="drop($event)"
+    <div cdkDropList [cdkDropListData]="prova.questoes" (cdkDropListDropped)="drop($event)"
         style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
 
-        <div cdkDrag class="questao" *ngFor="let questao of avaliacao.questoes; index as qi">
+        <div cdkDrag class="questao" *ngFor="let questao of prova.questoes; index as qi">
             <table style="width: 100%;">
 
                 <!-- Drag Handle -->
@@ -408,7 +408,7 @@
                         <button matTooltip="Alterar tags" mat-icon-button (click)="openInfoQuestao(questao)">
                             <mat-icon>local_offer</mat-icon>
                         </button>
-                        <button mat-icon-button (click)="avaliacao.questoes.splice(qi, 1)" matTooltip="Remover Questão">
+                        <button mat-icon-button (click)="prova.questoes.splice(qi, 1)" matTooltip="Remover Questão">
                             <mat-icon style="color: rgb(143, 12, 12);">delete</mat-icon>
                         </button>
                     </td>

@@ -3,6 +3,7 @@ import { ComumService } from './../../services/comum.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlNode } from 'src/app/models/url-node';
+import { Avaliacao } from 'src/app/models/avaliacao';
 
 @Component({
   selector: 'app-aluno',
@@ -11,18 +12,67 @@ import { UrlNode } from 'src/app/models/url-node';
 })
 export class AlunoComponent implements OnInit {
   public alterar = false;
+  public mostrarArquivadas = false;
   public selectedTab = 0;
+  public avaliacoesFiltradas: Array<Avaliacao>;
+  public avaliacoes: Array<Avaliacao> = [
+    {
+      id: "0000001",
+      titulo: "DS250 - Interação Humano Computador",
+      descricao: "Uma avaliação para Teste",
+      status: 0,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+      tags: [
+        'Avaliação 01',
+        'Tarde'
+      ],
 
-  public avaliacoes = [
-    { nomeAvaliacao: 'Avaliação 01', nomeProfessor: 'Paulo', nota: '-', status: 'Em Correção', color: 'var(--em-correcao)' },
-    { nomeAvaliacao: 'Avaliação 02', nomeProfessor: 'Dieval', nota: '55', status: 'Encerrada', color: 'var(--encerrada)' },
-    { nomeAvaliacao: 'Avaliação 03', nomeProfessor: 'Carlos Felipe', nota: '-', status: 'Em Preparação', color: 'var(--em-preparacao)' },
-    { nomeAvaliacao: 'Avaliação 04', nomeProfessor: 'Matheus Leonardo', nota: '-', status: 'Em Preparação', color: 'var(--em-preparacao)' },
-    { nomeAvaliacao: 'Avaliação 05', nomeProfessor: 'Sandramara', nota: '-', status: 'Durante Avaliação', color: 'var(--em-avaliacao)' },
-    { nomeAvaliacao: 'Avaliação 06', nomeProfessor: 'Marcos Kerchner', nota: '-', status: 'Em Correção', color: 'var(--em-correcao)' },
-    { nomeAvaliacao: 'Matéria Teste 07', nomeProfessor: 'Rafael Bini', nota: '80', status: 'Encerrada', color: 'var(--encerrada)' },
-    { nomeAvaliacao: 'Matéria Teste 08', nomeProfessor: 'João Sorrisão', nota: '94', status: 'Encerrada', color: 'var(--encerrada)' },
-
+    },
+    {
+      id: "0000002",
+      titulo: "DS250 - Interação Humano Computador",
+      descricao: "Uma avaliação para Teste",
+      status: 1,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+      tags: [
+        'Avaliação 02',
+        'Tarde'
+      ]
+    },
+    {
+      id: "0000003",
+      titulo: "DS250 - Interação Humano Computador",
+      descricao: "Uma avaliação para Teste",
+      status: 2,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+      tags: [
+        'Avaliação 01',
+        'Noite'
+      ]
+    },
+    {
+      id: "0000004",
+      titulo: "DS250 - Interação Humano Computador",
+      descricao: "Uma avaliação para Teste",
+      status: 3,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+      tags: [
+        'Avaliação 02',
+        'Noite'
+      ]
+    },
+    {
+      id: "0000005",
+      titulo: "DS130 - Web II",
+      descricao: "Uma avaliação para Teste",
+      status: 3,
+      dtInicio: '31/07/2020 18:00',
+      dtTermino: '01/08/2020 18:00',
+    },
   ];
 
   public tabs = [
@@ -46,12 +96,17 @@ export class AlunoComponent implements OnInit {
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
     });
+    this.avaliacoesFiltradas = this.avaliacoes;
   }
 
   tabAlterada(index) {
 
     this.router.navigate([`/aluno/${this.tabs[index].id}`]);
     this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
+  }
+
+  getTodasAvaliacoes() {
+    return this.avaliacoesFiltradas.concat().filter(avaliacao => (!avaliacao.isArquivada || this.mostrarArquivadas));
   }
 
 }

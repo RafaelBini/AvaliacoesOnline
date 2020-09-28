@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UrlNode } from 'src/app/models/url-node';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
+import { Prova } from 'src/app/models/prova';
 
 
 @Component({
@@ -42,6 +43,11 @@ export class AvaliacaoNovaComponent implements OnInit {
     correcaoParesQtdNumero: 1,
     tipoPontuacao: 0,
     tags: [],
+
+  };
+
+  public provaGabarito: Prova = {
+    isGabarito: true,
     questoes: [
       {
         pergunta: "",
@@ -57,10 +63,9 @@ export class AvaliacaoNovaComponent implements OnInit {
         tentativas: 0
       },
     ],
+  }
 
-  };
-
-  public avaliacaoAluno: Avaliacao;
+  public provaExemplo: Prova;
 
   public visao = "professor";
 
@@ -117,7 +122,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     event.target.style.height = ""; event.target.style.height = (event.target.scrollHeight - (paddingTop + paddingBottom)) + "px";
   }
   addQuestao() {
-    this.avaliacao.questoes.push({
+    this.provaGabarito.questoes.push({
       pergunta: "",
       tipo: 4,
       resposta: "",
@@ -151,6 +156,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     this.dialog.open(EscolherTipoComponent, {
       data: {
         avaliacao: this.avaliacao,
+        prova: this.provaGabarito,
         tipoEscolhido: tipoEscolhido
       },
       width: '75%'
@@ -158,7 +164,7 @@ export class AvaliacaoNovaComponent implements OnInit {
   }
 
   mudarVisao(tipoVisao) {
-    this.avaliacaoAluno = this.avaliacaoService.getAvaliacaoFromGabarito(this.avaliacao);
+    this.provaExemplo = this.avaliacaoService.getAvaliacaoFromGabarito(this.provaGabarito);
     this.visao = tipoVisao;
   }
 

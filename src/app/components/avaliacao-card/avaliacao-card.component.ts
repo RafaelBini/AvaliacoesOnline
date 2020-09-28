@@ -1,17 +1,18 @@
+import { Avaliacao } from 'src/app/models/avaliacao';
 import { MatDialog } from '@angular/material/dialog';
-import { ComumService } from './../../services/comum.service';
+import { ComumService } from '../../services/comum.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { ConfirmarComponent } from 'src/app/dialogs/confirmar/confirmar.component';
 
 @Component({
-  selector: 'app-avaliacao-card-professor',
-  templateUrl: './avaliacao-card-professor.component.html',
-  styleUrls: ['./avaliacao-card-professor.component.css']
+  selector: 'app-avaliacao-card',
+  templateUrl: './avaliacao-card.component.html',
+  styleUrls: ['./avaliacao-card.component.css']
 })
-export class AvaliacaoCardProfessorComponent implements OnInit {
+export class AvaliacaoCardComponent implements OnInit {
 
-  @Input()
-  public avaliacao;
+  @Input() public avaliacao: Avaliacao;
+  @Input() public tipoAcesso;
   public status;
 
   constructor(public comumService: ComumService, public dialog: MatDialog) { }

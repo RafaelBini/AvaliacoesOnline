@@ -19,8 +19,8 @@ export class EscolherTipoComponent implements OnInit {
 
   ngOnInit(): void {
     this.codigoPontuacaoSelecionado = this.data.avaliacao.tipoPontuacao;
-    this.codigoDisposicaoSelecionado = this.data.avaliacao.tipoPontuacao;
-    this.codigoCorrecaoSelecionado = this.data.avaliacao.tipoPontuacao;
+    this.codigoDisposicaoSelecionado = this.data.avaliacao.tipoDisposicao;
+    this.codigoCorrecaoSelecionado = this.data.avaliacao.tipoCorrecao;
   }
 
 
@@ -57,7 +57,7 @@ export class EscolherTipoComponent implements OnInit {
     const CODIGO_QUESTAO_V_F_SEM_JUSTIFICATIVA = 6;
     const CODIGO_QUESTAO_MULTIPLAESCOLHA = 4;
 
-    this.data.avaliacao.questoes.forEach(questao => {
+    this.data.prova.questoes.forEach(questao => {
       if (questao.tipo == CODIGO_QUESTAO_DISSERTATIVA || questao.tipo == CODIGO_QUESTAO_ENTREGA)
         questao.tipo = CODIGO_QUESTAO_MULTIPLAESCOLHA;
       else if (questao.tipo == CODIGO_QUESTAO_V_F_COM_JUSTIFICATIVA)
@@ -67,7 +67,7 @@ export class EscolherTipoComponent implements OnInit {
 
   escolher() {
     if (this.data.tipoEscolhido == 'pontuacao') {
-      if (this.comumService.pontuacoes[this.codigoPontuacaoSelecionado].correcaoAutomatica && !this.comumService.podeSerDeCorrecaoAutomatica(this.data.avaliacao)) {
+      if (this.comumService.pontuacoes[this.codigoPontuacaoSelecionado].correcaoAutomatica && !this.comumService.podeSerDeCorrecaoAutomatica(this.data.prova)) {
 
         const ref = this.dialog.open(ConfirmarComponent, {
           data: {
@@ -94,7 +94,7 @@ export class EscolherTipoComponent implements OnInit {
       this.data.avaliacao.tipoDisposicao = this.codigoDisposicaoSelecionado;
     }
     else if (this.data.tipoEscolhido == 'correcao') {
-      if (this.comumService.correcoes[this.codigoCorrecaoSelecionado].correcaoAutomatica && !this.comumService.podeSerDeCorrecaoAutomatica(this.data.avaliacao)) {
+      if (this.comumService.correcoes[this.codigoCorrecaoSelecionado].correcaoAutomatica && !this.comumService.podeSerDeCorrecaoAutomatica(this.data.prova)) {
 
         const ref = this.dialog.open(ConfirmarComponent, {
           data: {

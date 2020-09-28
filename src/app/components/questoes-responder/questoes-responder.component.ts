@@ -1,3 +1,4 @@
+import { Prova } from 'src/app/models/prova';
 import { Associacao } from './../../models/associacao';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -15,7 +16,8 @@ import { Avaliacao } from 'src/app/models/avaliacao';
 })
 export class QuestoesResponderComponent implements OnInit {
   @Input() avaliacao: Avaliacao;
-  @Input() gabarito: Avaliacao;
+  @Input() gabarito: Prova;
+  @Input() prova: Prova;
 
 
   constructor(public comumService: ComumService, private dialog: MatDialog, private snack: MatSnackBar) { }
@@ -36,7 +38,7 @@ export class QuestoesResponderComponent implements OnInit {
   }
   getPontuacaoMaxima() {
     var pontuacaoMaxima = 0;
-    this.avaliacao.questoes.forEach(questao => {
+    this.prova.questoes.forEach(questao => {
       pontuacaoMaxima += questao.valor;
     });
     return pontuacaoMaxima;

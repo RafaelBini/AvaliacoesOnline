@@ -1,0 +1,17 @@
+.input-clean{
+    border: 1px dashed transparent;
+    padding: 7px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+.input-clean:focus{
+    outline: none;
+    border: 1px dashed var(--cor-primaria);
+}
+
+.bi, .bi-eye {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+}

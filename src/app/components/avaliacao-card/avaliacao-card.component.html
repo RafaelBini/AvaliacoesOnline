@@ -19,11 +19,11 @@
     <br />
     Término: 31/07/2020 21:00
 
-    <a routerLink="/professor/avaliacao/1" matTooltip="Detalhes da Avalição" class="info-box"
+    <a [routerLink]="'/'+tipoAcesso+'/avaliacao/1'" matTooltip="Entrar na Avaliação" class="info-box"
         [style.backgroundColor]="status.cor">
         Status: {{status.nome}}
         <hr />
-        {{status.acaoProfessor}}
+        {{tipoAcesso=="professor" ? status.acaoProfessor : status.acaoAluno}}
     </a>
 
     <span *ngIf="avaliacao.isArquivada" (click)="desarquivar(avaliacao)" matTooltip="Clique para desarquivar"
@@ -34,10 +34,10 @@
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #aboveMenu="matMenu">
-        <button mat-menu-item>
+        <button *ngIf="tipoAcesso=='professor'" mat-menu-item>
             <mat-icon>content_copy</mat-icon>Duplicar
         </button>
-        <a [routerLink]="'/professor/avaliacao/editar/' + avaliacao.id" mat-menu-item>
+        <a *ngIf="tipoAcesso=='professor'" [routerLink]="'/professor/avaliacao/editar/' + avaliacao.id" mat-menu-item>
             <mat-icon>create</mat-icon>Editar
         </a>
         <button *ngIf="avaliacao.isArquivada != true" mat-menu-item (click)="arquivar(avaliacao)">
@@ -46,7 +46,7 @@
         <button *ngIf="avaliacao.isArquivada == true" mat-menu-item (click)="desarquivar(avaliacao)">
             <mat-icon>add</mat-icon>Desarquivar
         </button>
-        <button mat-menu-item (click)="deletar(avaliacao)">
+        <button *ngIf="tipoAcesso=='professor'" mat-menu-item (click)="deletar(avaliacao)">
             <mat-icon>cancel</mat-icon>Excluir
         </button>
     </mat-menu>

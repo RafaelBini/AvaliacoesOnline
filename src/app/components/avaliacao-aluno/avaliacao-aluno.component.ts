@@ -1,3 +1,4 @@
+import { Prova } from 'src/app/models/prova';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { ComumService } from './../../services/comum.service';
@@ -17,16 +18,46 @@ export class AvaliacaoAlunoComponent implements OnInit {
   constructor(public route: ActivatedRoute, public credencialService: CredencialService, public comumService: ComumService, private snack: MatSnackBar) { }
   public finalizado = false;
 
-  public avaliacao = {
+  public avaliacao: Avaliacao = {
     titulo: "Titulo da Avaliação",
     descricao: `Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
     Descrição da Avaliação`,
     status: 0,
     limitarNumIntegrantes: true,
     maxIntegrantes: 3,
+    correcaoParesQtdNumero: 3,
+    correcaoParesQtdTipo: 'DEFINIR',
     tipoDisposicao: 2,
-    tipoCorrecao: 0,
+    tipoCorrecao: 2,
     tipoPontuacao: 0,
+    alunos: [
+      { nome: "Camila Bini", email: 'Junqueira@gmail.com', online: true, },
+      { nome: "Matheus Leonardo", email: 'Junqueira3@gmail.com', online: true, },
+      { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, },
+      { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, },
+    ],
+    grupos: [
+      {
+        numero: 1,
+        instanciaId: '1',
+        alunos: [
+          { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, },
+          { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, },
+          { nome: "Junqueira Bini", email: 'Junqueirasx@gmail.com', online: true, },
+        ]
+      },
+      {
+        numero: 2,
+        instanciaId: '2',
+        alunos: [
+          { nome: "Camila Bini", email: 'Junqueira@gmail.com', online: true, },
+          { nome: "Matheus Leonardo", email: 'Junqueira3@gmail.com', online: true, },
+        ]
+      },
+    ],
+  }
+
+  public gabarito: Prova = {
     questoes: [
       {
         pergunta: "Qual é a cor da grama?",
@@ -78,56 +109,13 @@ export class AvaliacaoAlunoComponent implements OnInit {
         tentativas: 0,
       },
     ],
-    alunos: [
-      { nome: "Camila Bini", email: 'Junqueira@gmail.com', online: true, instanciaStatusId: null },
-      { nome: "Matheus Leonardo", email: 'Junqueira3@gmail.com', online: true, instanciaStatusId: null },
-      { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, instanciaStatusId: null },
-      { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, instanciaStatusId: null },
-    ],
-    grupos: [
-      {
-        numero: 1,
-        instanciaStatusId: 0,
-        instanciaId: '1',
-        alunos: [
-          { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, instanciaStatusId: null },
-          { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, instanciaStatusId: null },
-          { nome: "Junqueira Bini", email: 'Junqueirasx@gmail.com', online: true, instanciaStatusId: null },
-        ]
-      },
-      {
-        numero: 2,
-        instanciaStatusId: 0,
-        instanciaId: '2',
-        alunos: [
-          { nome: "Camila Bini", email: 'Junqueira@gmail.com', online: true, instanciaStatusId: null },
-          { nome: "Matheus Leonardo", email: 'Junqueira3@gmail.com', online: true, instanciaStatusId: null },
-        ]
-      },
-    ],
   }
 
-  public instancia = {
+  public prova: Prova = {
     id: '1',
     avaliacaoId: "1",
-    titulo: "Titulo da Avaliação",
-    descricao: `Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
-    Descrição da Avaliação`,
     status: 0,
-    correcaoParesQtdTipo: '1',
-    correcaoParesQtdNumero: 1,
-    tipoDisposicao: 3,
-    tipoCorrecao: 2,
-    tipoPontuacao: 0,
     questoes: [
-      /*{
-        pergunta: "Qual é a cor da grama?",
-        tipo: 1,
-        resposta: "Verde",
-        alternativas: [],
-        valor: 70,
-        tentativas: 0,
-      },*/
       {
         pergunta: "Qual é a cor da grama?",
         tipo: 4,
@@ -182,11 +170,11 @@ export class AvaliacaoAlunoComponent implements OnInit {
 
     ],
     alunos: [
-      { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, statusId: 1, instanciaStatusId: null },
-      { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, statusId: 1, instanciaStatusId: null },
-      { nome: "Rafael Bini", email: 'rfabini1996@gmail.com', online: true, statusId: 1, instanciaStatusId: null },
+      { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, statusId: 1, },
+      { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, statusId: 1, },
+      { nome: "Rafael Bini", email: 'rfabini1996@gmail.com', online: true, statusId: 1, },
     ],
-    instanciasParaCorrigir: [
+    provasParaCorrigir: [
 
     ]
   }
@@ -203,13 +191,13 @@ export class AvaliacaoAlunoComponent implements OnInit {
     if (this.avaliacao.tipoDisposicao == 3) {
       this.entrarEmGrupoAleatorio();
     }
-    this.receberInstanciasCorrigir();
+    this.receberProvasCorrigir();
 
   }
 
   // EM PREPARAÇÃO
   addGrupo() {
-    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaId: `${(this.avaliacao.grupos.length + 1)}`, instanciaStatusId: 0, alunos: [] });
+    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaId: `${(this.avaliacao.grupos.length + 1)}`, alunos: [] });
     setTimeout(() => {
       window.scroll({
         top: document.body.scrollHeight,
@@ -270,33 +258,33 @@ export class AvaliacaoAlunoComponent implements OnInit {
   sinalizarFinalizacao() {
     this.finalizado = true;
     const EU = this.credencialService.loggedUser;
-    const MEU_INDEX_INSTANCIA = this.instancia.alunos.indexOf(this.instancia.alunos.filter(a => a.email == EU.email)[0]);
-    this.instancia.alunos[MEU_INDEX_INSTANCIA].statusId = 3;
+    const MEU_INDEX_INSTANCIA = this.prova.alunos.indexOf(this.prova.alunos.filter(a => a.email == EU.email)[0]);
+    this.prova.alunos[MEU_INDEX_INSTANCIA].statusId = 3;
     console.log(this.getMinhaNota());
   }
 
   // EM CORREÇÃO
-  receberInstanciasCorrigir() {
-    if (this.instancia.tipoCorrecao != 2 || this.instancia.instanciasParaCorrigir.length > 0)
+  receberProvasCorrigir() {
+    if (this.avaliacao.tipoCorrecao != 2 || this.prova.provasParaCorrigir.length > 0)
       return;
 
-    if (this.instancia.correcaoParesQtdTipo == 'TODOS') {
+    if (this.avaliacao.correcaoParesQtdTipo == 'TODOS') {
       for (let grupo of this.avaliacao.grupos) {
-        this.instancia.instanciasParaCorrigir.push({
-          id: grupo.instanciaId,
+        this.prova.provasParaCorrigir.push({
+          id: grupo.instanciaId.toString(),
           corrigida: false
         });
       }
     }
     else {
-      while (this.instancia.instanciasParaCorrigir.length < this.instancia.correcaoParesQtdNumero) {
+      while (this.prova.provasParaCorrigir.length < this.avaliacao.correcaoParesQtdNumero) {
         for (let grupo of this.avaliacao.grupos) {
-          if (Math.random() > 0.7 && this.instancia.id != grupo.instanciaId) {
-            this.instancia.instanciasParaCorrigir.push({
+          if (Math.random() > 0.7 && this.prova.id != grupo.instanciaId) {
+            this.prova.provasParaCorrigir.push({
               id: grupo.instanciaId,
               corrigida: false
             });
-            if (this.instancia.instanciasParaCorrigir.length < this.instancia.correcaoParesQtdNumero)
+            if (this.prova.provasParaCorrigir.length < this.avaliacao.correcaoParesQtdNumero)
               return;
           }
         }
@@ -307,10 +295,10 @@ export class AvaliacaoAlunoComponent implements OnInit {
   // ENCERRADA
   getMinhaNota() {
     var nota = 0;
-    for (let [i, questao] of this.instancia.questoes.entries()) {
+    for (let [i, questao] of this.prova.questoes.entries()) {
       const questaoTipo = this.comumService.questaoTipos[questao.tipo];
       if (questaoTipo.temCorrecaoAutomatica)
-        nota += questaoTipo.getNota(questao, this.avaliacao.questoes[i]);
+        nota += questaoTipo.getNota(questao, this.gabarito.questoes[i]);
     }
     return nota;
   }

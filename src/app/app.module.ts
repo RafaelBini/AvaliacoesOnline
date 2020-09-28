@@ -43,13 +43,14 @@ import { QuestoesCorrigirComponent } from './components/questoes-corrigir/questo
 import { QuestoesEditarComponent } from './components/questoes-editar/questoes-editar.component';
 import { QuestoesResponderComponent } from './components/questoes-responder/questoes-responder.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { AvaliacaoCardProfessorComponent } from './components/avaliacao-card-professor/avaliacao-card-professor.component';
+import { AvaliacaoCardComponent } from './components/avaliacao-card/avaliacao-card.component';
 import { MatListModule } from '@angular/material/list';
 import { UsuarioPerfilEditarComponent } from './components/usuario-perfil-editar/usuario-perfil-editar.component';
 import { AlunoCardAvaliacaoProfessorComponent } from './components/avaliacao-professor/aluno-card-avaliacao-professor/aluno-card-avaliacao-professor.component';
 import { ConfirmarComponent } from './dialogs/confirmar/confirmar.component';
 import { AlunoCardAvaliacaoAlunoComponent } from './components/avaliacao-aluno/aluno-card-avaliacao-aluno/aluno-card-avaliacao-aluno.component';
 import { HomeComponent } from './components/home/home.component';
+import { AvaliacaoListaComponent } from './components/avaliacao-lista/avaliacao-lista.component';
 
 @NgModule({
   declarations: [
@@ -73,12 +74,13 @@ import { HomeComponent } from './components/home/home.component';
     QuestoesCorrigirComponent,
     QuestoesEditarComponent,
     QuestoesResponderComponent,
-    AvaliacaoCardProfessorComponent,
+    AvaliacaoCardComponent,
     UsuarioPerfilEditarComponent,
     AlunoCardAvaliacaoProfessorComponent,
     ConfirmarComponent,
     AlunoCardAvaliacaoAlunoComponent,
     HomeComponent,
+    AvaliacaoListaComponent,
   ],
   imports: [
     BrowserModule,

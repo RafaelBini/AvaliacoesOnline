@@ -1,0 +1,74 @@
+<div style="position: relative;">
+
+    <div
+        style="background-color: var(--cor-bloco); color: var(--cor-bloco-letra); padding: 15px; width: 60%; border-radius: 8px; margin: auto; margin-top: 20px;">
+        <table style="width: 90%; margin: auto; display: block;">
+            <tr>
+                <td colspan="2" align="center">
+                    <h2>Minhas Avaliações</h2>
+                </td>
+            </tr>
+            <tr>
+                <td width="95%">
+                    <input type="text" class="input-clean" style="width: 100%;" #inputBusca maxlength="85"
+                        (keyup)="onBuscaKeyUp(inputBusca.value)"
+                        placeholder="Digite aqui uma parte do titulo, descrição ou tag da avaliação que procura" />
+                </td>
+                <td width="5%" style="padding: 5px;">
+                    <button mat-icon-button>
+                        <mat-icon style="color: gray;">search</mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- AVALIAÇÕES AGRUPADAS -->
+    <mat-tab-group mat-align-tabs="center" *ngIf="agruparAvaliacoes" [selectedIndex]="selectedStatusTab"
+        class="sem-bottom-border">
+
+        <mat-tab *ngFor="let status of comumService.statusAvaliacao">
+            <ng-template mat-tab-label>
+                {{status.nome}} ({{getAvaliacoesNoStatus(status.id).length}})
+            </ng-template>
+
+            <table style="width: 100%;  margin-top: 20px;">
+                <tr *ngFor="let avaliacao of getAvaliacoesNoStatus(status.id)">
+                    <td>
+                        <app-avaliacao-card [avaliacao]="avaliacao" [tipoAcesso]="tipoAcesso"></app-avaliacao-card>
+                    </td>
+                </tr>
+            </table>
+
+        </mat-tab>
+    </mat-tab-group>
+
+    <!-- AVALIAÇÕES DESAGRUPADAS -->
+    <table *ngIf="agruparAvaliacoes == false" style="width: 100%; margin-top: 20px;">
+        <tr *ngFor="let avaliacao of getTodasAvaliacoes()">
+            <td>
+                <app-avaliacao-card [avaliacao]="avaliacao" [tipoAcesso]="tipoAcesso"></app-avaliacao-card>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<button mat-fab [matMenuTriggerFor]="menu" matTooltip="Opções de Filtro"
+    style="z-index: 1000; position: fixed; right: 50px; bottom: 120px; background-color: var(--cor-primaria); color: white">
+    <mat-icon>more_vert</mat-icon>
+</button>
+<mat-menu #menu="matMenu" yPosition="above" xPosition="before">
+    <button mat-menu-item (click)="agruparAvaliacoes = !agruparAvaliacoes">
+        {{agruparAvaliacoes ? 'Desagrupar' : 'Agrupar'}}
+    </button>
+    <button mat-menu-item (click)="mostrarArquivadas = !mostrarArquivadas">
+        {{mostrarArquivadas ? 'Esconder Arquivadas' : 'Mostrar Arquivadas'}}
+    </button>
+</mat-menu>
+
+<a *ngIf="tipoAcesso == 'professor'" routerLink="/professor/avaliacao/nova" matTooltip="Nova Avaliação"
+    style="z-index: 1000; position: fixed; right: 50px; bottom: 50px; background-color: var(--cor-primaria); color: white"
+    mat-fab>
+    <mat-icon>add</mat-icon>
+</a>

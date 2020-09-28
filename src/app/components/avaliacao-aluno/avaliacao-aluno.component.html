@@ -84,10 +84,10 @@
 
 
             <div class="cabecalho">
-                <span class="titulo">{{instancia.titulo}}</span>
+                <span class="titulo">{{avaliacao.titulo}}</span>
                 <br /><br />
                 <div style="text-align: justify;">
-                    {{instancia.descricao}}
+                    {{avaliacao.descricao}}
                     <br /><br />
                     Professor: Rafael Bini
                     <br /><br />
@@ -99,12 +99,12 @@
                 <br />
 
                 <!-- EM GRUPO -->
-                <div *ngIf="instancia.tipoDisposicao != 0" style="text-align: justify; ">
+                <div *ngIf="avaliacao.tipoDisposicao != 0" style="text-align: justify; ">
 
                     <div style="text-align: center;">
                         MEU GRUPO
                     </div>
-                    <div class="aluno" style="cursor: default;" *ngFor="let aluno of instancia.alunos"
+                    <div class="aluno" style="cursor: default;" *ngFor="let aluno of prova.alunos"
                         [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                         <app-aluno-card-avaliacao-professor [aluno]="aluno">
                         </app-aluno-card-avaliacao-professor>
@@ -121,7 +121,7 @@
 
             </div>
 
-            <app-questoes-responder [avaliacao]="instancia">
+            <app-questoes-responder [prova]="prova" [avaliacao]="avaliacao" [gabarito]="gabarito">
 
             </app-questoes-responder>
 
@@ -151,10 +151,10 @@
 
         <div align="center"
             style="padding: 20px; margin: auto; background-color: whitesmoke;  color: black; width: 55%; border-radius: 10px;">
-            <b style="font-size: 22px;">{{instancia.titulo}}</b>
+            <b style="font-size: 22px;">{{avaliacao.titulo}}</b>
             <br /><br />
             <div style="text-align: justify;">
-                {{instancia.descricao}}
+                {{avaliacao.descricao}}
                 <br /><br />
                 Professor: Rafael Bini
                 <br /><br />
@@ -166,15 +166,15 @@
             <br />
 
             <!-- ALUNOS NÃO CORRIGEM -->
-            <div *ngIf="instancia.tipoCorrecao == 0"
+            <div *ngIf="avaliacao.tipoCorrecao == 0"
                 style="padding: 35px; font-size: 16px; text-decoration: underline solid black;">
                 Aguarde a correção do professor para saber sua nota
             </div>
 
             <!-- EM GRUPO - AUTOAVALIAÇÃO -->
 
-            <div *ngIf="instancia.tipoCorrecao == 3" class="btn-corrigir" style="position: relative;">
-                <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + instancia.id">
+            <div *ngIf="avaliacao.tipoCorrecao == 3" class="btn-corrigir" style="position: relative;">
+                <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + prova.id">
                     CORRIGIR MINHA PRÓPRIA AVALIAÇÃO
                 </a>
             </div>
@@ -182,12 +182,12 @@
             <br />
 
             <!-- EM GRUPO -->
-            <div *ngIf="instancia.tipoDisposicao != 0" style="text-align: justify; ">
+            <div *ngIf="avaliacao.tipoDisposicao != 0" style="text-align: justify; ">
 
                 <div style="text-align: center;">
                     MEU GRUPO
                 </div>
-                <div class="aluno" style="cursor: default;" *ngFor="let aluno of instancia.alunos"
+                <div class="aluno" style="cursor: default;" *ngFor="let aluno of prova.alunos"
                     [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                     <app-aluno-card-avaliacao-professor [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
@@ -199,18 +199,17 @@
         <br />
 
         <!-- EM GRUPO - ALUNOS CORRIGEM -->
-        <div *ngIf="instancia.tipoDisposicao != 0 && instancia.tipoCorrecao == 2" class="container">
+        <div *ngIf="avaliacao.tipoDisposicao != 0 && avaliacao.tipoCorrecao == 2" class="container">
             <div style="margin: auto; text-align: center;">
                 <h2>Corrija as avaliações abaixo:</h2>
             </div>
-            <div *ngFor="let instanciaCorrigir of instancia.instanciasParaCorrigir;  index as i;" class="grupo"
-                style="width: 100%">
+            <div *ngFor="let provaCorrigir of prova.provasParaCorrigir;  index as i;" class="grupo" style="width: 100%">
                 <div class="grupo-title">
-                    GRUPO {{i+1}} - {{instanciaCorrigir.corrigida ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
+                    GRUPO {{i+1}} - {{provaCorrigir.corrigida ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
                 </div>
                 <div class="btn-corrigir">
-                    <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + instanciaCorrigir.id">
-                        {{instanciaCorrigir.corrigida ? "REVISAR" : "CORRIGIR"}}
+                    <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + provaCorrigir.id">
+                        {{provaCorrigir.corrigida ? "REVISAR" : "CORRIGIR"}}
                     </a>
                 </div>
             </div>
@@ -223,11 +222,11 @@
             </div>
             <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 100%">
                 <div class="grupo-title">
-                    ALUNO {{grupo.numero}} - {{grupo.instanciaStatusId > 2 ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
+                    ALUNO {{grupo.numero}} - {{grupo.provaStatusId > 2 ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
                 </div>
                 <div class="btn-corrigir">
-                    <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + grupo.instanciaId">
-                        {{grupo.instanciaStatusId > 2 ? "REVISAR" : "CORRIGIR"}}
+                    <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + grupo.provaId">
+                        {{grupo.provaStatusId > 2 ? "REVISAR" : "CORRIGIR"}}
                     </a>
                 </div>
             </div>
@@ -246,10 +245,10 @@
 
         <div
             style="text-align: center; margin: auto; width: 60%; background-color: whitesmoke; border-radius: 10px; padding: 30px; box-sizing: content-box; ">
-            <b style="font-size: 22px;">{{instancia.titulo}}</b>
+            <b style="font-size: 22px;">{{avaliacao.titulo}}</b>
             <br /><br />
             <div style="text-align: justify;">
-                {{instancia.descricao}}
+                {{avaliacao.descricao}}
                 <br /><br />
                 Professor: Rafael Bini
                 <br /><br />
@@ -271,9 +270,9 @@
             <br />
             <br />
             <!-- EM GRUPO -->
-            <div *ngIf="instancia.tipoDisposicao != 0">
+            <div *ngIf="avaliacao.tipoDisposicao != 0">
 
-                <div class="aluno" style="cursor: default;" *ngFor="let aluno of instancia.alunos"
+                <div class="aluno" style="cursor: default;" *ngFor="let aluno of prova.alunos"
                     [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                     <app-aluno-card-avaliacao-professor [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>

@@ -4,28 +4,32 @@ import { Usuario } from './usuario';
 
 export interface Avaliacao {
     id?: string,
-    titulo: string;
-    descricao: string;
-    dtInicio: string;
-    isInicioIndeterminado: boolean;
-    dtInicioCorrecao: string;
-    isInicioCorrecaoIndeterminado: boolean;
-    dtTermino: string;
-    isTerminoIndeterminado: boolean,
-    isOrdemAleatoria: boolean,
-    isBloqueadoAlunoAtrasado: boolean,
-    tipoDisposicao: number,
-    tipoCorrecao: number,
-    correcaoParesQtdTipo: string,
-    correcaoParesQtdNumero: number,
-    tipoPontuacao: number,
-    questoes: Array<Questao>,
+    titulo?: string;
+    descricao?: string;
+    dtInicio?: string;
+    isInicioIndeterminado?: boolean;
+    dtInicioCorrecao?: string;
+    isInicioCorrecaoIndeterminado?: boolean;
+    dtTermino?: string;
+    isTerminoIndeterminado?: boolean,
+    isOrdemAleatoria?: boolean,
+    isBloqueadoAlunoAtrasado?: boolean,
+    tipoDisposicao?: number,
+    tipoCorrecao?: number,
+    correcaoParesQtdTipo?: string,
+    correcaoParesQtdNumero?: number,
+    tipoPontuacao?: number,
     tags?: Array<string>,
-    status: number,
+    status?: number,
     alunos?: Array<Usuario>;
     grupos?: Array<Grupo>;
     maxIntegrantes?: number;
     limitarNumIntegrantes?: boolean;
-    avaliacoesParaCorrigir?: Array<Avaliacao>;
     isArquivada?: boolean;
+    provas?: Array<string>;
+
+    /*
+    questoes?: Array<Questao>,
+    avaliacoesParaCorrigir?: Array<Avaliacao>;
+     */
 }

@@ -1,3 +1,4 @@
+import { Prova } from 'src/app/models/prova';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
@@ -15,6 +16,7 @@ import { InfoQuestaoComponent } from 'src/app/dialogs/info-questao/info-questao.
   styleUrls: ['./questoes-editar.component.css']
 })
 export class QuestoesEditarComponent implements OnInit {
+  @Input() prova: Prova;
   @Input() avaliacao: Avaliacao;
 
   constructor(public comumService: ComumService, private dialog: MatDialog, private elementRef: ElementRef) { }
@@ -41,7 +43,7 @@ export class QuestoesEditarComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
     }
-    console.log(this.avaliacao);
+    console.log(this.prova);
   }
   tipoQuestaoChanged(questao, novoTipo) {
     questao.tipo = novoTipo;
@@ -57,7 +59,7 @@ export class QuestoesEditarComponent implements OnInit {
   }
   getPontuacaoMaxima() {
     var pontuacaoMaxima = 0;
-    this.avaliacao.questoes.forEach(questao => {
+    this.prova.questoes.forEach(questao => {
       pontuacaoMaxima += questao.valor;
     });
     return pontuacaoMaxima;

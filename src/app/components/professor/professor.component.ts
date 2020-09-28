@@ -16,9 +16,6 @@ import { CredencialService } from 'src/app/services/credencial.service';
 export class ProfessorComponent implements OnInit {
 
   public selectedTab = 0;
-  public agruparAvaliacoes = true;
-  public mostrarArquivadas = false;
-  public selectedStatusTab = 0;
 
   public alunosSelecionados = [];
   public alunosFiltrados = [];
@@ -35,7 +32,7 @@ export class ProfessorComponent implements OnInit {
     { email: "clone@gmail.com", nome: "Henrique Grosse", matricula: "grr20184610", tags: ['Empreendedorismo e Inovação', 'Gestão Empresarial'] },
   ];
 
-  public avaliacoesFiltradas;
+
   public avaliacoes: Array<any> = [
     {
       id: "0000001",
@@ -111,7 +108,6 @@ export class ProfessorComponent implements OnInit {
   constructor(private dialog: MatDialog, public credencialService: CredencialService, private route: ActivatedRoute, private router: Router, public comumService: ComumService) { }
 
   ngOnInit(): void {
-
     this.credencialService.loggedUser.acesso = "Professor";
     this.route.params.subscribe(params => {
       if (params.tab) {
@@ -120,93 +116,23 @@ export class ProfessorComponent implements OnInit {
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
     });
-    this.avaliacoesFiltradas = this.avaliacoes;
     this.alunosFiltrados = this.alunos;
-    this.selecionarStatusTabAdequada();
   }
 
   // Geral
-
   tabAlterada(index) {
     this.router.navigate([`/professor/${this.tabs[index].id}`]);
     this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
   }
 
-  // Avaliações
-
-  getStatusPorPrioridade() {
-    return this.comumService.statusAvaliacao.concat().sort((a, b) => b.prioridade - a.prioridade);
-  }
-  getAvaliacoesNoStatus(status) {
-    return this.avaliacoesFiltradas.concat().filter(avaliacao => avaliacao.status == status && (!avaliacao.isArquivada || this.mostrarArquivadas));
-  }
-  selecionarStatusTabAdequada() {
-    for (let status of this.comumService.statusAvaliacao) {
-      if (this.avaliacoesFiltradas.concat().filter(ava => ava.status == status.id && (!ava.isArquivada || this.mostrarArquivadas)).length > 0) {
-        this.selectedStatusTab = status.id;
-        return;
-      }
-    }
-  }
-  onBuscaKeyUp(texto: string) {
-    this.avaliacoesFiltradas = this.avaliacoes.filter(avaliacao => {
-
-      if (avaliacao.isArquivada && !this.mostrarArquivadas)
-        return false;
-
-      texto = this.comumService.normalizar(texto);
-
-      for (let parteTexto of texto.split(" ")) {
-        var titulo = this.comumService.normalizar(avaliacao.titulo);
-        var descricao = this.comumService.normalizar(avaliacao.descricao);
-
-        const FOI_ENCONTRADO = this.estaEmAlgumLugar(parteTexto, titulo, descricao, avaliacao.tags);
-
-        if (!FOI_ENCONTRADO)
-          return false;
-
-      }
-
-
-      return true;
-    });
-    this.selecionarStatusTabAdequada();
-  }
-  estaEmAlgumLugar(parteTexto, titulo, descricao, tags) {
-
-    // Titulo
-    for (let parteTitulo of titulo.split(" ")) {
-      if (parteTitulo.includes(parteTexto))
-        return true;
-    }
-
-    // Descrição
-    for (let parteDescricao of descricao.split(" ")) {
-      if (parteDescricao.includes(parteTexto))
-        return true;
-    }
-
-    // Tags
-    if (tags != null) {
-      for (let tag of tags) {
-        if (this.comumService.normalizar(tag).includes(parteTexto))
-          return true;
-      }
-    }
-  }
-  getTodasAvaliacoes() {
-    return this.avaliacoesFiltradas.concat().filter(avaliacao => (!avaliacao.isArquivada || this.mostrarArquivadas));
-  }
 
 
   // Alunos
-
   addAluno() {
     this.dialog.open(AlunoNovoComponent, {
 
     });
   }
-
   onBuscaAlunoKeyUp(texto: string) {
     this.alunosFiltrados = this.alunos.filter(aluno => {
 
@@ -235,7 +161,6 @@ export class ProfessorComponent implements OnInit {
     });
 
   }
-
   selecionarTodos() {
     if (this.alunosFiltrados.length == this.alunosSelecionados.length) {
       this.alunosSelecionados = [];
@@ -248,7 +173,6 @@ export class ProfessorComponent implements OnInit {
     }
 
   }
-
   removerAlunosSelecionados() {
 
   }
