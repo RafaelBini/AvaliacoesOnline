@@ -2,7 +2,7 @@
   <table style="width: 100%;">
     <tr>
       <td width="95%">
-        <a routerLink="/" class="logo">Avaliações Online</a>
+        <a (click)="goHome()" class="logo">Avaliações Online</a>
         <!--<img src="assets/logos/logo01.png" style="height: 10vh;" />-->
       </td>
       <td *ngIf="credencialService.estouLogado()">

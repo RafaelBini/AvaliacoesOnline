@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { CadastrarSeComponent } from './dialogs/cadastrar-se/cadastrar-se.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +13,7 @@ import { ComumService } from './services/comum.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private dialog: MatDialog, public credencialService: CredencialService) { }
+  constructor(private dialog: MatDialog, public credencialService: CredencialService, private router: Router) { }
 
   ngOnInit() {
 
@@ -24,5 +25,16 @@ export class AppComponent implements OnInit {
     });
   }
 
+  goHome() {
+    if (this.credencialService.estouLogado()) {
+      if (this.credencialService.loggedUser.acesso.toLowerCase() == "professor")
+        this.router.navigate(['professor']);
+      else
+        this.router.navigate(['aluno']);
+    }
+    else {
+      this.router.navigate(['']);
+    }
+  }
 
 }

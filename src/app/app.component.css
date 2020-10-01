@@ -7,7 +7,7 @@
 .logo{
     text-decoration: none;
     color: var(--cor-primaria-letra);
-
+    cursor: pointer;
 }
 
 .minha-conta{
