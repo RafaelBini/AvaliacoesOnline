@@ -62,4 +62,8 @@ export class CredencialService {
     return false;
   }
 
+  public cadastrar(usuario: Usuario): boolean {
+    return true;
+  }
+
 }

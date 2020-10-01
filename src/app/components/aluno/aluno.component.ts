@@ -92,15 +92,17 @@ export class AlunoComponent implements OnInit {
   constructor(public comumService: ComumService, public credencialService: CredencialService, public route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.credencialService.loggedUser.acesso = "Aluno";
+
     this.route.params.subscribe(params => {
       if (params.tab) {
         const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);
         this.selectedTab = index;
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
+      this.credencialService.loggedUser.acesso = "aluno";
+      this.avaliacoesFiltradas = this.avaliacoes;
     });
-    this.avaliacoesFiltradas = this.avaliacoes;
+
   }
 
   tabAlterada(index) {

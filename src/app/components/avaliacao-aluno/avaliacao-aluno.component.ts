@@ -2,7 +2,7 @@ import { Prova } from 'src/app/models/prova';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { ComumService } from './../../services/comum.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
 import { CredencialService } from 'src/app/services/credencial.service';
@@ -15,7 +15,7 @@ import { CredencialService } from 'src/app/services/credencial.service';
 })
 export class AvaliacaoAlunoComponent implements OnInit {
 
-  constructor(public route: ActivatedRoute, public credencialService: CredencialService, public comumService: ComumService, private snack: MatSnackBar) { }
+  constructor(public router: Router, public route: ActivatedRoute, public credencialService: CredencialService, public comumService: ComumService, private snack: MatSnackBar) { }
   public finalizado = false;
 
   public avaliacao: Avaliacao = {
@@ -23,6 +23,10 @@ export class AvaliacaoAlunoComponent implements OnInit {
     descricao: `Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
     Descrição da Avaliação`,
     status: 0,
+    professor: {
+      id: 'XXY',
+      nome: 'Rafael Bini'
+    },
     limitarNumIntegrantes: true,
     maxIntegrantes: 3,
     correcaoParesQtdNumero: 3,
@@ -186,6 +190,35 @@ export class AvaliacaoAlunoComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+
+    this.route.params.subscribe(param => {
+      const AVALIACAO_ID = param.id;
+
+      // TODO: Recebe a avaliação
+
+      // Se estou logado,
+      if (this.credencialService.estouLogado()) {
+        // Se sou o professor dessa avaliacao,
+        if (this.avaliacao.professor.id == this.credencialService.loggedUser.id) {
+          // Vou para visão do professor
+          this.credencialService.loggedUser.acesso = 'professor';
+          this.router.navigate([`professor/avaliacao/${AVALIACAO_ID}`]);
+        }
+        else {
+          this.credencialService.loggedUser.acesso = 'aluno';
+        }
+      }
+
+      // Se não estou logado,
+      else {
+        this.router.navigate([`${AVALIACAO_ID}`]);
+      }
+
+
+
+    });
+
+
 
     // Se o tipo de disposição é grupos aleatórios,
     if (this.avaliacao.tipoDisposicao == 3) {

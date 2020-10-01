@@ -13,7 +13,7 @@ import { Usuario } from 'src/app/models/usuario';
 })
 export class LoginComponent implements OnInit {
   public id: string = null;
-  private usuario: Usuario = {
+  public usuario: Usuario = {
     email: '',
     senha: '',
   };
@@ -21,29 +21,44 @@ export class LoginComponent implements OnInit {
   constructor(private dialog: MatDialog, public credencialService: CredencialService, private route: ActivatedRoute, public router: Router) { }
 
   ngOnInit(): void {
+
+
     this.route.params.subscribe(param => {
       this.id = param.id;
-    })
+
+      if (this.credencialService.estouLogado()) {
+        this.direcionar();
+      }
+
+    });
+
   }
 
   abrirCadastrar() {
-    this.dialog.open(CadastrarSeComponent, {
+    const ref = this.dialog.open(CadastrarSeComponent, {
+    });
+    ref.afterClosed().subscribe((usuarioCadastrado) => {
+      if (usuarioCadastrado) {
+        this.usuario = usuarioCadastrado;
+        this.fazerLogin();
+      }
     });
   }
 
   fazerLogin() {
     this.credencialService.fazerLogin(this.usuario);
 
+    this.direcionar();
+
+  }
+
+  direcionar() {
     if (this.id) {
       this.router.navigate([`/aluno/avaliacao/${this.id}`]);
     }
     else {
       this.router.navigate(['/professor']);
     }
-
-
   }
-
-
 
 }

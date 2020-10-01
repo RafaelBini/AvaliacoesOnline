@@ -3,7 +3,7 @@ import { ComumService } from './../../services/comum.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlunoNovoComponent } from './../aluno-novo/aluno-novo.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
 import { CredencialService } from 'src/app/services/credencial.service';
 
@@ -105,18 +105,20 @@ export class ProfessorComponent implements OnInit {
     { nome: this.tabs[0].nome, url: `#` },
   ];
 
-  constructor(private dialog: MatDialog, public credencialService: CredencialService, private route: ActivatedRoute, private router: Router, public comumService: ComumService) { }
+  constructor(private cdRef: ChangeDetectorRef, private dialog: MatDialog, public credencialService: CredencialService, private route: ActivatedRoute, private router: Router, public comumService: ComumService) { }
 
   ngOnInit(): void {
-    this.credencialService.loggedUser.acesso = "Professor";
+
     this.route.params.subscribe(params => {
       if (params.tab) {
         const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);
         this.selectedTab = index;
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
+      this.credencialService.loggedUser.acesso = "professor";
+      this.alunosFiltrados = this.alunos;
     });
-    this.alunosFiltrados = this.alunos;
+
   }
 
   // Geral

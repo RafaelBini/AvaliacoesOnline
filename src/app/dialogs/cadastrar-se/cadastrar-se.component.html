@@ -1,61 +1,13 @@
-<div style="padding: 10px;">
-    <table style="width: 100%;">
-        <tr>
-            <td colspan="2" align="center">
-                <h2>Cadastrar-se</h2>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="nome">Nome:</label>
-            </td>
-            <td>
-                <input required type="text" class="form-control" name="nome" [(ngModel)]="novoUsuario.nome">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="email">E-mail:</label>
-            </td>
-            <td>
-                <input required type="email" class="form-control" name="email" [(ngModel)]="novoUsuario.email">
-            </td>
-        </tr>
-        <tr>
-            <td>
-
-                <label for="senha">Senha:</label>
-            </td>
-            <td>
-                <input type="password" class="form-control" name="senha" [(ngModel)]="novoUsuario.senha">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="senha">Confirmar Senha:</label>
-            </td>
-            <td>
-                <input type="password" class="form-control" name="senha">
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <a mat-dialog-close *ngIf="!data.id && data.tipoUsuario == 'aluno'"
-                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;" routerLink="/aluno"
-                    (click)="credencialService.fazerLogin()" mat-button>CADASTRAR</a>
-                <a mat-dialog-close *ngIf="!data.id && data.tipoUsuario == 'professor'"
-                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;"
-                    routerLink="/professor" (click)="credencialService.fazerLogin()" mat-button>CADASTRAR</a>
-                <a mat-dialog-close *ngIf="data.id && data.tipoUsuario == 'aluno'"
-                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;"
-                    [routerLink]="'/aluno/avaliacao/' + data.id" (click)="credencialService.fazerLogin()"
-                    mat-button>CADASTRAR</a>
-                <a mat-dialog-close *ngIf="data.id && data.tipoUsuario == 'professor'"
-                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;"
-                    [routerLink]="'/professor/avaliacao/' + data.id" (click)="credencialService.fazerLogin()"
-                    mat-button>CADASTRAR</a>
-
-            </td>
-        </tr>
-    </table>
+<div class="login">
+    <span class="label">Nome</span>
+    <input type="text" />
+    <span class="label">Email</span>
+    <input type="text" />
+    <span class="label">Senha</span>
+    <input type="password" />
+    <span class="label">Confirmar Senha</span>
+    <input type="password" />
+    <button mat-button (click)="cadastrar()" class="btn-cadastrar">
+        CADASTRAR-SE
+    </button>
 </div>

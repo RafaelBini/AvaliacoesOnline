@@ -6,6 +6,7 @@ export interface Avaliacao {
     id?: string,
     titulo?: string;
     descricao?: string;
+    professor?: Usuario,
     dtInicio?: string;
     isInicioIndeterminado?: boolean;
     dtInicioCorrecao?: string;

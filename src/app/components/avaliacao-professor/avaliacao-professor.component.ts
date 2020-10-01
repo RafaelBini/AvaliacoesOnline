@@ -1,8 +1,9 @@
+import { CredencialService } from 'src/app/services/credencial.service';
+import { Avaliacao } from './../../models/avaliacao';
 import { ComumService } from './../../services/comum.service';
 import { UrlNode } from './../../models/url-node';
-import { Avaliacao } from 'src/app/models/avaliacao';
-import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Usuario } from 'src/app/models/usuario';
 
@@ -15,7 +16,7 @@ export class AvaliacaoProfessorComponent implements OnInit {
 
   public textoFiltroAlunos = "";
   public alunosFiltrados = [];
-  public professor = {
+  public professor: Usuario = {
     alunos: [
       { email: "godo@gmail.com", senha: '', nome: "Godofredo", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, online: false },
       { email: "rub@gmail.com", senha: '', nome: "Ruberlinda", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
@@ -31,9 +32,12 @@ export class AvaliacaoProfessorComponent implements OnInit {
   };
 
 
-  public avaliacao: any = {
+  public avaliacao: Avaliacao = {
     titulo: "Avaliação 01",
     descricao: "Essa é uma avaliação criada para testes.",
+    professor: {
+      id: 'XXX'
+    },
     alunos: [
       { email: "fredb12@hotmail.com", senha: '', nome: "Fred Desimpedidos", tags: ['Web II', 'Interação Humano Computador'], statusId: 2 },
       { email: "marilia@gmail.com", senha: '', nome: "Marília Galvão", tags: ['Web II', 'Interação Humano Computador'], statusId: 2 },
@@ -43,7 +47,7 @@ export class AvaliacaoProfessorComponent implements OnInit {
     grupos: [
       {
         numero: 1,
-        instanciaStatusId: 0,
+        instanciaStatusId: '0',
         alunos: []
       }
     ],
@@ -60,20 +64,47 @@ export class AvaliacaoProfessorComponent implements OnInit {
 
   public scrolling = false;
 
-  constructor(public route: ActivatedRoute, public comumService: ComumService) { }
+  constructor(public credencialService: CredencialService, public router: Router, public route: ActivatedRoute, public comumService: ComumService) { }
 
   ngOnInit(): void {
 
-    this.atualizarAlunosOnline();
+    this.route.params.subscribe(param => {
+      const AVALIACAO_ID = param.id;
 
+      // TODO: Recebe a avaliação
+
+      // Se estou logado,
+      if (this.credencialService.estouLogado()) {
+        // Se sou o professor dessa avaliacao,
+        if (this.avaliacao.professor.id == this.credencialService.loggedUser.id) {
+          // Vou para visão do professor
+          this.credencialService.loggedUser.acesso = 'professor';
+        }
+        else {
+          this.credencialService.loggedUser.acesso = 'aluno';
+          this.router.navigate([`aluno/avaliacao/${AVALIACAO_ID}`]);
+        }
+        this.atualizarAlunosOnline();
+      }
+
+      // Se não estou logado,
+      else {
+        this.router.navigate([`${AVALIACAO_ID}`]);
+      }
+
+
+
+    });
   }
+
+
 
   // Parte 1 - Em Preparação
 
   addGrupo() {
     // TODO: Add uma instância
 
-    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaStatusId: 0, alunos: [] });
+    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaStatusId: '0', alunos: [] });
 
   }
   drop(event: CdkDragDrop<string[]>, onde: string) {

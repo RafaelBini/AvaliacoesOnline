@@ -4,6 +4,7 @@ import { Usuario } from './../../models/usuario';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CredencialService } from 'src/app/services/credencial.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cadastrar-se',
@@ -17,11 +18,24 @@ export class CadastrarSeComponent implements OnInit {
     email: "",
     senha: "",
   };
+  public confirmacaoSenha: string;
 
-  constructor(public dialogRef: MatDialogRef<CadastrarSeComponent>,
+  constructor(public dialogRef: MatDialogRef<CadastrarSeComponent>, private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: any, public snack: MatSnackBar, public comumService: ComumService, public credencialService: CredencialService) { }
 
   ngOnInit(): void {
+
+  }
+
+  cadastrar() {
+    if (this.credencialService.cadastrar(this.novoUsuario)) {
+      this.snack.open("Cadastrado com sucesso!", null, {
+        duration: 3500
+      });
+
+      this.dialogRef.close(this.novoUsuario);
+    }
+
 
   }
 

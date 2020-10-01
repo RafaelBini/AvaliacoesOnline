@@ -7,7 +7,7 @@
       </td>
       <td *ngIf="credencialService.estouLogado()">
         <div class="tipo-acesso-card">
-          {{credencialService.loggedUser.acesso}}
+          {{credencialService.loggedUser.acesso == 'professor' ? 'Professor' : 'Aluno'}}
         </div>
       </td>
       <td width="5%" align="center" valign="middle" style="position: relative;">
@@ -25,33 +25,33 @@
           <hr />
 
           <!-- ALUNO -->
-          <a routerLink="/professor" (click)="credencialService.loggedUser.acesso='Professor'" mat-menu-item
-            *ngIf="credencialService.loggedUser.acesso == 'Aluno'">
+          <a routerLink="/professor" (click)="credencialService.loggedUser.acesso='professor'" mat-menu-item
+            *ngIf="credencialService.loggedUser.acesso == 'aluno'">
             <mat-icon>swap_horiz</mat-icon>Mudar para Professor
           </a>
-          <a routerLink="/aluno/avaliacoes" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Aluno'">
+          <a routerLink="/aluno/avaliacoes" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'aluno'">
             <mat-icon>description</mat-icon>Minhas Avaliações
           </a>
-          <a routerLink="/aluno/perfil" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Aluno'">
+          <a routerLink="/aluno/perfil" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'aluno'">
             <mat-icon>account_circle</mat-icon>Meu Perfil
           </a>
 
           <!-- PROFESSOR -->
-          <a routerLink="/aluno" (click)="credencialService.loggedUser.acesso='Aluno'" mat-menu-item
-            *ngIf="credencialService.loggedUser.acesso == 'Professor'">
+          <a routerLink="/aluno" (click)="credencialService.loggedUser.acesso='aluno'" mat-menu-item
+            *ngIf="credencialService.loggedUser.acesso == 'professor'">
             <mat-icon>swap_horiz</mat-icon>Mudar para Aluno
           </a>
           <a routerLink="/professor/avaliacoes" mat-menu-item
-            *ngIf="credencialService.loggedUser.acesso == 'Professor'">
+            *ngIf="credencialService.loggedUser.acesso == 'professor'">
             <mat-icon>description</mat-icon>Minhas Avaliações
           </a>
-          <a routerLink="/professor/alunos" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Professor'">
+          <a routerLink="/professor/alunos" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'professor'">
             <mat-icon>recent_actors</mat-icon>Alunos
           </a>
-          <a routerLink="/professor/perfil" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Professor'">
+          <a routerLink="/professor/perfil" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'professor'">
             <mat-icon>account_circle</mat-icon>Meu Perfil
           </a>
-          <a routerLink="/professor/dashboard" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'Professor'">
+          <a routerLink="/professor/dashboard" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'professor'">
             <mat-icon>dashboard</mat-icon>Dashboard
           </a>
 

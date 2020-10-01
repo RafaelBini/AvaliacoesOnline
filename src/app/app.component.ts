@@ -20,21 +20,19 @@ export class AppComponent implements OnInit {
   }
 
   abrirDialogoCadastro() {
-    this.dialog.open(CadastrarSeComponent, {
-      data: { tipoUsuario: 'professor' }
+    const ref = this.dialog.open(CadastrarSeComponent, {
+
+    });
+    ref.afterClosed().subscribe((usuarioCadastrado) => {
+      this.credencialService.fazerLogin(usuarioCadastrado);
+      this.router.navigate(['professor']);
     });
   }
 
   goHome() {
-    if (this.credencialService.estouLogado()) {
-      if (this.credencialService.loggedUser.acesso.toLowerCase() == "professor")
-        this.router.navigate(['professor']);
-      else
-        this.router.navigate(['aluno']);
-    }
-    else {
-      this.router.navigate(['']);
-    }
+
+    this.router.navigate(['']);
+
   }
 
 }
