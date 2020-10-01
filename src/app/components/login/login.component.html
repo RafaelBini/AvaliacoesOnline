@@ -3,9 +3,9 @@
     <div class="container">
 
         <span class="label">Email</span>
-        <input type="text" autofocus />
+        <input type="text" [(ngModel)]="usuario.email" autofocus />
         <span class="label">Senha</span>
-        <input type="password" />
+        <input type="password" [(ngModel)]="usuario.senha" />
         <br />
 
         <button (click)="fazerLogin()" class="botao-entrar" mat-button>Entrar</button>

@@ -4,6 +4,7 @@ import { CadastrarSeComponent } from './../../dialogs/cadastrar-se/cadastrar-se.
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { CredencialService } from 'src/app/services/credencial.service';
+import { Usuario } from 'src/app/models/usuario';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,10 @@ import { CredencialService } from 'src/app/services/credencial.service';
 })
 export class LoginComponent implements OnInit {
   public id: string = null;
+  private usuario: Usuario = {
+    email: '',
+    senha: '',
+  };
 
   constructor(private dialog: MatDialog, public credencialService: CredencialService, private route: ActivatedRoute, public router: Router) { }
 
@@ -27,7 +32,7 @@ export class LoginComponent implements OnInit {
   }
 
   fazerLogin() {
-    this.credencialService.fazerLogin();
+    this.credencialService.fazerLogin(this.usuario);
 
     if (this.id) {
       this.router.navigate([`/aluno/avaliacao/${this.id}`]);

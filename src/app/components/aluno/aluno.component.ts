@@ -18,9 +18,9 @@ export class AlunoComponent implements OnInit {
   public avaliacoes: Array<Avaliacao> = [
     {
       id: "0000001",
-      titulo: "DS250 - Interação Humano Computador",
-      descricao: "Uma avaliação para Teste",
-      status: 0,
+      titulo: "DS553 - Engenharia de Software",
+      descricao: "Avaliacao de teste",
+      status: 2,
       dtInicio: '31/07/2020 18:00',
       dtTermino: '01/08/2020 18:00',
       tags: [
@@ -31,9 +31,9 @@ export class AlunoComponent implements OnInit {
     },
     {
       id: "0000002",
-      titulo: "DS250 - Interação Humano Computador",
+      titulo: "DS553 - Engenharia de Software",
       descricao: "Uma avaliação para Teste",
-      status: 1,
+      status: 3,
       dtInicio: '31/07/2020 18:00',
       dtTermino: '01/08/2020 18:00',
       tags: [
@@ -43,9 +43,9 @@ export class AlunoComponent implements OnInit {
     },
     {
       id: "0000003",
-      titulo: "DS250 - Interação Humano Computador",
+      titulo: "DS330 - Bancos de Dados I",
       descricao: "Uma avaliação para Teste",
-      status: 2,
+      status: 0,
       dtInicio: '31/07/2020 18:00',
       dtTermino: '01/08/2020 18:00',
       tags: [
@@ -55,9 +55,9 @@ export class AlunoComponent implements OnInit {
     },
     {
       id: "0000004",
-      titulo: "DS250 - Interação Humano Computador",
+      titulo: "DS330 - Bancos de Dados II",
       descricao: "Uma avaliação para Teste",
-      status: 3,
+      status: 0,
       dtInicio: '31/07/2020 18:00',
       dtTermino: '01/08/2020 18:00',
       tags: [
@@ -67,11 +67,15 @@ export class AlunoComponent implements OnInit {
     },
     {
       id: "0000005",
-      titulo: "DS130 - Web II",
+      titulo: "DS330 - Bancos de Dados II",
       descricao: "Uma avaliação para Teste",
-      status: 3,
+      status: 1,
       dtInicio: '31/07/2020 18:00',
       dtTermino: '01/08/2020 18:00',
+      tags: [
+        'Avaliação 02',
+        'Tarde'
+      ]
     },
   ];
 
