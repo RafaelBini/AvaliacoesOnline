@@ -99,7 +99,6 @@ export class AlunoComponent implements OnInit {
         this.selectedTab = index;
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
-      this.credencialService.loggedUser.acesso = "aluno";
       this.avaliacoesFiltradas = this.avaliacoes;
     });
 

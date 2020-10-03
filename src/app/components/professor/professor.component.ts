@@ -115,9 +115,10 @@ export class ProfessorComponent implements OnInit {
         this.selectedTab = index;
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
-      this.credencialService.loggedUser.acesso = "professor";
       this.alunosFiltrados = this.alunos;
     });
+
+
 
   }
 

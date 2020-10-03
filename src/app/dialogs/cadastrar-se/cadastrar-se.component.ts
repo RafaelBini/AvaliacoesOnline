@@ -17,6 +17,7 @@ export class CadastrarSeComponent implements OnInit {
     nome: "",
     email: "",
     senha: "",
+    acesso: "professor",
   };
   public confirmacaoSenha: string;
 
@@ -28,15 +29,31 @@ export class CadastrarSeComponent implements OnInit {
   }
 
   cadastrar() {
-    if (this.credencialService.cadastrar(this.novoUsuario)) {
-      this.snack.open("Cadastrado com sucesso!", null, {
-        duration: 3500
+
+    this.credencialService.isNovoUsuarioValido(this.novoUsuario, this.confirmacaoSenha).then(() => {
+      this.credencialService.cadastrar(this.novoUsuario).then((docRef) => {
+
+        this.snack.open("Cadastrado com sucesso!", null, {
+          duration: 3500
+        });
+
+        this.novoUsuario.id = docRef.id;
+        this.dialogRef.close(this.novoUsuario);
+
+      })
+        .catch((reason) => {
+          this.snack.open("Não foi possivel cadastrar", null, {
+            duration: 2500,
+          });
+          console.log(reason);
+        });
+    })
+      .catch(reason => {
+        this.snack.open(reason, null, {
+          duration: 3500,
+        });
       });
-
-      this.dialogRef.close(this.novoUsuario);
-    }
-
-
   }
+
 
 }

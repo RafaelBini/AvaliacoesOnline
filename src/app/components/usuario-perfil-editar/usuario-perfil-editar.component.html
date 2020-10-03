@@ -14,19 +14,19 @@
         <tr>
             <td align="left">
                 Nome<br />
-                <input required type="text" value="Rafael Bini" name="email">
+                <input required type="text" [(ngModel)]="usuario.nome">
             </td>
         </tr>
         <tr>
             <td align="left">
                 E-mail<br />
-                <input required type="email" value="professor@ufpr.br" name="email">
+                <input required type="text" [(ngModel)]="usuario.email">
             </td>
         </tr>
         <tr>
             <td align="left">
                 Senha<br />
-                <input required [disabled]="!alterar" type="password" value="senha123" name="senha">
+                <input required [disabled]="!alterar" [(ngModel)]="usuario.senha" type="password">
 
                 <button (click)="alterar = true" mat-button matTooltip="Alterar senha">
                     <mat-icon>create</mat-icon>
@@ -37,11 +37,11 @@
 
             <td align="left">
                 Confirmar Senha<br />
-                <input required type="password" value="" name="nova_senha">
+                <input required [(ngModel)]="confirmacaoSenha" type="password" value="">
             </td>
         </tr>
     </table>
     <div style="margin: auto; text-align: center;">
-        <button type="button" mat-raised-button>Editar</button>
+        <button (click)="salvar()" type="button" mat-raised-button>Salvar</button>
     </div>
 </div>

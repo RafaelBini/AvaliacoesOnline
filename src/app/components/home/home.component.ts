@@ -10,7 +10,12 @@ import { Usuario } from 'src/app/models/usuario';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  novoUsuario: Usuario;
+  novoUsuario: Usuario = {
+    nome: '',
+    email: '',
+    senha: '',
+  };
+  confirmarcaoSenha: string;
   constructor(public credencialService: CredencialService, private router: Router,
     private snack: MatSnackBar) { }
 
@@ -25,12 +30,29 @@ export class HomeComponent implements OnInit {
   }
 
   primeiraAvaliacao() {
-    this.credencialService.cadastrar(this.novoUsuario);
-    this.snack.open("Cadastrado com sucesso!", null, {
-      duration: 3500,
-    })
-    this.credencialService.fazerLogin(this.novoUsuario);
-    this.router.navigate(['professor/avaliacao/nova']);
+    this.credencialService.isNovoUsuarioValido(this.novoUsuario, this.confirmarcaoSenha).then(() => {
+      this.credencialService.cadastrar(this.novoUsuario).then((docRef) => {
+        this.novoUsuario.id = docRef.id;
+        this.snack.open("Cadastrado com sucesso!", null, {
+          duration: 3500,
+        })
+        this.credencialService.fazerLogin(this.novoUsuario).then(usuarioLogado => {
+          this.router.navigate(['professor/avaliacao/nova']);
+        })
+          .catch(reason => {
+            this.snack.open(reason, null, {
+              duration: 3500,
+            })
+          });;
+
+      });
+    }).catch(reason => {
+      this.snack.open(reason, null, {
+        duration: 3500,
+      })
+    });
+
+
   }
 
 }
