@@ -7,6 +7,10 @@ import { AppComponent } from './app.component';
 import { ProfessorComponent } from './components/professor/professor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -51,6 +55,7 @@ import { ConfirmarComponent } from './dialogs/confirmar/confirmar.component';
 import { AlunoCardAvaliacaoAlunoComponent } from './components/avaliacao-aluno/aluno-card-avaliacao-aluno/aluno-card-avaliacao-aluno.component';
 import { HomeComponent } from './components/home/home.component';
 import { AvaliacaoListaComponent } from './components/avaliacao-lista/avaliacao-lista.component';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -106,7 +111,10 @@ import { AvaliacaoListaComponent } from './components/avaliacao-lista/avaliacao-
     MatExpansionModule,
     MatRadioModule,
     MatMenuModule,
-    MatListModule
+    MatListModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule,
+    AngularFireStorageModule,
   ],
   providers: [
 
