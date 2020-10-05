@@ -1,9 +1,11 @@
+import { AvaliacaoListaComponent } from './../avaliacao-lista/avaliacao-lista.component';
+import { AvaliacaoService } from './../../services/avaliacao.service';
 import { Avaliacao } from './../../models/avaliacao';
 import { ComumService } from './../../services/comum.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlunoNovoComponent } from './../aluno-novo/aluno-novo.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
 import { CredencialService } from 'src/app/services/credencial.service';
 
@@ -33,65 +35,7 @@ export class ProfessorComponent implements OnInit {
   ];
 
 
-  public avaliacoes: Array<any> = [
-    {
-      id: "0000001",
-      titulo: "DS250 - Interação Humano Computador",
-      descricao: "Uma avaliação para Teste",
-      status: 0,
-      dtInicio: '31/07/2020 18:00',
-      dtTermino: '01/08/2020 18:00',
-      tags: [
-        'Avaliação 01',
-        'Tarde'
-      ],
-
-    },
-    {
-      id: "0000002",
-      titulo: "DS250 - Interação Humano Computador",
-      descricao: "Uma avaliação para Teste",
-      status: 1,
-      dtInicio: '31/07/2020 18:00',
-      dtTermino: '01/08/2020 18:00',
-      tags: [
-        'Avaliação 02',
-        'Tarde'
-      ]
-    },
-    {
-      id: "0000003",
-      titulo: "DS250 - Interação Humano Computador",
-      descricao: "Uma avaliação para Teste",
-      status: 2,
-      dtInicio: '31/07/2020 18:00',
-      dtTermino: '01/08/2020 18:00',
-      tags: [
-        'Avaliação 01',
-        'Noite'
-      ]
-    },
-    {
-      id: "0000004",
-      titulo: "DS250 - Interação Humano Computador",
-      descricao: "Uma avaliação para Teste",
-      status: 3,
-      dtInicio: '31/07/2020 18:00',
-      dtTermino: '01/08/2020 18:00',
-      tags: [
-        'Avaliação 02',
-        'Noite'
-      ]
-    },
-    {
-      id: "0000005",
-      titulo: "DS130 - Web II",
-      descricao: "Uma avaliação para Teste",
-      status: 3,
-      dtInicio: '31/07/2020 18:00',
-      dtTermino: '01/08/2020 18:00',
-    },
-  ]
+  public avaliacoes: Array<Avaliacao> = []
 
   private tabs = [
     { id: "avaliacoes", nome: "Avaliações" },
@@ -105,7 +49,16 @@ export class ProfessorComponent implements OnInit {
     { nome: this.tabs[0].nome, url: `#` },
   ];
 
-  constructor(private cdRef: ChangeDetectorRef, private dialog: MatDialog, public credencialService: CredencialService, private route: ActivatedRoute, private router: Router, public comumService: ComumService) { }
+  @ViewChild(AvaliacaoListaComponent) avaliacaoLista: AvaliacaoListaComponent;
+
+  constructor(private cdRef: ChangeDetectorRef,
+    private dialog: MatDialog,
+    public credencialService: CredencialService,
+    public comumService: ComumService,
+    private avaliacaoService: AvaliacaoService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
 
@@ -120,10 +73,18 @@ export class ProfessorComponent implements OnInit {
         this.selectedTab = index;
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
-      this.alunosFiltrados = this.alunos;
     });
 
 
+    this.avaliacaoService.getAvaliacoesFromProfessor(this.credencialService.getLoggedUserIdFromCookie()).then(avaliacoes => {
+      this.avaliacaoLista.avaliacoes = avaliacoes;
+      this.avaliacaoLista.atualizarAvaliacoesFiltradas();
+    })
+      .catch(reason => {
+        this.comumService.notificarErro("Falha ao buscar avaliações", reason);
+      });
+
+    this.alunosFiltrados = this.alunos;
 
   }
 

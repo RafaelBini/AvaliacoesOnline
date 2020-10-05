@@ -45,6 +45,8 @@
     margin-bottom: 7px;
 }
 
+
+
 /* CDK DRAG & DROP */
 
 .cdk-drag-preview {
@@ -63,6 +65,21 @@
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
 
+  .header-container{
+    background-color: whitesmoke; 
+    border-bottom-left-radius: 10px; 
+    border-bottom-right-radius: 10px; 
+    padding: 15px;
+  }
+
+  .error-div{
+    color: pink;
+    text-align: center;
+    text-decoration: underline;
+    padding: 5px;
+    font-size: 14px;
+  }
+
 
   .titulo-input {
     width: 95%; 
@@ -75,9 +92,53 @@
     display: block;
     font-weight: bold;
   }
-
   .titulo-input:focus,  .descricao-textarea:focus {
     outline: none;
+  }  
+
+  .link-div{
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: var(--cor-primaria);
+    text-align: center;
+    color: white;
+  }
+
+  .link-span{
+    background-color: rgba(255, 255, 255, 0.589);
+    border-radius: 3px;
+    color: black;
+    padding: 3px;
+    font-size: 17;
+    position: relative;
+  }
+
+  .link-input{
+    background-color: hsla(0, 0%, 100%, 0.068);
+    border-radius: 3px;
+    border: 1px dashed transparent;
+    padding: 0px;
+    font-family: Arial;
+    font-weight: bold;
+  }
+  .link-input:focus{
+    outline: none;
+  }
+
+  .btn-aleatorio{
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    padding: 0px;
+    height: 80%;
+    text-align: center;
+    cursor: pointer;
+    font-size: 22px;
+    user-select: none;
+  }
+  .btn-aleatorio:active{
+    color: var(--cor-primaria)
   }
 
   .botao-tipo{

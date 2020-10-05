@@ -23,10 +23,8 @@ export class AvaliacaoAlunoComponent implements OnInit {
     descricao: `Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
     Descrição da Avaliação`,
     status: 0,
-    professor: {
-      id: 'XXY',
-      nome: 'Rafael Bini'
-    },
+    professorId: 'XXX',
+    professorNome: 'Rafael Bini',
     limitarNumIntegrantes: true,
     maxIntegrantes: 3,
     correcaoParesQtdNumero: 3,
@@ -199,7 +197,7 @@ export class AvaliacaoAlunoComponent implements OnInit {
       // Se estou logado,
       if (this.credencialService.estouLogado()) {
         // Se sou o professor dessa avaliacao,
-        if (this.avaliacao.professor.id == this.credencialService.loggedUser.id) {
+        if (this.avaliacao.professorId == this.credencialService.loggedUser.id) {
           // Vou para visão do professor
           this.credencialService.loggedUser.acesso = 'professor';
           this.router.navigate([`professor/avaliacao/${AVALIACAO_ID}`]);

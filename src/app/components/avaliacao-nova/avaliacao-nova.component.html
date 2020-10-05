@@ -1,10 +1,24 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
 <div style="height: 20px;"></div>
-<!-- VISÃO DE PROFESSOR -->
 
+<!-- VISÃO DE PROFESSOR -->
 <div *ngIf="visao == 'professor'" style="width: 60%; margin: auto;">
-    <div style="background-color: whitesmoke; border-radius: 10px; padding: 15px;">
+    <div class="link-div">
+        Link da Avaliação:
+        <span class="link-span">
+            http://{{comumService.getHostName()}}/<input type="text" (ngModelChange)="corrigirId()"
+                (change)="corrigirIdVazio()" [(ngModel)]="avaliacao.id" class="link-input" maxlength="20" />
+
+            <mat-icon class="btn-aleatorio" (click)="setIdAleatorio()" matTooltip="Gerar aleatório">refresh</mat-icon>
+
+        </span>
+        <div *ngIf="idJaExiste" class="error-div">
+            Ops! Esse link já está sendo usado
+        </div>
+    </div>
+    <div class="header-container">
+
         <div>
             <input required placeholder="Título da Avaliação" class="titulo-input" [(ngModel)]="avaliacao.titulo" />
         </div>
@@ -17,7 +31,6 @@
                 placeholder="Insira aqui uma descrição / instruções iniciais"></textarea>
             <span *ngIf="estaEmFoco(descricaoTextarea)"
                 class="contador-caracteres">{{descricaoTextarea.value.length}}/1500</span>
-
         </div>
         <div style="position: relative;">
             <mat-form-field style="width: 95%; padding: 15px; margin: auto;">
@@ -34,6 +47,7 @@
                 <mat-placeholder class="placeholder">Digite aqui algumas tags para te ajudarem a encontrar essa
                     avaliação</mat-placeholder>
             </mat-form-field>
+
 
         </div>
 
@@ -172,11 +186,11 @@
     </app-questoes-editar>
 
     <div style="width: 100%; text-align: center;">
-        <button mat-raised-button (click)="finalizar()"
+        <button *ngIf="isEditando" mat-raised-button (click)="salvar()"
             style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: inline-block;">
             Salvar
         </button>
-        <button mat-raised-button (click)="finalizar()"
+        <button *ngIf="!isEditando" mat-raised-button (click)="finalizar()"
             style="margin: auto; margin-top: 40px; margin-left: 20px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: inline-block; background-color: var(--cor-primaria); color: white;">
             Tudo pronto, Finalizar!
         </button>

@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Questao } from './../models/questao';
 import { Injectable } from '@angular/core';
 import { animationFrameScheduler } from 'rxjs';
@@ -8,7 +9,7 @@ import { Avaliacao } from '../models/avaliacao';
 })
 export class ComumService {
 
-  constructor() { }
+  constructor(private snack: MatSnackBar) { }
 
   getStringFromDate(date: Date) {
     return date.toISOString().substr(0, 10) + "T00:00";
@@ -317,6 +318,15 @@ export class ComumService {
       }
     }
     return true;
+  }
+
+  getHostName() {
+    return window.location.host;
+  }
+
+  notificarErro(msgUsuario: string, errorObj: any) {
+    this.snack.open(msgUsuario, null, { duration: 3500 });
+    console.log(errorObj);
   }
 
 }

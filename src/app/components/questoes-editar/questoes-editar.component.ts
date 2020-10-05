@@ -69,9 +69,11 @@ export class QuestoesEditarComponent implements OnInit {
     if (this.comumService.precisaDeCorrecaoAutomatica(this.avaliacao)) {
       return this.comumService.questaoTipos.concat().filter(tipo => tipo.temCorrecaoAutomatica);
     }
-
     return this.comumService.questaoTipos;
-
+  }
+  deletarQuestao(questaoIndex: number) {
+    if (this.prova.questoes.length > 1)
+      this.prova.questoes.splice(questaoIndex, 1);
   }
 
   // Alternativa

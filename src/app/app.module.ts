@@ -56,6 +56,7 @@ import { AlunoCardAvaliacaoAlunoComponent } from './components/avaliacao-aluno/a
 import { HomeComponent } from './components/home/home.component';
 import { AvaliacaoListaComponent } from './components/avaliacao-lista/avaliacao-lista.component';
 import { environment } from 'src/environments/environment';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import { environment } from 'src/environments/environment';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireStorageModule,
+    ClipboardModule
   ],
   providers: [
 

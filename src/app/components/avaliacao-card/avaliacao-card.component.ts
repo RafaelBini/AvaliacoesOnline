@@ -1,3 +1,4 @@
+import { AvaliacaoService } from 'src/app/services/avaliacao.service';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from '../../services/comum.service';
@@ -15,7 +16,9 @@ export class AvaliacaoCardComponent implements OnInit {
   @Input() public tipoAcesso;
   public status;
 
-  constructor(public comumService: ComumService, public dialog: MatDialog) { }
+  constructor(public comumService: ComumService,
+    private avaliacaoService: AvaliacaoService,
+    public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.status = this.comumService.statusAvaliacao[this.avaliacao.status];
@@ -37,10 +40,12 @@ export class AvaliacaoCardComponent implements OnInit {
 
   arquivar(avaliacao) {
     avaliacao.isArquivada = true;
+    this.avaliacaoService.arquivarAvaliacao(avaliacao.id);
   }
 
   desarquivar(avaliacao) {
     avaliacao.isArquivada = false;
+    this.avaliacaoService.desarquivarAvaliacao(avaliacao.id);
   }
 
 

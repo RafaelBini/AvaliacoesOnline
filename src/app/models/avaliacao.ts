@@ -6,7 +6,8 @@ export interface Avaliacao {
     id?: string,
     titulo?: string;
     descricao?: string;
-    professor?: Usuario,
+    professorId?: string,
+    professorNome?: string,
     dtInicio?: string;
     isInicioIndeterminado?: boolean;
     dtInicioCorrecao?: string;
@@ -28,6 +29,7 @@ export interface Avaliacao {
     limitarNumIntegrantes?: boolean;
     isArquivada?: boolean;
     provas?: Array<string>;
+    provaGabarito?: string;
 
     /*
     questoes?: Array<Questao>,

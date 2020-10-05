@@ -50,17 +50,15 @@ export class CredencialService {
   }
 
   public estouLogado(): boolean {
-
     // Verifica os cookies
-
     if (localStorage.getItem(this.KEY_LOGGED_USER_ID)) {
-
-
       return true;
-
     }
-
     return false;
+  }
+
+  public getLoggedUserIdFromCookie(): string {
+    return localStorage.getItem(this.KEY_LOGGED_USER_ID);
   }
 
   public cadastrar(usuario: Usuario) {

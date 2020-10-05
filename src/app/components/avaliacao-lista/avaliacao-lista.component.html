@@ -10,8 +10,8 @@
             </tr>
             <tr>
                 <td width="95%">
-                    <input type="text" class="input-clean" style="width: 100%;" #inputBusca maxlength="85"
-                        (keyup)="onBuscaKeyUp(inputBusca.value)"
+                    <input type="text" [(ngModel)]="textoBusca" class="input-clean" style="width: 100%;" #inputBusca
+                        maxlength="85" (keyup)="onBuscaKeyUp(inputBusca.value)"
                         placeholder="Digite aqui uma parte do titulo, descrição ou tag da avaliação que procura" />
                 </td>
                 <td width="5%" style="padding: 5px;">
@@ -62,7 +62,7 @@
     <button mat-menu-item (click)="agruparAvaliacoes = !agruparAvaliacoes">
         {{agruparAvaliacoes ? 'Desagrupar' : 'Agrupar'}}
     </button>
-    <button mat-menu-item (click)="mostrarArquivadas = !mostrarArquivadas">
+    <button *ngIf="tipoAcesso == 'professor'" mat-menu-item (click)="toggleMostrarArquivadas()">
         {{mostrarArquivadas ? 'Esconder Arquivadas' : 'Mostrar Arquivadas'}}
     </button>
 </mat-menu>

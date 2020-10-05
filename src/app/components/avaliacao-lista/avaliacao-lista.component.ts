@@ -13,6 +13,7 @@ export class AvaliacaoListaComponent implements OnInit {
   public mostrarArquivadas = false;
   public selectedStatusTab = 0;
   public avaliacoesFiltradas: Array<Avaliacao>;
+  public textoBusca: string = "";
 
   @Input() avaliacoes: Array<Avaliacao>;
   @Input() tipoAcesso;
@@ -20,11 +21,16 @@ export class AvaliacaoListaComponent implements OnInit {
   constructor(public comumService: ComumService) { }
 
   ngOnInit(): void {
-    this.avaliacoesFiltradas = this.avaliacoes;
-    this.selecionarStatusTabAdequada();
+    if (this.tipoAcesso != 'professor') {
+      this.mostrarArquivadas = true;
+    }
+    this.atualizarAvaliacoesFiltradas();
+
   }
 
-
+  atualizarAvaliacoesFiltradas() {
+    this.onBuscaKeyUp(this.textoBusca);
+  }
   getStatusPorPrioridade() {
     return this.comumService.statusAvaliacao.concat().sort((a, b) => b.prioridade - a.prioridade);
   }
@@ -87,6 +93,10 @@ export class AvaliacaoListaComponent implements OnInit {
   }
   getTodasAvaliacoes() {
     return this.avaliacoesFiltradas.concat().filter(avaliacao => (!avaliacao.isArquivada || this.mostrarArquivadas));
+  }
+  toggleMostrarArquivadas() {
+    this.mostrarArquivadas = !this.mostrarArquivadas;
+    this.atualizarAvaliacoesFiltradas();
   }
 
 

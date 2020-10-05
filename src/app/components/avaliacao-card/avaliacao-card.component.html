@@ -1,4 +1,4 @@
-<div class="avalicao-card" [style.borderColor]="status.cor" [style.opacity]="avaliacao.isArquivada? '0.5' : '1'">
+<div class="avalicao-card" [style.borderColor]="status.cor" [style.opacity]="avaliacao.isArquivada? '0.85' : '1'">
     <h3><b>{{avaliacao.titulo}}</b></h3>
     <div style="display: flex;">
         <div *ngFor="let tag of avaliacao.tags" class="tag" [style.backgroundColor]="status.cor">
@@ -19,18 +19,20 @@
     <br />
     Término: 31/07/2020 21:00
 
-    <a [routerLink]="'/'+tipoAcesso+'/avaliacao/1'" matTooltip="Entrar na Avaliação" class="info-box"
+    <a [routerLink]="'/'+tipoAcesso+'/avaliacao/'+ avaliacao.id" matTooltip="Entrar na Avaliação" class="info-box"
         [style.backgroundColor]="status.cor">
         Status: {{status.nome}}
         <hr />
         {{tipoAcesso=="professor" ? status.acaoProfessor : status.acaoAluno}}
     </a>
 
-    <span *ngIf="avaliacao.isArquivada" (click)="desarquivar(avaliacao)" matTooltip="Clique para desarquivar"
+    <span *ngIf="avaliacao.isArquivada && tipoAcesso=='professor' " (click)="desarquivar(avaliacao)"
+        matTooltip="Clique para desarquivar"
         style="position: absolute; top: 12px; right: 50px; cursor: pointer; text-decoration: underline dashed;">
         ARQUIVADA
     </span>
-    <button mat-icon-button style="position: absolute; top: 3px; right: 3px;" [matMenuTriggerFor]="aboveMenu">
+    <button *ngIf="tipoAcesso=='professor'" mat-icon-button style="position: absolute; top: 3px; right: 3px;"
+        [matMenuTriggerFor]="aboveMenu">
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #aboveMenu="matMenu">

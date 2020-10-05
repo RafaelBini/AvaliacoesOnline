@@ -35,9 +35,8 @@ export class AvaliacaoProfessorComponent implements OnInit {
   public avaliacao: Avaliacao = {
     titulo: "Avaliação 01",
     descricao: "Essa é uma avaliação criada para testes.",
-    professor: {
-      id: 'XXX'
-    },
+    professorId: 'XXX',
+    professorNome: 'Rafael Bini',
     alunos: [
       { email: "fredb12@hotmail.com", senha: '', nome: "Fred Desimpedidos", tags: ['Web II', 'Interação Humano Computador'], statusId: 2 },
       { email: "marilia@gmail.com", senha: '', nome: "Marília Galvão", tags: ['Web II', 'Interação Humano Computador'], statusId: 2 },
@@ -76,7 +75,7 @@ export class AvaliacaoProfessorComponent implements OnInit {
       // Se estou logado,
       if (this.credencialService.estouLogado()) {
         // Se sou o professor dessa avaliacao,
-        if (this.avaliacao.professor.id == this.credencialService.loggedUser.id) {
+        if (this.avaliacao.professorId == this.credencialService.loggedUser.id) {
           // Vou para visão do professor
           this.credencialService.loggedUser.acesso = 'professor';
         }

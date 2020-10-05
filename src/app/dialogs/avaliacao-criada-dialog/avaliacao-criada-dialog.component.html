@@ -2,8 +2,8 @@
     <h1>Avalição criada com sucesso!</h1>
     <h4>Compartilhe o link abaixo com seus alunos:</h4>
     <span class="linkCompartilhavel" style="background-color: rgb(94, 184, 101);"><a
-            href="#">avaliacao.com/001001</a></span>
-    <button matTooltip="Copiar link" mat-icon-button>
+            [href]="getLink()">{{getLink()}}</a></span>
+    <button [cdkCopyToClipboard]="getLink()" (click)="notificarCopy()" matTooltip="Copiar link" mat-icon-button>
         <mat-icon style="font-size: 17px;">content_copy</mat-icon>
     </button>
 
