@@ -109,6 +109,11 @@ export class ProfessorComponent implements OnInit {
 
   ngOnInit(): void {
 
+    if (!this.credencialService.estouLogado()) {
+      this.router.navigate(['']);
+      return;
+    }
+
     this.route.params.subscribe(params => {
       if (params.tab) {
         const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);

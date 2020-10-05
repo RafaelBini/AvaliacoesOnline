@@ -93,6 +93,11 @@ export class AlunoComponent implements OnInit {
 
   ngOnInit(): void {
 
+    if (!this.credencialService.estouLogado()) {
+      this.router.navigate(['']);
+      return;
+    }
+
     this.route.params.subscribe(params => {
       if (params.tab) {
         const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);
@@ -100,6 +105,7 @@ export class AlunoComponent implements OnInit {
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
       }
       this.avaliacoesFiltradas = this.avaliacoes;
+
     });
 
   }
