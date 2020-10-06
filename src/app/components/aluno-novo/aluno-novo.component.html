@@ -7,28 +7,29 @@
         </tr>
         <tr>
             <td>
-                <label for="nome">Nome do aluno:</label>
-            </td>
-            <td>
-                <input required type="text" class="form-control" name="nome" value="{{aluno.nome}}"
-                    [(ngModel)]="aluno.nome">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="email">E-mail do aluno:</label>
+                <label for="email">E-mail:</label>
             </td>
             <td>
                 <input required type="email" class="form-control" name="email" value="{{aluno.email}}"
-                    [(ngModel)]="aluno.email">
+                    [(ngModel)]="aluno.email" (ngModelChange)="verificarEmail()">
             </td>
         </tr>
         <tr>
             <td>
-                <label for="senha">Senha padrão do aluno:</label>
+                <label for="senha">Senha:</label>
             </td>
             <td>
-                <input type="text" class="form-control" name="senha" value="TADS2020">
+                <input type="text" class="form-control" [disabled]="!novoUsuario" [(ngModel)]="aluno.senha"
+                    name="senha">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="nome">Nome:</label>
+            </td>
+            <td>
+                <input required type="text" [disabled]="!novoUsuario" class="form-control" name="nome"
+                    value="{{aluno.nome}}" [(ngModel)]="aluno.nome">
             </td>
         </tr>
         <tr>
@@ -51,8 +52,10 @@
         </tr>
         <tr>
             <td colspan="2" align="center">
-                <button mat-button mat-dialog-close
+                <button *ngIf="novoUsuario" mat-button (click)="cadastrar()"
                     style="background-color: var(--cor-primaria); color: white; margin-top: 5px;">Cadastrar</button>
+                <button *ngIf="!novoUsuario" mat-button (click)="adicionar()"
+                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;">Adicionar</button>
             </td>
         </tr>
 

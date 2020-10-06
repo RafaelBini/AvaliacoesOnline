@@ -1,3 +1,5 @@
+import { ConfirmarComponent } from './../../dialogs/confirmar/confirmar.component';
+import { UsuarioService } from './../../services/usuario.service';
 import { AvaliacaoListaComponent } from './../avaliacao-lista/avaliacao-lista.component';
 import { AvaliacaoService } from './../../services/avaliacao.service';
 import { Avaliacao } from './../../models/avaliacao';
@@ -8,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
 import { CredencialService } from 'src/app/services/credencial.service';
+import { Usuario } from 'src/app/models/usuario';
+import { EditarAlunoComponent } from 'src/app/dialogs/editar-aluno/editar-aluno.component';
 
 
 @Component({
@@ -21,17 +25,12 @@ export class ProfessorComponent implements OnInit {
 
   public alunosSelecionados = [];
   public alunosFiltrados = [];
-  public alunos = [
-    { email: "godo@gmail.com", nome: "Godofredo", matricula: "grr20178700", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "rub@gmail.com", nome: "Ruberlinda", matricula: "grr20181110", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "cdnleon@outlook.com", nome: "Leon Martins", matricula: "grr20194580", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "nil@gmail.com", nome: "Nilce Moretto", matricula: "grr20171234", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "fredb12@hotmail.com", nome: "Fred Desimpedidos", matricula: "grr20184658", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "marilia@gmail.com", nome: "Marília Galvão", matricula: "grr20167755", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "bueno@gmail.com", nome: "Galvão Bueno", matricula: "grr20184848", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "alanzoka@hotmail.com", nome: "Alan Ferreira", matricula: "grr20178452", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "balga@outlook.com", nome: "Mari Balga", matricula: "grr20196658", tags: ['LPOO II', 'DAC'] },
-    { email: "clone@gmail.com", nome: "Henrique Grosse", matricula: "grr20184610", tags: ['Empreendedorismo e Inovação', 'Gestão Empresarial'] },
+  public alunos: Array<Usuario> = [
+    { email: "godo@gmail.com", nome: "Godofredo", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "rub@gmail.com", nome: "Ruberlinda", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "cdnleon@outlook.com", nome: "Leon Martins", tags: ['Web II', 'Interação Humano Computador'] },
+    { email: "nil@gmail.com", nome: "Nilce Moretto", tags: ['Web II', 'Interação Humano Computador'] },
+
   ];
 
 
@@ -56,6 +55,7 @@ export class ProfessorComponent implements OnInit {
     public credencialService: CredencialService,
     public comumService: ComumService,
     private avaliacaoService: AvaliacaoService,
+    private usuarioService: UsuarioService,
     private route: ActivatedRoute,
     private router: Router,
   ) { }
@@ -72,10 +72,21 @@ export class ProfessorComponent implements OnInit {
         const index = this.tabs.indexOf(this.tabs.filter(tab => tab.id == params.tab)[0]);
         this.selectedTab = index;
         this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };
+
+        if (params.tab == "alunos") {
+          var intervalRef = setInterval(() => {
+            if (this.credencialService.loggedUser.id != null) {
+              this.alunos = this.credencialService.loggedUser.alunos;
+              this.alunosFiltrados = this.alunos;
+              clearInterval(intervalRef);
+            }
+          });
+        }
+
       }
     });
 
-
+    // AVALIAÇÕES
     this.avaliacaoService.getAvaliacoesFromProfessor(this.credencialService.getLoggedUserIdFromCookie()).then(avaliacoes => {
       this.avaliacaoLista.avaliacoes = avaliacoes;
       this.avaliacaoLista.atualizarAvaliacoesFiltradas();
@@ -84,7 +95,8 @@ export class ProfessorComponent implements OnInit {
         this.comumService.notificarErro("Falha ao buscar avaliações", reason);
       });
 
-    this.alunosFiltrados = this.alunos;
+
+
 
   }
 
@@ -143,6 +155,63 @@ export class ProfessorComponent implements OnInit {
 
   }
   removerAlunosSelecionados() {
+
+    var diagRef = this.dialog.open(ConfirmarComponent, {
+      data: {
+        mensagem: `Tem certeza de que deseja remover ${this.alunosSelecionados.length > 1 ? 'os' : 'o'} ${this.alunosSelecionados.length} ${this.alunosSelecionados.length > 1 ? 'alunos selecionados' : 'aluno selecionado'}?`,
+        mensagem2: "Remover alunos"
+      }
+    });
+    diagRef.afterClosed().subscribe((result) => {
+      if (result == true) {
+        for (let alunoEmail of this.alunosSelecionados) {
+          this.credencialService.loggedUser.alunos = this.credencialService.loggedUser.alunos.filter(u => u.email != alunoEmail);
+        }
+        this.alunos = this.credencialService.loggedUser.alunos;
+        this.alunosFiltrados = this.alunos;
+        this.usuarioService.update(this.credencialService.loggedUser);
+      }
+    });
+
+
+
+
+  }
+  adicionarTagsAosSelecionados() {
+    if (this.alunosSelecionados.length <= 1)
+      return;
+    var diagRef = this.dialog.open(EditarAlunoComponent, {
+      width: '80%',
+    });
+    diagRef.afterClosed().subscribe(aluno => {
+      if (aluno) {
+        const alunoTipado: Usuario = aluno;
+        for (let aluno of this.credencialService.loggedUser.alunos) {
+          if (this.alunosSelecionados.includes(aluno.email)) {
+            for (let tag of alunoTipado.tags) {
+              aluno.tags.push(tag);
+            }
+          }
+        }
+        this.alunos = this.credencialService.loggedUser.alunos;
+        this.alunosFiltrados = this.alunos;
+        this.usuarioService.update(this.credencialService.loggedUser);
+
+      }
+    });
+  }
+  editarAluno() {
+    if (this.alunosSelecionados.length > 1)
+      return;
+    var diagRef = this.dialog.open(EditarAlunoComponent, {
+      data: this.alunos.filter(a => a.email == this.alunosSelecionados[0])[0],
+      width: '80%',
+    });
+    diagRef.afterClosed().subscribe(() => {
+      this.credencialService.loggedUser.alunos = this.alunos;
+      this.alunosFiltrados = this.alunos;
+      this.usuarioService.update(this.credencialService.loggedUser);
+    });
 
   }
 

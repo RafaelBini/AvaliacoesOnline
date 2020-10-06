@@ -10,7 +10,23 @@ export class UsuarioService {
   constructor(private db: AngularFirestore) { }
 
   insert(usuario: Usuario) {
+    usuario.alunos = [];
     return this.db.collection('usuarios').add(usuario);
+  }
+
+
+  getAll(): Promise<Array<Usuario>> {
+    return new Promise((resolve, reject) => {
+      this.db.collection('usuarios').get().toPromise().then(ref => {
+        var usuarios: Array<Usuario> = [];
+        for (let doc of ref.docs) {
+          usuarios.push(doc.data() as Usuario);
+        }
+        resolve(usuarios);
+      }).catch(reason => reject(reason));
+
+    });
+
   }
 
   async exists(usuario: Usuario) {

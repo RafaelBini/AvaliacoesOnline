@@ -1,0 +1,15 @@
+<mat-form-field style="width: 90%; padding: 15px; margin: auto;">
+    <mat-chip-list #chipList>
+        <mat-chip *ngFor="let tag of aluno.tags" [selectable]="true" [removable]="true" (removed)="removeTag(tag)">
+            {{tag}}
+            <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+        </mat-chip>
+        <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)" />
+
+    </mat-chip-list>
+    <mat-placeholder class="placeholder">Digite aqui algumas tags para te ajudarem a encontrar esse
+        aluno</mat-placeholder>
+</mat-form-field>
+
+<button [mat-dialog-close]="aluno" mat-button class="btn">PRONTO</button>

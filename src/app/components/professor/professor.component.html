@@ -39,11 +39,13 @@
                 </tr>
                 <tr>
                     <td align="center" colspan="2">
-                        <button mat-button (click)="selecionarTodos()">
+                        <button *ngIf="alunosFiltrados.length > 0" mat-button (click)="selecionarTodos()">
                             {{alunosFiltrados.length == alunosSelecionados.length ? 'Deselecionar' : 'Selecionar'}}
                             Todos
                         </button>
-
+                        <div *ngIf="alunos.length <= 0" class="msg-sem-aluno">
+                            Você ainda não tem nenhum aluno...
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -101,12 +103,13 @@
             mat-fab>
             <mat-icon>delete</mat-icon>
         </button>
-        <button *ngIf="alunosSelecionados.length > 1" matTooltip="Adicionar tags aos alunos selecionados"
+        <button *ngIf="alunosSelecionados.length > 1" (click)="adicionarTagsAosSelecionados()"
+            matTooltip="Adicionar tags aos alunos selecionados"
             style="position: fixed; left: 30px; bottom: 120px; background-color: var(--cor-primaria); color: white"
             mat-fab>
             <mat-icon>style</mat-icon>
         </button>
-        <button *ngIf="alunosSelecionados.length == 1" matTooltip="Editar o aluno selecionado"
+        <button *ngIf="alunosSelecionados.length == 1" (click)="editarAluno()" matTooltip="Editar o aluno selecionado"
             style="position: fixed; left: 30px; bottom: 120px; background-color: var(--cor-primaria); color: white"
             mat-fab>
             <mat-icon>create</mat-icon>

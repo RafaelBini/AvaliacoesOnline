@@ -57,6 +57,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AvaliacaoListaComponent } from './components/avaliacao-lista/avaliacao-lista.component';
 import { environment } from 'src/environments/environment';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { EditarAlunoComponent } from './dialogs/editar-aluno/editar-aluno.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     AlunoCardAvaliacaoAlunoComponent,
     HomeComponent,
     AvaliacaoListaComponent,
+    EditarAlunoComponent,
   ],
   imports: [
     BrowserModule,
