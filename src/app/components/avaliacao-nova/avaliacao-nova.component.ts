@@ -34,7 +34,7 @@ export class AvaliacaoNovaComponent implements OnInit {
 
 
   public avaliacao: Avaliacao = {
-    id: 'AVAL',
+    id: '',
     status: 0,
     titulo: "",
     descricao: "",
@@ -56,6 +56,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     tags: [],
     provas: [],
     provaGabarito: "",
+    alunos: []
   };
 
   public provaGabarito: Prova = {
@@ -102,7 +103,15 @@ export class AvaliacaoNovaComponent implements OnInit {
 
     this.comumService.scrollToTop();
     this.route.params.subscribe(params => {
-      if (params.id) {
+      if (params.id && params.tipo == 'duplicar') {
+        this.puxarAvaliacaoParaEditar(params.id).then(() => {
+          this.receberTodasAvaliacoes().then(() => {
+            this.setIdDuplicado(params.id);
+          });
+        });
+        this.isEditando = false;
+      }
+      else if (params.id) {
         this.puxarAvaliacaoParaEditar(params.id);
         this.isEditando = true;
       }
@@ -115,22 +124,38 @@ export class AvaliacaoNovaComponent implements OnInit {
   }
 
   puxarAvaliacaoParaEditar(avaliacaoId) {
-    this.avaliacaoService.getAvaliacaoFromId(avaliacaoId).then(avaliacao => {
-      this.avaliacao = avaliacao;
-      this.provaService.getProvaFromId(avaliacao.provaGabarito).then(prova => {
-        this.provaGabarito = prova;
+    return new Promise((resolve, reject) => {
+      this.avaliacaoService.getAvaliacaoFromId(avaliacaoId).then(avaliacao => {
+        this.avaliacao = avaliacao;
+        this.provaService.getProvaFromId(avaliacao.provaGabarito).then(prova => {
+          this.provaGabarito = prova;
+          resolve();
+        })
+          .catch(reason => {
+            this.comumService.notificarErro("Erro ao tentar receber prova gabarito", reason);
+            reject(reason);
+            return;
+          });
       })
-        .catch(reason => this.comumService.notificarErro("Erro ao tentar receber prova gabarito", reason));
-    })
-      .catch(reason => this.comumService.notificarErro("Erro ao tentar receber avaliacao", reason))
+        .catch(reason => {
+          this.comumService.notificarErro("Erro ao tentar receber avaliacao", reason);
+          reject(reason);
+          return;
+        });
+    });
+
   }
 
   receberTodasAvaliacoes() {
-    this.avaliacaoService.getAllAvaliacoes().then(ref => {
-      for (let doc of ref.docs) {
-        this.avaliacoesId.push(doc.id);
-      }
+    return new Promise((resolve, reject) => {
+      this.avaliacaoService.getAllAvaliacoes().then(ref => {
+        for (let doc of ref.docs) {
+          this.avaliacoesId.push(doc.id);
+        }
+        resolve();
+      }).catch(reason => reject(reason));
     });
+
   }
 
   addTag(event: MatChipInputEvent): void {
@@ -213,6 +238,8 @@ export class AvaliacaoNovaComponent implements OnInit {
   }
 
   salvar() {
+    if (!this.isEditando)
+      return;
     this.avaliacaoService.updateAvaliacao(this.avaliacao).then(() => {
       this.provaGabarito.id = this.avaliacao.provaGabarito;
       this.provaService.updateProva(this.provaGabarito).then(() => {
@@ -290,6 +317,18 @@ export class AvaliacaoNovaComponent implements OnInit {
       }
     }
     return idAleatorio;
+  }
+
+  setIdDuplicado(base: string) {
+    this.avaliacao.id = this.getIdDuplicado(base);
+  }
+
+  getIdDuplicado(base: string) {
+    var count = 2;
+    while (this.avaliacoesId.includes(`${base}_${count}`)) {
+      count++;
+    }
+    return `${base}_${count}`;
   }
 
 }

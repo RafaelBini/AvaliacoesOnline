@@ -44,4 +44,8 @@ export class ProvaService {
       });
     });
   }
+
+  deletarProva(provaId: string) {
+    return this.db.collection('provas').doc(provaId).delete();
+  }
 }

@@ -1,3 +1,5 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProvaService } from './../../services/prova.service';
 import { AvaliacaoService } from 'src/app/services/avaliacao.service';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,22 +20,40 @@ export class AvaliacaoCardComponent implements OnInit {
 
   constructor(public comumService: ComumService,
     private avaliacaoService: AvaliacaoService,
-    public dialog: MatDialog) { }
+    private provaService: ProvaService,
+    public dialog: MatDialog,
+    private snack: MatSnackBar) { }
 
   ngOnInit(): void {
     this.status = this.comumService.statusAvaliacao[this.avaliacao.status];
   }
 
-  deletar(avaliacao) {
+  deletar(avaliacao: Avaliacao) {
     const dialgogRef = this.dialog.open(ConfirmarComponent, {
       data: {
         mensagem: "Você tem certeza de que deseja excluir essa avaliação?",
-        mensagem2: "Não será possível recuperar a avaliação após exluir."
+        mensagem2: "Excluir avaliação: Não será possível recuperar a avaliação após exluir."
       }
     });
     dialgogRef.afterClosed().subscribe(result => {
       if (result == true) {
-        console.log("EXCLUIR");
+        this.avaliacaoService.deletarAvaliacao(avaliacao.id).then(() => {
+          this.snack.open("Avaliação excluida com sucesso.", null, { duration: 3500 });
+          avaliacao.isArquivada = true;
+          const dialgogRef2 = this.dialog.open(ConfirmarComponent, {
+            data: {
+              mensagem: "Você deseja excluir as questões dessa avaliação?",
+              mensagem2: "Excluir questões: Não será possível usar as questões dessa avaliação em outras avaliações após excluir."
+            }
+          });
+          dialgogRef2.afterClosed().subscribe(result => {
+            if (result == true) {
+              this.provaService.deletarProva(avaliacao.provaGabarito).then(() => {
+                this.snack.open("Questões excluidas com sucesso.", null, { duration: 3500 });
+              });
+            }
+          });
+        });
       }
     });
   }

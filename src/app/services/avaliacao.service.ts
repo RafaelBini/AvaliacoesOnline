@@ -119,4 +119,8 @@ export class AvaliacaoService {
     });
   }
 
+  deletarAvaliacao(avaliacaoId) {
+    return this.db.collection('avaliacoes').doc(avaliacaoId).delete();
+  }
+
 }

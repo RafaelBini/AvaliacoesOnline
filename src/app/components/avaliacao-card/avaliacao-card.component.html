@@ -36,7 +36,8 @@
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #aboveMenu="matMenu">
-        <button *ngIf="tipoAcesso=='professor'" mat-menu-item>
+        <button *ngIf="tipoAcesso=='professor'" [routerLink]="'/professor/avaliacao/duplicar/' + avaliacao.id"
+            mat-menu-item>
             <mat-icon>content_copy</mat-icon>Duplicar
         </button>
         <a *ngIf="tipoAcesso=='professor'" [routerLink]="'/professor/avaliacao/editar/' + avaliacao.id" mat-menu-item>
