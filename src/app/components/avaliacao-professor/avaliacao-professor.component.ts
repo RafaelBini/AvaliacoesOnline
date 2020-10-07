@@ -1,48 +1,34 @@
+import { UsuarioService } from './../../services/usuario.service';
+import { AvaliacaoAlunoComponent } from './../avaliacao-aluno/avaliacao-aluno.component';
+import { AvaliacaoService } from './../../services/avaliacao.service';
 import { CredencialService } from 'src/app/services/credencial.service';
 import { Avaliacao } from './../../models/avaliacao';
 import { ComumService } from './../../services/comum.service';
 import { UrlNode } from './../../models/url-node';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Usuario } from 'src/app/models/usuario';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'app-avaliacao-professor',
   templateUrl: './avaliacao-professor.component.html',
   styleUrls: ['./avaliacao-professor.component.css']
 })
-export class AvaliacaoProfessorComponent implements OnInit {
+export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
   public textoFiltroAlunos = "";
-  public alunosFiltrados = [];
+  public alunosFiltrados: Array<Usuario> = [];
   public professor: Usuario = {
-    alunos: [
-      { email: "godo@gmail.com", senha: '', nome: "Godofredo", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, online: false },
-      { email: "rub@gmail.com", senha: '', nome: "Ruberlinda", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
-      { email: "cdnleon@outlook.com", senha: '', nome: "Leon Martins", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
-      { email: "nil@gmail.com", senha: '', nome: "Nilce Moretto", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
-      { email: "fredb12@hotmail.com", senha: '', nome: "Fred Desimpedidos", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
-      { email: "marilia@gmail.com", senha: '', nome: "Marília Galvão", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
-      { email: "bueno@gmail.com", senha: '', nome: "Galvão Bueno", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
-      { email: "alanzoka@hotmail.com", senha: '', nome: "Alan Ferreira", tags: ['Web II', 'Interação Humano Computador'], statusId: 0, },
-      { email: "balga@outlook.com", senha: '', nome: "Mari Balga", tags: ['LPOO II', 'DAC'], statusId: 0, },
-      { email: "clone@gmail.com", senha: '', nome: "Henrique Grosse", tags: ['Empreendedorismo e Inovação', 'Gestão Empresarial'], statusId: 0, },
-    ]
+    alunos: []
   };
-
-
   public avaliacao: Avaliacao = {
-    titulo: "Avaliação 01",
-    descricao: "Essa é uma avaliação criada para testes.",
+    titulo: "",
+    descricao: "",
     professorId: 'XXX',
-    professorNome: 'Rafael Bini',
-    alunos: [
-      { email: "fredb12@hotmail.com", senha: '', nome: "Fred Desimpedidos", tags: ['Web II', 'Interação Humano Computador'], statusId: 2 },
-      { email: "marilia@gmail.com", senha: '', nome: "Marília Galvão", tags: ['Web II', 'Interação Humano Computador'], statusId: 2 },
-      { email: "bueno@gmail.com", senha: '', nome: "Galvão Bueno", tags: ['Web II', 'Interação Humano Computador'], statusId: 3 },
-      { email: "rafaelbini@hotmail.com", senha: '', nome: "Rafael Bini", statusId: 3 },
-    ],
+    professorNome: '',
+    alunos: [],
     grupos: [
       {
         numero: 1,
@@ -53,37 +39,73 @@ export class AvaliacaoProfessorComponent implements OnInit {
     tipoCorrecao: 0,
     tipoDisposicao: 1,
     tipoPontuacao: 0,
-  }
-
+  };
   public caminho: Array<UrlNode> = [
     { nome: `Professor`, url: `/professor` },
     { nome: `Avaliações`, url: `/professor/avaliacoes` },
-    { nome: `${this.avaliacao.titulo}`, url: `#` },
+    { nome: ``, url: `#` },
   ];
 
+  avaliacaoSubscription: Subscription;
   public scrolling = false;
 
-  constructor(public credencialService: CredencialService, public router: Router, public route: ActivatedRoute, public comumService: ComumService) { }
+  constructor(public credencialService: CredencialService,
+    public comumService: ComumService,
+    private avaliacaoService: AvaliacaoService,
+    private usuarioService: UsuarioService,
+    public router: Router,
+    public route: ActivatedRoute,
+  ) { }
 
   ngOnInit(): void {
 
     this.route.params.subscribe(param => {
       const AVALIACAO_ID = param.id;
 
-      // TODO: Recebe a avaliação
-
       // Se estou logado,
       if (this.credencialService.estouLogado()) {
-        // Se sou o professor dessa avaliacao,
-        if (this.avaliacao.professorId == this.credencialService.loggedUser.id) {
-          // Vou para visão do professor
-          this.credencialService.loggedUser.acesso = 'professor';
-        }
-        else {
-          this.credencialService.loggedUser.acesso = 'aluno';
-          this.router.navigate([`aluno/avaliacao/${AVALIACAO_ID}`]);
-        }
-        this.atualizarAlunosOnline();
+
+        // Vou para visão do professor
+        this.credencialService.loggedUser.acesso = 'professor';
+
+        // Começa a ouvir mudanças na avaliação
+        this.avaliacaoSubscription = this.avaliacaoService.onAvaliacaoChange(AVALIACAO_ID).subscribe(avaliacao => {
+
+          this.avaliacao = avaliacao;
+
+
+          this.caminho = [
+            { nome: `Professor`, url: `/professor` },
+            { nome: `Avaliações`, url: `/professor/avaliacoes` },
+            { nome: `${this.avaliacao.titulo}`, url: `#` },
+          ];
+
+          // Se não tem nenhum grupo criado, cria um vazio.
+          if (this.avaliacao.grupos.length <= 0) {
+            this.addGrupo();
+          }
+
+          // Recebe os dados do professor
+          var intervalRef = setInterval(() => {
+            if (this.credencialService.loggedUser.id != null) {
+              this.professor = { ...this.credencialService.loggedUser };
+              this.adicionarAlunosVisitantes();
+
+              clearInterval(intervalRef);
+            }
+          });
+
+          // Se não sou o professor dessa avaliacao, entro nela como aluno
+          if (this.avaliacao.professorId != this.credencialService.loggedUser.id) {
+
+            this.credencialService.loggedUser.acesso = 'aluno';
+            this.router.navigate([`aluno/avaliacao/${AVALIACAO_ID}`]);
+            return;
+
+          }
+
+        });
+
       }
 
       // Se não estou logado,
@@ -91,28 +113,25 @@ export class AvaliacaoProfessorComponent implements OnInit {
         this.router.navigate([`${AVALIACAO_ID}`]);
       }
 
-
-
     });
   }
 
-
+  ngOnDestroy() {
+    if (this.avaliacaoSubscription)
+      this.avaliacaoSubscription.unsubscribe();
+  }
 
   // Parte 1 - Em Preparação
 
   addGrupo() {
-    // TODO: Add uma instância
-
     this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaStatusId: '0', alunos: [] });
-
+    this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
   drop(event: CdkDragDrop<string[]>, onde: string) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       if (onde == 'grupo') {
-
-
         transferArrayItem(event.previousContainer.data,
           event.container.data,
           this.professor.alunos.indexOf(this.professor.alunos.filter(aluno => aluno.email == this.alunosFiltrados[event.previousIndex].email)[0]),
@@ -124,12 +143,14 @@ export class AvaliacaoProfessorComponent implements OnInit {
           event.previousIndex,
           event.currentIndex);
       }
-
     }
     this.onBuscaAlunoKeyUp();
+    this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
   onBuscaAlunoKeyUp() {
     var texto = this.textoFiltroAlunos;
+
+    this.professor.alunos = this.getAlunosSemGrupo();
 
     this.professor.alunos.sort((a, b) => {
       if (a.online && !b.online) {
@@ -176,38 +197,26 @@ export class AvaliacaoProfessorComponent implements OnInit {
 
 
   }
-  atualizarAlunosOnline() {
-    this.avaliacao.alunos.forEach(alunoOnline => {
+  adicionarAlunosVisitantes() {
 
-      var estaEmUmGrupo = false;
-      alunoOnline.online = true;
+    var adicioneiAluno = false;
+    for (let alunoOnline of this.getAlunosFromTodosGrupos()) {
 
-      this.avaliacao.grupos.forEach(grupo => {
-
-        const ALUNOS_ENCONTRADOS = grupo.alunos.concat().filter(aluno => aluno.email == alunoOnline.email);
-
-        if (ALUNOS_ENCONTRADOS.length > 0) {
-          const ALUNO_ENCONTRADO_INDEX = grupo.alunos.indexOf(ALUNOS_ENCONTRADOS[0]);
-          grupo.alunos[ALUNO_ENCONTRADO_INDEX].online = true;
-          estaEmUmGrupo = true;
-        }
-
-      });
-
-      if (!estaEmUmGrupo) {
-        const ALUNOS_ENCONTRADOS = this.professor.alunos.concat().filter(aluno => aluno.email == alunoOnline.email);
-
-        if (ALUNOS_ENCONTRADOS.length > 0) {
-          const ALUNO_ENCONTRADO_INDEX = this.professor.alunos.indexOf(ALUNOS_ENCONTRADOS[0]);
-          this.professor.alunos[ALUNO_ENCONTRADO_INDEX].online = true;
-        }
-
-        else {
-          this.professor.alunos.push(alunoOnline);
+      var tenhoAluno = false;
+      for (let aluno of this.credencialService.loggedUser.alunos) {
+        if (alunoOnline.id == aluno.id) {
+          tenhoAluno = true;
         }
       }
+      if (!tenhoAluno) {
+        this.credencialService.loggedUser.alunos.push(alunoOnline);
+        adicioneiAluno = true;
+      }
+    }
 
-    });
+    if (adicioneiAluno) {
+      this.usuarioService.update(this.credencialService.loggedUser);
+    }
 
     this.onBuscaAlunoKeyUp();
 
@@ -240,6 +249,32 @@ export class AvaliacaoProfessorComponent implements OnInit {
         });
       }
     })
+  }
+  getAlunosSemGrupo() {
+    var alunosSemDuplicados: Array<Usuario> = [];
+    var alunosEmGrupos = this.getAlunosFromTodosGrupos();
+    for (let aluno of this.professor.alunos) {
+      var estaEmGrupo = false;
+      for (let alunoEmGrupo of alunosEmGrupos) {
+        if (aluno.id == alunoEmGrupo.id) {
+          estaEmGrupo = true;
+          break;
+        }
+      }
+      if (!estaEmGrupo) {
+        alunosSemDuplicados.push(aluno);
+      }
+    }
+    return alunosSemDuplicados;
+  }
+  getAlunosFromTodosGrupos(): Array<Usuario> {
+    var alunos: Array<Usuario> = [];
+    for (let grupo of this.avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        alunos.push(aluno);
+      }
+    }
+    return alunos;
   }
 
 

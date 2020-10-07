@@ -1,3 +1,4 @@
+import { Usuario } from './../models/usuario';
 import { Prova } from './../models/prova';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -63,8 +64,34 @@ export class AvaliacaoService {
     })
   }
 
+  onAvaliacaoChange(avaliacaoId: string) {
+    return this.db.collection('avaliacoes').doc(avaliacaoId).valueChanges();
+  }
+
   getAllAvaliacoes() {
-    return this.db.collection('avaliacoes').get().toPromise();
+    return new Promise<Array<Avaliacao>>((resolve, reject) => {
+      this.db.collection('avaliacoes').get().toPromise().then(ref => {
+        var avaliacoes: Array<Avaliacao> = [];
+        for (let doc of ref.docs) {
+          avaliacoes.push(doc.data());
+        }
+        resolve(avaliacoes);
+      }).catch(reason => reject(reason));
+    });
+  }
+
+  getAvaliacoesFromAluno(alunoId: string) {
+    return new Promise<Array<Avaliacao>>((resolve, reject) => {
+      this.db.collection('avaliacoes').get().toPromise().then(ref => {
+        var avaliacoes: Array<Avaliacao> = [];
+        for (let doc of ref.docs) {
+          const avaliacao = doc.data() as Avaliacao;
+          if (avaliacao.grupos.filter(grupo => grupo.alunos.filter(a => a.id == alunoId).length > 0).length > 0)
+            avaliacoes.push(avaliacao);
+        }
+        resolve(avaliacoes);
+      }).catch(reason => reject(reason));
+    });
   }
 
   getAvaliacoesFromProfessor(professorId: string): Promise<Array<Avaliacao>> {
@@ -83,23 +110,11 @@ export class AvaliacaoService {
     });
   }
 
-  getAvaliacoesFromAluno(AlunoId): Promise<Array<Avaliacao>> {
-    return new Promise((resolve, reject) => {
-      this.db.collection('avaliacoes', ref => ref.where('alunos', 'array-contains', AlunoId)).get().toPromise()
-        .then(ref => {
-          var avaliacoes: Array<Avaliacao> = [];
-          for (let doc of ref.docs) {
-            avaliacoes.push(doc.data());
-          }
-          resolve(avaliacoes);
-        })
-        .catch(reason => {
-          reject(reason);
-        });
-    });
-  }
+
 
   insertNovaAvaliacao(avaliacao: Avaliacao) {
+    avaliacao.grupos = [];
+    avaliacao.alunos = [];
     return this.db.collection('avaliacoes').doc(avaliacao.id).set(avaliacao);
   }
 

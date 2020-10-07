@@ -52,6 +52,7 @@ export class AlunoComponent implements OnInit {
     });
 
     this.avaliacaoService.getAvaliacoesFromAluno(this.credencialService.getLoggedUserIdFromCookie()).then(avaliacoes => {
+
       this.avaliacaoLista.avaliacoes = avaliacoes;
       this.avaliacaoLista.atualizarAvaliacoesFiltradas();
     })

@@ -52,21 +52,12 @@ export class LoginComponent implements OnInit {
   }
 
   fazerLogin() {
-
-    this.credencialService.fazerLogin(this.usuario).then((usuarioLogado: Usuario) => {
-
-
-
-      this.direcionar();
-
-    })
-      .catch(reason => {
-        this.snack.open(reason, null, {
-          duration: 3500,
-        })
-      });
-
-
+    this.credencialService.isLoginValido(this.usuario).then(() => {
+      this.credencialService.fazerLogin(this.usuario).then((usuarioLogado: Usuario) => {
+        this.direcionar();
+      })
+        .catch(reason => this.snack.open(reason, null, { duration: 3500 }));
+    }).catch(reason => this.snack.open(reason, null, { duration: 3500 }));
 
   }
 

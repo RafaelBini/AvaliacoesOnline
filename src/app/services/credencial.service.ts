@@ -88,4 +88,17 @@ export class CredencialService {
 
   }
 
+  isLoginValido(usuario: Usuario) {
+    return new Promise((resolve, reject) => {
+      if (usuario.email == '' || usuario.senha == '') {
+        reject('Preencha todos os campos.');
+      }
+      else if (!usuario.email.includes('@')) {
+        reject("Email inválido.");
+      }
+
+      resolve();
+    })
+  }
+
 }

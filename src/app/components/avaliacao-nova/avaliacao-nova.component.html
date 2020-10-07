@@ -75,7 +75,7 @@
                 </td>
                 <td style="display: flex;">
                     <!--min="2020-07-28T16:15:23" -->
-                    <input type="datetime-local" [(ngModel)]="avaliacao.dtInicioCorrecao"
+                    <input type="datetime-local" [min]="avaliacao.dtInicio" [(ngModel)]="avaliacao.dtInicioCorrecao"
                         *ngIf="!avaliacao.isInicioCorrecaoIndeterminado" />
 
                     <mat-checkbox style="margin-left: 5px;" #inicioCorrecaoIndeterminado
@@ -91,7 +91,7 @@
                 </td>
                 <td style="display: flex;">
                     <!--min="2020-07-28T16:15:23" -->
-                    <input type="datetime-local" [(ngModel)]="avaliacao.dtTermino"
+                    <input type="datetime-local" [min]="avaliacao.dtInicioCorrecao" [(ngModel)]="avaliacao.dtTermino"
                         *ngIf="!avaliacao.isTerminoIndeterminado" />
 
                     <mat-checkbox style="margin-left: 5px;" #terminoIndeterminado

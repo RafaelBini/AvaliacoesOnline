@@ -148,9 +148,9 @@ export class AvaliacaoNovaComponent implements OnInit {
 
   receberTodasAvaliacoes() {
     return new Promise((resolve, reject) => {
-      this.avaliacaoService.getAllAvaliacoes().then(ref => {
-        for (let doc of ref.docs) {
-          this.avaliacoesId.push(doc.id);
+      this.avaliacaoService.getAllAvaliacoes().then(avaliacoes => {
+        for (let avaliacao of avaliacoes) {
+          this.avaliacoesId.push(avaliacao.id);
         }
         resolve();
       }).catch(reason => reject(reason));

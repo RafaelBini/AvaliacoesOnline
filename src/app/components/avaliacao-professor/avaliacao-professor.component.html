@@ -7,21 +7,8 @@
 
         <ng-template matStepLabel>Em Preparação</ng-template>
 
-        <!-- INDIVIDUAL -->
-        <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
-            <div class="head">
-                <h2>Alunos Online ({{avaliacao.alunos.length}})</h2>
-                <h3>Os alunos abaixo estão aguardando que a Avaliação seja iniciada</h3>
-            </div>
-            <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
-                style="border-color: var(--cor-secundaria); cursor: default">
-                <app-aluno-card-avaliacao-professor [aluno]="aluno">
-                </app-aluno-card-avaliacao-professor>
-            </div>
-        </div>
-
         <!-- EM GRUPO -->
-        <div *ngIf="avaliacao.tipoDisposicao != 0" cdkDropListGroup>
+        <div cdkDropListGroup>
             <table style="width: 100%; height: 70vh;">
                 <tr>
                     <td width="70%" style="position: relative;">
@@ -31,7 +18,7 @@
                             <div cdkDropList *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo"
                                 [cdkDropListData]="grupo.alunos" (cdkDropListDropped)="drop($event, 'grupo')">
 
-                                <div class="grupo-title">
+                                <div *ngIf="avaliacao.tipoDisposicao != 0" class="grupo-title">
                                     GRUPO {{grupo.numero}}
                                 </div>
                                 <div class="aluno" cdkDrag *ngFor="let aluno of grupo.alunos"
@@ -40,7 +27,8 @@
                                     </app-aluno-card-avaliacao-professor>
                                 </div>
                             </div>
-                            <div class="grupo btn-novo-grupo" matTooltip="Adicionar grupo" (click)="addGrupo()">
+                            <div *ngIf="avaliacao.tipoDisposicao != 0" class="grupo btn-novo-grupo"
+                                matTooltip="Adicionar grupo" (click)="addGrupo()">
 
                                 <mat-icon style="font-size: 35px; display: block; margin: auto;">add
                                 </mat-icon>
@@ -50,11 +38,14 @@
                         <div (mouseover)="scrollUp(gruposContainerDiv)" (mouseleave)="scrolling=false"
                             style="width: 100%; height: 15px; position: absolute; top: 0px; z-index: 1000;">
                             <div style="position: relative;">
-                                <div
+                                <div *ngIf="avaliacao.tipoDisposicao != 0"
                                     style="background-color: var(--cor-primaria); color: white; padding: 5px; padding-left: 15px; padding-right: 15px; text-align: center; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; position: absolute; top: 0px; left: 45%;">
                                     GRUPOS ({{avaliacao.grupos.length}})
                                 </div>
-
+                                <div *ngIf="avaliacao.tipoDisposicao == 0"
+                                    style="background-color: var(--cor-primaria); color: white; padding: 5px; padding-left: 15px; padding-right: 15px; text-align: center; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; position: absolute; top: 0px; left: 35%;">
+                                    ALUNOS QUE PARTICIPARÃO DA PROVA
+                                </div>
                             </div>
 
                         </div>
@@ -86,7 +77,7 @@
 
                         <div
                             style="background-color: var(--cor-primaria); color: white;  padding: 5px; padding-left: 15px; padding-right: 15px; text-align: center; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; position: absolute; top: 0px; left: 43%;">
-                            ALUNOS
+                            MEUS ALUNOS
                         </div>
                     </td>
 

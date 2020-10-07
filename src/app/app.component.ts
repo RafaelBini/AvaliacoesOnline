@@ -47,6 +47,11 @@ export class AppComponent implements OnInit {
 
   }
 
+  fazerLogout() {
+    this.router.navigate(['login']);
+    this.credencialService.fazerLogout();
+  }
+
 
   abrirDialogoCadastro() {
     const ref = this.dialog.open(CadastrarSeComponent, {

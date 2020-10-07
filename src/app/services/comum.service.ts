@@ -3,6 +3,7 @@ import { Questao } from './../models/questao';
 import { Injectable } from '@angular/core';
 import { animationFrameScheduler } from 'rxjs';
 import { Avaliacao } from '../models/avaliacao';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,11 @@ export class ComumService {
 
   getStringFromDate(date: Date) {
     return date.toISOString().substr(0, 10) + "T00:00";
+  }
+
+  getStrDateFormatada(strDate: string) {
+    const date = new Date(strDate);
+    return date.toLocaleString();
   }
 
   public statusAvaliacao = [

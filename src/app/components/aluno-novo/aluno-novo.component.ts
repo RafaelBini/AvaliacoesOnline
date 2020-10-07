@@ -73,13 +73,16 @@ export class AlunoNovoComponent implements OnInit {
 
   cadastrar() {
     this.credencialService.isNovoUsuarioValido(this.aluno, this.aluno.senha).then(() => {
-      this.usuarioService.insert(this.aluno);
-      this.adicionar();
+      this.usuarioService.insert(this.aluno).then(docRef => {
+        this.aluno.id = docRef.id;
+        this.adicionar();
+      }).catch(reason => this.comumService.notificarErro("Falha ao cadastrar aluno no banco de dados", reason));;
     }).catch(reason => this.comumService.notificarErro(reason, reason));
   }
 
   adicionar() {
     this.credencialService.loggedUser.alunos.push({
+      id: this.aluno.id,
       nome: this.aluno.nome,
       email: this.aluno.email,
       tags: this.aluno.tags,

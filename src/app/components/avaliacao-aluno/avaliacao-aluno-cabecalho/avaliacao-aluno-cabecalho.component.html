@@ -1,0 +1,25 @@
+<span class="titulo">{{avaliacao.titulo}}</span>
+<br /><br />
+<div style="text-align: justify;">
+    {{avaliacao.descricao}}
+    <br /><br />
+    <b>Professor</b>: {{avaliacao.professorNome}}
+    <br /><br />
+    <b>Inicio</b>:
+    <span *ngIf="avaliacao.isInicioIndeterminado">
+        Indeterminado
+    </span>
+    <span *ngIf="!avaliacao.isInicioIndeterminado">
+        {{comumService.getStrDateFormatada(avaliacao.dtInicio)}}
+    </span>
+    <br />
+    <b>Término</b>:
+    <span *ngIf="avaliacao.isInicioCorrecaoIndeterminado">
+        Indeterminado
+    </span>
+    <span *ngIf="!avaliacao.isInicioCorrecaoIndeterminado">
+        {{comumService.getStrDateFormatada(avaliacao.dtInicioCorrecao)}}
+    </span>
+
+    <br />
+</div>
