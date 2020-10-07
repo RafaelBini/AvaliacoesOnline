@@ -68,14 +68,14 @@ export class CredencialService {
 
   isNovoUsuarioValido(usuario: Usuario, confirmacaoSenha) {
     return new Promise(async (resolve, reject) => {
-      if (!usuario.email.includes('@') || !usuario.email.includes('.')) {
+      if (usuario.nome == '' || usuario.email == '' || usuario.senha == '') {
+        reject('Preencha todos os campos.');
+      }
+      else if (!usuario.email.includes('@')) {
         reject("Email inválido.");
       }
       else if (usuario.senha != confirmacaoSenha) {
         reject("Senha diferente da confirmação.");
-      }
-      else if (usuario.nome == '' || usuario.email == '' || usuario.senha == '') {
-        reject('Preencha todos os campos.');
       }
       else if (this.loggedUser.email != usuario.email) {
         if (await this.usuarioService.exists(usuario)) {

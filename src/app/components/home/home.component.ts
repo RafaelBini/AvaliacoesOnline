@@ -31,8 +31,8 @@ export class HomeComponent implements OnInit {
 
   primeiraAvaliacao() {
     this.credencialService.isNovoUsuarioValido(this.novoUsuario, this.confirmarcaoSenha).then(() => {
-      this.credencialService.cadastrar(this.novoUsuario).then((docRef) => {
-        this.novoUsuario.id = docRef.id;
+      this.credencialService.cadastrar(this.novoUsuario).then(() => {
+        this.novoUsuario.id = this.novoUsuario.email;
         this.snack.open("Cadastrado com sucesso!", null, {
           duration: 3500,
         })

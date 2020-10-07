@@ -11,7 +11,7 @@ export class UsuarioService {
 
   insert(usuario: Usuario) {
     usuario.alunos = [];
-    return this.db.collection('usuarios').add(usuario);
+    return this.db.collection('usuarios').doc(usuario.email).set(usuario);
   }
 
 
@@ -31,24 +31,24 @@ export class UsuarioService {
 
   async exists(usuario: Usuario) {
 
-    const ref = await this.db.collection<Usuario>('usuarios', ref => ref.where('email', '==', usuario.email)).get().toPromise();
-    return ref.docs.length > 0;
+    const docRef = await this.db.collection('usuarios').doc(usuario.email).get().toPromise();
+    return docRef.exists;
 
   }
 
   podeLogar(usuario: Usuario) {
     return new Promise((resolve, reject) => {
-      this.db.collection<Usuario>('usuarios', ref => ref.where('email', '==', usuario.email)).get().toPromise().then(ref => {
+      this.db.collection('usuarios').doc(usuario.email).get().toPromise().then(docRef => {
 
-        if (ref.docs.length <= 0) {
+        if (!docRef.exists) {
           reject('Usuario ou senha incorreta.');
           return;
         }
 
 
-        if (ref.docs[0].data().senha == usuario.senha) {
-          var usuarioLogado: Usuario = ref.docs[0].data();
-          usuarioLogado.id = ref.docs[0].id;
+        if (docRef.data().senha == usuario.senha) {
+          var usuarioLogado: Usuario = docRef.data();
+          usuarioLogado.id = docRef.id;
           resolve(usuarioLogado);
           return;
         }
@@ -78,7 +78,7 @@ export class UsuarioService {
   }
 
   update(usuario: Usuario) {
-    return this.db.collection('usuarios').doc(usuario.id).update(usuario);
+    return this.db.collection('usuarios').doc(usuario.email).update(usuario);
   }
 
 }
