@@ -82,7 +82,7 @@ export class AlunoNovoComponent implements OnInit {
     this.credencialService.loggedUser.alunos.push({
       nome: this.aluno.nome,
       email: this.aluno.email,
-      tags: [],
+      tags: this.aluno.tags,
     });
     this.usuarioService.update(this.credencialService.loggedUser);
     this.aluno = {
