@@ -1,36 +1,56 @@
 <div class="avalicao-card" [style.borderColor]="status.cor" [style.opacity]="avaliacao.isArquivada? '0.85' : '1'">
-    <h3><b>{{avaliacao.titulo}}</b></h3>
+
+
+    <div>
+        <span class="titulo">{{avaliacao.titulo}}</span>
+        <span class="linkCompartilhavel">
+            <a [routerLink]="'/'+avaliacao.id">
+                {{getLink(avaliacao)}}
+            </a>
+        </span>
+        <button class="btn-copiar" matTooltip="Copiar link da avaliação" [cdkCopyToClipboard]="getLink(avaliacao)"
+            (click)="notificarCopy()" mat-icon-button>
+            <mat-icon style="font-size: 18px; color: var(--cor-primaria)">content_copy</mat-icon>
+        </button>
+    </div>
+
+
     <div style="display: flex;">
         <div *ngFor="let tag of avaliacao.tags" class="tag" [style.backgroundColor]="status.cor">
             {{tag}}
         </div>
     </div>
-    <br />
-    {{avaliacao.descricao}}
-    <br />
-    <br />
-    <span class="linkCompartilhavel" [style.backgroundColor]="status.cor"><a
-            [routerLink]="'/'+avaliacao.id">avaliacao.com/{{avaliacao.id}}</a></span>
-    <button matTooltip="Copiar link" mat-icon-button>
-        <mat-icon style="font-size: 17px;">content_copy</mat-icon>
-    </button>
-    <br /><br />
-    Inicio: 31/07/2020 18:00
-    <br />
-    Término: 31/07/2020 21:00
 
-    <a [routerLink]="'/'+tipoAcesso+'/avaliacao/'+ avaliacao.id" matTooltip="Entrar na Avaliação" class="info-box"
-        [style.backgroundColor]="status.cor">
-        Status: {{status.nome}}
-        <hr />
-        {{tipoAcesso=="professor" ? status.acaoProfessor : status.acaoAluno}}
-    </a>
+    <div style="padding-bottom: 10px;padding-top: 10px; width: 50%;">
+        {{avaliacao.descricao}}
+    </div>
+
+    <div>
+        <b>Inicio</b>:
+        <span *ngIf="avaliacao.isInicioIndeterminado">
+            Indeterminado
+        </span>
+        <span *ngIf="!avaliacao.isInicioIndeterminado">
+            {{comumService.getStrDateFormatada(avaliacao.dtInicio)}}
+        </span>
+        <br />
+        <b>Término</b>:
+        <span *ngIf="avaliacao.isInicioCorrecaoIndeterminado">
+            Indeterminado
+        </span>
+        <span *ngIf="!avaliacao.isInicioCorrecaoIndeterminado">
+            {{comumService.getStrDateFormatada(avaliacao.dtInicioCorrecao)}}
+        </span>
+    </div>
+
+
 
     <span *ngIf="avaliacao.isArquivada && tipoAcesso=='professor' " (click)="desarquivar(avaliacao)"
         matTooltip="Clique para desarquivar"
         style="position: absolute; top: 12px; right: 50px; cursor: pointer; text-decoration: underline dashed;">
         ARQUIVADA
     </span>
+
     <button *ngIf="tipoAcesso=='professor'" mat-icon-button style="position: absolute; top: 3px; right: 3px;"
         [matMenuTriggerFor]="aboveMenu">
         <mat-icon>more_vert</mat-icon>
@@ -53,6 +73,13 @@
             <mat-icon>cancel</mat-icon>Excluir
         </button>
     </mat-menu>
+
+    <a [routerLink]="'/'+tipoAcesso+'/avaliacao/'+ avaliacao.id" matTooltip="Entrar na Avaliação" class="info-box"
+        [style.backgroundColor]="status.cor">
+        Status: {{status.nome}}
+        <hr />
+        {{tipoAcesso=="professor" ? status.acaoProfessor : status.acaoAluno}}
+    </a>
 
 
 </div>

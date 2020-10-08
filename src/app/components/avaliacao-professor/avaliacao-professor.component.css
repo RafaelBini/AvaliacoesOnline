@@ -37,6 +37,9 @@
     border: 1px dashed var(--cor-primaria);
     position: relative;
 }
+.grupo:hover .btn-excluir-grupo{
+  opacity: 1;
+}
     
 .aluno{
   z-index: 900;
@@ -53,6 +56,7 @@
   margin-top: 6px;
   cursor: move;
   position: relative;
+  user-select: none;
 }
 
 .main-btn{
@@ -64,8 +68,15 @@
 }
 
 .btn-novo-grupo:hover{
-  cursor: pointer;
-  color: var(--cor-secundaria);;
+  color: var(--cor-secundaria);
+  user-select: none;
+}
+
+.btn-excluir-grupo {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  opacity: 0;
 }
 
 .btn-corrigir{

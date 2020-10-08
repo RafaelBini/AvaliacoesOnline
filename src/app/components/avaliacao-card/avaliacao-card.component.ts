@@ -68,5 +68,11 @@ export class AvaliacaoCardComponent implements OnInit {
     this.avaliacaoService.desarquivarAvaliacao(avaliacao.id);
   }
 
+  getLink(avaliacao) {
+    return `http://${this.comumService.getHostName()}/${avaliacao.id}`;
+  }
+  notificarCopy() {
+    this.snack.open("Link copiado!", null, { duration: 3500 })
+  }
 
 }

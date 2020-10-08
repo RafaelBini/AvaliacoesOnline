@@ -172,43 +172,16 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
           ];
 
           // Se sou o professor dessa avaliacao, Vou para visão do professor
-          if (this.avaliacao.professorId == this.credencialService.loggedUser.id) {
+          if (this.avaliacao.professorId == this.credencialService.getLoggedUserIdFromCookie()) {
             this.credencialService.loggedUser.acesso = 'professor';
             this.router.navigate([`professor/avaliacao/${AVALIACAO_ID}`]);
             return;
           }
 
-          // Recebe meus dados
-          var intervalRef = setInterval(() => {
-            if (this.credencialService.loggedUser.id != null) {
+          this.meAtualizarNaAvaliacao();
 
-              // Passa por cada aluno na avaliação
-              var estouNaAvaliacao = false;
-              for (let grupo of this.avaliacao.grupos) {
-                for (let aluno of grupo.alunos) {
-                  if (aluno.id == this.credencialService.loggedUser.id) {
-                    aluno.online = true;
-                    estouNaAvaliacao = true;
-                    break;
-                  }
-                }
-                if (estouNaAvaliacao) {
-                  this.avaliacaoService.updateAvaliacao(this.avaliacao);
-                  break;
-                }
-              }
-              if (!estouNaAvaliacao) {
-                this.entrarEmGrupoAleatorio();
-                this.avaliacaoService.updateAvaliacao(this.avaliacao);
-              }
-
-              this.receberProvasCorrigir();
-
-              clearInterval(intervalRef);
-            }
-          });
-
-
+          if (this.avaliacao.tipoCorrecao == 3)
+            this.receberProvasCorrigir();
 
         });
 
@@ -263,10 +236,32 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     }
     return alunos;
   }
+  meAtualizarNaAvaliacao() {
+    // Passa por cada aluno na avaliação para verificar se eu já estou na avaliação
+    var estouNaAvaliacao = false;
+    for (let grupo of this.avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie()) {
+          aluno.online = true;
+          estouNaAvaliacao = true;
+          break;
+        }
+      }
+      if (estouNaAvaliacao) {
+        this.avaliacaoService.updateAvaliacao(this.avaliacao);
+        break;
+      }
+    }
+    if (!estouNaAvaliacao) {
+      this.entrarEmGrupoAleatorio();
+      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+    }
+  }
 
   // EM PREPARAÇÃO
   addGrupo() {
-    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaId: `${(this.avaliacao.grupos.length + 1)}`, alunos: [] });
+    const novoLength = this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaId: `${(this.avaliacao.grupos.length + 1)}`, alunos: [] });
+    this.entrarNoGrupo(this.avaliacao.grupos[novoLength - 1]);
     setTimeout(() => {
       window.scroll({
         top: document.body.scrollHeight,
@@ -286,22 +281,27 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     }
 
     // Passa por cada grupo da avaliação
-    this.avaliacao.grupos.forEach(g => {
-      // Se estou nesse grupo, me retiro
-      if (g.alunos.includes(me)) {
-        g.alunos = g.alunos.filter(a => a.email != me.email);
+    for (let g of this.avaliacao.grupos) {
+      for (let aluno of g.alunos) {
+        // Se estou nesse grupo, me retiro
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie()) {
+          g.alunos = g.alunos.filter(a => a.id != this.credencialService.getLoggedUserIdFromCookie());
+        }
       }
-    });
+
+    }
 
     // Insere no grupo
+    me.online = true;
     grupo.alunos.push(me);
+    this.deletarGruposVazios();
+    this.redefinirIdentificacaoDosGrupos();
+
+    // Salva no bd
+    this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
   temGrupoVazio() {
-    for (let g of this.avaliacao.grupos) {
-      if (g.alunos.length <= 0)
-        return true;
-    };
-    return false;
+    return this.avaliacao.grupos.filter(g => g.alunos.length <= 0).length > 0;
   }
   entrarEmGrupoAleatorio() {
     // Passa por cada grupo
@@ -320,6 +320,15 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
       // Entra nele
       this.entrarNoGrupo(this.avaliacao.grupos[this.avaliacao.grupos.length - 1]);
+    }
+  }
+  deletarGruposVazios() {
+    this.avaliacao.grupos = this.avaliacao.grupos.filter(g => g.alunos.length > 0);
+  }
+  redefinirIdentificacaoDosGrupos() {
+    var count = 1;
+    for (let grupo of this.avaliacao.grupos) {
+      grupo.numero = count++;
     }
   }
 

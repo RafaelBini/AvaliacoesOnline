@@ -26,9 +26,15 @@
                                     <app-aluno-card-avaliacao-professor [aluno]="aluno">
                                     </app-aluno-card-avaliacao-professor>
                                 </div>
+
+                                <button *ngIf="avaliacao.tipoDisposicao != 0" (click)="excluirGrupo(grupo)"
+                                    matTooltip="Excluir grupo" class="btn-excluir-grupo" mat-icon-button>
+                                    <mat-icon>delete</mat-icon>
+                                </button>
                             </div>
                             <div *ngIf="avaliacao.tipoDisposicao != 0" class="grupo btn-novo-grupo"
-                                matTooltip="Adicionar grupo" (click)="addGrupo()">
+                                matTooltip="Arraste aqui um aluno para criar um novo grupo" cdkDropList
+                                (cdkDropListDropped)="drop($event, 'novo-grupo')">
 
                                 <mat-icon style="font-size: 35px; display: block; margin: auto;">add
                                 </mat-icon>

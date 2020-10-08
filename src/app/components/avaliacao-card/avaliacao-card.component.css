@@ -1,12 +1,19 @@
 .avalicao-card{
     background-color: whitesmoke;
     width: 60%;
+    min-height: 160px;
     padding: 10px;
     border-radius: 7px;
     border-left: 7px solid var(--cor-secundaria);
     position: relative;
     margin: auto;
     margin-bottom: 30px;
+}
+.avalicao-card:hover .linkCompartilhavel{
+    opacity: 1;
+}
+.avalicao-card:hover .btn-copiar{
+    opacity: 1;
 }
 
 
@@ -15,11 +22,19 @@
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 5px;
-    background-color: var(--cor-secundaria);
+    margin-left: 7px;
+    background-color: white;
+    border: 1px dashed var(--cor-secundaria);
+    opacity: 0;
 }
 
 .linkCompartilhavel a {
-    color: white
+    color: var(--cor-secundaria);
+    text-decoration: none;
+}
+
+.btn-copiar {
+    opacity: 0;
 }
 
 .info-box{
@@ -27,7 +42,7 @@
     height: 80px;
     width: 40%;
     background-color: var(--cor-secundaria);
-    bottom: 30px;
+    bottom: 20px;
     right: 10px;
     border-radius: 5px;
     color: white;
@@ -51,4 +66,9 @@
     font-size: 13px;
     width: fit-content;
     display: flexbox;
+}
+
+.titulo{
+    font-weight: bold;
+    font-size: 17px;
 }

@@ -1,3 +1,4 @@
+import { Grupo } from './../../models/grupo';
 import { UsuarioService } from './../../services/usuario.service';
 import { AvaliacaoAlunoComponent } from './../avaliacao-aluno/avaliacao-aluno.component';
 import { AvaliacaoService } from './../../services/avaliacao.service';
@@ -80,8 +81,8 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
             { nome: `${this.avaliacao.titulo}`, url: `#` },
           ];
 
-          // Se não tem nenhum grupo criado, cria um vazio.
-          if (this.avaliacao.grupos.length <= 0) {
+          // Se não tem nenhum grupo criado e é individual, cria um vazio.
+          if (this.avaliacao.grupos.length <= 0 && this.avaliacao.tipoDisposicao == 0) {
             this.addGrupo();
           }
 
@@ -125,17 +126,30 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
   addGrupo() {
     this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaStatusId: '0', alunos: [] });
-    this.avaliacaoService.updateAvaliacao(this.avaliacao);
+    //this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
-  drop(event: CdkDragDrop<string[]>, onde: string) {
+  drop(event: CdkDragDrop<string[]>, paraOnde: string) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      if (onde == 'grupo') {
+
+      const vindoDeOutroGrupo = event.previousContainer.id != "cdk-drop-list-0";
+      const vaiDeixarVazio = event.previousContainer.data.length <= 1;
+
+      if (paraOnde == 'grupo' && !vindoDeOutroGrupo) {
         transferArrayItem(event.previousContainer.data,
           event.container.data,
           this.professor.alunos.indexOf(this.professor.alunos.filter(aluno => aluno.email == this.alunosFiltrados[event.previousIndex].email)[0]),
           event.currentIndex);
+      }
+      else if (paraOnde == 'novo-grupo') {
+        if (vaiDeixarVazio && vindoDeOutroGrupo)
+          return;
+        this.addGrupo();
+        transferArrayItem(event.previousContainer.data,
+          this.avaliacao.grupos[this.avaliacao.grupos.length - 1].alunos as Array<String>,
+          event.previousIndex,
+          0);
       }
       else {
         transferArrayItem(event.previousContainer.data,
@@ -144,6 +158,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
           event.currentIndex);
       }
     }
+    this.removerGruposVazios();
     this.onBuscaAlunoKeyUp();
     this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
@@ -275,6 +290,29 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
       }
     }
     return alunos;
+  }
+  excluirGrupo(grupo: Grupo) {
+    // Remover grupo da array
+    this.avaliacao.grupos = this.avaliacao.grupos.filter(g => g.numero != grupo.numero);
+    this.redefinirIdentificacaoDosGrupos();
+
+    // Salvar no banco de dados
+    this.avaliacaoService.updateAvaliacao(this.avaliacao);
+  }
+  redefinirIdentificacaoDosGrupos() {
+    var count = 1;
+    for (let grupo of this.avaliacao.grupos) {
+      grupo.numero = count++;
+    }
+  }
+  removerGruposVazios() {
+    if (this.avaliacao.tipoDisposicao == 0)
+      return;
+    for (let grupo of this.avaliacao.grupos) {
+      if (grupo.alunos.length <= 0) {
+        this.excluirGrupo(grupo);
+      }
+    }
   }
 
 
