@@ -18,7 +18,8 @@ export class ComumService {
 
   getStrDateFormatada(strDate: string) {
     const date = new Date(strDate);
-    return date.toLocaleString();
+    var strDate = date.toLocaleString();
+    return strDate.substr(0, 8) + " " + strDate.substr(11, 5);
   }
 
   public statusAvaliacao = [

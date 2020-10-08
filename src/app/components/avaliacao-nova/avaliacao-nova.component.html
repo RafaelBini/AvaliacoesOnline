@@ -61,11 +61,12 @@
                     <input type="datetime-local" [(ngModel)]="avaliacao.dtInicio"
                         *ngIf="!avaliacao.isInicioIndeterminado" />
                     <div style="width: fit-content">
-                        <mat-checkbox style="margin-left: 5px;" #inicioIndeterminado
-                            (change)="avaliacao.isInicioIndeterminado = inicioIndeterminado.checked">
 
+                        <mat-checkbox style="margin-left: 5px;" [(ngModel)]="avaliacao.isInicioIndeterminado"
+                            (ngModelChange)="limitarIndeterminados()">
                             <span style="font-size: 12px; ">Indeterminado</span>
                         </mat-checkbox>
+
                     </div>
                 </td>
             </tr>
@@ -74,15 +75,15 @@
                     Início da Correção:
                 </td>
                 <td style="display: flex;">
-                    <!--min="2020-07-28T16:15:23" -->
+
                     <input type="datetime-local" [min]="avaliacao.dtInicio" [(ngModel)]="avaliacao.dtInicioCorrecao"
                         *ngIf="!avaliacao.isInicioCorrecaoIndeterminado" />
 
-                    <mat-checkbox style="margin-left: 5px;" #inicioCorrecaoIndeterminado
-                        (change)="avaliacao.isInicioCorrecaoIndeterminado = inicioCorrecaoIndeterminado.checked">
-
+                    <mat-checkbox style="margin-left: 5px;" [(ngModel)]="avaliacao.isInicioCorrecaoIndeterminado"
+                        (ngModelChange)="limitarIndeterminados()" [disabled]="avaliacao.isInicioIndeterminado">
                         <span style="font-size: 12px;">Indeterminado</span>
                     </mat-checkbox>
+
                 </td>
             </tr>
             <tr>
@@ -94,8 +95,8 @@
                     <input type="datetime-local" [min]="avaliacao.dtInicioCorrecao" [(ngModel)]="avaliacao.dtTermino"
                         *ngIf="!avaliacao.isTerminoIndeterminado" />
 
-                    <mat-checkbox style="margin-left: 5px;" #terminoIndeterminado
-                        (change)="avaliacao.isTerminoIndeterminado = terminoIndeterminado.checked">
+                    <mat-checkbox style="margin-left: 5px;" [(ngModel)]="avaliacao.isTerminoIndeterminado"
+                        [disabled]="avaliacao.isInicioCorrecaoIndeterminado">
 
                         <span style="font-size: 12px;">Indeterminado</span>
                     </mat-checkbox>

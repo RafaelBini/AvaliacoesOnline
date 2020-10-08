@@ -1,9 +1,9 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
-<mat-horizontal-stepper #stepper>
+<mat-horizontal-stepper class="avaliacao-stepper" [selectedIndex]="avaliacao.status" #stepper>
 
     <!-- EM PREPARAÇÃO -->
-    <mat-step style="height: 100%;" [editable]="true">
+    <mat-step style="height: 100%;" [editable]="false" [completed]="false">
 
         <ng-template matStepLabel>Em Preparação</ng-template>
 
@@ -99,7 +99,7 @@
     </mat-step>
 
     <!-- DURANTE AVALIAÇÃO -->
-    <mat-step>
+    <mat-step [editable]="false" [completed]="false">
         <ng-template matStepLabel>Durante Avaliação</ng-template>
 
         <div class="head">
@@ -155,7 +155,7 @@
     </mat-step>
 
     <!-- EM CORREÇÃO -->
-    <mat-step [editable]="true">
+    <mat-step [editable]="false" [completed]="false">
         <ng-template matStepLabel>Em Correção</ng-template>
 
         <div class="head">
@@ -205,7 +205,7 @@
     </mat-step>
 
     <!-- ENCERRADA -->
-    <mat-step [editable]="true">
+    <mat-step [editable]="false" [completed]="false">
         <ng-template matStepLabel>Avaliação Encerrada</ng-template>
 
         <div class="head">
@@ -257,3 +257,9 @@
     </mat-step>
 
 </mat-horizontal-stepper>
+
+<div *ngIf="avaliacao.status <= 2" class="countdown">
+    <app-countdown tipoAcesso="professor" [dataObjetivo]="getDataObjetivo()"
+        (tempoEsgotado)="atualizarStatusConformeTempo()"
+        [mensagem]="comumService.statusAvaliacao[avaliacao.status].mensagemCountdown"></app-countdown>
+</div>

@@ -1,3 +1,4 @@
+import { CountdownComponent } from './../countdown/countdown.component';
 import { AvaliacaoService } from 'src/app/services/avaliacao.service';
 import { Prova } from 'src/app/models/prova';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -126,6 +127,8 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
   private avaliacaoSubscription: Subscription;
 
+  @ViewChild(CountdownComponent) countDown: CountdownComponent;
+
   ngOnInit(): void {
 
     this.route.params.subscribe(param => {
@@ -155,6 +158,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
           }
 
           this.meAtualizarNaAvaliacao();
+
 
           if (this.avaliacao.tipoCorrecao == 3)
             this.receberProvasCorrigir();
@@ -232,6 +236,29 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       this.entrarEmGrupoAleatorio();
       this.avaliacaoService.updateAvaliacao(this.avaliacao);
     }
+  }
+  atualizarStatusConformeTempo() {
+    setTimeout(() => {
+      var agora = new Date();
+
+      if (agora < new Date(this.avaliacao.dtInicio) || (this.avaliacao.status == 0 && this.avaliacao.isInicioIndeterminado)) {
+        this.avaliacao.status = 0;
+      }
+      else if (agora < new Date(this.avaliacao.dtInicioCorrecao) || (this.avaliacao.status == 1 && this.avaliacao.isInicioCorrecaoIndeterminado)) {
+        this.avaliacao.status = 1;
+      }
+      else if (agora < new Date(this.avaliacao.dtTermino) || (this.avaliacao.status == 2 && this.avaliacao.isTerminoIndeterminado)) {
+        this.avaliacao.status = 2;
+      }
+      else {
+        this.avaliacao.status = 3;
+      }
+
+      this.countDown.iniciarTimer();
+
+      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+    }, 3000);
+
   }
 
   // EM PREPARAÇÃO

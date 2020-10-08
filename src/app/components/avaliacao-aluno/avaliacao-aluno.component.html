@@ -1,11 +1,10 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
-<mat-horizontal-stepper #stepper>
-    <!-- <mat-horizontal-stepper linear [selectedIndex]="1" #stepper> -->
+<mat-horizontal-stepper class="avaliacao-stepper"  [selectedIndex]="avaliacao.status" #stepper>
 
     <!-- EM PREPARAÇÃO -->
-    <mat-step>
-        <!-- <mat-step [editable]="false" [completed]="false"> -->
+    <mat-step [editable]="false" [completed]="false">
+
         <ng-template matStepLabel>Em Preparação</ng-template>
 
         <div style="width: 60%; margin: auto;">
@@ -68,8 +67,8 @@
     </mat-step>
 
     <!-- DURANTE AVALIAÇÃO -->
-    <mat-step>
-        <!-- <mat-step [editable]="false" [completed]="false"> -->
+    <mat-step [editable]="false" [completed]="false">
+
         <ng-template matStepLabel>Durante Avaliação</ng-template>
 
 
@@ -127,8 +126,7 @@
     </mat-step>
 
     <!-- EM CORREÇÃO -->
-    <mat-step>
-        <!-- <mat-step [editable]="false" [completed]="false"> -->
+    <mat-step [editable]="false" [completed]="false">
         <ng-template matStepLabel>Em Correção</ng-template>
 
         <div align="center"
@@ -211,7 +209,7 @@
     </mat-step>
 
     <!-- ENCERRADA -->
-    <mat-step>
+    <mat-step [editable]="false" [completed]="false">
 
         <ng-template matStepLabel>Avaliação Encerrada</ng-template>
 
@@ -250,6 +248,6 @@
 </mat-horizontal-stepper>
 
 <div *ngIf="avaliacao.status <= 2" style="position: fixed; top: 30%; right: 4%; width: 15%;">
-    <app-countdown [dataObjetivo]="getDataObjetivo()"
+    <app-countdown [dataObjetivo]="getDataObjetivo()" (tempoEsgotado)="atualizarStatusConformeTempo()"
         [mensagem]="comumService.statusAvaliacao[avaliacao.status].mensagemCountdown"></app-countdown>
 </div>

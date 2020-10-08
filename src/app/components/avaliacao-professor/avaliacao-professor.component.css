@@ -98,6 +98,14 @@
   padding: 5px;
 }
 
+.countdown{
+  position: fixed; 
+  top: 9.5%; 
+  right: 28%; 
+  margin: auto; 
+  text-align: center;
+}
+
 /* CDK DRAG & DROP */
 
 .cdk-drag-preview {

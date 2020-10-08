@@ -5,21 +5,24 @@
     <br /><br />
     <b>Professor</b>: {{avaliacao.professorNome}}
     <br /><br />
-    <b>Inicio</b>:
-    <span *ngIf="avaliacao.isInicioIndeterminado">
-        Indeterminado
-    </span>
-    <span *ngIf="!avaliacao.isInicioIndeterminado">
-        {{comumService.getStrDateFormatada(avaliacao.dtInicio)}}
-    </span>
-    <br />
-    <b>Término</b>:
-    <span *ngIf="avaliacao.isInicioCorrecaoIndeterminado">
-        Indeterminado
-    </span>
-    <span *ngIf="!avaliacao.isInicioCorrecaoIndeterminado">
-        {{comumService.getStrDateFormatada(avaliacao.dtInicioCorrecao)}}
-    </span>
+
+    <div *ngIf="!avaliacao.isInicioIndeterminado">
+        <b>Periodo de Avaliação</b>:
+        <span>
+            {{avaliacao.isInicioIndeterminado ? 'Indeterminado' : comumService.getStrDateFormatada(avaliacao.dtInicio)}}
+            -
+            {{avaliacao.isInicioCorrecaoIndeterminado ? 'Indeterminado' : comumService.getStrDateFormatada(avaliacao.dtInicioCorrecao)}}
+        </span>
+    </div>
+
+    <div *ngIf="!avaliacao.isInicioCorrecaoIndeterminado">
+        <b>Periodo de Correção</b>:
+        <span>
+            {{avaliacao.isInicioCorrecaoIndeterminado ? 'Indeterminado' : comumService.getStrDateFormatada(avaliacao.dtInicioCorrecao)}}
+            -
+            {{avaliacao.isTerminoIndeterminado ? 'Indeterminado' : comumService.getStrDateFormatada(avaliacao.dtTermino)}}
+        </span>
+    </div>
 
     <br />
 </div>

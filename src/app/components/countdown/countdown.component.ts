@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ValueSansProvider } from '@angular/core';
 
 @Component({
   selector: 'app-countdown',
@@ -9,20 +9,31 @@ export class CountdownComponent implements OnInit {
 
   @Input() mensagem: string = 'TEMPO RESTANTE';
 
+  @Input() tipoAcesso: string = 'aluno';
+
   @Input() dataObjetivo: string = "2020-09-05T13:55:30.000Z";
 
+  @Output() tempoEsgotado = new EventEmitter<void>();
+
   public tempoRestante: string = "-";
+  interval;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.iniciarTimer();
+  }
 
-    var interval = setInterval(() => {
+  iniciarTimer() {
+    if (this.interval != null)
+      clearInterval(this.interval);
+    this.interval = setInterval(() => {
       this.tempoRestante = this.getTempoRestante();
       if (this.tempoRestante == '-') {
-        clearInterval(interval);
+        this.tempoEsgotado.emit();
+        clearInterval(this.interval);
       }
-    }, 4000)
+    }, 1000);
   }
 
   getTempoRestante(): string {
@@ -42,7 +53,9 @@ export class CountdownComponent implements OnInit {
     }
     else if (TEMPO_RESTANTE <= 86400000) {
       const HORAS = TEMPO_RESTANTE / 3600000;
-      return `${Math.round(HORAS)} h ${Math.round(60 * (HORAS - Math.round(HORAS)))} min`;
+      var horaFloor = Math.floor(HORAS);
+      var minutos = Math.round(60 * (HORAS - horaFloor)).toString();
+      return `${horaFloor} h ${minutos} min`;
     }
     else if (TEMPO_RESTANTE <= 604800000) {
       return `${Math.round(TEMPO_RESTANTE / 86400000)} dias`;

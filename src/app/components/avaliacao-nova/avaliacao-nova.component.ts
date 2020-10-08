@@ -226,6 +226,15 @@ export class AvaliacaoNovaComponent implements OnInit {
 
   }
 
+  limitarIndeterminados() {
+    if (this.avaliacao.isInicioIndeterminado) {
+      this.avaliacao.isInicioCorrecaoIndeterminado = true;
+    }
+    if (this.avaliacao.isInicioCorrecaoIndeterminado) {
+      this.avaliacao.isTerminoIndeterminado = true;
+    }
+  }
+
   finalizar() {
     // TODO: VALIDAR SE EXISTE UMA AVALIAÇÃO COM ESSE ID
     this.avaliacao.professorId = this.credencialService.loggedUser.id;

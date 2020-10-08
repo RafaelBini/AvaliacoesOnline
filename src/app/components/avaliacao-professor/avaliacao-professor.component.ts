@@ -7,10 +7,11 @@ import { Avaliacao } from './../../models/avaliacao';
 import { ComumService } from './../../services/comum.service';
 import { UrlNode } from './../../models/url-node';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Usuario } from 'src/app/models/usuario';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { CountdownComponent } from '../countdown/countdown.component';
 
 @Component({
   selector: 'app-avaliacao-professor',
@@ -48,6 +49,8 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
   avaliacaoSubscription: Subscription;
   public scrolling = false;
+
+  @ViewChild(CountdownComponent) countDown: CountdownComponent;
 
   constructor(public credencialService: CredencialService,
     public comumService: ComumService,
@@ -119,6 +122,54 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.avaliacaoSubscription)
       this.avaliacaoSubscription.unsubscribe();
+  }
+
+  getDataObjetivo() {
+    if (this.avaliacao.status == 0) {
+      if (this.avaliacao.isInicioIndeterminado)
+        return '2020-09-05T13:55:30.000Z';
+      else
+        return this.avaliacao.dtInicio;
+    }
+    else if (this.avaliacao.status == 1) {
+      if (this.avaliacao.isInicioCorrecaoIndeterminado)
+        return '2020-09-05T13:55:30.000Z';
+      else
+        return this.avaliacao.dtInicioCorrecao;
+    }
+    else if (this.avaliacao.status == 2) {
+      if (this.avaliacao.isTerminoIndeterminado)
+        return '2020-09-05T13:55:30.000Z';
+      else
+        return this.avaliacao.dtTermino;
+    }
+    else {
+      return '2020-09-05T13:55:30.000Z';
+    }
+
+  }
+  atualizarStatusConformeTempo() {
+    setTimeout(() => {
+      var agora = new Date();
+
+      if (agora < new Date(this.avaliacao.dtInicio) || (this.avaliacao.status == 0 && this.avaliacao.isInicioIndeterminado)) {
+        this.avaliacao.status = 0;
+      }
+      else if (agora < new Date(this.avaliacao.dtInicioCorrecao) || (this.avaliacao.status == 1 && this.avaliacao.isInicioCorrecaoIndeterminado)) {
+        this.avaliacao.status = 1;
+      }
+      else if (agora < new Date(this.avaliacao.dtTermino) || (this.avaliacao.status == 2 && this.avaliacao.isTerminoIndeterminado)) {
+        this.avaliacao.status = 2;
+      }
+      else {
+        this.avaliacao.status = 3;
+      }
+
+      this.countDown.iniciarTimer();
+
+      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+    }, 3000);
+
   }
 
   // Parte 1 - Em Preparação

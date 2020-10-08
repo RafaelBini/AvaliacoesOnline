@@ -1,14 +1,21 @@
-<div *ngIf="tempoRestante != '-'" class="painel">
-    <table style="width: 100%; height: 100%;">
-        <tr>
-            <td>
-                <span style="font-size: 12px;">{{mensagem}}</span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <span class="tempo">{{tempoRestante}}</span>
-            </td>
-        </tr>
-    </table>
+<div *ngIf="tempoRestante != '-'">
+    <div *ngIf="tipoAcesso == 'aluno'" class="painel">
+        <table style="width: 100%; height: 100%;">
+            <tr>
+                <td>
+                    <span style="font-size: 12px;">{{mensagem}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="tempo">{{tempoRestante}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div *ngIf="tipoAcesso == 'professor'" style="padding: 5px; border-radius: 7px; background-color: whitesmoke;">
+        <span style="font-size: 15px;">
+            {{mensagem}}: <b>{{tempoRestante}}</b>
+        </span>
+    </div>
 </div>

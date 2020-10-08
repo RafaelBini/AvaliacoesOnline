@@ -98,3 +98,7 @@ textarea {
 .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate, .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate {
   background-color: var(--cor-primaria);
 }
+
+.avaliacao-stepper .mat-step-header  {
+  pointer-events: none !important;
+}
