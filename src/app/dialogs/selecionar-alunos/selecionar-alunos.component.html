@@ -30,7 +30,8 @@
                                     Todos
                                 </button>
                                 <button *ngIf="alunosAvaliacaoSelecionados.length > 0" mat-raised-button
-                                    (click)="removerSelecionadosDaAvaliacao()" class="btn-right">
+                                    (click)="removerSelecionadosDaAvaliacao()" matTooltip="Remover alunos selecionados"
+                                    class="btn-right">
                                     <mat-icon>keyboard_arrow_right</mat-icon>
                                 </button>
                                 <div *ngIf="getAlunosFromTodosGrupos().length <= 0" class="msg-sem-aluno">
@@ -105,7 +106,7 @@
                         <tr>
                             <td align="center" colspan="2">
                                 <button *ngIf="alunosSelecionados.length > 0" (click)="addSelecionadosParaAvaliacao()"
-                                    mat-raised-button class="btn-left">
+                                    mat-raised-button class="btn-left" matTooltip="Adicionar alunos selecionados">
                                     <mat-icon>keyboard_arrow_left</mat-icon>
                                 </button>
                                 <button *ngIf="alunosFiltrados.length > 0" mat-button (click)="selecionarTodos()">
@@ -162,6 +163,8 @@
 
     </tr>
 
-
+    <button mat-icon-button mat-dialog-close style="position: absolute; top: -8px; right: -7px;">
+        <mat-icon>cancel</mat-icon>
+    </button>
 
 </table>

@@ -44,7 +44,7 @@
                 <div *ngIf="avaliacao.tipoDisposicao == 2">
                     Clique em um grupo abaixo para participar
                     <div *ngFor="let grupo of avaliacao.grupos;  index as i;" (click)="entrarNoGrupo(grupo)"
-                        class="grupo btn-novo-grupo" style="width: 95%">
+                        matTooltip="Clique para entrar no grupo" class="grupo btn-novo-grupo" style="width: 95%">
                         <div class="grupo-title">
                             GRUPO {{grupo.numero}} <span
                                 *ngIf="avaliacao.limitarNumIntegrantes">({{grupo.alunos.length}}/{{avaliacao.maxIntegrantes}})</span>
