@@ -175,6 +175,17 @@
     </table>
     <br />
 
+    <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
+        ALUNOS ESPERADOS (OPCIONAL)<br />
+        <button mat-button class="botao-tipo" matTooltip="Clique para selecionar alunos"
+            (click)="abirSelecionarAunos()">
+            <mat-icon>person</mat-icon> {{getAlunosFromTodosGrupos().length}}
+        </button>
+    </div>
+
+
+
+    <br />
     <div
         style="text-align: center; background-color: whitesmoke; margin-bottom: 15px; cursor: default; color: black; width: 100%; border-radius: 10px;">
         <h2>Questões</h2>

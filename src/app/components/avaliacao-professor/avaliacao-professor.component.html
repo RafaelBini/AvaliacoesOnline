@@ -108,7 +108,7 @@
 
         <!-- INDIVIDUAL -->
         <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
-            <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
+            <div class="aluno" *ngFor="let aluno of avaliacao.grupos[0].alunos"
                 style="border-color: var(--cor-secundaria); cursor: default">
                 <app-aluno-card-avaliacao-professor [aluno]="aluno">
                 </app-aluno-card-avaliacao-professor>
@@ -164,7 +164,7 @@
 
         <!-- INDIVIDUAL -->
         <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
-            <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
+            <div class="aluno" *ngFor="let aluno of avaliacao.grupos[0].alunos"
                 style="border-color: var(--cor-secundaria); cursor: default">
                 <app-aluno-card-avaliacao-professor [aluno]="aluno">
                 </app-aluno-card-avaliacao-professor>
@@ -214,7 +214,7 @@
 
         <!-- INDIVIDUAL -->
         <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
-            <div class="aluno" *ngFor="let aluno of avaliacao.alunos"
+            <div class="aluno" *ngFor="let aluno of avaliacao.grupos[0].alunos"
                 style="border-color: var(--cor-secundaria); cursor: default">
                 <app-aluno-card-avaliacao-professor [aluno]="aluno">
                 </app-aluno-card-avaliacao-professor>

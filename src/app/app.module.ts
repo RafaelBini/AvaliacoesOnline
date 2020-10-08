@@ -59,6 +59,7 @@ import { environment } from 'src/environments/environment';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { EditarAlunoComponent } from './dialogs/editar-aluno/editar-aluno.component';
 import { AvaliacaoAlunoCabecalhoComponent } from './components/avaliacao-aluno/avaliacao-aluno-cabecalho/avaliacao-aluno-cabecalho.component';
+import { SelecionarAlunosComponent } from './dialogs/selecionar-alunos/selecionar-alunos.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { AvaliacaoAlunoCabecalhoComponent } from './components/avaliacao-aluno/a
     AvaliacaoListaComponent,
     EditarAlunoComponent,
     AvaliacaoAlunoCabecalhoComponent,
+    SelecionarAlunosComponent,
   ],
   imports: [
     BrowserModule,

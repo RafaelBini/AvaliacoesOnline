@@ -1,0 +1,167 @@
+<table style="height: 100%; width: 100%; position: relative;">
+    <tr>
+        <td width="50%">
+            <div class="meus-alunos-container">
+                <div>
+                    <table style="width: 90%; margin: auto; display: block;">
+                        <tr>
+                            <td colspan="2" align="center">
+                                <h2>Alunos Esperados na Avaliação</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="95%">
+                                <input type="text" class="input-clean" style="width: 100%;"
+                                    [(ngModel)]="textoBuscaAvaliacao" #inputBuscaAlunoAvaliacao maxlength="85"
+                                    (keyup)="onBuscaAlunoAvaliacaoKeyUp()"
+                                    placeholder="Digite aqui uma parte do nome, email ou tag do aluno que procura" />
+                            </td>
+                            <td width="5%" style="padding: 5px;">
+                                <button mat-icon-button>
+                                    <mat-icon style="color: gray;">search</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" colspan="2">
+                                <button *ngIf="alunosAvaliacaoFiltrados.length > 0" mat-button
+                                    (click)="selecionarTodosAlunosAvaliacao()">
+                                    {{alunosFiltrados.length == alunosAvaliacaoSelecionados.length ? 'Deselecionar' : 'Selecionar'}}
+                                    Todos
+                                </button>
+                                <button *ngIf="alunosAvaliacaoSelecionados.length > 0" mat-raised-button
+                                    (click)="removerSelecionadosDaAvaliacao()" class="btn-right">
+                                    <mat-icon>keyboard_arrow_right</mat-icon>
+                                </button>
+                                <div *ngIf="getAlunosFromTodosGrupos().length <= 0" class="msg-sem-aluno">
+                                    Você ainda não tem nenhum aluno esperado para essa avaliação...
+                                </div>
+                                <div *ngIf="alunosAvaliacaoFiltrados.length <= 0 && getAlunosFromTodosGrupos().length > 0"
+                                    class="msg-sem-aluno">
+                                    Nenhum aluno encontrado...
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <mat-selection-list [(ngModel)]="alunosAvaliacaoSelecionados">
+
+                        <mat-list-option checkboxPosition="before" class="aluno"
+                            *ngFor="let aluno of alunosAvaliacaoFiltrados" [value]="aluno">
+                            <table style="width: 100%;">
+                                <tr class="aluno-line">
+                                    <td width="10">
+                                        <img src="assets/avatares/padrao.jpg"
+                                            style="height: 5vh; width: 5vh; object-fit: cover;" />
+                                    </td>
+                                    <td width="25%">
+                                        {{aluno.nome}}
+                                    </td>
+                                    <td width="25%">
+                                        {{aluno.email}}
+                                    </td>
+                                    <td width="40%">
+                                        <div style="display: flex; flex-wrap: wrap;">
+                                            <div *ngFor="let tag of aluno.tags" class="tag">
+                                                {{tag}}
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </mat-list-option>
+                    </mat-selection-list>
+                </div>
+
+                <span style="position: absolute; bottom: 6px; left: 15px;">
+                    Mostrando {{alunosAvaliacaoFiltrados.length}} de {{getAlunosFromTodosGrupos().length}}
+                </span>
+
+            </div>
+        </td>
+        <td>
+            <div class="meus-alunos-container">
+                <div>
+                    <table style="width: 90%; margin: auto; display: block;">
+                        <tr>
+                            <td colspan="2" align="center">
+                                <h2>Meus Alunos</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="95%">
+                                <input type="text" class="input-clean" style="width: 100%;" [(ngModel)]="textoBusca"
+                                    #inputBuscaAluno maxlength="85" (keyup)="onBuscaAlunoKeyUp()"
+                                    placeholder="Digite aqui uma parte do nome, email ou tag do aluno que procura" />
+                            </td>
+                            <td width="5%" style="padding: 5px;">
+                                <button mat-icon-button>
+                                    <mat-icon style="color: gray;">search</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" colspan="2">
+                                <button *ngIf="alunosSelecionados.length > 0" (click)="addSelecionadosParaAvaliacao()"
+                                    mat-raised-button class="btn-left">
+                                    <mat-icon>keyboard_arrow_left</mat-icon>
+                                </button>
+                                <button *ngIf="alunosFiltrados.length > 0" mat-button (click)="selecionarTodos()">
+                                    {{alunosFiltrados.length == alunosSelecionados.length ? 'Deselecionar' : 'Selecionar'}}
+                                    Todos
+                                </button>
+                                <div *ngIf="alunos.length <= 0" class="msg-sem-aluno">
+                                    Você ainda não tem nenhum aluno...
+                                </div>
+                                <div *ngIf="alunosFiltrados.length <= 0 && alunos.length > 0" class="msg-sem-aluno">
+                                    Nenhum aluno encontrado...
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <mat-selection-list [(ngModel)]="alunosSelecionados">
+
+                        <mat-list-option checkboxPosition="before" class="aluno" *ngFor="let aluno of alunosFiltrados"
+                            [value]="aluno">
+                            <table style="width: 100%;">
+                                <tr class="aluno-line">
+                                    <td width="10">
+                                        <img src="assets/avatares/padrao.jpg"
+                                            style="height: 5vh; width: 5vh; object-fit: cover;" />
+                                    </td>
+                                    <td width="25%">
+                                        {{aluno.nome}}
+                                    </td>
+                                    <td width="25%">
+                                        {{aluno.email}}
+                                    </td>
+                                    <td width="40%">
+                                        <div style="display: flex; flex-wrap: wrap;">
+                                            <div *ngFor="let tag of aluno.tags" class="tag">
+                                                {{tag}}
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </mat-list-option>
+                    </mat-selection-list>
+                </div>
+
+                <span style="position: absolute; bottom: 6px; left: 15px;">
+                    Mostrando {{alunosFiltrados.length}} de {{alunos.length}}
+                </span>
+
+            </div>
+        </td>
+
+    </tr>
+
+
+
+</table>

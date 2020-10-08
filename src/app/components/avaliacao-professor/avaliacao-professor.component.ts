@@ -29,7 +29,6 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     descricao: "",
     professorId: 'XXX',
     professorNome: '',
-    alunos: [],
     grupos: [
       {
         numero: 1,

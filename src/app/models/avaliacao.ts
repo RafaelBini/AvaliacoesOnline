@@ -23,7 +23,6 @@ export interface Avaliacao {
     tipoPontuacao?: number,
     tags?: Array<string>,
     status?: number,
-    alunos?: Array<Usuario>;
     grupos?: Array<Grupo>;
     maxIntegrantes?: number;
     limitarNumIntegrantes?: boolean;
@@ -35,4 +34,5 @@ export interface Avaliacao {
     questoes?: Array<Questao>,
     avaliacoesParaCorrigir?: Array<Avaliacao>;
      */
+
 }

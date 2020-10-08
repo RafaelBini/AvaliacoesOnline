@@ -113,8 +113,6 @@ export class AvaliacaoService {
 
 
   insertNovaAvaliacao(avaliacao: Avaliacao) {
-    avaliacao.grupos = [];
-    avaliacao.alunos = [];
     return this.db.collection('avaliacoes').doc(avaliacao.id).set(avaliacao);
   }
 

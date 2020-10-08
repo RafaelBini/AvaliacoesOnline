@@ -43,31 +43,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     tipoDisposicao: 2,
     tipoCorrecao: 2,
     tipoPontuacao: 0,
-    alunos: [
-      { nome: "Camila Bini", email: 'Junqueira@gmail.com', online: true, },
-      { nome: "Matheus Leonardo", email: 'Junqueira3@gmail.com', online: true, },
-      { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, },
-      { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, },
-    ],
-    grupos: [
-      {
-        numero: 1,
-        instanciaId: '1',
-        alunos: [
-          { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, },
-          { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, },
-          { nome: "Junqueira Bini", email: 'Junqueirasx@gmail.com', online: true, },
-        ]
-      },
-      {
-        numero: 2,
-        instanciaId: '2',
-        alunos: [
-          { nome: "Camila Bini", email: 'Junqueira@gmail.com', online: true, },
-          { nome: "Matheus Leonardo", email: 'Junqueira3@gmail.com', online: true, },
-        ]
-      },
-    ],
+    grupos: [],
   }
 
   public gabarito: Prova = {

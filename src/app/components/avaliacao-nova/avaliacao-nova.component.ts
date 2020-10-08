@@ -1,3 +1,4 @@
+import { SelecionarAlunosComponent } from './../../dialogs/selecionar-alunos/selecionar-alunos.component';
 import { CredencialService } from './../../services/credencial.service';
 import { ProvaService } from './../../services/prova.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,6 +15,7 @@ import { UrlNode } from 'src/app/models/url-node';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { Prova } from 'src/app/models/prova';
+import { Usuario } from 'src/app/models/usuario';
 
 
 @Component({
@@ -54,9 +56,9 @@ export class AvaliacaoNovaComponent implements OnInit {
     correcaoParesQtdNumero: 1,
     tipoPontuacao: 0,
     tags: [],
+    grupos: [],
     provas: [],
     provaGabarito: "",
-    alunos: []
   };
 
   public provaGabarito: Prova = {
@@ -144,6 +146,24 @@ export class AvaliacaoNovaComponent implements OnInit {
         });
     });
 
+  }
+
+  getAlunosFromTodosGrupos(): Array<Usuario> {
+    var alunos: Array<Usuario> = [];
+    for (let grupo of this.avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        alunos.push(aluno);
+      }
+    }
+    return alunos;
+  }
+
+  abirSelecionarAunos() {
+    this.dialog.open(SelecionarAlunosComponent, {
+      data: this.avaliacao,
+      width: '85%',
+      height: '95%',
+    });
   }
 
   receberTodasAvaliacoes() {

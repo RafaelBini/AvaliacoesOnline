@@ -1,0 +1,51 @@
+.meus-alunos-container{
+    background-color: whitesmoke; 
+    padding: 15px; 
+    padding-bottom: 23px;
+    width: 90%; 
+    height: 100%;
+    border-radius: 8px; 
+    margin: auto; 
+    position: relative;
+}
+
+.tag{
+    padding: 5px;
+    background-color: var(--cor-primaria);
+    color: white;
+    margin-right: 4px;
+    border-radius: 7px;
+    font-size: 11px;
+    min-width: fit-content;
+    display: flexbox;
+    margin-top: 4px;
+}
+
+.aluno{
+    border: 1px dashed var(--cor-primaria);
+    border-radius: 6px;
+    margin-bottom: 5px;
+    background-color: white;
+    padding: 7px;
+    height: fit-content !important;
+    width: 98% !important;
+}
+
+.msg-sem-aluno{
+    padding: 80px;
+}
+
+.input-clean{
+    border: 1px dashed transparent;
+    padding: 7px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+.input-clean:focus{
+    outline: none;
+    border: 1px dashed var(--cor-primaria);
+}
+
+.btn-right{
+    
+}
