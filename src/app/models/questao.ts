@@ -1,5 +1,4 @@
 import { OpcaoPreencher } from './opcao-preencher';
-import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { Alternativa } from './alternativa';
 import { Associacao } from './associacao';
 import { Correcao } from './correcao';

@@ -1,17 +1,21 @@
 
+- Colocar todos no primeiro grupo quando o tipo disposição é individual
+- Distribuir os alunos de forma equilibrada nos grupos (nr de alunos dividido pelo numero de possiveis grupos)
+- Refazer grupos quando o tipo de disposição é alterado (avaliação-nova)
+- Criei verificações de status e existencia ao editar avaliacao
+- Colocar validação das datas ao finalizar avaliação
+- Arrumar a função "buscar questão" para inserir na prova e não na avaliaçao
 
 -------------------
 
-- Criar função para mudar o status da avaliação de acordo com o tempo
-- Colocar validação das datas ao finalizar avaliação
-- Arrumar a função "buscar questão" para inserir na prova e não na avaliaçao
+- Visão do aluno da avaliação com bD
+- Visão do professor da avaliação com bd
 
 - Anexo de imagens / arquivos nas questões (1 ou mais)
 	- Na pergunta
 	- Nas respostas (dissertativas e envio de arquivo)
 - Cadastrar alunos por CSV no bd
 
-- Visão do professor da avaliação com bd
-- Visão do aluno da avaliação com bD
-
+- Confirmar antes de fechar sem salvar (avaliacao-nova)
+- Criar hash da senha para inserir e conferir com banco de dados
 

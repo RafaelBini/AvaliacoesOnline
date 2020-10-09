@@ -23,13 +23,13 @@
         <div *ngFor="let questao of questoesFiltradas; index as i" (click)="add(i)" class="questao"
             matTooltip="Clique para adicionar">
 
-            <b>{{questao.pergunta}}</b>
+            <b>{{questao.q.pergunta}}</b> - {{questao.avaliacao.titulo}}
             <br />
-            {{comumService.questaoTipos[questao.tipo].nome}} -
-            {{comumService.niveisDificuldade[questao.nivelDificuldade]}}
+            {{comumService.questaoTipos[questao.q.tipo].nome}} -
+            {{comumService.niveisDificuldade[questao.q.nivelDificuldade]}}
             <br />
             <div style="display: flex; padding: 7px;">
-                <div *ngFor="let tag of questao.tags" class="tag">
+                <div *ngFor="let tag of questao.q.tags" class="tag">
                     {{tag}}
                 </div>
             </div>

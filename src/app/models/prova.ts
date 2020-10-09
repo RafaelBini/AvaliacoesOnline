@@ -5,6 +5,7 @@ import { Usuario } from './usuario';
 export interface Prova {
     id?: string,
     avaliacaoId?: string,
+    professorId?: string,
     dtInicio?: string;
     dtInicioCorrecao?: string;
     dtTermino?: string;

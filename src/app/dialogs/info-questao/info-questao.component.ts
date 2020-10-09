@@ -30,7 +30,6 @@ export class InfoQuestaoComponent implements OnInit {
     // Add our fruit
     if ((value || '').trim()) {
       this.questao.tags.push(value);
-      console.log(this.questao.tags);
     }
 
     // Reset the input value

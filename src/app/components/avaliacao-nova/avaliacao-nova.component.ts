@@ -43,11 +43,11 @@ export class AvaliacaoNovaComponent implements OnInit {
     limitarNumIntegrantes: true,
     maxIntegrantes: 3,
     dtInicio: this.comumService.getStringFromDate(new Date()),
-    isInicioIndeterminado: false,
+    isInicioIndeterminado: true,
     dtInicioCorrecao: this.comumService.getStringFromDate(new Date()),
-    isInicioCorrecaoIndeterminado: false,
+    isInicioCorrecaoIndeterminado: true,
     dtTermino: this.comumService.getStringFromDate(new Date()),
-    isTerminoIndeterminado: false,
+    isTerminoIndeterminado: true,
     isOrdemAleatoria: false,
     isBloqueadoAlunoAtrasado: false,
     tipoDisposicao: 0,
@@ -59,10 +59,12 @@ export class AvaliacaoNovaComponent implements OnInit {
     grupos: [],
     provas: [],
     provaGabarito: "",
+
   };
 
   public provaGabarito: Prova = {
     isGabarito: true,
+    professorId: '',
     questoes: [
       {
         pergunta: "",
@@ -75,12 +77,14 @@ export class AvaliacaoNovaComponent implements OnInit {
         associacoes: [],
         textoParaPreencher: "",
         opcoesParaPreencher: [],
-        tentativas: 0
+        tentativas: 0,
+        extensoes: [],
       },
     ],
   };
 
-  private avaliacoesId = [];
+  private avaliacoesId: Array<string> = [];
+  private minhasAvaliacoes: Array<Avaliacao> = [];
 
   public provaExemplo: Prova;
 
@@ -95,6 +99,8 @@ export class AvaliacaoNovaComponent implements OnInit {
   idJaExiste = false;
   isEditando = false;
 
+  idEmEdicao: string;
+
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
 
   ngOnInit(): void {
@@ -105,21 +111,54 @@ export class AvaliacaoNovaComponent implements OnInit {
 
     this.comumService.scrollToTop();
     this.route.params.subscribe(params => {
+
+      // DUPLICANDO 
       if (params.id && params.tipo == 'duplicar') {
         this.puxarAvaliacaoParaEditar(params.id).then(() => {
+          if (this.avaliacao.professorId != this.credencialService.getLoggedUserIdFromCookie()) {
+            this.snack.open('Sem permissao para duplicar', null, { duration: 4500 });
+            this.router.navigate(['']);
+            return;
+          }
+          this.provaGabarito.professorId = this.credencialService.getLoggedUserIdFromCookie();
           this.receberTodasAvaliacoes().then(() => {
             this.setIdDuplicado(params.id);
+            this.avaliacao.status = 0;
           });
         });
         this.isEditando = false;
       }
+
+      // EDITANDO
       else if (params.id) {
-        this.puxarAvaliacaoParaEditar(params.id);
+        this.idEmEdicao = params.id;
+        this.puxarAvaliacaoParaEditar(params.id).then(() => {
+          if (this.avaliacao.status != 0) {
+            this.snack.open('Essa avaliação não pode mais ser editada', null, { duration: 4500 });
+            this.router.navigate(['']);
+            return;
+          }
+          else if (this.avaliacao.professorId != this.credencialService.getLoggedUserIdFromCookie()) {
+            this.snack.open('Sem permissao para duplicar', null, { duration: 4500 });
+            this.router.navigate(['']);
+            return;
+          }
+          this.provaGabarito.professorId = this.credencialService.getLoggedUserIdFromCookie();
+          this.receberTodasAvaliacoes();
+        }).catch(() => {
+          this.snack.open('Avaliação não encontrada', null, { duration: 4500 });
+          this.router.navigate(['']);
+          return;
+        });
+
         this.isEditando = true;
       }
+
+      // CRIANDO NOVA
       else {
         this.setIdAleatorio();
         this.receberTodasAvaliacoes();
+        this.provaGabarito.professorId = this.credencialService.getLoggedUserIdFromCookie();
         this.isEditando = false;
       }
     });
@@ -158,19 +197,14 @@ export class AvaliacaoNovaComponent implements OnInit {
     return alunos;
   }
 
-  abirSelecionarAunos() {
-    this.dialog.open(SelecionarAlunosComponent, {
-      data: this.avaliacao,
-      width: '85%',
-      height: '95%',
-    });
-  }
 
   receberTodasAvaliacoes() {
     return new Promise((resolve, reject) => {
       this.avaliacaoService.getAllAvaliacoes().then(avaliacoes => {
         for (let avaliacao of avaliacoes) {
           this.avaliacoesId.push(avaliacao.id);
+          if (avaliacao.professorId == this.credencialService.getLoggedUserIdFromCookie())
+            this.minhasAvaliacoes.push(avaliacao);
         }
         resolve();
       }).catch(reason => reject(reason));
@@ -220,6 +254,7 @@ export class AvaliacaoNovaComponent implements OnInit {
       textoParaPreencher: "",
       opcoesParaPreencher: [],
       tentativas: 0,
+      extensoes: [],
     });
 
     this.comumService.scrollToBottom();
@@ -235,26 +270,35 @@ export class AvaliacaoNovaComponent implements OnInit {
     }
   }
 
+  // FINAL
   finalizar() {
-    // TODO: VALIDAR SE EXISTE UMA AVALIAÇÃO COM ESSE ID
-    this.avaliacao.professorId = this.credencialService.loggedUser.id;
-    this.avaliacao.professorNome = this.credencialService.loggedUser.nome;
-    this.avaliacaoService.insertNovaAvaliacao(this.avaliacao).then(() => {
-      this.provaGabarito.avaliacaoId = this.avaliacao.id;
-      this.provaService.insertProvaGabarito(this.provaGabarito).then(() => {
-        this.router.navigate(['/professor']);
-        this.dialog.open(AvaliacaoCriadaDialogComponent, {
-          data: this.avaliacao.id
+    if (this.idJaExiste) {
+      this.snack.open(`Já existe uma avaliação com o ID ${this.avaliacao.id}`, null, { duration: 3500 });
+      return;
+    }
+    this.validarDatas().then(() => {
+      this.avaliacao.professorId = this.credencialService.loggedUser.id;
+      this.avaliacao.professorNome = this.credencialService.loggedUser.nome;
+
+      this.avaliacaoService.insertNovaAvaliacao(this.avaliacao).then(() => {
+        this.provaGabarito.avaliacaoId = this.avaliacao.id;
+        this.provaService.insertProvaGabarito(this.provaGabarito).then(() => {
+          this.router.navigate(['/professor']);
+          this.dialog.open(AvaliacaoCriadaDialogComponent, {
+            data: this.avaliacao.id
+          });
+        }).catch(reason => {
+          this.comumService.notificarErro("Não foi possível adicionar a prova", reason);
         });
       }).catch(reason => {
-        this.comumService.notificarErro("Não foi possível adicionar a prova", reason);
+        this.comumService.notificarErro("Não foi possível adicionar a avaliação", reason);
       });
     }).catch(reason => {
-      this.comumService.notificarErro("Não foi possível adicionar a avaliação", reason);
-    });
+      this.snack.open(reason, null, { duration: 3500 });
+    })
+
 
   }
-
   @HostListener('window:keydown', ['$event'])
   onKeyUp(event: KeyboardEvent) {
 
@@ -265,28 +309,39 @@ export class AvaliacaoNovaComponent implements OnInit {
 
 
   }
-
   salvar() {
     if (!this.isEditando)
       return;
-    this.avaliacaoService.updateAvaliacao(this.avaliacao).then(() => {
-      this.provaGabarito.id = this.avaliacao.provaGabarito;
-      this.provaService.updateProva(this.provaGabarito).then(() => {
-        this.snack.open("Avaliação salva!", null, { duration: 3500 });
-      }).catch(reason => this.comumService.notificarErro("Não foi possível salvar a avaliação", reason))
-    }).catch(reason => this.comumService.notificarErro("Não foi possível salvar a prova", reason));
+    if (this.idJaExiste) {
+      this.snack.open(`Já existe uma avaliação com o ID ${this.avaliacao.id}`, null, { duration: 3500 });
+      return;
+    }
+    this.validarDatas().then(() => {
+      this.avaliacaoService.updateAvaliacao(this.avaliacao).then(() => {
+        this.provaGabarito.id = this.avaliacao.provaGabarito;
+        this.provaService.updateProva(this.provaGabarito).then(() => {
+          this.snack.open("Avaliação salva!", null, { duration: 3500 });
+        }).catch(reason => this.comumService.notificarErro("Não foi possível salvar a avaliação", reason))
+      }).catch(reason => this.comumService.notificarErro("Não foi possível salvar a prova", reason));
+    }).catch(reason => {
+      this.snack.open(reason, null, { duration: 3500 });
+    });
+
   }
 
 
+  // DIALOGS
   buscarQuestao() {
     this.dialog.open(BuscarQuestaoComponent, {
-      data: this.avaliacao,
+      data: {
+        prova: this.provaGabarito,
+        minhasAvaliacoes: this.minhasAvaliacoes,
+      },
       width: '75%'
     });
   }
-
   abrirTipos(tipoEscolhido) {
-    this.dialog.open(EscolherTipoComponent, {
+    const DIAG_REF = this.dialog.open(EscolherTipoComponent, {
       data: {
         avaliacao: this.avaliacao,
         prova: this.provaGabarito,
@@ -294,39 +349,112 @@ export class AvaliacaoNovaComponent implements OnInit {
       },
       width: '75%'
     });
+    DIAG_REF.afterClosed().subscribe(() => {
+      if (tipoEscolhido == 'disposicao')
+        this.redistribuirAlunosNosGrupos();
+    });
   }
-
   mudarVisao(tipoVisao) {
     this.provaExemplo = this.avaliacaoService.getAvaliacaoFromGabarito(this.provaGabarito);
     this.visao = tipoVisao;
   }
+  abirSelecionarAunos() {
+    var diagRef = this.dialog.open(SelecionarAlunosComponent, {
+      data: this.avaliacao,
+      width: '85%',
+      height: '95%',
+    });
+    diagRef.afterClosed().subscribe(() => {
+      this.redistribuirAlunosNosGrupos();
+    });
+  }
+  redistribuirAlunosNosGrupos() {
+    var todosAlunos = this.getAlunosFromTodosGrupos();
 
+    if (todosAlunos.length <= 0)
+      return;
+
+    if (this.avaliacao.tipoDisposicao == 0) {
+      this.avaliacao.grupos = this.avaliacao.grupos.filter(g => g.numero == 1);
+      this.avaliacao.grupos[0].alunos = todosAlunos;
+      return;
+    }
+    else {
+      if (!this.avaliacao.limitarNumIntegrantes) {
+        this.avaliacao.maxIntegrantes = 3;
+      }
+      const QTD_GRUPOS_NECESSARIOS = (todosAlunos.length / this.avaliacao.maxIntegrantes);
+      const MAX_EQUILIBRADO = todosAlunos.length / QTD_GRUPOS_NECESSARIOS;
+      this.avaliacao.grupos = [];
+      for (var g = 0; g < QTD_GRUPOS_NECESSARIOS; g++) {
+        this.addGrupo();
+        while (this.avaliacao.grupos[g].alunos.length < MAX_EQUILIBRADO && todosAlunos.length > 0) {
+          const INDEX_SORTEADO = Math.floor(Math.random() * todosAlunos.length);
+          const ALUNO_SORTEADO = todosAlunos[INDEX_SORTEADO]
+          this.avaliacao.grupos[g].alunos.push(ALUNO_SORTEADO);
+          todosAlunos.splice(INDEX_SORTEADO, 1);
+        }
+      }
+    }
+  }
+  addGrupo() {
+    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaId: `${(this.avaliacao.grupos.length + 1)}`, alunos: [] });
+  }
+
+  // DATAS DA AVALIAÇÃO
+  validarDatas() {
+    return new Promise<void>((resolve, reject) => {
+      const dtInicio = new Date(this.avaliacao.dtInicio);
+      const dtInicioCorrecao = new Date(this.avaliacao.dtInicioCorrecao);
+      const dtTermino = new Date(this.avaliacao.descricao);
+
+      if ((dtTermino <= dtInicioCorrecao || dtTermino <= dtInicio) && !this.avaliacao.isInicioCorrecaoIndeterminado && !this.avaliacao.isInicioIndeterminado && !this.avaliacao.isTerminoIndeterminado) {
+        reject('O término da avaliação não pode ser antes que o início');
+        return;
+      }
+      else if (dtInicioCorrecao <= dtInicio && !this.avaliacao.isInicioCorrecaoIndeterminado && !this.avaliacao.isInicioIndeterminado) {
+        reject('O início da correção não pode ser antes do início da avaliaçao');
+        return;
+      }
+      else if (dtInicio < new Date() && !this.avaliacao.isInicioIndeterminado) {
+        reject('O início da avaliação não pode ser colocado no passado.');
+        return;
+      }
+
+      resolve();
+
+    });
+  }
+  getNowStr() {
+    return this.comumService.getStringFromDate(new Date());
+  }
+
+  // ID DA AVALIAÇÃO
   validarId() {
-    if (this.avaliacoesId.includes(this.avaliacao.id)) {
+    if (this.idEmEdicao == this.avaliacao.id) {
+      this.idJaExiste = false;
+    }
+    else if (this.avaliacoesId.includes(this.avaliacao.id)) {
       this.idJaExiste = true;
     }
     else {
       this.idJaExiste = false;
     }
   }
-
   corrigirId() {
     setTimeout(() => {
       this.avaliacao.id = this.avaliacao.id.replace(" ", "");
       this.validarId();
     });
   }
-
   corrigirIdVazio() {
     if (this.avaliacao.id == "") {
       this.setIdAleatorio();
     }
   }
-
   setIdAleatorio() {
     this.avaliacao.id = this.getIdAleatorio(4);
   }
-
   getIdAleatorio(maxDigitos: number): string {
     const CARACTERES = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Z', 'Y', 'W'];
     var idAleatorio = '';
@@ -347,11 +475,9 @@ export class AvaliacaoNovaComponent implements OnInit {
     }
     return idAleatorio;
   }
-
   setIdDuplicado(base: string) {
     this.avaliacao.id = this.getIdDuplicado(base);
   }
-
   getIdDuplicado(base: string) {
     var count = 2;
     while (this.avaliacoesId.includes(`${base}_${count}`)) {

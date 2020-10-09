@@ -58,7 +58,7 @@
                     Inicio da Avaliação:
                 </td>
                 <td style="display: flex;">
-                    <input type="datetime-local" [(ngModel)]="avaliacao.dtInicio"
+                    <input type="datetime-local" [min]="getNowStr()" [(ngModel)]="avaliacao.dtInicio"
                         *ngIf="!avaliacao.isInicioIndeterminado" />
                     <div style="width: fit-content">
 
