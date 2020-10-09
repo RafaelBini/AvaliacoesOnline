@@ -47,10 +47,17 @@ export class AvaliacaoCardComponent implements OnInit {
             }
           });
           dialgogRef2.afterClosed().subscribe(result => {
+
             if (result == true) {
-              this.provaService.deletarProva(avaliacao.provaGabarito).then(() => {
+              this.provaService.getProvasFromAvaliacao(avaliacao.id).then(provas => {
+
+                for (let prova of provas) {
+                  this.provaService.deletarProva(prova.id);
+                }
+
                 this.snack.open("Questões excluidas com sucesso.", null, { duration: 3500 });
               });
+
             }
           });
         });

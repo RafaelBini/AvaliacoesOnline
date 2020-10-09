@@ -92,7 +92,7 @@
         </div>
 
         <button mat-raised-button matStepperNext matTooltip="Clique aqui para iniciar a avaliação" class="main-btn"
-            style="color: white; background-color: var(--cor-tranquila);">
+            style="color: white; background-color: var(--cor-tranquila);" (click)="iniciarAvaliacao()">
             Iniciar Avaliação
         </button>
 
@@ -112,12 +112,15 @@
                 style="border-color: var(--cor-secundaria); cursor: default">
                 <app-aluno-card-avaliacao-professor [aluno]="aluno">
                 </app-aluno-card-avaliacao-professor>
-                <div *ngIf="aluno.statusId" style="position: absolute; top: 30%; right: 20px;">
+                <div style="position: absolute; top: 30%; right: 20px;">
                     <span *ngIf="aluno.statusId > 2">
-                        <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">done</mat-icon>
+                        <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">check_circle</mat-icon>
                     </span>
                     <div *ngIf="aluno.statusId <= 2">
-                        <mat-icon matTooltip="O aluno está relizando as questões">query_builder</mat-icon>
+                        <mat-icon matTooltip="O aluno está relizando as questões">create</mat-icon>
+                    </div>
+                    <div *ngIf="aluno.statusId == null">
+                        <mat-icon matTooltip="O aluno não iniciou a avaliação">not_interested</mat-icon>
                     </div>
                 </div>
             </div>
@@ -135,12 +138,15 @@
                     style="cursor: default">
                     <app-aluno-card-avaliacao-professor [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
-                    <div *ngIf="aluno.statusId != null" style="position: absolute; top: 30%; right: 20px;">
+                    <div style="position: absolute; top: 30%; right: 20px;">
                         <span *ngIf="aluno.statusId > 2">
-                            <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">done</mat-icon>
+                            <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">check_circle</mat-icon>
                         </span>
                         <div *ngIf="aluno.statusId <= 2">
-                            <mat-icon matTooltip="O aluno está relizando as questões">query_builder</mat-icon>
+                            <mat-icon matTooltip="O aluno está relizando as questões">create</mat-icon>
+                        </div>
+                        <div *ngIf="aluno.statusId == null">
+                            <mat-icon matTooltip="O aluno não iniciou a avaliação">not_interested</mat-icon>
                         </div>
                     </div>
                 </div>
@@ -189,7 +195,7 @@
                     </app-aluno-card-avaliacao-professor>
                 </div>
                 <div class="btn-corrigir">
-                    <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.instanciaId">
+                    <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId">
                         {{grupo.instanciaStatusId > 2 ? "REVISAR" : "CORRIGIR"}}
                     </a>
                 </div>
@@ -241,7 +247,7 @@
                 </div>
 
                 <div class="btn-corrigir">
-                    <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.instanciaId">
+                    <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId">
                         NOTA: {{100}}% - REVISAR
                     </a>
                 </div>

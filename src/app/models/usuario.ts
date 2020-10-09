@@ -8,6 +8,6 @@ export interface Usuario {
     alunos?: Array<Usuario>;
     online?: boolean;
     statusId?: number;
-    instanciaId?: string;
+    provaId?: string;
     acesso?: string;
 }

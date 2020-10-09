@@ -274,6 +274,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
         }
       }
       if (!tenhoAluno) {
+        alunoOnline.online = false;
         this.credencialService.loggedUser.alunos.push(alunoOnline);
         adicioneiAluno = true;
       }
@@ -364,6 +365,10 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
       }
     }
   }
+  iniciarAvaliacao() {
 
+    this.avaliacao.status = 1;
+    this.avaliacaoService.updateAvaliacao(this.avaliacao);
+  }
 
 }

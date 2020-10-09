@@ -40,6 +40,12 @@ export class BuscarQuestaoComponent implements OnInit {
 
         var avaliacao = this.data.minhasAvaliacoes.filter(a => a.provaGabarito == prova.id)[0];
 
+        if (avaliacao == null) {
+          avaliacao = {
+            titulo: 'Avaliação Excluida'
+          }
+        }
+
         for (let questao of prova.questoes) {
           this.questoes.push({
             q: questao,

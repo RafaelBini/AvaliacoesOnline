@@ -1,6 +1,6 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
-<mat-horizontal-stepper class="avaliacao-stepper"  [selectedIndex]="avaliacao.status" #stepper>
+<mat-horizontal-stepper class="avaliacao-stepper" [selectedIndex]="avaliacao.status" #stepper>
 
     <!-- EM PREPARAÇÃO -->
     <mat-step [editable]="false" [completed]="false">
@@ -85,16 +85,20 @@
                     <div style="text-align: center;">
                         MEU GRUPO
                     </div>
-                    <div class="aluno" style="cursor: default;" *ngFor="let aluno of prova.alunos"
+                    <div class="aluno" style="cursor: default;" *ngFor="let aluno of getMeuGrupoNaAvaliacao().alunos"
                         [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                         <app-aluno-card-avaliacao-professor [aluno]="aluno">
                         </app-aluno-card-avaliacao-professor>
-                        <div *ngIf="aluno.statusId" style="position: absolute; top: 30%; right: 20px;">
+                        <div style="position: absolute; top: 30%; right: 20px;">
                             <span *ngIf="aluno.statusId > 2">
-                                <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">done</mat-icon>
+                                <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">check_circle
+                                </mat-icon>
                             </span>
                             <div *ngIf="aluno.statusId <= 2">
-                                <mat-icon matTooltip="O aluno está respondendo as questões">query_builder</mat-icon>
+                                <mat-icon matTooltip="O aluno está relizando as questões">create</mat-icon>
+                            </div>
+                            <div *ngIf="aluno.statusId == null">
+                                <mat-icon matTooltip="O aluno não iniciou a avaliação">not_interested</mat-icon>
                             </div>
                         </div>
                     </div>
@@ -102,7 +106,8 @@
 
             </div>
 
-            <app-questoes-responder [prova]="prova" [avaliacao]="avaliacao" [gabarito]="gabarito">
+            <app-questoes-responder (respostaAlterada)="respostaAlterada()" [prova]="prova" [avaliacao]="avaliacao"
+                [gabarito]="gabarito">
 
             </app-questoes-responder>
 
@@ -110,11 +115,11 @@
 
 
         <div style="width: 100%;">
-            <button *ngIf="!finalizado" (click)="sinalizarFinalizacao()" mat-raised-button
+            <button *ngIf="!getFinalizado()" (click)="sinalizarFinalizacao()" mat-raised-button
                 style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
                 Sinalizar Finalização
             </button>
-            <div *ngIf="finalizado"
+            <div *ngIf="getFinalizado()"
                 style="margin: auto; text-align: center; width: 60%; background-color: whitesmoke; border-radius: 10px; margin-top: 15px; margin-bottom: 40px; font-size: 14px; padding: 10px; display: block;">
                 <h2>Finalização sinalizada!</h2>
                 <span *ngIf="avaliacao.tipoDisposicao != 0">Esta avaliação será finalizada quando todos do seu grupo

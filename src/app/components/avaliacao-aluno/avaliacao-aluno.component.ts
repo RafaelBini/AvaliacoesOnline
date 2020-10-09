@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { ProvaService } from 'src/app/services/prova.service';
 import { AvaliacaoAlunoCabecalhoComponent } from './avaliacao-aluno-cabecalho/avaliacao-aluno-cabecalho.component';
 import { Usuario } from 'src/app/models/usuario';
+import { Grupo } from 'src/app/models/grupo';
 
 
 @Component({
@@ -28,15 +29,14 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     private avaliacaoService: AvaliacaoService,
     private provaService: ProvaService,
     private snack: MatSnackBar) { }
-  public finalizado = false;
+
 
   public avaliacao: Avaliacao = {
-    titulo: "Titulo da Avaliação",
-    descricao: `Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação Descrição da Avaliação
-    Descrição da Avaliação`,
+    titulo: "",
+    descricao: "",
     status: 0,
-    professorId: 'XXX',
-    professorNome: 'Rafael Bini',
+    professorId: '',
+    professorNome: '',
     limitarNumIntegrantes: true,
     maxIntegrantes: 3,
     correcaoParesQtdNumero: 3,
@@ -55,65 +55,8 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     id: '1',
     avaliacaoId: "1",
     status: 0,
-    questoes: [
-      {
-        pergunta: "Qual é a cor da grama?",
-        tipo: 4,
-        resposta: "",
-        alternativas: [
-          { texto: "A cor é Vermelha.", selecionada: false },
-          { texto: "A cor é Verde.", selecionada: false },
-          { texto: "A cor é Rosa.", selecionada: false },
-          { texto: "A cor é Azul.", selecionada: false },
-        ],
-        valor: 30,
-        tentativas: 0,
-      },
-      {
-        pergunta: "Qual(is) deste(s) tem quatro patas?",
-        tipo: 3,
-        resposta: "",
-        alternativas: [
-          { texto: "Cachorro.", selecionada: false },
-          { texto: "Pássaro.", selecionada: false },
-          { texto: "Gato.", selecionada: false },
-          { texto: "Centopéia.", selecionada: false },
-        ],
-        valor: 10,
-        tentativas: 0,
-      },
-      {
-        valor: 5,
-        pergunta: "Complete a frase abaixo:",
-        tags: ["astronomia", "cores", "química"],
-        tipo: 5,
-        nivelDificuldade: 4,
-        opcoesParaPreencher: [
-          { texto: "grama", opcaoSelecionada: null, ativa: true },
-          { texto: "verde", opcaoSelecionada: null, ativa: true }
-        ],
-        textoParaPreencher: "A (1) geralemnte é da cor (2).",
-        partesPreencher: [
-          { conteudo: "A ", tipo: "texto" },
-          { conteudo: 0, tipo: "select" },
-          { conteudo: " geralmente é da cor ", tipo: "texto" },
-          { conteudo: 1, tipo: "select" },
-          { conteudo: ".", tipo: "texto" },
-        ],
-        correcaoProfessor: {
-          nota: null,
-          observacao: null,
-        },
-        correcoes: [],
-        tentativas: 0,
-      },
-
-    ],
-    alunos: [
-      { nome: "Douglas Marques", email: 'Junqueira2@gmail.com', online: true, statusId: 1, },
-      { nome: "Guilherme Cruz", email: 'Junqueira4@gmail.com', online: true, statusId: 1, },
-      { nome: "Rafael Bini", email: 'rfabini1996@gmail.com', online: true, statusId: 1, },
-    ],
+    questoes: [],
+    alunos: [],
     provasParaCorrigir: [
 
     ]
@@ -126,6 +69,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
   ];
 
   private avaliacaoSubscription: Subscription;
+  private provaSubscription: Subscription;
 
   @ViewChild(CountdownComponent) countDown: CountdownComponent;
 
@@ -159,9 +103,125 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
           this.meAtualizarNaAvaliacao();
 
+          if (this.avaliacao.status == 1) {
 
-          if (this.avaliacao.tipoCorrecao == 3)
-            this.receberProvasCorrigir();
+            if (this.gabarito.questoes.length <= 0) {
+              this.receberGabarito();
+            }
+
+            var EU_NA_AVALIACAO = this.getEuNaAvaliacao();
+
+            // INDIVIDUAL
+            if (this.avaliacao.tipoDisposicao == 0) {
+
+              // Se estou sem prova para fazer, pego uma prova
+              if (EU_NA_AVALIACAO.provaId == null) {
+
+                // Certifica-se de ter o gabarito,
+                var recebeGabaritoInterval = setInterval(() => {
+                  if (this.gabarito.questoes.length > 0) {
+
+                    const PROVA_EM_BRANCO = this.provaService.getProvaFromGabarito(this.gabarito);
+                    PROVA_EM_BRANCO.alunos = [];
+                    PROVA_EM_BRANCO.alunos.push(EU_NA_AVALIACAO);
+
+                    // Insere uma nova prova
+                    this.provaService.insertProva(PROVA_EM_BRANCO).then(novaProva => {
+                      this.prova = novaProva;
+                      EU_NA_AVALIACAO.provaId = this.prova.id;
+                      EU_NA_AVALIACAO.statusId = 2;
+                      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+
+                    }).catch(reason => this.snack.open('Falha ao receber a prova', null, { duration: 3500 }));
+
+                    clearInterval(recebeGabaritoInterval);
+                  }
+                });
+
+              }
+
+              // Se já estou atribuido a uma prova, recebo a prova
+              else {
+                this.provaService.getProvaFromId(EU_NA_AVALIACAO.provaId).then(prova => {
+                  this.prova = prova;
+                });
+              }
+
+            }
+
+            // EM GRUPO
+            else {
+
+              var MEU_GRUPO_NA_AVALIACAO = this.getMeuGrupoNaAvaliacao();
+
+              // Se meu grupo não tem prova atribuida,
+              if (MEU_GRUPO_NA_AVALIACAO.provaId == null) {
+
+                // Certifica-se de ter o gabarito,
+                var recebeGabaritoInterval = setInterval(() => {
+                  if (this.gabarito.questoes.length > 0) {
+
+                    const PROVA_EM_BRANCO = this.provaService.getProvaFromGabarito(this.gabarito);
+                    PROVA_EM_BRANCO.alunos = [];
+                    PROVA_EM_BRANCO.alunos.push(EU_NA_AVALIACAO);
+
+                    // Insere uma nova prova
+                    this.provaService.insertProva(PROVA_EM_BRANCO).then(novaProva => {
+                      this.prova = novaProva;
+                      MEU_GRUPO_NA_AVALIACAO.provaId = this.prova.id;
+                      EU_NA_AVALIACAO.statusId = 2;
+                      this.getEuNaProva().statusId = 2;
+                      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+
+                    }).catch(reason => this.comumService.notificarErro('Falha ao receber a prova', reason));
+
+                    clearInterval(recebeGabaritoInterval);
+                  }
+                });
+
+              }
+
+              // Se meu grupo já tem prova atribuida, recebe-a
+              else {
+
+                if (this.provaSubscription == null) {
+
+                  this.provaSubscription = this.provaService.onProvaChange(MEU_GRUPO_NA_AVALIACAO.provaId).subscribe(prova => {
+                    this.prova = prova;
+                    this.prova.id = MEU_GRUPO_NA_AVALIACAO.provaId;
+
+                    // Se eu não estou na prova, eu entro                  
+                    if (this.getEuNaProva() == null) {
+                      EU_NA_AVALIACAO.statusId = 2;
+                      this.prova.alunos.push(EU_NA_AVALIACAO);
+                      this.provaService.updateProva(this.prova);
+                      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+                    }
+                    else if (this.getEuNaProva().statusId != 2) {
+                      this.getEuNaProva().statusId = 2;
+                      this.provaService.updateProva(this.prova);
+                    }
+                    else if (EU_NA_AVALIACAO.statusId != 2) {
+                      EU_NA_AVALIACAO.statusId = 2;
+                      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+                    }
+
+
+                  });
+
+                }
+
+
+              }
+
+            }
+
+          }
+          else if (this.avaliacao.status == 2) {
+            if (this.avaliacao.tipoCorrecao == 3)
+              this.receberProvasCorrigir();
+          }
+
 
         });
 
@@ -180,6 +240,8 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.avaliacaoSubscription)
       this.avaliacaoSubscription.unsubscribe();
+    if (this.provaSubscription)
+      this.provaSubscription.unsubscribe();
   }
 
   // GERAL
@@ -263,7 +325,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
   // EM PREPARAÇÃO
   addGrupo() {
-    const novoLength = this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaId: `${(this.avaliacao.grupos.length + 1)}`, alunos: [] });
+    const novoLength = this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, provaId: null, alunos: [] });
     this.entrarNoGrupo(this.avaliacao.grupos[novoLength - 1]);
     setTimeout(() => {
       window.scroll({
@@ -276,7 +338,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     const me = this.credencialService.loggedUser;
 
     // Se o grupo já tem o máximo de integrantes
-    if (grupo.alunos.length >= this.avaliacao.maxIntegrantes) {
+    if (grupo.alunos.length >= this.avaliacao.maxIntegrantes && this.avaliacao.limitarNumIntegrantes && this.avaliacao.tipoDisposicao != 0) {
       this.snack.open("Este grupo já está cheio", null, {
         duration: 3000
       });
@@ -307,10 +369,15 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     return this.avaliacao.grupos.filter(g => g.alunos.length <= 0).length > 0;
   }
   entrarEmGrupoAleatorio() {
+    if (this.avaliacao.tipoDisposicao == 0) {
+      this.entrarNoGrupo(this.avaliacao.grupos[0]);
+      return;
+    }
+
     // Passa por cada grupo
     var foiAlocado = false;
     for (let grupo of this.avaliacao.grupos) {
-      if (grupo.alunos.length < this.avaliacao.maxIntegrantes) {
+      if (grupo.alunos.length < this.avaliacao.maxIntegrantes && this.avaliacao.limitarNumIntegrantes) {
         this.entrarNoGrupo(grupo);
         foiAlocado = true;
       }
@@ -337,12 +404,57 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
   // DURANTE AVALIAÇÃO
   sinalizarFinalizacao() {
-    this.finalizado = true;
-    const EU = this.credencialService.loggedUser;
-    const MEU_INDEX_INSTANCIA = this.prova.alunos.indexOf(this.prova.alunos.filter(a => a.email == EU.email)[0]);
-    this.prova.alunos[MEU_INDEX_INSTANCIA].statusId = 3;
-    console.log(this.getMinhaNota());
+
+    this.getEuNaProva().statusId = 3;
+    this.getEuNaAvaliacao().statusId = 3;
+
+    this.provaService.updateProva(this.prova);
+    this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
+  receberGabarito() {
+    this.provaService.getProvaFromId(this.avaliacao.provaGabarito).then(gabarito => {
+      this.gabarito = gabarito;
+    });
+  }
+  getEuNaAvaliacao(): Usuario {
+    for (let grupo of this.avaliacao.grupos) {
+      var count = 0;
+      for (let aluno of grupo.alunos) {
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
+          return this.avaliacao.grupos[this.avaliacao.grupos.indexOf(grupo)].alunos[count];
+        count++;
+      }
+    }
+    return null;
+  }
+  getEuNaProva(): Usuario {
+    const EU = this.credencialService.loggedUser;
+    const MEU_INDEX_PROVA = this.prova.alunos.indexOf(this.prova.alunos.filter(a => a.email == EU.email)[0]);
+    return this.prova.alunos[MEU_INDEX_PROVA];
+  }
+  getMeuGrupoNaAvaliacao(): Grupo {
+    for (let grupo of this.avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
+          return this.avaliacao.grupos[this.avaliacao.grupos.indexOf(grupo)];
+      }
+    }
+    return {
+      alunos: []
+    }
+  }
+  getFinalizado() {
+    if (this.avaliacao.grupos.length > 0) {
+      if (this.getEuNaAvaliacao())
+        return this.getEuNaAvaliacao().statusId >= 3;
+    }
+
+    return false;
+  }
+  respostaAlterada() {
+    this.provaService.updateProva(this.prova);
+  }
+
 
   // EM CORREÇÃO
   receberProvasCorrigir() {
@@ -352,7 +464,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     if (this.avaliacao.correcaoParesQtdTipo == 'TODOS') {
       for (let grupo of this.avaliacao.grupos) {
         this.prova.provasParaCorrigir.push({
-          id: grupo.instanciaId.toString(),
+          id: grupo.provaId.toString(),
           corrigida: false
         });
       }
@@ -360,9 +472,9 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     else {
       while (this.prova.provasParaCorrigir.length < this.avaliacao.correcaoParesQtdNumero) {
         for (let grupo of this.avaliacao.grupos) {
-          if (Math.random() > 0.7 && this.prova.id != grupo.instanciaId) {
+          if (Math.random() > 0.7 && this.prova.id != grupo.provaId) {
             this.prova.provasParaCorrigir.push({
-              id: grupo.instanciaId,
+              id: grupo.provaId,
               corrigida: false
             });
             if (this.prova.provasParaCorrigir.length < this.avaliacao.correcaoParesQtdNumero)

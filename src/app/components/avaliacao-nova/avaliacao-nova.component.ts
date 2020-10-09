@@ -355,7 +355,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     });
   }
   mudarVisao(tipoVisao) {
-    this.provaExemplo = this.avaliacaoService.getAvaliacaoFromGabarito(this.provaGabarito);
+    this.provaExemplo = this.provaService.getProvaFromGabarito(this.provaGabarito);
     this.visao = tipoVisao;
   }
   abirSelecionarAunos() {
@@ -398,7 +398,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     }
   }
   addGrupo() {
-    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaId: `${(this.avaliacao.grupos.length + 1)}`, alunos: [] });
+    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, provaId: null, alunos: [] });
   }
 
   // DATAS DA AVALIAÇÃO

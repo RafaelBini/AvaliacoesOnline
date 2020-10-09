@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, EventEmitter, Output } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 
 
@@ -19,6 +19,7 @@ export class QuestoesResponderComponent implements OnInit {
   @Input() gabarito: Prova;
   @Input() prova: Prova;
 
+  @Output() respostaAlterada = new EventEmitter<void>();
 
   constructor(public comumService: ComumService, private dialog: MatDialog, private snack: MatSnackBar) { }
 
@@ -59,6 +60,9 @@ export class QuestoesResponderComponent implements OnInit {
     return false;
 
   }
+  sinalizarRespostaAlterada() {
+    this.respostaAlterada.emit();
+  }
 
 
   // ASSOCIACAO
@@ -67,8 +71,11 @@ export class QuestoesResponderComponent implements OnInit {
   }
   onAssociativaChange(questao: Questao, questaoIndex: number) {
 
+    this.sinalizarRespostaAlterada();
+
     if (this.avaliacao.tipoPontuacao != 2)
       return;
+
     for (let [i, associacao] of questao.associacoes.entries()) {
       if (associacao.opcaoSelecionada != this.gabarito.questoes[questaoIndex].associacoes[i].opcaoSelecionada && associacao.opcaoSelecionada != null && associacao.opcaoSelecionada != '') {
         if (questao.tentativas < 3) {
@@ -87,6 +94,8 @@ export class QuestoesResponderComponent implements OnInit {
         return;
       }
     }
+
+
   }
 
 
@@ -94,6 +103,7 @@ export class QuestoesResponderComponent implements OnInit {
   onMultiplaEscolhaChange(questao: Questao, alternativaIndex: number, isEditavel: boolean, questaoIndex: number) {
     this.desmarcarTudoMenosUma(questao, alternativaIndex, isEditavel);
     this.registrarTentativaMultiplaEscolha(questao, questaoIndex);
+    this.sinalizarRespostaAlterada();
     //console.log(this.comumService.questaoTipos[questao.tipo].getNota(questao));
   }
   desmarcarTudoMenosUma(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
@@ -166,6 +176,8 @@ export class QuestoesResponderComponent implements OnInit {
   }
   onPreenchimentoChange(questao: Questao) {
 
+    this.sinalizarRespostaAlterada();
+
     if (this.avaliacao.tipoPontuacao != 2)
       return;
 
@@ -187,10 +199,14 @@ export class QuestoesResponderComponent implements OnInit {
         return;
       }
     }
+
+
   }
 
   // VERDADEIRO OU FALSO
   onVerdadeiroFalsoChange(questao: Questao, questaoIndex: number) {
+
+    this.sinalizarRespostaAlterada();
 
     if (this.avaliacao.tipoPontuacao != 2)
       return;
@@ -214,5 +230,7 @@ export class QuestoesResponderComponent implements OnInit {
       }
     }
   }
+
+
 
 }
