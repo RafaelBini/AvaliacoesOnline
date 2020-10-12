@@ -94,9 +94,28 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
           var avaliacaoAnterior = { ...this.avaliacao };
           this.avaliacao = avaliacao;
-          if (this.meuGrupoTemProva && this.getMeuGrupoNaAvaliacao().provaId == null) {
-            this.avaliacao = avaliacaoAnterior;
+
+
+          if (this.avaliacao.tipoDisposicao != 0 && this.getMeuGrupoFromAvaliacao(avaliacaoAnterior) != null) {
+            if (this.getMeuGrupoFromAvaliacao(avaliacaoAnterior).provaId != null && this.getMeuGrupoNaAvaliacao().provaId == null) {
+              this.getMeuGrupoNaAvaliacao().provaId = this.getMeuGrupoFromAvaliacao(avaliacaoAnterior).provaId;
+              this.avaliacaoService.updateAvaliacao(this.avaliacao);
+              console.log("tiraram a prova do meu grupo, mas já coloquei de volta!")
+              return;
+            }
           }
+          else if (this.avaliacao.tipoDisposicao == 0 && this.getEuFromAvaliacao(avaliacaoAnterior) != null) {
+            if (this.getEuFromAvaliacao(avaliacaoAnterior).provaId != null && this.getEuNaAvaliacao().provaId == null) {
+
+              this.getEuNaAvaliacao().provaId = this.getEuFromAvaliacao(avaliacaoAnterior).provaId;
+              this.avaliacaoService.updateAvaliacao(this.avaliacao);
+              console.log("tiraram a prova de mim, mas já coloquei de volta!")
+              return;
+            }
+
+          }
+
+
 
 
           this.caminho = [
@@ -369,6 +388,17 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     }
     return null;
   }
+  getEuFromAvaliacao(avaliacao: Avaliacao) {
+    for (let grupo of avaliacao.grupos) {
+      var count = 0;
+      for (let aluno of grupo.alunos) {
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
+          return avaliacao.grupos[avaliacao.grupos.indexOf(grupo)].alunos[count];
+        count++;
+      }
+    }
+    return null;
+  }
   getEuNaProva(): Usuario {
     const EU = this.credencialService.loggedUser;
     const MEU_INDEX_PROVA = this.prova.alunos.indexOf(this.prova.alunos.filter(a => a.id == EU.id)[0]);
@@ -379,6 +409,17 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       for (let aluno of grupo.alunos) {
         if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
           return this.avaliacao.grupos[this.avaliacao.grupos.indexOf(grupo)];
+      }
+    }
+    return {
+      alunos: []
+    }
+  }
+  getMeuGrupoFromAvaliacao(avaliacao: Avaliacao): Grupo {
+    for (let grupo of avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
+          return avaliacao.grupos[avaliacao.grupos.indexOf(grupo)];
       }
     }
     return {
@@ -487,8 +528,8 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
           // Insere uma nova prova
           this.provaService.insertProva(PROVA_EM_BRANCO).then(novaProva => {
             this.prova = novaProva;
-            EU_NA_AVALIACAO.provaId = this.prova.id;
-            EU_NA_AVALIACAO.statusId = 2;
+            this.getEuNaAvaliacao().provaId = this.prova.id;
+            this.getEuNaAvaliacao().statusId = 2;
             this.avaliacaoService.updateAvaliacao(this.avaliacao);
 
           }).catch(reason => this.snack.open('Falha ao receber a prova', null, { duration: 3500 }));

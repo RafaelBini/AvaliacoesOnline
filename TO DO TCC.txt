@@ -1,13 +1,9 @@
 
-- Criei bloqueio de questao dissertativa em grupo
-- Arrumar Problema de criação desnecessária de provas quando entra num grupo sem prova criada em uma avaliação veremelha
-
-- Testado criacao de prova com aluno já na preparação
 
 
 -------------------
 
-
+- Testado criacao de prova com aluno já na preparação
 - Testado criacao de prova com varios alunos já online no grupo
 - Testado criação de prova com primeiro aluno entrando no grupo avaliacao vermelha
 - Testado criação de prova com 
