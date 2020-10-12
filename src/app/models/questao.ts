@@ -2,6 +2,7 @@ import { OpcaoPreencher } from './opcao-preencher';
 import { Alternativa } from './alternativa';
 import { Associacao } from './associacao';
 import { Correcao } from './correcao';
+import { Usuario } from './usuario';
 
 export interface Questao {
     id?: string,
@@ -22,5 +23,6 @@ export interface Questao {
     correcoes?: Array<Correcao>;
     correcaoProfessor?: Correcao;
     tentativas?: number;
-
+    ultimaModificacao?: number;
+    usuarioUltimaModificacao?: Usuario;
 }

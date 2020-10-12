@@ -1,12 +1,19 @@
 
-- Colocar todos no primeiro grupo quando o tipo disposição é individual
-- Distribuir os alunos de forma equilibrada nos grupos (nr de alunos dividido pelo numero de possiveis grupos)
-- Refazer grupos quando o tipo de disposição é alterado (avaliação-nova)
-- Criei verificações de status e existencia ao editar avaliacao
-- Colocar validação das datas ao finalizar avaliação
-- Arrumar a função "buscar questão" para inserir na prova e não na avaliaçao
+- Criei bloqueio de questao dissertativa em grupo
+- Arrumar Problema de criação desnecessária de provas quando entra num grupo sem prova criada em uma avaliação veremelha
+
+- Testado criacao de prova com aluno já na preparação
+
 
 -------------------
+
+
+- Testado criacao de prova com varios alunos já online no grupo
+- Testado criação de prova com primeiro aluno entrando no grupo avaliacao vermelha
+- Testado criação de prova com 
+
+- Arrumar errinho de console de questões associativas
+- Arrumar questoes verdadeiro ou falso que estão vindo com a resposta
 
 - Visão do aluno da avaliação com bD
 - Visão do professor da avaliação com bd

@@ -39,6 +39,10 @@
   border: 1px dashed var(--cor-primaria);
   border-radius: 7px;
 }
+.input-basico:disabled {
+  border: 1px solid var(--cor-secundaria);
+  color: var(--cor-secundaria);
+}
 
 .select-basico {
   cursor: pointer;
@@ -99,6 +103,17 @@
   color: var(--cor-primaria);
   border-color: var(--cor-primaria);
 
+}
+
+/* DISSERTATIVA */
+
+.aluno-na-questao{
+  background-color: var(--cor-secundaria);
+  color: white;
+  text-align: left;
+  font-size: 14px;
+  padding: 7px;
+  border-radius: 7px;
 }
 
 /* --------------------- */

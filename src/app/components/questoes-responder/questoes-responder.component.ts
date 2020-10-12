@@ -1,12 +1,14 @@
+import { TimeService } from './../../services/time.service';
+import { CredencialService } from './../../services/credencial.service';
 import { Prova } from 'src/app/models/prova';
 import { Associacao } from './../../models/associacao';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
-import { Component, OnInit, Input, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
+import { Usuario } from 'src/app/models/usuario';
 
 
 @Component({
@@ -21,10 +23,14 @@ export class QuestoesResponderComponent implements OnInit {
 
   @Output() respostaAlterada = new EventEmitter<void>();
 
-  constructor(public comumService: ComumService, private dialog: MatDialog, private snack: MatSnackBar) { }
+  constructor(
+    public comumService: ComumService,
+    public credencialService: CredencialService,
+    private timeService: TimeService,
+    private dialog: MatDialog,
+    private snack: MatSnackBar) { }
 
   ngOnInit(): void {
-
   }
 
 
@@ -60,10 +66,13 @@ export class QuestoesResponderComponent implements OnInit {
     return false;
 
   }
-  sinalizarRespostaAlterada() {
+  sinalizarRespostaAlterada(questao: Questao) {
+    questao.ultimaModificacao = new Date().getTime();
     this.respostaAlterada.emit();
   }
-
+  identificarQuestao(index: Number, questao: Questao) {
+    return index;
+  }
 
   // ASSOCIACAO
   getAssociacoesOrdenadas(questaoIndex: number) {
@@ -71,7 +80,7 @@ export class QuestoesResponderComponent implements OnInit {
   }
   onAssociativaChange(questao: Questao, questaoIndex: number) {
 
-    this.sinalizarRespostaAlterada();
+    this.sinalizarRespostaAlterada(questao);
 
     if (this.avaliacao.tipoPontuacao != 2)
       return;
@@ -103,7 +112,7 @@ export class QuestoesResponderComponent implements OnInit {
   onMultiplaEscolhaChange(questao: Questao, alternativaIndex: number, isEditavel: boolean, questaoIndex: number) {
     this.desmarcarTudoMenosUma(questao, alternativaIndex, isEditavel);
     this.registrarTentativaMultiplaEscolha(questao, questaoIndex);
-    this.sinalizarRespostaAlterada();
+    this.sinalizarRespostaAlterada(questao);
     //console.log(this.comumService.questaoTipos[questao.tipo].getNota(questao));
   }
   desmarcarTudoMenosUma(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
@@ -136,6 +145,26 @@ export class QuestoesResponderComponent implements OnInit {
         return;
       }
     }
+  }
+
+  // DISSERTATIVA
+  isLocked(questao: Questao) {
+    if (questao.usuarioUltimaModificacao == null) {
+      return false;
+    }
+    return (questao.usuarioUltimaModificacao.id != this.credencialService.getLoggedUserIdFromCookie());
+  }
+  onDissertativaFocus(questao: Questao) {
+    var usuario: Usuario = {
+      id: this.credencialService.getLoggedUserIdFromCookie(),
+      nome: this.credencialService.loggedUser.nome,
+    }
+    questao.usuarioUltimaModificacao = usuario;
+    this.respostaAlterada.emit();
+  }
+  onDissertativaBlur(questao: Questao) {
+    questao.usuarioUltimaModificacao = null;
+    this.respostaAlterada.emit();
   }
 
   // PREENCHER
@@ -176,7 +205,7 @@ export class QuestoesResponderComponent implements OnInit {
   }
   onPreenchimentoChange(questao: Questao) {
 
-    this.sinalizarRespostaAlterada();
+    this.sinalizarRespostaAlterada(questao);
 
     if (this.avaliacao.tipoPontuacao != 2)
       return;
@@ -206,7 +235,7 @@ export class QuestoesResponderComponent implements OnInit {
   // VERDADEIRO OU FALSO
   onVerdadeiroFalsoChange(questao: Questao, questaoIndex: number) {
 
-    this.sinalizarRespostaAlterada();
+    this.sinalizarRespostaAlterada(questao);
 
     if (this.avaliacao.tipoPontuacao != 2)
       return;

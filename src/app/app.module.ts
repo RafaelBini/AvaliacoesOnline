@@ -60,6 +60,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { EditarAlunoComponent } from './dialogs/editar-aluno/editar-aluno.component';
 import { AvaliacaoAlunoCabecalhoComponent } from './components/avaliacao-aluno/avaliacao-aluno-cabecalho/avaliacao-aluno-cabecalho.component';
 import { SelecionarAlunosComponent } from './dialogs/selecionar-alunos/selecionar-alunos.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -122,7 +123,8 @@ import { SelecionarAlunosComponent } from './dialogs/selecionar-alunos/seleciona
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireStorageModule,
-    ClipboardModule
+    ClipboardModule,
+    HttpClientModule
   ],
   providers: [
 

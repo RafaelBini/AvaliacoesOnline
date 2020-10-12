@@ -40,6 +40,7 @@ export class ProvaService {
   }
 
   onProvaChange(provaId: string) {
+    console.log(`pegando a prova ${provaId}...`)
     return this.db.collection('provas').doc(provaId).valueChanges();
   }
 
