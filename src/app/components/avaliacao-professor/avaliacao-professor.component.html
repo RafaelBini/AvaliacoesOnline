@@ -91,7 +91,7 @@
             </table>
         </div>
 
-        <button mat-raised-button matStepperNext matTooltip="Clique aqui para iniciar a avaliação" class="main-btn"
+        <button mat-raised-button matTooltip="Clique aqui para iniciar a avaliação" class="main-btn"
             style="color: white; background-color: var(--cor-tranquila);" (click)="iniciarAvaliacao()">
             Iniciar Avaliação
         </button>
@@ -154,8 +154,9 @@
 
         </div>
 
-        <button class="main-btn" mat-button matStepperNext style="background-color: var(--cor-perigosa); color: white;">
-            Encerrar Avaliação Agora
+        <button class="main-btn" mat-button (click)="inicarCorrecoes()"
+            style="background-color: var(--cor-secundaria); color: white;">
+            Iniciar Correções
         </button>
 
     </mat-step>
@@ -194,10 +195,16 @@
                     <app-aluno-card-avaliacao-professor [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
                 </div>
-                <div class="btn-corrigir">
+                <div *ngIf="grupo.provaId" class="btn-corrigir">
                     <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId">
                         {{grupo.instanciaStatusId > 2 ? "REVISAR" : "CORRIGIR"}}
                     </a>
+                </div>
+                <div *ngIf="grupo.provaId == null" class="info-grupo"
+                    matTooltip="Nenhum aluno do grupo iniciou a avaliação">
+                    <mat-icon>
+                        alarm_off
+                    </mat-icon>
                 </div>
             </div>
         </div>

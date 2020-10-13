@@ -1,3 +1,4 @@
 [0928/184459.607:ERROR:file_io_win.cc(171)] CreateFile C:\Users\rfabini\AppData\Local\Temp\.profile\Crashpad\reports\75687745-b9f8-4ce6-a769-d62a7aa2a6fd.dmp: O sistema não pode encontrar o caminho especificado. (0x3)
 [0928/184459.624:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
 [1012/173833.992:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1013/080838.964:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)

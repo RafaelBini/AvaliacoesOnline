@@ -95,12 +95,11 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
           var avaliacaoAnterior = { ...this.avaliacao };
           this.avaliacao = avaliacao;
 
-
+          // Verifica se a prova foi removida de mim
           if (this.avaliacao.tipoDisposicao != 0 && this.getMeuGrupoFromAvaliacao(avaliacaoAnterior) != null) {
             if (this.getMeuGrupoFromAvaliacao(avaliacaoAnterior).provaId != null && this.getMeuGrupoNaAvaliacao().provaId == null) {
               this.getMeuGrupoNaAvaliacao().provaId = this.getMeuGrupoFromAvaliacao(avaliacaoAnterior).provaId;
-              this.avaliacaoService.updateAvaliacao(this.avaliacao);
-              console.log("tiraram a prova do meu grupo, mas já coloquei de volta!")
+              this.updateAvaliacao("tiraram a prova do meu grupo, mas já coloquei de volta!");
               return;
             }
           }
@@ -108,16 +107,13 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             if (this.getEuFromAvaliacao(avaliacaoAnterior).provaId != null && this.getEuNaAvaliacao().provaId == null) {
 
               this.getEuNaAvaliacao().provaId = this.getEuFromAvaliacao(avaliacaoAnterior).provaId;
-              this.avaliacaoService.updateAvaliacao(this.avaliacao);
-              console.log("tiraram a prova de mim, mas já coloquei de volta!")
+              this.updateAvaliacao("tiraram a prova de mim, mas já coloquei de volta!");
               return;
             }
 
           }
 
-
-
-
+          // Atualiza o caminho
           this.caminho = [
             { nome: `Aluno`, url: `/aluno` },
             { nome: `Avaliações`, url: `/aluno/avaliacoes` },
@@ -136,11 +132,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             return;
 
 
-          if (this.avaliacao.status == 1) {
-
-            console.log("Estamos no status 'durante avaliacao'");
-
-
+          if (this.avaliacao.status >= 1) {
             // Se não tem gabarito ainda
             if (this.gabarito.questoes.length <= 0) {
               // Recebe o gabarito
@@ -152,13 +144,25 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             else {
               this.receberProva();
             }
-
-
-
           }
-          else if (this.avaliacao.status == 2) {
-            if (this.avaliacao.tipoCorrecao == 3)
-              this.receberProvasCorrigir();
+
+          if (this.avaliacao.status == 2) {
+
+            var temProvaInterval = setInterval(() => {
+
+              if (this.prova.id != '1') {
+
+                if (this.avaliacao.tipoCorrecao == 2 && this.avaliacao.tipoDisposicao != 0) {
+                  this.receberProvasCorrigirEmGrupo();
+                }
+                else if (this.avaliacao.tipoCorrecao == 2 && this.avaliacao.tipoDisposicao == 0) {
+                  this.receberProvasCorrigirIndividual();
+                }
+                clearInterval(temProvaInterval);
+              }
+            })
+
+
           }
         });
       }
@@ -187,6 +191,10 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
   }
 
   // GERAL
+  updateAvaliacao(motivo: string) {
+    console.log(`FIREBASE UPDATE: ${motivo}`);
+    this.avaliacaoService.updateAvaliacao(this.avaliacao);
+  }
   getDataObjetivo() {
     if (this.avaliacao.status == 0) {
       if (this.avaliacao.isInicioIndeterminado)
@@ -243,21 +251,21 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
         }
       }
       if (estouNaAvaliacao && mudeiAlgo) {
-        console.log("Me atualizei na avaliacao!!");
-        this.avaliacaoService.updateAvaliacao(this.avaliacao);
+        this.updateAvaliacao("Me atualizei na avaliacao!!")
         break;
       }
     }
     if (!estouNaAvaliacao) {
-      console.log("Vou entrar em algum grupo aleatório!");
       this.entrarEmGrupoAleatorio();
-      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+      this.updateAvaliacao("Entrei em um grupo aleatorio");
     }
     return !estouNaAvaliacao || (estouNaAvaliacao && mudeiAlgo);
   }
   atualizarStatusConformeTempo() {
     setTimeout(() => {
       var agora = new Date();
+
+      var statusAntes = this.avaliacao.status;
 
       if (agora < new Date(this.avaliacao.dtInicio) || (this.avaliacao.status == 0 && this.avaliacao.isInicioIndeterminado)) {
         this.avaliacao.status = 0;
@@ -274,7 +282,9 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
       this.countDown.iniciarTimer();
 
-      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+      if (statusAntes != this.avaliacao.status)
+        this.updateAvaliacao("Atualizei o status da avaliacao conforme o tempo!!");
+
     }, 3000);
 
   }
@@ -328,8 +338,8 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     this.deletarGruposVazios();
     this.redefinirIdentificacaoDosGrupos();
 
-    // Salva no bd
-    this.avaliacaoService.updateAvaliacao(this.avaliacao);
+    // Salva no bd   
+    this.updateAvaliacao("Entrei em um grupo!!")
   }
   temGrupoVazio() {
     return this.avaliacao.grupos.filter(g => g.alunos.length <= 0).length > 0;
@@ -375,7 +385,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     this.getEuNaAvaliacao().statusId = 3;
 
 
-    this.avaliacaoService.updateAvaliacao(this.avaliacao);
+    this.updateAvaliacao("Sinalizei a finalização!");
   }
   getEuNaAvaliacao(): Usuario {
     for (let grupo of this.avaliacao.grupos) {
@@ -383,6 +393,17 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       for (let aluno of grupo.alunos) {
         if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
           return this.avaliacao.grupos[this.avaliacao.grupos.indexOf(grupo)].alunos[count];
+        count++;
+      }
+    }
+    return null;
+  }
+  getIndexEuNaAvaliacao() {
+    for (let grupo of this.avaliacao.grupos) {
+      var count = 0;
+      for (let aluno of grupo.alunos) {
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
+          return count;
         count++;
       }
     }
@@ -413,6 +434,14 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     }
     return {
       alunos: []
+    }
+  }
+  getIndexMeuGrupoNaAvaliacao() {
+    for (let grupo of this.avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
+          return this.avaliacao.grupos.indexOf(grupo);
+      }
     }
   }
   getMeuGrupoFromAvaliacao(avaliacao: Avaliacao): Grupo {
@@ -454,6 +483,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
     const PROVA_EM_BRANCO = this.provaService.getProvaFromGabarito(this.gabarito);
     PROVA_EM_BRANCO.alunos = [];
+    PROVA_EM_BRANCO.provasParaCorrigir = [];
     PROVA_EM_BRANCO.alunos.push(this.getEuNaAvaliacao());
 
     // Se já tenho prova para meu grupo, cancelo
@@ -473,7 +503,8 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       this.getEuNaAvaliacao().statusId = 2;
       this.getEuNaProva().statusId = 2;
       this.provaService.updateProva(this.prova); // Atualizando o id de dentro da prova
-      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+
+      this.updateAvaliacao("Inseri no banco uma nova prova!");
 
     }).catch(reason => this.comumService.notificarErro('Falha ao receber a prova', reason));
 
@@ -516,6 +547,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
           const PROVA_EM_BRANCO = this.provaService.getProvaFromGabarito(this.gabarito);
           PROVA_EM_BRANCO.alunos = [];
+          PROVA_EM_BRANCO.provasParaCorrigir = [];
           PROVA_EM_BRANCO.alunos.push(this.getEuNaAvaliacao());
 
           if (this.estouIndoInserirProva) {
@@ -530,7 +562,8 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             this.prova = novaProva;
             this.getEuNaAvaliacao().provaId = this.prova.id;
             this.getEuNaAvaliacao().statusId = 2;
-            this.avaliacaoService.updateAvaliacao(this.avaliacao);
+
+            this.updateAvaliacao("Inseri uma nova prova!")
 
           }).catch(reason => this.snack.open('Falha ao receber a prova', null, { duration: 3500 }));
 
@@ -636,11 +669,12 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
             // Se eu não estou na prova, eu entro
             if (this.getEuNaProva() == null) {
-              console.log("Eita, não to na prova!, vou me add");
+
               EU_NA_AVALIACAO.statusId = 2;
               this.prova.alunos.push(EU_NA_AVALIACAO);
               this.provaService.updateProva(this.prova);
-              this.avaliacaoService.updateAvaliacao(this.avaliacao);
+
+              this.updateAvaliacao("Eita, não to na prova!, vou me add com status novo");
             }
             else if (tenhoAlgoMaisAtualizado) {
               console.log("Mandei atualizar de novo!", this.prova.questoes[0])
@@ -661,32 +695,85 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
 
   // EM CORREÇÃO
-  receberProvasCorrigir() {
-    if (this.avaliacao.tipoCorrecao != 2 || this.prova.provasParaCorrigir.length > 0)
+  receberProvasCorrigirEmGrupo() {
+    if (this.avaliacao.tipoCorrecao != 2 || this.prova.provasParaCorrigir.length > 0 || this.avaliacao.tipoDisposicao == 0)
       return;
 
-    if (this.avaliacao.correcaoParesQtdTipo == 'TODOS') {
-      for (let grupo of this.avaliacao.grupos) {
-        this.prova.provasParaCorrigir.push({
-          id: grupo.provaId.toString(),
-          corrigida: false
+    const Q = this.getNumberFromString(this.avaliacao.id);
+    var NUM = this.avaliacao.correcaoParesQtdNumero | 1;
+
+    if ((this.avaliacao.correcaoParesQtdTipo == 'TODOS') || (NUM > this.avaliacao.grupos.length - 1)) {
+      NUM = this.avaliacao.grupos.length - 1;
+    }
+
+    const MINHA_POSICAO = this.getIndexMeuGrupoNaAvaliacao();
+
+    var selecionados: Array<Prova> = [];
+    var rounds = 0;
+
+    for (let i = (MINHA_POSICAO + Q); selecionados.length < NUM; i++) {
+      var a = i % this.avaliacao.grupos.length;
+
+      if (a != MINHA_POSICAO && this.avaliacao.grupos[a].provaId != null && (selecionados.filter(s => s.id == this.avaliacao.grupos[a].provaId).length <= 0)) {
+        selecionados.push({
+          id: this.avaliacao.grupos[a].provaId,
+          corrigida: false,
         });
       }
-    }
-    else {
-      while (this.prova.provasParaCorrigir.length < this.avaliacao.correcaoParesQtdNumero) {
-        for (let grupo of this.avaliacao.grupos) {
-          if (Math.random() > 0.7 && this.prova.id != grupo.provaId) {
-            this.prova.provasParaCorrigir.push({
-              id: grupo.provaId,
-              corrigida: false
-            });
-            if (this.prova.provasParaCorrigir.length < this.avaliacao.correcaoParesQtdNumero)
-              return;
-          }
-        }
+      else if (a == MINHA_POSICAO) {
+        rounds++;
+        if (rounds > 1)
+          break;
       }
     }
+
+    this.prova.provasParaCorrigir = selecionados;
+
+    this.provaService.updateProva(this.prova);
+
+    console.log("Recebi provas para corrigir");
+  }
+  receberProvasCorrigirIndividual() {
+    if (this.avaliacao.tipoCorrecao != 2 || this.prova.provasParaCorrigir.length > 0 || this.avaliacao.tipoDisposicao != 0)
+      return;
+
+    const Q = this.getNumberFromString(this.avaliacao.id);
+    var NUM = this.avaliacao.correcaoParesQtdNumero | 1;
+
+    if ((this.avaliacao.correcaoParesQtdTipo == 'TODOS') || (NUM > this.avaliacao.grupos[0].alunos.length - 1)) {
+      NUM = this.avaliacao.grupos[0].alunos.length - 1;
+    }
+
+    const MINHA_POSICAO = this.getIndexEuNaAvaliacao();
+
+    var selecionados: Array<Prova> = [];
+    var rounds = 0;
+
+    for (let i = (MINHA_POSICAO + Q); selecionados.length < NUM; i++) {
+      var a = i % this.avaliacao.grupos[0].alunos.length;
+
+      if (a != MINHA_POSICAO && this.avaliacao.grupos[0].alunos[a].provaId != null && (selecionados.filter(s => s.id == this.avaliacao.grupos[0].alunos[a].provaId).length <= 0)) {
+        selecionados.push({
+          id: this.avaliacao.grupos[0].alunos[a].provaId,
+          corrigida: false,
+        });
+      }
+      else if (a == MINHA_POSICAO) {
+        rounds++;
+        if (rounds > 1)
+          break;
+      }
+
+    }
+
+    this.prova.provasParaCorrigir = selecionados;
+
+    this.provaService.updateProva(this.prova);
+
+    console.log("Recebi provas para corrigir");
+  }
+  getNumberFromString(texto: string): number {
+    return texto.charCodeAt(0);
   }
 
   // ENCERRADA

@@ -152,6 +152,8 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       var agora = new Date();
 
+      var statusAntes = this.avaliacao.status;
+
       if (agora < new Date(this.avaliacao.dtInicio) || (this.avaliacao.status == 0 && this.avaliacao.isInicioIndeterminado)) {
         this.avaliacao.status = 0;
       }
@@ -165,9 +167,12 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
         this.avaliacao.status = 3;
       }
 
+
       this.countDown.iniciarTimer();
 
-      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+      if (statusAntes != this.avaliacao.status)
+        this.updateAvaliacao("Alterei o status da avaliação conforme o tempo!");
+
     }, 3000);
 
   }
@@ -210,7 +215,8 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     }
     this.removerGruposVazios();
     this.onBuscaAlunoKeyUp();
-    this.avaliacaoService.updateAvaliacao(this.avaliacao);
+
+    this.updateAvaliacao("Movi um aluno nos grupos!");
   }
   onBuscaAlunoKeyUp() {
     var texto = this.textoFiltroAlunos;
@@ -347,8 +353,8 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     this.avaliacao.grupos = this.avaliacao.grupos.filter(g => g.numero != grupo.numero);
     this.redefinirIdentificacaoDosGrupos();
 
-    // Salvar no banco de dados
-    this.avaliacaoService.updateAvaliacao(this.avaliacao);
+    // Salvar no banco de dados    
+    this.updateAvaliacao("Exclui um grupo!");
   }
   redefinirIdentificacaoDosGrupos() {
     var count = 1;
@@ -366,8 +372,15 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     }
   }
   iniciarAvaliacao() {
-
     this.avaliacao.status = 1;
+    this.updateAvaliacao("Alterei o status da avaliacao para DURANTE AVALIACAO")
+  }
+  inicarCorrecoes() {
+    this.avaliacao.status = 2;
+    this.updateAvaliacao("Alterei o status da avaliação para EM CORRECAO");
+  }
+  updateAvaliacao(motivo: string) {
+    console.log(`FIREBASE UPDATE: ${motivo}`);
     this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
 
