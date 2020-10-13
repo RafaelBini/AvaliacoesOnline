@@ -146,11 +146,11 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             }
           }
 
-          if (this.avaliacao.status == 2) {
+          var temProvaInterval = setInterval(() => {
 
-            var temProvaInterval = setInterval(() => {
+            if (this.prova.id != '1') {
 
-              if (this.prova.id != '1') {
+              if (this.avaliacao.status == 2) {
 
                 if (this.avaliacao.tipoCorrecao == 2 && this.avaliacao.tipoDisposicao != 0) {
                   this.receberProvasCorrigirEmGrupo();
@@ -158,12 +158,32 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
                 else if (this.avaliacao.tipoCorrecao == 2 && this.avaliacao.tipoDisposicao == 0) {
                   this.receberProvasCorrigirIndividual();
                 }
-                clearInterval(temProvaInterval);
+
               }
-            })
+              else if (this.avaliacao.status == 3) {
+                const MINHA_NOTA = this.provaService.getMinhaNota(this.prova, this.gabarito);
+                const NOTA_MAXIMA = this.provaService.getPontuacaoMaxima(this.prova);
+
+                if (this.avaliacao.tipoDisposicao == 0) {
+                  if (this.getEuNaAvaliacao().notaTotal != MINHA_NOTA || this.getEuNaAvaliacao().valorTotal != NOTA_MAXIMA) {
+                    this.getEuNaAvaliacao().notaTotal = MINHA_NOTA;
+                    this.getEuNaAvaliacao().valorTotal = NOTA_MAXIMA;
+                    this.updateAvaliacao("Inseri minha nota");
+                  }
+                }
+                else if (this.avaliacao.tipoDisposicao != 0) {
+                  if (this.getMeuGrupoNaAvaliacao().notaTotal != MINHA_NOTA || this.getMeuGrupoNaAvaliacao().valorTotal != NOTA_MAXIMA) {
+                    this.getMeuGrupoNaAvaliacao().notaTotal = MINHA_NOTA;
+                    this.getMeuGrupoNaAvaliacao().valorTotal = NOTA_MAXIMA;
+                    this.updateAvaliacao("Inseri minha nota");
+                  }
+                }
+              }
+              clearInterval(temProvaInterval);
+            }
+          });
 
 
-          }
         });
       }
       // Se não estou logado,
@@ -232,11 +252,25 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     // Passa por cada aluno na avaliação para verificar se eu já estou na avaliação
     var estouNaAvaliacao = false;
     var mudeiAlgo = false;
+
     for (let grupo of this.avaliacao.grupos) {
       for (let aluno of grupo.alunos) {
         if (aluno.id == this.credencialService.getLoggedUserIdFromCookie()) {
 
           if (aluno.online == false) {
+
+            // VALIDAR ATRASADOS
+            if (this.avaliacao.status > 1) {
+              this.snack.open("Avaliação encerrada: Você não participou desta avaliação.", null, { duration: 5500 });
+              this.router.navigate(['']);
+              return true;
+            }
+            else if (this.avaliacao.status > 0 && this.avaliacao.isBloqueadoAlunoAtrasado) {
+              this.snack.open("Avaliação já iniciada: Você não pode entrar atrasado.", null, { duration: 5500 });
+              this.router.navigate(['']);
+              return true;
+            }
+
             aluno.online = true;
             mudeiAlgo = true;
           }
@@ -256,6 +290,19 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       }
     }
     if (!estouNaAvaliacao) {
+
+      // VALIDAR ATRASADOS
+      if (this.avaliacao.status > 1) {
+        this.snack.open("Avaliação encerrada: Você não participou desta avaliação.", null, { duration: 5500 });
+        this.router.navigate(['']);
+        return true;
+      }
+      else if (this.avaliacao.status > 0 && this.avaliacao.isBloqueadoAlunoAtrasado) {
+        this.snack.open("Avaliação já iniciada: Você não pode entrar atrasado.", null, { duration: 5500 });
+        this.router.navigate(['']);
+        return true;
+      }
+
       this.entrarEmGrupoAleatorio();
       this.updateAvaliacao("Entrei em um grupo aleatorio");
     }
@@ -533,15 +580,23 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       return;
     }
 
-
     var EU_NA_AVALIACAO = this.getEuNaAvaliacao();
 
     // INDIVIDUAL
     if (this.avaliacao.tipoDisposicao == 0) {
 
-      // Se estou sem prova para fazer, pego uma prova
+      // Se estou sem prova para fazer,
       if (this.getEuNaAvaliacao().provaId == null) {
 
+        // VALIDAR ATRASADOS
+        if (this.avaliacao.status > 1) {
+          return;
+        }
+        else if (this.avaliacao.status == 1 && !this.getEuNaAvaliacao().online && this.avaliacao.isBloqueadoAlunoAtrasado) {
+          this.snack.open("Avaliação já iniciada: Você não pode entrar atrasado.", null, { duration: 5500 });
+          this.router.navigate(['']);
+          return;
+        }
 
         if (this.gabarito.questoes.length > 0) {
 
@@ -589,10 +644,19 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
       // Se meu grupo não tem prova atribuida,              
       if (this.getMeuGrupoNaAvaliacao().provaId == null) {
-        console.log("Meu grupo não tem prova ainda!");
+
+        // VALIDAR ATRASADOS
+        if (this.avaliacao.status > 1) {
+          return;
+        }
+        else if (this.avaliacao.status == 1 && !this.getEuNaAvaliacao().online && this.avaliacao.isBloqueadoAlunoAtrasado) {
+          this.snack.open("Avaliação já iniciada: Você não pode entrar atrasado.", null, { duration: 5500 });
+          this.router.navigate(['']);
+          return;
+        }
+
         // Inicio um contador que vai determinar de quem é a vez de tentar criar a prova
         var count = 0;
-
 
         // Se sou o primeiro do grupo, já crio a prova
         if (this.getMeuGrupoNaAvaliacao().alunos[count].id == this.credencialService.getLoggedUserIdFromCookie()) {
@@ -777,13 +841,5 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
   }
 
   // ENCERRADA
-  getMinhaNota() {
-    var nota = 0;
-    for (let [i, questao] of this.prova.questoes.entries()) {
-      const questaoTipo = this.comumService.questaoTipos[questao.tipo];
-      if (questaoTipo.temCorrecaoAutomatica)
-        nota += questaoTipo.getNota(questao, this.gabarito.questoes[i]);
-    }
-    return nota;
-  }
+
 }

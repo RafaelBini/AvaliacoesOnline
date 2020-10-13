@@ -1,7 +1,7 @@
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { Prova } from 'src/app/models/prova';
 
@@ -18,6 +18,8 @@ export class QuestoesCorrigirComponent implements OnInit {
   @Input() userTipo: string;
   @Input() visaoTipo: string;
 
+
+  @Output() correcaoAlterada = new EventEmitter<void>();
 
   constructor(public comumService: ComumService, private dialog: MatDialog, private elementRef: ElementRef) { }
 
@@ -41,6 +43,17 @@ export class QuestoesCorrigirComponent implements OnInit {
       pontuacaoMaxima += questao.valor;
     });
     return pontuacaoMaxima;
+  }
+  sinalizarCorrecaoAlterada(questao: Questao) {
+    questao.ultimaModificacao = new Date().getTime();
+    this.correcaoAlterada.emit();
+  }
+  identificarQuestao(index: Number, questao: Questao) {
+    return index;
+  }
+  inserirNotaMaxima(questao: Questao) {
+    questao.correcaoProfessor.nota = questao.valor;
+    this.sinalizarCorrecaoAlterada(questao);
   }
 
   // ASSOCIACAO

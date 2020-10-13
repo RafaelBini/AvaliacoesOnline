@@ -26,14 +26,16 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     alunos: []
   };
   public avaliacao: Avaliacao = {
+    id: '1',
     titulo: "",
     descricao: "",
     professorId: 'XXX',
     professorNome: '',
+    status: 0,
     grupos: [
       {
         numero: 1,
-        instanciaStatusId: '0',
+        provaCorrigida: false,
         alunos: []
       }
     ],
@@ -180,7 +182,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   // Parte 1 - Em Preparação
 
   addGrupo() {
-    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, instanciaStatusId: '0', alunos: [] });
+    this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, provaCorrigida: false, alunos: [] });
     //this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
   drop(event: CdkDragDrop<string[]>, paraOnde: string) {
@@ -378,6 +380,10 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   inicarCorrecoes() {
     this.avaliacao.status = 2;
     this.updateAvaliacao("Alterei o status da avaliação para EM CORRECAO");
+  }
+  encerrarCorrecoes() {
+    this.avaliacao.status = 3;
+    this.updateAvaliacao("Alterei o status da avaliação para ENCERRADA")
   }
   updateAvaliacao(motivo: string) {
     console.log(`FIREBASE UPDATE: ${motivo}`);

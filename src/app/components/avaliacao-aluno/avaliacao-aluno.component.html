@@ -209,7 +209,8 @@
             </div>
         </div>
 
-        <div style="margin: auto; text-align: center;" *ngIf="prova.provasParaCorrigir.length <= 0">
+        <div style="margin: auto; text-align: center;"
+            *ngIf="prova.provasParaCorrigir.length <= 0 && avaliacao.tipoCorrecao == 2">
             Não existem provas para serem corrigidas por você.
             <br />
             Aguarde o professor finalizar a correção da sua prova.
@@ -231,11 +232,18 @@
             <app-avaliacao-aluno-cabecalho [avaliacao]="avaliacao"></app-avaliacao-aluno-cabecalho>
             <br />
             <br />
-            <span
-                style="font-size: 16px; background-color: var(--cor-primaria); padding: 20px; color: white; border-radius: 10px;">Sua
-                nota: 85/100</span>
-            <br /><br /><br />
-            <a mat-raised-button routerLink="/aluno/avaliacao/consulta/1">
+            <div *ngIf="avaliacao.id != '1'">
+                <span *ngIf="avaliacao.tipoDisposicao != 0"
+                    style="font-size: 16px; background-color: var(--cor-primaria); padding: 20px; color: white; border-radius: 10px;">Sua
+                    nota: {{getMeuGrupoNaAvaliacao().notaTotal || 0}}/{{getMeuGrupoNaAvaliacao().valorTotal|| 0}}
+                </span>
+                <span *ngIf="avaliacao.tipoDisposicao == 0"
+                    style="font-size: 16px; background-color: var(--cor-primaria); padding: 20px; color: white; border-radius: 10px;">Sua
+                    nota: {{getEuNaAvaliacao().notaTotal || 0}}/{{getEuNaAvaliacao().valorTotal|| 0}}
+                </span>
+            </div>
+            <br /><br />
+            <a mat-raised-button [routerLink]="'/aluno/avaliacao/consulta/' + getMeuGrupoNaAvaliacao().provaId">
                 Consultar Correção
             </a>
             <br />
@@ -244,7 +252,7 @@
             <!-- EM GRUPO -->
             <div *ngIf="avaliacao.tipoDisposicao != 0">
 
-                <div class="aluno" style="cursor: default;" *ngFor="let aluno of prova.alunos"
+                <div class="aluno" style="cursor: default;" *ngFor="let aluno of getMeuGrupoNaAvaliacao().alunos"
                     [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                     <app-aluno-card-avaliacao-professor [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
@@ -260,7 +268,7 @@
 
 </mat-horizontal-stepper>
 
-<div *ngIf="avaliacao.status <= 2" style="position: fixed; top: 30%; right: 4%; width: 15%;">
+<div style="position: fixed; top: 30%; right: 4%; width: 15%;">
     <app-countdown [dataObjetivo]="getDataObjetivo()" (tempoEsgotado)="atualizarStatusConformeTempo()"
         [mensagem]="comumService.statusAvaliacao[avaliacao.status].mensagemCountdown"></app-countdown>
 </div>

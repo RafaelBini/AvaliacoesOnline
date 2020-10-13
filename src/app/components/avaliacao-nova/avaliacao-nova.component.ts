@@ -79,6 +79,11 @@ export class AvaliacaoNovaComponent implements OnInit {
         opcoesParaPreencher: [],
         tentativas: 0,
         extensoes: [],
+        correcoes: [],
+        correcaoProfessor: {
+          nota: 0,
+          observacao: ""
+        },
       },
     ],
   };
@@ -124,6 +129,7 @@ export class AvaliacaoNovaComponent implements OnInit {
           this.receberTodasAvaliacoes().then(() => {
             this.setIdDuplicado(params.id);
             this.avaliacao.status = 0;
+            this.avaliacao.grupos = [];
           });
         });
         this.isEditando = false;
@@ -255,6 +261,11 @@ export class AvaliacaoNovaComponent implements OnInit {
       opcoesParaPreencher: [],
       tentativas: 0,
       extensoes: [],
+      correcoes: [],
+      correcaoProfessor: {
+        nota: 0,
+        observacao: ""
+      },
     });
 
     this.comumService.scrollToBottom();

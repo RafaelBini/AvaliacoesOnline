@@ -44,6 +44,11 @@
   color: var(--cor-secundaria);
 }
 
+.tenativa-incorreta{
+  color: var(--cor-perigosa);
+  font-size: 14px;
+}
+
 .select-basico {
   cursor: pointer;
   border: 1px dotted rgba(0, 0, 0, 0.20);

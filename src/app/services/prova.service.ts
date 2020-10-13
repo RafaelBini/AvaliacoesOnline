@@ -1,3 +1,5 @@
+import { Correcao } from './../models/correcao';
+import { ComumService } from './comum.service';
 import { Questao } from './../models/questao';
 import { Prova } from './../models/prova';
 import { Injectable } from '@angular/core';
@@ -11,7 +13,7 @@ import { Md5 } from 'ts-md5/dist/md5';
 })
 export class ProvaService {
 
-  constructor(private db: AngularFirestore) { }
+  constructor(private db: AngularFirestore, private comumService: ComumService) { }
 
   insertProvaGabarito(prova: Prova) {
     return new Promise((resolve, reject) => {
@@ -105,13 +107,13 @@ export class ProvaService {
       else if (questao.tipo == 2) {
         // TODO: Zerar caminho da entrega
       }
-      else if ([3, 4].includes(questao.tipo)) {
+      else if (questao.tipo == 3 || questao.tipo == 4) {
         for (let alternativa of questao.alternativas) {
           alternativa.justificativa = "";
           alternativa.selecionada = false;
         }
       }
-      else if ([6, 7].includes(questao.tipo)) {
+      else if (questao.tipo == 6 || questao.tipo == 7) {
         for (let alternativa of questao.alternativas) {
           alternativa.justificativa = "";
           alternativa.selecionada = null;
@@ -165,5 +167,35 @@ export class ProvaService {
 
   deletarProva(provaId: string) {
     return this.db.collection('provas').doc(provaId).delete();
+  }
+
+  getMinhaNota(prova: Prova, gabarito: Prova) {
+    var nota = 0;
+    for (let [i, questao] of prova.questoes.entries()) {
+      const questaoTipo = this.comumService.questaoTipos[questao.tipo];
+      if (questao.correcaoProfessor != null) {
+        nota += questao.correcaoProfessor.nota;
+      }
+      else if (questao.correcoes.length > 0) {
+        var media = 0;
+        for (let correcao of questao.correcoes) {
+          media += correcao.nota;
+        }
+        media = media / questao.correcoes.length;
+        nota += media;
+      }
+      else if (questaoTipo.temCorrecaoAutomatica) {
+        nota += questaoTipo.getNota(questao, gabarito.questoes[i]);
+      }
+
+    }
+    return Math.round(nota);
+  }
+  getPontuacaoMaxima(prova: Prova) {
+    var pontuacaoMaxima = 0;
+    prova.questoes.forEach(questao => {
+      pontuacaoMaxima += questao.valor;
+    });
+    return Math.round(pontuacaoMaxima);
   }
 }

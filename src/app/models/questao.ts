@@ -25,4 +25,5 @@ export interface Questao {
     tentativas?: number;
     ultimaModificacao?: number;
     usuarioUltimaModificacao?: Usuario;
+    isValidadaCorreta?: boolean;
 }

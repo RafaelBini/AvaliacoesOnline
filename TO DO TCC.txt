@@ -3,13 +3,15 @@
 
 -------------------
 
-- Testado criacao de prova com aluno já na preparação
-- Testado criacao de prova com varios alunos já online no grupo
-- Testado criação de prova com primeiro aluno entrando no grupo avaliacao vermelha
-- Testado criação de prova com 
 
-- Arrumar errinho de console de questões associativas
-- Arrumar questoes verdadeiro ou falso que estão vindo com a resposta
+- Esquema de correção de um grupo por outro grupo
+- Equema de correção de um individuo por outro individuo
+
+- Esquema de consulta de avaliação de um indiviuo
+- Esquema de consulta de avaliação de um grupo
+
+- Tratar quando avaliação aluno não existe!
+- Tratar quando avaliação professor não existe!
 
 - Visão do aluno da avaliação com bD
 - Visão do professor da avaliação com bd

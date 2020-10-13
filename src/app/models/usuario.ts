@@ -10,4 +10,7 @@ export interface Usuario {
     statusId?: number;
     provaId?: string;
     acesso?: string;
+    provaCorrigida?: boolean;
+    notaTotal?: number;
+    valorTotal?: number;
 }

@@ -1,8 +1,12 @@
+import { Subscription } from 'rxjs/internal/Subscription';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AvaliacaoService } from 'src/app/services/avaliacao.service';
+import { ProvaService } from 'src/app/services/prova.service';
 import { ComumService } from 'src/app/services/comum.service';
 import { Questao } from './../../models/questao';
 import { Avaliacao } from 'src/app/models/avaliacao';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UrlNode } from 'src/app/models/url-node';
 import { Prova } from 'src/app/models/prova';
 
@@ -11,9 +15,16 @@ import { Prova } from 'src/app/models/prova';
   templateUrl: './avaliacao-correcao.component.html',
   styleUrls: ['./avaliacao-correcao.component.css']
 })
-export class AvaliacaoCorrecaoComponent implements OnInit {
+export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
 
-  constructor(public route: ActivatedRoute, public comumService: ComumService) { }
+  constructor(
+    public route: ActivatedRoute,
+    public router: Router,
+    private snack: MatSnackBar,
+    public comumService: ComumService,
+    public provaService: ProvaService,
+    private avaliacaoService: AvaliacaoService
+  ) { }
 
   public visaoTipo = "correcao";
   public userTipo = "aluno"
@@ -21,7 +32,7 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
 
   public avaliacao: Avaliacao = {
     status: 0,
-    id: "01",
+    id: "1",
     titulo: "Avaliacao 01",
     descricao: "",
     dtInicio: "",
@@ -41,250 +52,119 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
   }
 
   public prova: Prova = {
-    questoes: [
-      {
-        valor: 4,
-        pergunta: "Qual é a cor da grama?",
-        tipo: 1,
-        nivelDificuldade: 1,
-        extensoes: [".pdf"],
-        resposta: "A cor da grama é laranja.",
-        correcaoProfessor: {
-          nota: null,
-          observacao: null,
-        },
-        correcoes: [
-          {
-            instancia: {
-              id: '01',
-              alunos: [
-                { nome: "Rodolfo Arnold" },
-                { nome: "Bruno Marques" },
-                { nome: "José da Silva" },
-              ]
-            },
-            nota: 1,
-            observacao: "Na verdade a cor da grama é verde"
-          },
-          {
-            instancia: {
-              id: '02',
-              alunos: [
-                { nome: "Joaquim Almeida" },
-                { nome: "Murilo Gonçalves" },
-                { nome: "Mario Andrade" },
-              ]
-            },
-            nota: 3,
-            observacao: "A cor da grama é laranja escuro..."
-          },
-          {
-            instancia: {
-              id: '03',
-              alunos: [
-                { nome: "Renan Carvalho" },
-                { nome: "Julio Mendonça" },
-                { nome: "Matheus Leonardo" },
-              ]
-            },
-            nota: 0,
-            observacao: "É verde!!"
-          }
-        ]
-      },
-      {
-        valor: 3,
-        pergunta: "Associe as cores",
-        tipo: 0,
-        nivelDificuldade: 1,
-        resposta: "A cor da grama é laranja.",
-        correcaoProfessor: {
-          nota: null,
-          observacao: null,
-        },
-        correcoes: [
-          {
-            instancia: {
-              id: '01',
-              alunos: [
-                { nome: "Rodolfo Arnold" },
-                { nome: "Bruno Marques" },
-                { nome: "José da Silva" },
-              ]
-            },
-            nota: 1,
-            observacao: "Na verdade a cor do céu é azul e a cor do sol é amarelo"
-          }
-        ],
-        associacoes: [
-          {
-            texto: "Cor do sol",
-            opcaoSelecionada: "Amarelo",
-          },
-          { texto: "Cor da grama", opcaoSelecionada: "Verde", },
-          { texto: "Cor do céu", opcaoSelecionada: "Azul", }
-        ]
-      },
-
-      {
-        valor: 5,
-        pergunta: "Quanto é 2 + 2?",
-        tags: ["matemática", "soma", "cálculo", "números"],
-        tipo: 3,
-        nivelDificuldade: 1,
-        alternativas: [
-          { texto: "1", selecionada: false, },
-          { texto: "2", selecionada: false, },
-          { texto: "3", selecionada: false, },
-          { texto: "4", selecionada: true, },
-        ],
-        correcaoProfessor: {
-          nota: null,
-          observacao: null,
-        },
-        correcoes: [
-          {
-            instancia: {
-              id: '04',
-              alunos: [
-                { nome: "Camila Bini" },
-              ]
-            },
-            nota: 5,
-            observacao: "Está certinho!"
-          }
-        ],
-      },
-      {
-        valor: 5,
-        pergunta: "Complete a frase abaixo:",
-        tags: ["astronomia", "cores", "química"],
-        tipo: 5,
-        nivelDificuldade: 4,
-        opcoesParaPreencher: [
-          { texto: "grama", opcaoSelecionada: "verde", ativa: true },
-          { texto: "verde", opcaoSelecionada: "grama", ativa: true }
-        ],
-        textoParaPreencher: "A (1) geralemnte é da cor (2).",
-        partesPreencher: [
-          { conteudo: "A ", tipo: "texto" },
-          { conteudo: 0, tipo: "select" },
-          { conteudo: " geralmente é da cor ", tipo: "texto" },
-          { conteudo: 1, tipo: "select" },
-          { conteudo: ".", tipo: "texto" },
-        ],
-        correcaoProfessor: {
-          nota: null,
-          observacao: null,
-        },
-        correcoes: [],
-
-      },
-
-    ],
+    id: '1',
+    questoes: [],
   }
 
   public gabarito: Prova = {
-    questoes: [
-      {
-        valor: 4,
-        pergunta: "Qual é a cor da grama?",
-        tipo: 1,
-        nivelDificuldade: 1,
-        extensoes: [".pdf"],
-        resposta: "A cor da grama é verde.",
-        correcaoProfessor: {
-          nota: null,
-          observacao: null,
-        },
-
-      },
-      {
-        valor: 3,
-        pergunta: "Associe as cores",
-        tipo: 0,
-        nivelDificuldade: 1,
-        associacoes: [
-          {
-            texto: "Cor do sol",
-            opcaoSelecionada: "Amarelo",
-          },
-          { texto: "Cor da grama", opcaoSelecionada: "Verde", },
-          { texto: "Cor do céu", opcaoSelecionada: "Azul", }
-        ]
-      },
-
-      {
-        valor: 5,
-        pergunta: "Quanto é 2 + 2?",
-        tags: ["matemática", "soma", "cálculo", "números"],
-        tipo: 3,
-        nivelDificuldade: 1,
-        alternativas: [
-          { texto: "1", selecionada: false, },
-          { texto: "2", selecionada: false, },
-          { texto: "3", selecionada: false, },
-          { texto: "4", selecionada: true, },
-        ],
-        correcaoProfessor: {
-          nota: null,
-          observacao: null,
-        },
-        correcoes: [
-          {
-            instancia: {
-              id: '04',
-              alunos: [
-                { nome: "Camila Bini" },
-              ]
-            },
-            nota: 5,
-            observacao: "Está certinho!"
-          }
-        ],
-      },
-      {
-        valor: 5,
-        pergunta: "Complete a frase abaixo:",
-        tags: ["astronomia", "cores", "química"],
-        tipo: 5,
-        nivelDificuldade: 4,
-        opcoesParaPreencher: [
-          { texto: "grama", opcaoSelecionada: "verde", ativa: true },
-          { texto: "verde", opcaoSelecionada: "grama", ativa: true }
-        ],
-        textoParaPreencher: "A (1) geralemnte é da cor (2).",
-        partesPreencher: [
-          { conteudo: "A ", tipo: "texto" },
-          { conteudo: 0, tipo: "select" },
-          { conteudo: " geralmente é da cor ", tipo: "texto" },
-          { conteudo: 1, tipo: "select" },
-          { conteudo: ".", tipo: "texto" },
-        ],
-        correcaoProfessor: {
-          nota: null,
-          observacao: null,
-        },
-        correcoes: [],
-
-      },
-
-    ],
+    id: '1',
+    questoes: [],
   }
 
+  private provaSubscription: Subscription;
 
   ngOnInit(): void {
-
-
     this.route.url.subscribe((value) => {
+
       this.userTipo = value[0].path;
       this.visaoTipo = value[2].path;
+      var provaId = value[3].path;
+
+
+      // Começa a ouvir a prova
+      if (this.provaSubscription == null) {
+
+        this.provaSubscription = this.provaService.onProvaChange(provaId).subscribe(prova => {
+
+          if (prova == undefined) {
+            this.snack.open("Avaliação não encontrada", null, { duration: 4500 });
+            this.router.navigate(['']);
+            return;
+          }
+
+
+          const provaTipada = prova as Prova;
+
+          console.log("Peguei uma prova pra mim!!", provaTipada.id);
+
+
+          // Recebe a prova toda
+          var provaAtualizada = { ...provaTipada };
+          provaAtualizada.id = provaId;
+
+          // Atualiza as questões
+          var tenhoAlgoMaisAtualizado = false;
+          if (this.prova.questoes.length > 0) {
+            for (var i = 0; i < provaAtualizada.questoes.length; i++) {
+              if (provaAtualizada.questoes[i].ultimaModificacao < this.prova.questoes[i].ultimaModificacao) {
+                tenhoAlgoMaisAtualizado = true;
+                provaAtualizada.questoes[i] = this.prova.questoes[i];
+              }
+            }
+          }
+
+          this.prova = provaAtualizada;
+
+
+
+        });
+      }
+
+      // Certifico-me de ter recebido a prova
+      var provaInterval = setInterval(() => {
+        if (this.prova.id != '1') {
+
+          // Recebe a avaliação
+          this.avaliacaoService.getAvaliacaoFromId(this.prova.avaliacaoId).then(avaliacao => {
+
+            this.avaliacao = avaliacao;
+
+            this.inserirNotasPadrao();
+            this.definirCaminho();
+
+            // Recebe o gabarito
+            this.provaService.getProvaFromId(this.avaliacao.provaGabarito).then(gabarito => {
+              this.gabarito = gabarito;
+            });
+
+
+          });
+
+
+
+          clearInterval(provaInterval);
+        }
+      });
+
     });
 
-    this.inserirNotasPadrao();
+  }
 
-    this.definirCaminho();
+  ngOnDestroy() {
+    if (this.provaSubscription)
+      this.provaSubscription.unsubscribe();
+  }
 
+  correcaoAlterada() {
+    console.log('FIREBASE UPDATE: atualizei prova');
+    this.provaService.updateProva(this.prova);
+  }
+
+  finalizarCorrecao() {
+    if (this.avaliacao.tipoDisposicao != 0) {
+      this.getGrupoNaAvaliacao().provaCorrigida = true;
+      this.getGrupoNaAvaliacao().notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
+      this.getGrupoNaAvaliacao().valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
+    }
+    else {
+      this.getAlunoNaAvaliacao().provaCorrigida = true;
+      this.getAlunoNaAvaliacao().notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
+      this.getAlunoNaAvaliacao().valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
+    }
+
+    console.log('FIREBASE UPDATE: atualizei avaliação com a prova corrigida');
+    this.avaliacaoService.updateAvaliacao(this.avaliacao);
+    this.router.navigate([`professor/avaliacao/${this.avaliacao.id}`]);
   }
 
   definirCaminho() {
@@ -334,6 +214,27 @@ export class AvaliacaoCorrecaoComponent implements OnInit {
 
 
     }
+  }
+
+  getGrupoNaAvaliacao() {
+    if (this.avaliacao.id != '1')
+      return this.avaliacao.grupos[this.avaliacao.grupos.indexOf(this.avaliacao.grupos.filter(g => g.provaId == this.prova.id)[0])];
+    else
+      return {
+        alunos: []
+      }
+
+  }
+
+  getAlunoNaAvaliacao() {
+    var count = 0;
+    for (let aluno of this.avaliacao.grupos[0].alunos) {
+      if (aluno.id == this.prova.alunos[0].id) {
+        return this.avaliacao.grupos[0].alunos[count];
+      }
+      count++;
+    }
+    return null;
   }
 
 }

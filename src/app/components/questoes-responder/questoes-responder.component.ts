@@ -68,50 +68,105 @@ export class QuestoesResponderComponent implements OnInit {
   }
   sinalizarRespostaAlterada(questao: Questao) {
     questao.ultimaModificacao = new Date().getTime();
+    questao.isValidadaCorreta = false;
+    this.respostaAlterada.emit();
+  }
+  sinalizarRespostaAlteradaSemInvalidar(questao: Questao) {
+    questao.ultimaModificacao = new Date().getTime();
     this.respostaAlterada.emit();
   }
   identificarQuestao(index: Number, questao: Questao) {
     return index;
+  }
+  validar(questao: Questao, questaoIndex: number) {
+    if (this.avaliacao.tipoPontuacao != 2)
+      return;
+
+    var tudoCerto = true;
+
+    // ASSOCIACAO
+    if (questao.tipo == 0) {
+      for (let [i, associacao] of questao.associacoes.entries()) {
+        if (associacao.opcaoSelecionada != this.gabarito.questoes[questaoIndex].associacoes[i].opcaoSelecionada && associacao.opcaoSelecionada != null && associacao.opcaoSelecionada != '') {
+
+          setTimeout(() => {
+            associacao.opcaoSelecionada = null;
+          }, 1200);
+          tudoCerto = false;
+          break;
+        }
+      }
+    }
+    // MULTIPLAESCOLHA
+    else if (questao.tipo == 3 || questao.tipo == 4) {
+      for (let [i, alternativa] of questao.alternativas.entries()) {
+        if (!this.gabarito.questoes[questaoIndex].alternativas[i].selecionada && alternativa.selecionada) {
+
+          setTimeout(() => {
+            alternativa.selecionada = false;
+          }, 1200);
+          tudoCerto = false;
+          break;
+        }
+      }
+
+    }
+    // PREENCHIMENTO
+    else if (questao.tipo == 5) {
+      for (let opcao of questao.opcoesParaPreencher) {
+        if (opcao.opcaoSelecionada != opcao.texto && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
+
+          setTimeout(() => {
+            opcao.opcaoSelecionada = null;
+          }, 1200);
+          tudoCerto = false;
+          break;
+        }
+      }
+    }
+    // VERDADEIRO OU FALSO
+    else if (questao.tipo == 6) {
+      for (let [i, alternativa] of questao.alternativas.entries()) {
+        if ((this.gabarito.questoes[questaoIndex].alternativas[i].selecionada != alternativa.selecionada) && alternativa.selecionada != null) {
+
+          setTimeout(() => {
+            alternativa.selecionada = null;
+          }, 1200);
+          tudoCerto = false;
+          break;
+        }
+      }
+    }
+
+    if (tudoCerto) {
+      questao.isValidadaCorreta = true;
+      this.snack.open("Respondido corretamente!", null, { duration: 3500 });
+    }
+    else {
+      questao.isValidadaCorreta = false;
+      if (questao.tentativas < 3) {
+        questao.tentativas++;
+        this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
+          duration: 4000
+        });
+      } else {
+        this.snack.open(`Resposta incorreta!`, null, {
+          duration: 4000
+        });
+      }
+    }
+    this.sinalizarRespostaAlteradaSemInvalidar(questao);
   }
 
   // ASSOCIACAO
   getAssociacoesOrdenadas(questaoIndex: number) {
     return this.gabarito.questoes[questaoIndex].associacoes.concat().sort((a, b) => a.texto > b.texto ? 1 : -1);
   }
-  onAssociativaChange(questao: Questao, questaoIndex: number) {
-
-    this.sinalizarRespostaAlterada(questao);
-
-    if (this.avaliacao.tipoPontuacao != 2)
-      return;
-
-    for (let [i, associacao] of questao.associacoes.entries()) {
-      if (associacao.opcaoSelecionada != this.gabarito.questoes[questaoIndex].associacoes[i].opcaoSelecionada && associacao.opcaoSelecionada != null && associacao.opcaoSelecionada != '') {
-        if (questao.tentativas < 3) {
-          questao.tentativas++;
-          this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
-            duration: 4000
-          });
-        } else {
-          this.snack.open(`Resposta incorreta!`, null, {
-            duration: 4000
-          });
-        }
-        setTimeout(() => {
-          associacao.opcaoSelecionada = null;
-        }, 1200);
-        return;
-      }
-    }
-
-
-  }
 
 
   // ALTERNATIVAS
   onMultiplaEscolhaChange(questao: Questao, alternativaIndex: number, isEditavel: boolean, questaoIndex: number) {
     this.desmarcarTudoMenosUma(questao, alternativaIndex, isEditavel);
-    this.registrarTentativaMultiplaEscolha(questao, questaoIndex);
     this.sinalizarRespostaAlterada(questao);
     //console.log(this.comumService.questaoTipos[questao.tipo].getNota(questao));
   }
@@ -124,28 +179,7 @@ export class QuestoesResponderComponent implements OnInit {
       }
     }
   }
-  registrarTentativaMultiplaEscolha(questao: Questao, questaoIndex: number) {
-    if (this.avaliacao.tipoPontuacao != 2)
-      return;
-    for (let [i, alternativa] of questao.alternativas.entries()) {
-      if (!this.gabarito.questoes[questaoIndex].alternativas[i].selecionada && alternativa.selecionada) {
-        if (questao.tentativas < 3) {
-          questao.tentativas++;
-          this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
-            duration: 4000
-          });
-        } else {
-          this.snack.open(`Resposta incorreta!`, null, {
-            duration: 4000
-          });
-        }
-        setTimeout(() => {
-          alternativa.selecionada = false;
-        }, 1200);
-        return;
-      }
-    }
-  }
+
 
   // DISSERTATIVA
   isLocked(questao: Questao) {
@@ -203,62 +237,10 @@ export class QuestoesResponderComponent implements OnInit {
     return partes;
 
   }
-  onPreenchimentoChange(questao: Questao) {
 
-    this.sinalizarRespostaAlterada(questao);
-
-    if (this.avaliacao.tipoPontuacao != 2)
-      return;
-
-    for (let opcao of questao.opcoesParaPreencher) {
-      if (opcao.opcaoSelecionada != opcao.texto && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
-        if (questao.tentativas < 3) {
-          questao.tentativas++;
-          this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
-            duration: 4000
-          });
-        } else {
-          this.snack.open(`Resposta incorreta!`, null, {
-            duration: 4000
-          });
-        }
-        setTimeout(() => {
-          opcao.opcaoSelecionada = null;
-        }, 1200);
-        return;
-      }
-    }
-
-
-  }
 
   // VERDADEIRO OU FALSO
-  onVerdadeiroFalsoChange(questao: Questao, questaoIndex: number) {
 
-    this.sinalizarRespostaAlterada(questao);
-
-    if (this.avaliacao.tipoPontuacao != 2)
-      return;
-
-    for (let [i, alternativa] of questao.alternativas.entries()) {
-      if ((this.gabarito.questoes[questaoIndex].alternativas[i].selecionada != alternativa.selecionada) && alternativa.selecionada != null) {
-        if (questao.tentativas < 3) {
-          questao.tentativas++;
-          this.snack.open(`Resposta incorreta... Você perdeu ${Math.round(questao.valor / 3)} pontos no valor da questão`, null, {
-            duration: 4000
-          });
-        } else {
-          this.snack.open(`Resposta incorreta!`, null, {
-            duration: 4000
-          });
-        }
-        setTimeout(() => {
-          alternativa.selecionada = null;
-        }, 1200);
-        return;
-      }
-    }
-  }
 
 
 

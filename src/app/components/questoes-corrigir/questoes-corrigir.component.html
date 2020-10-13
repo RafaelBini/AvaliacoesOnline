@@ -1,6 +1,6 @@
 <div>
     <div style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
-        <div class="questao" *ngFor="let questao of prova.questoes; index as qi">
+        <div class="questao" *ngFor="let questao of prova.questoes; index as qi; trackBy:identificarQuestao">
 
             <table style="width: 100%;">
 
@@ -196,10 +196,11 @@
                             <tr>
                                 <td>
                                     Nota: <input type="number" [disabled]="visaoTipo != 'correcao'"
-                                        [(ngModel)]="questao.correcaoProfessor.nota" min="0" [max]="questao.valor" #nota
+                                        [(ngModel)]="questao.correcaoProfessor.nota" min="0"
+                                        (ngModelChange)="sinalizarCorrecaoAlterada(questao)" [max]="questao.valor" #nota
                                         value="0" style="width: 40px;" /> de {{questao.valor}}
 
-                                    <button (click)="nota.value = questao.valor" matTooltip="Dar nota máxima"
+                                    <button (click)="inserirNotaMaxima(questao)" matTooltip="Dar nota máxima"
                                         mat-icon-button>
                                         <mat-icon>done</mat-icon>
                                     </button>
@@ -207,6 +208,7 @@
                                         class="dica-resposta-dissertativa">
                                         {{gabarito.questoes[qi].resposta}}
                                     </div>
+                                    <br />
                                     Observação (opcional):
                                 </td>
                                 <td align='Left' valign='top' width='30%'>
@@ -219,6 +221,7 @@
                                         <textarea rows="3" #correcaoProfessorTextarea maxlength="2500"
                                             (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
                                             [(ngModel)]="questao.correcaoProfessor.observacao" class="input-basico"
+                                            (ngModelChange)="sinalizarCorrecaoAlterada(questao)"
                                             [disabled]="visaoTipo != 'correcao'"
                                             style="width: 98%; padding: 6px;  padding-top: 14px;"></textarea>
                                         <span *ngIf="estaEmFoco(correcaoProfessorTextarea)"

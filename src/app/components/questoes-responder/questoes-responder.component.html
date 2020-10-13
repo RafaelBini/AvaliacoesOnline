@@ -18,7 +18,7 @@
                                 <td width="20%" style="cursor:default;">
                                     <mat-select class="select-basico" style="width: 82%;"
                                         [(ngModel)]="associacao.opcaoSelecionada"
-                                        (ngModelChange)="onAssociativaChange(questao, qi)">
+                                        (ngModelChange)="sinalizarRespostaAlterada(questao)">
                                         <mat-option [value]="_associacao.opcaoSelecionada"
                                             *ngFor="let _associacao of getAssociacoesOrdenadas(qi)">
                                             {{_associacao.opcaoSelecionada}}
@@ -99,7 +99,7 @@
                             <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
                             <select *ngIf="parte.tipo == 'select'" class="select-basico"
                                 [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada"
-                                (ngModelChange)="onPreenchimentoChange(questao)">
+                                (ngModelChange)="sinalizarRespostaAlterada(questao)">
                                 <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao)"
                                     [value]="opcaoPreencher.texto">
                                     {{opcaoPreencher.texto}}
@@ -119,7 +119,7 @@
                                         <tr>
                                             <td width="5%" class="alternativa">
                                                 <mat-button-toggle-group [(ngModel)]="alternativa.selecionada"
-                                                    (ngModelChange)="onVerdadeiroFalsoChange(questao, qi)">
+                                                    (ngModelChange)="sinalizarRespostaAlterada(questao)">
                                                     <mat-button-toggle matTooltip=" Marcar como verdadeiro"
                                                         [value]="true">V
                                                     </mat-button-toggle>
@@ -158,16 +158,38 @@
                     <td align="left" style="position: relative; padding-top: 20px;">
 
                         <!-- NORMAL -->
-                        <div *ngIf="questao.tentativas == null || questao.tentativas <= 0">
+                        <div *ngIf="questao.tentativas == null || questao.tentativas <= 0" style="display: inline">
                             Valor: {{questao.valor}}/{{getPontuacaoMaxima()}}
+
                         </div>
 
                         <!-- POR TENTATIVAS -->
-                        <div *ngIf="questao.tentativas > 0">
+
+                        <div *ngIf="questao.tentativas > 0" style="display: inline">
                             Valor:
                             {{comumService.getRounded(questao.valor - (questao.tentativas * (questao.valor/3)))}}/{{getPontuacaoMaxima()}}
+                            <span class="tenativa-incorreta" *ngIf="questao.tentativas==1">
+                                (1 tentativa incorreta)
+                            </span>
+                            <span class="tenativa-incorreta" *ngIf="questao.tentativas>1">
+                                ({{questao.tentativas}} tentativas incorretas)
+                            </span>
 
                         </div>
+
+                        <button mat-button *ngIf="avaliacao.tipoPontuacao == 2" (click)="validar(questao, qi)"
+                            [matTooltip]="'Atenção: Se a resposta estiver errada, você irá perder ' + comumService.getRounded(questao.valor/3) + ' pontos'">
+                            Validar
+                        </button>
+
+                        <div *ngIf="questao.isValidadaCorreta" matTooltip="Essa questão foi validada como correta"
+                            style="display: inline;">
+                            <mat-icon style="color: green; user-select: none; ">
+                                check_circle
+                            </mat-icon>
+                        </div>
+
+
                     </td>
                 </tr>
 

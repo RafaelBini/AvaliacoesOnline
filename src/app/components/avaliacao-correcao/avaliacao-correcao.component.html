@@ -1,34 +1,50 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
-<div style="margin: auto; width: 60%; padding-top: 20px; padding-bottom: 70px;">
+<div *ngIf="gabarito.id != '1'" style="margin: auto; width: 60%; padding-top: 20px; padding-bottom: 70px;">
 
     <div class="quadrinho" style="text-align: center;">
         <h2>Corrigir Avaliação</h2>
-        Grupo 01
+        <div *ngIf="avaliacao.tipoDisposicao != 0">Grupo {{getGrupoNaAvaliacao().numero}}</div>
     </div>
 
-    <div *ngIf="userTipo == 'professor'" class="quadrinho">
+    <div *ngIf="userTipo == 'professor' && avaliacao.tipoDisposicao != 0" class="quadrinho">
         Integrantes do Grupo:
-        <br /><br />
-        <li>Rafael Bini</li>
-        <li>Matheus Leonardo</li>
-        <li>Julio do Lago</li>
+        <div class="aluno" *ngFor="let aluno of getGrupoNaAvaliacao().alunos"
+            [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'"
+            style="cursor: default">
+            <app-aluno-card-avaliacao-professor [aluno]="aluno">
+            </app-aluno-card-avaliacao-professor>
+        </div>
+    </div>
+
+    <div *ngIf="userTipo == 'professor' && avaliacao.tipoDisposicao == 0" class="quadrinho">
+        Aluno que respondeu às questões:
+        <div class="aluno"
+            [style.borderColor]="prova.alunos[0].online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'"
+            style="cursor: default">
+            <app-aluno-card-avaliacao-professor [aluno]="prova.alunos[0]">
+            </app-aluno-card-avaliacao-professor>
+        </div>
     </div>
 
     <div style="padding-bottom: 20px;">
-        <app-questoes-corrigir [avaliacao]="avaliacao" [prova]="prova" [gabarito]="gabarito" [userTipo]="userTipo"
-            [visaoTipo]="visaoTipo">
+        <app-questoes-corrigir (correcaoAlterada)="correcaoAlterada()" [avaliacao]="avaliacao" [prova]="prova"
+            [gabarito]="gabarito" [userTipo]="userTipo" [visaoTipo]="visaoTipo">
 
         </app-questoes-corrigir>
     </div>
 
+    <div class="nota-total" *ngIf="gabarito.id != '1'">
+        Nota total:
+        {{provaService.getMinhaNota(prova,gabarito)}}/{{provaService.getPontuacaoMaxima(prova)}}
+    </div>
+    <br /><br />
 
     <div *ngIf="visaoTipo == 'correcao'"
         style="margin: auto; text-align: center; font-size: 40px; margin-bottom: 40px;">
-        <a [routerLink]="'/' + userTipo + '/avaliacao/1'" mat-button
-            style="background-color: var(--cor-primaria); color: white">
+        <button (click)="finalizarCorrecao()" mat-button style="background-color: var(--cor-primaria); color: white">
             Finalizar Correção
-        </a>
+        </button>
     </div>
     <div *ngIf="visaoTipo == 'consulta'"
         style="margin: auto; text-align: center; font-size: 40px; margin-bottom: 40px;">
