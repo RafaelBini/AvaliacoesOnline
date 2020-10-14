@@ -173,7 +173,7 @@ export class ProvaService {
     var nota = 0;
     for (let [i, questao] of prova.questoes.entries()) {
       const questaoTipo = this.comumService.questaoTipos[questao.tipo];
-      if (questao.correcaoProfessor != null) {
+      if (questao.correcaoProfessor.nota != null) {
         nota += questao.correcaoProfessor.nota;
       }
       else if (questao.correcoes.length > 0) {
@@ -182,7 +182,7 @@ export class ProvaService {
           media += correcao.nota;
         }
         media = media / questao.correcoes.length;
-        nota += media;
+        nota += Math.round(media);
       }
       else if (questaoTipo.temCorrecaoAutomatica) {
         nota += questaoTipo.getNota(questao, gabarito.questoes[i]);
@@ -197,5 +197,24 @@ export class ProvaService {
       pontuacaoMaxima += questao.valor;
     });
     return Math.round(pontuacaoMaxima);
+  }
+  getMaiorNota(avaliacao: Avaliacao) {
+    var maiorNota = 0;
+    if (avaliacao.tipoDisposicao != 0) {
+      for (let grupo of avaliacao.grupos) {
+        if (grupo.notaTotal > maiorNota) {
+          maiorNota = grupo.notaTotal;
+        }
+      }
+    }
+    else {
+      for (let aluno of avaliacao.grupos[0].alunos) {
+        if (aluno.notaTotal > maiorNota) {
+          maiorNota = aluno.notaTotal;
+        }
+      }
+    }
+    return maiorNota;
+
   }
 }

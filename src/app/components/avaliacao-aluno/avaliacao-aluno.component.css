@@ -110,6 +110,14 @@
   .grupo-title{
     padding: 5px;
   }
+
+  .pontuacao-card{
+    font-size: 16px; 
+    background-color: var(--cor-primaria); 
+    padding: 20px; 
+    color: white; 
+    border-radius: 10px;
+  }
   
   /* CDK DRAG & DROP */
   

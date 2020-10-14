@@ -2,3 +2,16 @@
 [0928/184459.624:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
 [1012/173833.992:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
 [1013/080838.964:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1014/072100.694:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1014/114944.064:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1014/133944.454:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/135444.744:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/140944.751:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/142444.769:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/143944.775:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/145444.779:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/150944.784:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/152444.793:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/153944.821:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/155444.932:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1014/160740.536:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)

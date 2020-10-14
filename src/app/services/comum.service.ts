@@ -169,11 +169,17 @@ export class ComumService {
       codigo: 1,
       nome: "Dissertativa",
       temCorrecaoAutomatica: false,
+      getNota(questao, questaoGabarito): number {
+        return 0;
+      },
     },
     {
       codigo: 2,
       nome: "Entrega",
       temCorrecaoAutomatica: false,
+      getNota(questao, questaoGabarito): number {
+        return 0;
+      },
     },
     {
       codigo: 3,

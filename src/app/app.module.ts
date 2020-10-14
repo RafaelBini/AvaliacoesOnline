@@ -61,6 +61,7 @@ import { EditarAlunoComponent } from './dialogs/editar-aluno/editar-aluno.compon
 import { AvaliacaoAlunoCabecalhoComponent } from './components/avaliacao-aluno/avaliacao-aluno-cabecalho/avaliacao-aluno-cabecalho.component';
 import { SelecionarAlunosComponent } from './dialogs/selecionar-alunos/selecionar-alunos.component';
 import { HttpClientModule } from '@angular/common/http';
+import { GabaritoQuestaoComponent } from './dialogs/gabarito-questao/gabarito-questao.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { HttpClientModule } from '@angular/common/http';
     EditarAlunoComponent,
     AvaliacaoAlunoCabecalhoComponent,
     SelecionarAlunosComponent,
+    GabaritoQuestaoComponent,
   ],
   imports: [
     BrowserModule,

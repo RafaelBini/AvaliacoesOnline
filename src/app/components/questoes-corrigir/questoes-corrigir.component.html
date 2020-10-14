@@ -19,9 +19,9 @@
                                 <td width="20%" style="cursor:default;">
                                     <mat-select disabled="true" class="select-basico" style="width: 82%;"
                                         [(ngModel)]="associacao.opcaoSelecionada">
-                                        <mat-option [value]="_associacao.opcaoCorreta"
-                                            *ngFor="let _associacao of getAssociacoesOrdenadas(questao)">
-                                            {{_associacao.opcaoCorreta}}
+                                        <mat-option [value]="_associacao.opcaoSelecionada"
+                                            *ngFor="let _associacao of getAssociacoesOrdenadas(qi)">
+                                            {{_associacao.opcaoSelecionada}}
                                         </mat-option>
                                     </mat-select>
                                 </td>
@@ -162,14 +162,32 @@
 
 
                                             </td>
-                                            <td align='left' width='30%'>
-                                                {{correcao.instancia.alunos.length > 1 ? 'GRUPO' : 'ALUNO'}}
-                                                {{correcao.instancia.id}}
-                                                <ul *ngIf="userTipo == 'professor'">
-                                                    <li *ngFor="let aluno of correcao.instancia.alunos">
+                                            <td align='left' width='50%'>
+
+
+                                                <div *ngIf="avaliacao.tipoDisposicao != 0 && userTipo == 'professor'"
+                                                    class="lista-alunos-container">
+                                                    <span class="titulo-lista-alunos">
+                                                        Correção do
+                                                        {{ 'Grupo ' + getGrupoFromProvaId(correcao.avaliadorProvaId).numero }}
+                                                    </span>
+                                                    <div class="aluno-listado"
+                                                        *ngFor="let aluno of getGrupoFromProvaId(correcao.avaliadorProvaId).alunos">
                                                         {{aluno.nome}}
-                                                    </li>
-                                                </ul>
+                                                    </div>
+                                                </div>
+
+                                                <div *ngIf="avaliacao.tipoDisposicao == 0 && userTipo == 'professor'"
+                                                    class="lista-alunos-container">
+                                                    <span class="titulo-lista-alunos">
+                                                        Correção do Aluno
+                                                    </span>
+                                                    <div class="aluno-listado" style="text-align: center;">
+                                                        {{getAlunoFromProvaId(correcao.avaliadorProvaId).nome}}
+                                                    </div>
+                                                </div>
+
+
                                             </td>
                                         </tr>
                                         <tr>
@@ -189,9 +207,10 @@
                 </tr>
 
                 <!-- PAINEL PARA CORREÇÃO PROFESSOR -->
-                <tr *ngIf="userTipo == 'professor' || (userTipo=='aluno' && visaoTipo=='consulta')">
+                <tr
+                    *ngIf="(userTipo == 'professor' || (userTipo=='aluno' && visaoTipo=='consulta')) && avaliacao.tipoPontuacao != 3">
                     <td
-                        style="background-color: var(--cor-secundaria); color: white; padding: 10px; border-radius: 8px;">
+                        style="background-color: var(--cor-secundaria); color: white; padding: 10px; border-radius: 8px; position: relative;">
                         <table style="width: 100%; height: 100%;">
                             <tr>
                                 <td>
@@ -200,8 +219,8 @@
                                         (ngModelChange)="sinalizarCorrecaoAlterada(questao)" [max]="questao.valor" #nota
                                         value="0" style="width: 40px;" /> de {{questao.valor}}
 
-                                    <button (click)="inserirNotaMaxima(questao)" matTooltip="Dar nota máxima"
-                                        mat-icon-button>
+                                    <button *ngIf="visaoTipo == 'correcao'" (click)="inserirNotaMaxima(questao)"
+                                        matTooltip="Dar nota máxima" mat-icon-button>
                                         <mat-icon>done</mat-icon>
                                     </button>
                                     <div *ngIf="questao.tipo == 1 && userTipo == 'professor'"
@@ -211,8 +230,8 @@
                                     <br />
                                     Observação (opcional):
                                 </td>
-                                <td align='Left' valign='top' width='30%'>
-                                    CORREÇÃO DO PROFESSOR
+                                <td align='Left' valign='top' width='50%'>
+                                    Correção do Professor
                                 </td>
                             </tr>
                             <tr>
@@ -231,6 +250,10 @@
                             </tr>
                         </table>
 
+                        <button mat-button *ngIf="userTipo == 'professor'" (click)="abrirGabarito(qi)"
+                            style="position: absolute; top: 8px; right: 8px;">
+                            Ver Gabarito
+                        </button>
 
                     </td>
                 </tr>
@@ -238,15 +261,18 @@
                 <!-- PAINEL PARA CORREÇÃO ALUNO -->
                 <tr *ngIf="visaoTipo == 'correcao' && userTipo == 'aluno'">
                     <td
-                        style="background-color: var(--cor-secundaria); color: white; padding: 10px; border-radius: 8px;">
+                        style="background-color: var(--cor-secundaria); color: white; padding: 10px; border-radius: 8px; position: relative;">
                         <table style="width: 100%; height: 100%;">
                             <tr>
                                 <td>
-                                    Nota: <input type="number" [disabled]="visaoTipo != 'correcao'" min="0"
-                                        [max]="questao.valor" #nota value="0" style="width: 40px;" /> de
+                                    Nota: <input type="number" [(ngModel)]="getMinhaCorrecao(questao,qi).nota"
+                                        (ngModelChange)="sinalizarCorrecaoAlterada(questao)"
+                                        [disabled]="visaoTipo != 'correcao'" min="0" [max]="questao.valor" #nota
+                                        value="0" style="width: 40px;" /> de
                                     {{questao.valor}}
 
-                                    <button (click)="nota.value = questao.valor" matTooltip="Dar nota máxima"
+                                    <button *ngIf="visaoTipo == 'correcao'"
+                                        (click)="inserirNotaMaximaAluno(questao, qi)" matTooltip="Dar nota máxima"
                                         mat-icon-button>
                                         <mat-icon>done</mat-icon>
                                     </button>
@@ -264,7 +290,16 @@
                                         <textarea rows="3" #correcaoProfessorTextarea maxlength="2500"
                                             (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
                                             class="input-basico" [disabled]="visaoTipo != 'correcao'"
+                                            [disabled]="isLocked(questao)"
+                                            [(ngModel)]="getMinhaCorrecao(questao, qi).observacao"
+                                            (ngModelChange)="sinalizarCorrecaoAlterada(questao)"
+                                            (blur)="onDissertativaBlur(questao)" (focus)="onDissertativaFocus(questao)"
                                             style="width: 98%; padding: 6px;  padding-top: 14px;"></textarea>
+
+                                        <div *ngIf="isLocked(questao)" class=" aluno-na-questao">
+                                            {{questao.usuarioUltimaModificacao.nome}} está escrevendo essa observação.
+                                        </div>
+
                                         <span *ngIf="estaEmFoco(correcaoProfessorTextarea)"
                                             class="contador-caracteres">{{correcaoProfessorTextarea.value.length}}/2500</span>
                                     </div>
@@ -272,6 +307,10 @@
                             </tr>
                         </table>
 
+                        <button mat-button *ngIf="avaliacao.tipoCorrecao == 3" (click)="abrirGabarito(qi)"
+                            style="position: absolute; top: 8px; right: 8px;">
+                            Ver Gabarito
+                        </button>
 
                     </td>
                 </tr>

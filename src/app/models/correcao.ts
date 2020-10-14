@@ -1,6 +1,6 @@
 
 export interface Correcao {
-    instancia?: any;
+    avaliadorProvaId?: any;
     nota?: number;
     observacao?: string;
 }

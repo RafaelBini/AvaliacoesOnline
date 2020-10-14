@@ -81,7 +81,7 @@ export class AvaliacaoNovaComponent implements OnInit {
         extensoes: [],
         correcoes: [],
         correcaoProfessor: {
-          nota: 0,
+          nota: null,
           observacao: ""
         },
       },
@@ -263,7 +263,7 @@ export class AvaliacaoNovaComponent implements OnInit {
       extensoes: [],
       correcoes: [],
       correcaoProfessor: {
-        nota: 0,
+        nota: null,
         observacao: ""
       },
     });

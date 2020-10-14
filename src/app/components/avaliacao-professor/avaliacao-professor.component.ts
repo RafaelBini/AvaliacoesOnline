@@ -1,3 +1,4 @@
+import { ProvaService } from 'src/app/services/prova.service';
 import { Grupo } from './../../models/grupo';
 import { UsuarioService } from './../../services/usuario.service';
 import { AvaliacaoAlunoComponent } from './../avaliacao-aluno/avaliacao-aluno.component';
@@ -54,9 +55,11 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
   @ViewChild(CountdownComponent) countDown: CountdownComponent;
 
-  constructor(public credencialService: CredencialService,
+  constructor(
+    public credencialService: CredencialService,
     public comumService: ComumService,
     private avaliacaoService: AvaliacaoService,
+    public provaService: ProvaService,
     private usuarioService: UsuarioService,
     public router: Router,
     public route: ActivatedRoute,
@@ -107,6 +110,13 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
             this.router.navigate([`aluno/avaliacao/${AVALIACAO_ID}`]);
             return;
 
+          }
+
+          if (this.avaliacao.status == 2) {
+            if (this.avaliacao.tipoPontuacao == 3) {
+              this.avaliacao.status = 3;
+              this.updateAvaliacao("Pulei o status 2 porque é por participação")
+            }
           }
 
         });
@@ -178,6 +188,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     }, 3000);
 
   }
+
 
   // Parte 1 - Em Preparação
 

@@ -34,7 +34,7 @@
         </app-questoes-corrigir>
     </div>
 
-    <div class="nota-total" *ngIf="gabarito.id != '1'">
+    <div class="nota-total" *ngIf="gabarito.id != '1' && avaliacao.tipoPontuacao != 3">
         Nota total:
         {{provaService.getMinhaNota(prova,gabarito)}}/{{provaService.getPontuacaoMaxima(prova)}}
     </div>
@@ -48,7 +48,8 @@
     </div>
     <div *ngIf="visaoTipo == 'consulta'"
         style="margin: auto; text-align: center; font-size: 40px; margin-bottom: 40px;">
-        <a [routerLink]="'/aluno/avaliacao/1'" mat-button style="background-color: var(--cor-primaria); color: white">
+        <a [routerLink]="'/aluno/avaliacao/' + avaliacao.id" mat-button
+            style="background-color: var(--cor-primaria); color: white">
             Voltar
         </a>
     </div>

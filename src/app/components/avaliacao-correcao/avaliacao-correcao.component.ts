@@ -5,10 +5,14 @@ import { ProvaService } from 'src/app/services/prova.service';
 import { ComumService } from 'src/app/services/comum.service';
 import { Questao } from './../../models/questao';
 import { Avaliacao } from 'src/app/models/avaliacao';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlNode } from 'src/app/models/url-node';
 import { Prova } from 'src/app/models/prova';
+import { CredencialService } from 'src/app/services/credencial.service';
+import { Grupo } from 'src/app/models/grupo';
+import { Usuario } from 'src/app/models/usuario';
+import { Correcao } from 'src/app/models/correcao';
 
 @Component({
   selector: 'app-avaliacao-correcao',
@@ -22,12 +26,13 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
     public router: Router,
     private snack: MatSnackBar,
     public comumService: ComumService,
+    public credencialService: CredencialService,
     public provaService: ProvaService,
     private avaliacaoService: AvaliacaoService
   ) { }
 
-  public visaoTipo = "correcao";
-  public userTipo = "aluno"
+  public visaoTipo: string = "correcao";
+  public userTipo: string = "aluno";
   public caminho: Array<UrlNode>;
 
   public avaliacao: Avaliacao = {
@@ -119,13 +124,52 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
 
             this.avaliacao = avaliacao;
 
-            this.inserirNotasPadrao();
-            this.definirCaminho();
+            // Verifica se sou um aluno se passando por professor
+            if (this.avaliacao.professorId != this.credencialService.getLoggedUserIdFromCookie() && this.userTipo == 'professor') {
+              this.snack.open("Você não é o professor desta avaliação", null, { duration: 5500 });
+              this.router.navigate(['']);
+              return;
+            }
+            else if (this.avaliacao.professorId == this.credencialService.getLoggedUserIdFromCookie() && this.userTipo != 'professor') {
+              this.snack.open("Você não é aluno desta avaliação", null, { duration: 5500 });
+              this.router.navigate(['']);
+              return;
+            }
+            // Verifica se sou um aluno que não foi designado para corrigir esta prova
+            this.fuiDesignadoParaEssaProva().catch(() => {
+
+              if ((this.visaoTipo == "correcao" && this.userTipo == "aluno" && this.avaliacao.tipoCorrecao != 3) ||
+                (this.visaoTipo == "correcao" && this.userTipo == "aluno" && this.avaliacao.tipoCorrecao == 3 && !this.respondiEssaProva()) ||
+                (this.visaoTipo == 'consulta' && this.userTipo == "aluno" && !this.respondiEssaProva())) {
+
+                this.snack.open("Você não foi designado para essa prova", null, { duration: 5500 });
+                this.router.navigate(['']);
+                return;
+
+              }
+
+            });
+            // Verifica se sou aluno tentando corrigir a prova que já foi encerrada
+            if (this.userTipo == 'aluno' && this.visaoTipo == 'correcao' && this.avaliacao.status > 2) {
+              this.snack.open("Avaliaçao encerrada", null, { duration: 5500 });
+              this.router.navigate(['']);
+              return;
+            }
+            else if (this.visaoTipo == 'consulta' && !this.respondiEssaProva()) {
+              this.snack.open("Você não pode consultar a prova de  outro aluno", null, { duration: 5500 });
+              this.router.navigate(['']);
+              return;
+            }
 
             // Recebe o gabarito
             this.provaService.getProvaFromId(this.avaliacao.provaGabarito).then(gabarito => {
               this.gabarito = gabarito;
+
+              this.inserirNotasPadrao();
+
             });
+
+            this.definirCaminho();
 
 
           });
@@ -145,26 +189,195 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
       this.provaSubscription.unsubscribe();
   }
 
+  @HostListener('window:beforeunload')
+  beforeUnload() {
+    if (this.prova != null) {
+      this.meRemoverDasQuestoes();
+    }
+  }
+  meRemoverDasQuestoes() {
+    var estavaEmQuestao = false;
+    for (let q of this.prova.questoes) {
+      if (q.usuarioUltimaModificacao == null)
+        continue;
+      else if (q.usuarioUltimaModificacao.id == this.credencialService.getLoggedUserIdFromCookie()) {
+        q.usuarioUltimaModificacao = null;
+        estavaEmQuestao = true;
+      }
+    }
+    if (estavaEmQuestao) {
+      this.provaService.updateProva(this.prova);
+    }
+  }
+
+  respondiEssaProva() {
+    return this.prova.alunos.filter(a => a.id == this.credencialService.getLoggedUserIdFromCookie()).length > 0;
+  }
+  fuiDesignadoParaEssaProva() {
+    return new Promise((resolve, reject) => {
+      var MINHA_PROVA_ID = null;
+
+      if (this.avaliacao.tipoDisposicao != 0)
+        MINHA_PROVA_ID = this.getMeuGrupoNaAvaliacao().provaId;
+      else
+        MINHA_PROVA_ID = this.getEuNaAvaliacao().provaId;
+
+      this.provaService.getProvaFromId(MINHA_PROVA_ID).then(minhaProva => {
+
+        for (let provaCorrigir of minhaProva.provasParaCorrigir) {
+          if (provaCorrigir.id == this.prova.id) {
+            resolve();
+          }
+        }
+
+        reject();
+
+      }).catch(reason => {
+        reject();
+      });
+    });
+
+  }
+
   correcaoAlterada() {
-    console.log('FIREBASE UPDATE: atualizei prova');
-    this.provaService.updateProva(this.prova);
+    this.validarNotas().then(() => {
+      console.log('FIREBASE UPDATE: atualizei prova');
+      this.provaService.updateProva(this.prova);
+    }).catch(reason => {
+      console.log('FIREBASE UPDATE: atualizei prova');
+      this.provaService.updateProva(this.prova);
+    });
+
   }
 
   finalizarCorrecao() {
-    if (this.avaliacao.tipoDisposicao != 0) {
-      this.getGrupoNaAvaliacao().provaCorrigida = true;
-      this.getGrupoNaAvaliacao().notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
-      this.getGrupoNaAvaliacao().valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
-    }
-    else {
-      this.getAlunoNaAvaliacao().provaCorrigida = true;
-      this.getAlunoNaAvaliacao().notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
-      this.getAlunoNaAvaliacao().valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
+
+    this.validarNotas().then(() => {
+      if (this.avaliacao.tipoDisposicao != 0) {
+        this.getGrupoNaAvaliacao().provaCorrigida = true;
+        this.getGrupoNaAvaliacao().notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
+        this.getGrupoNaAvaliacao().valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
+
+      }
+      else {
+        this.getAlunoNaAvaliacao().provaCorrigida = true;
+        this.getAlunoNaAvaliacao().notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
+        this.getAlunoNaAvaliacao().valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
+      }
+
+      if (this.userTipo == 'aluno') {
+        var MINHA_PROVA_ID = null;
+
+        if (this.avaliacao.tipoDisposicao != 0)
+          MINHA_PROVA_ID = this.getMeuGrupoNaAvaliacao().provaId;
+        else
+          MINHA_PROVA_ID = this.getEuNaAvaliacao().provaId;
+
+        this.provaService.getProvaFromId(MINHA_PROVA_ID).then(minhaProva => {
+          var acheiProva = false;
+          for (let provaParaCorrigir of minhaProva.provasParaCorrigir) {
+            if (provaParaCorrigir.id == this.prova.id) {
+              provaParaCorrigir.corrigida = true;
+              provaParaCorrigir.notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
+              provaParaCorrigir.valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
+              acheiProva = true;
+              break;
+            }
+          }
+          if (acheiProva) {
+            console.log("FIREBASE UPDATE: Atualizei a minha prova com a correção feita");
+            this.provaService.updateProva(minhaProva);
+          }
+        });
+      }
+
+      console.log('FIREBASE UPDATE: atualizei avaliação com a prova corrigida');
+      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+      this.router.navigate([`professor/avaliacao/${this.avaliacao.id}`]);
+    }).catch(reason => {
+      this.snack.open(reason, null, { duration: 5500 });
+    });
+
+
+
+
+  }
+
+  validarNotas(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      var count = 0;
+      var notaMaiorQueValor = null;
+      var notaMenorQueZero = null;
+      for (let questao of this.prova.questoes) {
+
+        if (this.userTipo == "aluno") {
+          const MINHA_CORRECAO = this.getMinhaCorrecao(questao, count);
+          if (MINHA_CORRECAO.nota > questao.valor) {
+            MINHA_CORRECAO.nota = questao.valor;
+            notaMaiorQueValor = count + 1;
+            break;
+          }
+          else if (MINHA_CORRECAO.nota < 0) {
+            MINHA_CORRECAO.nota = 0;
+            notaMenorQueZero = count + 1;
+            break;
+          }
+        }
+        else {
+          if (questao.correcaoProfessor.nota > questao.valor) {
+            questao.correcaoProfessor.nota = questao.valor;
+            notaMaiorQueValor = count + 1;
+            break;
+          }
+          else if (questao.correcaoProfessor.nota < 0) {
+            questao.correcaoProfessor.nota = 0;
+            notaMenorQueZero = count + 1;
+            break;
+          }
+        }
+        count++;
+      }
+
+      if (notaMaiorQueValor) {
+        reject(`Nota maior que o valor na questão ${notaMaiorQueValor}`);
+      }
+      else if (notaMenorQueZero) {
+        reject(`Nota menor que zero na questão ${notaMenorQueZero}`);
+      }
+
+      resolve();
+
+    })
+  }
+
+  getMinhaCorrecao(questao: Questao, questaoIndex: number): Correcao {
+
+    var MINHA_PROVA_ID = null;
+
+    if (this.avaliacao.tipoDisposicao != 0)
+      MINHA_PROVA_ID = this.getMeuGrupoNaAvaliacao().provaId;
+    else
+      MINHA_PROVA_ID = this.getEuNaAvaliacao().provaId;
+
+    // Busco minha correcao, e retorno-a
+    for (var i = 0; i < questao.correcoes.length; i++) {
+      if (questao.correcoes[i].avaliadorProvaId == MINHA_PROVA_ID)
+        return questao.correcoes[i];
     }
 
-    console.log('FIREBASE UPDATE: atualizei avaliação com a prova corrigida');
-    this.avaliacaoService.updateAvaliacao(this.avaliacao);
-    this.router.navigate([`professor/avaliacao/${this.avaliacao.id}`]);
+    // Se não encontrei a minha correção mas tenho uma instância, insiro-me
+    if (MINHA_PROVA_ID != null) {
+      var questaoGabarito = this.gabarito.questoes[questaoIndex];
+      questao.correcoes.push({
+        avaliadorProvaId: MINHA_PROVA_ID,
+        nota: this.comumService.questaoTipos[questao.tipo].getNota(questao, questaoGabarito),
+        observacao: ""
+      });
+      return questao.correcoes[questao.correcoes.length - 1];
+    }
+
+    return null;
+
   }
 
   definirCaminho() {
@@ -187,7 +400,8 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
   }
 
   inserirNotasPadrao() {
-    if (this.avaliacao.tipoCorrecao != 2)
+
+    if (this.userTipo != 'professor' && this.visaoTipo == 'correcao')
       return;
 
     for (var questao of this.prova.questoes) {
@@ -209,6 +423,10 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
       else if (soma <= 0 && questaoTipo.temCorrecaoAutomatica) {
         soma = questaoTipo.getNota(questao, this.gabarito.questoes[this.prova.questoes.indexOf(questao)]);
         questao.correcaoProfessor.nota = Math.round(soma);
+      }
+
+      else if (soma <= 0 && !questaoTipo.temCorrecaoAutomatica) {
+        questao.correcaoProfessor.nota = 0;
       }
 
 
@@ -233,6 +451,30 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
         return this.avaliacao.grupos[0].alunos[count];
       }
       count++;
+    }
+    return null;
+  }
+
+  getMeuGrupoNaAvaliacao(): Grupo {
+    for (let grupo of this.avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
+          return this.avaliacao.grupos[this.avaliacao.grupos.indexOf(grupo)];
+      }
+    }
+    return {
+      alunos: []
+    }
+  }
+
+  getEuNaAvaliacao(): Usuario {
+    for (let grupo of this.avaliacao.grupos) {
+      var count = 0;
+      for (let aluno of grupo.alunos) {
+        if (aluno.id == this.credencialService.getLoggedUserIdFromCookie())
+          return this.avaliacao.grupos[this.avaliacao.grupos.indexOf(grupo)].alunos[count];
+        count++;
+      }
     }
     return null;
   }

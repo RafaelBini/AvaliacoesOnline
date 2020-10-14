@@ -15,4 +15,6 @@ export interface Prova {
     provasParaCorrigir?: Array<Prova>;
     isGabarito?: boolean;
     corrigida?: boolean;
+    notaTotal?: number,
+    valorTotal?: number,
 }

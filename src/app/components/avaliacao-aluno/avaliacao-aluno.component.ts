@@ -28,11 +28,12 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     public credencialService: CredencialService,
     public comumService: ComumService,
     private avaliacaoService: AvaliacaoService,
-    private provaService: ProvaService,
+    public provaService: ProvaService,
     private snack: MatSnackBar) { }
 
 
   public avaliacao: Avaliacao = {
+    id: "1",
     titulo: "",
     descricao: "",
     status: 0,
@@ -157,6 +158,10 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
                 }
                 else if (this.avaliacao.tipoCorrecao == 2 && this.avaliacao.tipoDisposicao == 0) {
                   this.receberProvasCorrigirIndividual();
+                }
+                else if (this.avaliacao.tipoPontuacao == 3) {
+                  this.avaliacao.status = 3;
+                  this.updateAvaliacao("Passei direto para próxima por não precisar de correção");
                 }
 
               }

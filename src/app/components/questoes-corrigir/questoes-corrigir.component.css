@@ -28,6 +28,25 @@
   margin-bottom: 7px;
 }
 
+.lista-alunos-container{  
+  border-radius: 5px;  
+  padding: 5px;  
+  background-color: var(--cor-primaria);
+}
+
+.titulo-lista-alunos{
+  text-decoration: underline solid white;
+  text-align: center;
+  margin: auto; display: block;
+  padding-bottom: 8px;
+}
+
+.aluno-listado{  
+  color: white;
+  padding: 6px;
+  text-align: left;    
+}
+
 .input-basico{
   border: 1px dotted rgba(0, 0, 0, 0.20);
   border-radius: 7px;
