@@ -1,12 +1,16 @@
 
-- Corrigir bug onde todos os alunos já iniciam no status 2
-- Tratar quando avaliação aluno não existe!
-- Tratar quando avaliação professor não existe!
-
+- Corrigir bug data_inicio sem dt_correcao e s/ dt_termino que vai direto pra encerrado
+- Corrigir bug: Gabarito preenchimento não aparece
+- Colocar listener na tela do professor e aluno
+- Atualizar avaliações conforme tempo (tela professor e aluno)
+- Arrumar correção de preenchimento
 
 -------------------
 
-- Colocar listener na tela do professor e aluno
+
+
+
+- Impedir que a avaliação seja criada sem nenhuma resposta certa
 
 - Anexo de imagens / arquivos nas questões (1 ou mais)
 	- Na pergunta

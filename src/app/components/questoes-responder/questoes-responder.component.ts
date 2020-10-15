@@ -115,10 +115,7 @@ export class QuestoesResponderComponent implements OnInit {
     else if (questao.tipo == 5) {
       for (let opcao of questao.opcoesParaPreencher) {
         if (opcao.opcaoSelecionada != opcao.texto && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
-
-          setTimeout(() => {
-            opcao.opcaoSelecionada = null;
-          }, 1200);
+          opcao.opcaoSelecionada = null;
           tudoCerto = false;
           break;
         }

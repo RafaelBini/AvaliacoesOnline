@@ -4,6 +4,7 @@ import { Associacao } from './associacao';
 import { Correcao } from './correcao';
 import { Usuario } from './usuario';
 
+
 export interface Questao {
     id?: string,
     pergunta?: string;
@@ -19,7 +20,7 @@ export interface Questao {
     arquivosEntregues?: Array<string>;
     textoParaPreencher?: string;
     opcoesParaPreencher?: Array<OpcaoPreencher>;
-    partesPreencher?: Array<any>;
+    partesPreencher?: Array<{ tipo: 'texto' | 'select', conteudo: any }>;
     correcoes?: Array<Correcao>;
     correcaoProfessor?: Correcao;
     tentativas?: number;

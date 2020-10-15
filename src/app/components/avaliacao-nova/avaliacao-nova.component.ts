@@ -116,6 +116,7 @@ export class AvaliacaoNovaComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
 
   ngOnInit(): void {
+
     if (!this.credencialService.estouLogado()) {
       this.router.navigate(['']);
       return;
@@ -136,7 +137,13 @@ export class AvaliacaoNovaComponent implements OnInit {
           this.receberTodasAvaliacoes().then(() => {
             this.setIdDuplicado(params.id);
             this.avaliacao.status = 0;
-            this.avaliacao.grupos = [];
+            this.avaliacao.grupos = [
+              {
+                numero: 1,
+                alunos: [],
+                provaId: null,
+              }
+            ];
           });
         });
         this.isEditando = false;

@@ -58,13 +58,13 @@ export class CountdownComponent implements OnInit {
       return `${horaFloor} h ${minutos} min`;
     }
     else if (TEMPO_RESTANTE <= 604800000) {
-      return `${Math.round(TEMPO_RESTANTE / 86400000)} dias`;
+      return `${Math.round(TEMPO_RESTANTE / 86400000)} dia(s)`;
     }
     else if (TEMPO_RESTANTE <= 2592000000) {
-      return `${Math.round(TEMPO_RESTANTE / 604800000)} semanas`;
+      return `${Math.round(TEMPO_RESTANTE / 604800000)} semana(s)`;
     }
     else {
-      return `${Math.round(TEMPO_RESTANTE / 2592000000)} meses`;
+      return `${Math.round(TEMPO_RESTANTE / 2592000000)} mese(s)`;
     }
   }
 

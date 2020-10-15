@@ -171,23 +171,10 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   }
   atualizarStatusConformeTempo() {
     setTimeout(() => {
-      var agora = new Date();
 
       var statusAntes = this.avaliacao.status;
 
-      if (agora < new Date(this.avaliacao.dtInicio) || (this.avaliacao.status == 0 && this.avaliacao.isInicioIndeterminado)) {
-        this.avaliacao.status = 0;
-      }
-      else if (agora < new Date(this.avaliacao.dtInicioCorrecao) || (this.avaliacao.status == 1 && this.avaliacao.isInicioCorrecaoIndeterminado)) {
-        this.avaliacao.status = 1;
-      }
-      else if (agora < new Date(this.avaliacao.dtTermino) || (this.avaliacao.status == 2 && this.avaliacao.isTerminoIndeterminado)) {
-        this.avaliacao.status = 2;
-      }
-      else {
-        this.avaliacao.status = 3;
-      }
-
+      this.avaliacao.status = this.avaliacaoService.getStatusConformeTempo(this.avaliacao);
 
       this.countDown.iniciarTimer();
 
@@ -396,15 +383,18 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   }
   iniciarAvaliacao() {
     this.avaliacao.status = 1;
+    this.avaliacao.dtInicio = new Date().toISOString();
     this.updateAvaliacao("Alterei o status da avaliacao para DURANTE AVALIACAO")
   }
   inicarCorrecoes() {
     this.avaliacao.status = 2;
+    this.avaliacao.dtInicioCorrecao = new Date().toISOString();
     this.updateAvaliacao("Alterei o status da avaliação para EM CORRECAO");
   }
   encerrarCorrecoes() {
     this.avaliacao.status = 3;
-    this.updateAvaliacao("Alterei o status da avaliação para ENCERRADA")
+    this.avaliacao.dtTermino = new Date().toISOString();
+    this.updateAvaliacao("Alterei o status da avaliação para ENCERRADA");
   }
   updateAvaliacao(motivo: string) {
     console.log(`FIREBASE UPDATE: ${motivo}`);

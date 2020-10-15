@@ -1,6 +1,7 @@
+import { Subscription } from 'rxjs/internal/Subscription';
 import { CredencialService } from './../../services/credencial.service';
 import { ComumService } from './../../services/comum.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlNode } from 'src/app/models/url-node';
 import { Avaliacao } from 'src/app/models/avaliacao';
@@ -12,7 +13,7 @@ import { AvaliacaoListaComponent } from '../avaliacao-lista/avaliacao-lista.comp
   templateUrl: './aluno.component.html',
   styleUrls: ['./aluno.component.css']
 })
-export class AlunoComponent implements OnInit {
+export class AlunoComponent implements OnInit, OnDestroy {
   public alterar = false;
   public mostrarArquivadas = false;
   public selectedTab = 0;
@@ -27,6 +28,9 @@ export class AlunoComponent implements OnInit {
     { nome: `Aluno`, url: `/aluno` },
     { nome: this.tabs[0].nome, url: "#" }
   ];
+
+  private avaliacoesSubscription: Subscription;
+  private verificacaoStatusInterval;
 
   @ViewChild(AvaliacaoListaComponent) avaliacaoLista: AvaliacaoListaComponent;
 
@@ -51,15 +55,45 @@ export class AlunoComponent implements OnInit {
       }
     });
 
-    this.avaliacaoService.getAvaliacoesFromAluno(this.credencialService.getLoggedUserIdFromCookie()).then(avaliacoes => {
+    // Começa a ouvir TODAS AVALIAÇÕES
+    if (this.avaliacoesSubscription == null) {
+      this.avaliacoesSubscription = this.avaliacaoService.onAllAvaliacoesChange().subscribe(avaliacoes => {
 
-      this.avaliacaoLista.avaliacoes = avaliacoes;
-      this.avaliacaoLista.atualizarAvaliacoesFiltradas();
-    })
-      .catch(reason => {
-        this.comumService.notificarErro("Falha ao buscar avaliações", reason);
+        const MEU_ID = this.credencialService.getLoggedUserIdFromCookie();
+
+        var minhasAvaliacoes: Array<Avaliacao> = [];
+        for (let avaliacao of avaliacoes as Avaliacao[]) {
+          if (avaliacao.grupos.filter(grupo => grupo.alunos.filter(a => a.id == MEU_ID).length > 0).length > 0)
+            minhasAvaliacoes.push(avaliacao);
+        }
+
+        this.avaliacaoLista.avaliacoes = minhasAvaliacoes;
+        this.avaliacaoLista.atualizarAvaliacoesFiltradas();
       });
+    }
 
+    // Começa a verificar status
+    if (this.verificacaoStatusInterval == null) {
+      this.verificacaoStatusInterval = setInterval(() => {
+        for (let avaliacao of this.avaliacaoLista.avaliacoes) {
+
+          var statusAnterior = avaliacao.status;
+          avaliacao.status = this.avaliacaoService.getStatusConformeTempo(avaliacao);
+
+          if (statusAnterior != avaliacao.status) {
+            this.avaliacaoService.updateAvaliacao(avaliacao);
+            return;
+          }
+
+        }
+      }, 5500);
+    }
+
+  }
+
+  ngOnDestroy() {
+    this.avaliacoesSubscription.unsubscribe();
+    clearInterval(this.verificacaoStatusInterval);
   }
 
   tabAlterada(index) {

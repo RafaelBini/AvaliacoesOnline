@@ -89,7 +89,7 @@
                     <span style="white-space: pre-line;" *ngFor="let parte of questao.partesPreencher">
                         <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
                         <select disabled="true" *ngIf="parte.tipo == 'select'" class="select-basico"
-                            [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada">
+                            [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].texto">
                             <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao)"
                                 [value]="opcaoPreencher.texto">
                                 {{opcaoPreencher.texto}}

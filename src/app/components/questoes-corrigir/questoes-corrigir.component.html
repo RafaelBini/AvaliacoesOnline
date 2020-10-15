@@ -250,8 +250,8 @@
                             </tr>
                         </table>
 
-                        <button mat-button *ngIf="userTipo == 'professor'" (click)="abrirGabarito(qi)"
-                            style="position: absolute; top: 8px; right: 8px;">
+                        <button mat-button *ngIf="visaoTipo == 'consulta' || userTipo == 'professor'"
+                            (click)="abrirGabarito(qi)" style="position: absolute; top: 8px; right: 8px;">
                             Ver Gabarito
                         </button>
 

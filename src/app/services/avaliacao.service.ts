@@ -4,6 +4,7 @@ import { Prova } from './../models/prova';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Avaliacao } from '../models/avaliacao';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
   providedIn: 'root'
@@ -76,7 +77,24 @@ export class AvaliacaoService {
     });
   }
 
+  getStatusConformeTempo(avaliacao: Avaliacao) {
 
+    var agora = new Date();
+
+
+    if (agora > new Date(avaliacao.dtTermino) && !avaliacao.isTerminoIndeterminado && avaliacao.status < 3) {
+      avaliacao.status = 3;
+    }
+    else if (agora > new Date(avaliacao.dtInicioCorrecao) && !avaliacao.isInicioCorrecaoIndeterminado && avaliacao.status < 2) {
+      avaliacao.status = 2;
+    }
+    else if (agora > new Date(avaliacao.dtInicio) && !avaliacao.isInicioIndeterminado && avaliacao.status < 1) {
+      avaliacao.status = 1;
+    }
+
+    return avaliacao.status;
+
+  }
 
   insertNovaAvaliacao(avaliacao: Avaliacao) {
     return this.db.collection('avaliacoes').doc(avaliacao.id).set(avaliacao);
@@ -102,6 +120,13 @@ export class AvaliacaoService {
     return this.db.collection('avaliacoes').doc(avaliacaoId).delete();
   }
 
+  onAvaliacoesFromProfessorChange(professorId: string) {
+    return this.db.collection('avaliacoes', ref => ref.where('professorId', '==', professorId)).valueChanges();
+  }
+
+  onAllAvaliacoesChange() {
+    return this.db.collection('avaliacoes').valueChanges();
+  }
 
 
 }

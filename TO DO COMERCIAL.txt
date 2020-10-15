@@ -1,2 +1,8 @@
 
+- Colocar horario do servidor nas etapas avaliação.
+- Dar um jeito de conseguir pegar a data atual do servidor para comparar
+
 - Colocar explicação sobre o bloqueio de alunos atrasados na criação da avaliação
+
+- Salvar o nome das pessoas em com a Primeira Letra Maiúscula ao cadastrar novo usuario
+

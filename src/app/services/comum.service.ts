@@ -65,25 +65,25 @@ export class ComumService {
     {
       codigo: 0,
       nome: "Individual",
-      descricao: "Neste modo cada Aluno faz a avaliação de forma individual.",
+      descricao: "O aluno faz a avaliação de forma individual.",
       icone: "person"
     },
     {
       codigo: 1,
       nome: "Grupo (Professor Define)",
-      descricao: "Neste modo a avaliação é feita em grupos definidos pelo Professor.",
+      descricao: "A avaliação é feita em grupos definidos pelo Professor.",
       icone: "supervisor_account"
     },
     {
       codigo: 2,
       nome: "Grupo (Alunos Definem)",
-      descricao: "Neste modo a avaliação é feita em grupos definidos pelos próprios alunos.",
+      descricao: "A avaliação é feita em grupos definidos pelos próprios alunos e pelo professor.",
       icone: "group"
     },
     {
       codigo: 3,
-      nome: "Grupo (Aleatóriamente)",
-      descricao: "Neste modo a avaliação é feita em grupos definidos de forma aleatória pelo sistema.",
+      nome: "Grupo (Aleatoriamente)",
+      descricao: "A avaliação é feita em grupos definidos de forma aleatória pelo sistema e pelo professor.",
       icone: "people_outline"
     }
   ];
@@ -92,28 +92,28 @@ export class ComumService {
     {
       codigo: 0,
       nome: "Professor Corrige",
-      descricao: "Este é o método de correção tradicional. O Professor corrige todas as Avaliações dos Alunos.",
+      descricao: "O professor corrige todas as avaliações dos alunos.",
       icone: "grading",
       correcaoAutomatica: false,
     },
     {
       codigo: 1,
       nome: "Correção Automática",
-      descricao: "Neste método de correção o sistema corrige as Avaliações de forma automática, permitindo que o Professor revise posteriormente.",
+      descricao: "O sistema corrige as avaliações automaticamente, permitindo que o professor revise posteriormente.",
       icone: "rule",
       correcaoAutomatica: true,
     },
     {
       codigo: 2,
       nome: "Alunos Corrigem",
-      descricao: "Neste método de correção os próprios alunos corrigem as avaliações uns dos outros.",
+      descricao: "Os alunos corrigem as avaliações uns dos outros.",
       icone: "sync_alt",
       correcaoAutomatica: false,
     },
     {
       codigo: 3,
       nome: "Autoavaliação",
-      descricao: "Neste método de correção o Aluno recebe a resposta correta logo depois de finalizar a Avaliação.",
+      descricao: "O aluno corrige a sua própria avaliação consultando o gabarito.",
       icone: "sync",
       correcaoAutomatica: false,
     }
@@ -123,28 +123,28 @@ export class ComumService {
     {
       codigo: 0,
       nome: "Fixa Por Questão",
-      descricao: "Neste modo o Professor determina um valor fixo para cada questão. A nota máxima é a somatória dos valores de todas as questões.",
+      descricao: "O professor determina um valor fixo para cada questão.",
       icone: "exposure_plus_1",
       correcaoAutomatica: false,
     },
     {
       codigo: 1,
       nome: "Comparativa",
-      descricao: "Neste modo o Professor determina um valor fixo para cada questão. A nota máxima é a maior nota dentre todos os alunos. Portanto, a nota de cada Aluno é definida pelo percentual da maior nota.",
+      descricao: "A nota de cada Aluno é definida pelo percentual da maior nota dentre todos os alunos.",
       icone: "insert_chart_outlined",
       correcaoAutomatica: false,
     },
     {
       codigo: 2,
       nome: "Por Tentativa",
-      descricao: "Neste modo o Professor determina um valor fixo para cada questão. O Aluno pode tentar acertar a questão três vezes. A cada tentativa incorreta o Aluno perde 1/3 do valor total da questão. ",
+      descricao: "O aluno pode validar suas respostas três vezes. A cada tentativa incorreta o Aluno perde 1/3 do valor total da questão. ",
       icone: "filter_3",
       correcaoAutomatica: true,
     },
     {
       codigo: 3,
       nome: "Por Participação",
-      descricao: "Neste modo o Professor não determina um valor para cada questão. Se o Aluno participar respondendo a questão já recebe a nota máxima.",
+      descricao: "O aluno recebe a nota máxima ao participar da avaliação.",
       icone: "star_rate",
       correcaoAutomatica: false,
     }
@@ -215,11 +215,17 @@ export class ComumService {
       codigo: 5,
       nome: "Preenchimento",
       temCorrecaoAutomatica: true,
-      getNota(questao, questaoGabarito): number {
+      getNota(questao: Questao, questaoGabarito): number {
         var nota = questao.valor;
+        // for (let parte of questao.partesPreencher) {
+        //   if (parte.tipo == 'select') {
+        //     if (questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada != questao.opcoesParaPreencher[parte.conteudo].texto)
+
+        //   }
+        // }
         for (let opcao of questao.opcoesParaPreencher) {
-          if (opcao.texto != opcao.opcaoSelecionada) {
-            nota -= (questao.valor / questao.opcoesParaPreencher.length);
+          if (opcao.opcaoSelecionada != opcao.texto && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
+            nota -= (questao.valor / questao.partesPreencher.filter(p => p.tipo == 'select').length);
           }
         }
         return nota - ComumService.getDescontoTentativas(questao);

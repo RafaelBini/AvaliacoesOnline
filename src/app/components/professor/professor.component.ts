@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmarComponent } from './../../dialogs/confirmar/confirmar.component';
 import { UsuarioService } from './../../services/usuario.service';
 import { AvaliacaoListaComponent } from './../avaliacao-lista/avaliacao-lista.component';
@@ -7,7 +8,7 @@ import { ComumService } from './../../services/comum.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlunoNovoComponent } from './../aluno-novo/aluno-novo.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
 import { CredencialService } from 'src/app/services/credencial.service';
 import { Usuario } from 'src/app/models/usuario';
@@ -19,7 +20,7 @@ import { EditarAlunoComponent } from 'src/app/dialogs/editar-aluno/editar-aluno.
   templateUrl: './professor.component.html',
   styleUrls: ['./professor.component.css']
 })
-export class ProfessorComponent implements OnInit {
+export class ProfessorComponent implements OnInit, OnDestroy {
 
   public selectedTab = 0;
 
@@ -41,6 +42,9 @@ export class ProfessorComponent implements OnInit {
     { nome: `Professor`, url: `/professor` },
     { nome: this.tabs[0].nome, url: `#` },
   ];
+
+  private verificacaoStatusInterval;
+  private avaliacoesSubscription: Subscription;
 
   @ViewChild(AvaliacaoListaComponent) avaliacaoLista: AvaliacaoListaComponent;
 
@@ -81,17 +85,37 @@ export class ProfessorComponent implements OnInit {
     });
 
     // AVALIAÇÕES
-    this.avaliacaoService.getAvaliacoesFromProfessor(this.credencialService.getLoggedUserIdFromCookie()).then(avaliacoes => {
-      this.avaliacaoLista.avaliacoes = avaliacoes;
-      this.avaliacaoLista.atualizarAvaliacoesFiltradas();
-    })
-      .catch(reason => {
-        this.comumService.notificarErro("Falha ao buscar avaliações", reason);
+    if (this.avaliacoesSubscription == null) {
+      this.avaliacoesSubscription = this.avaliacaoService.onAvaliacoesFromProfessorChange(this.credencialService.getLoggedUserIdFromCookie()).subscribe(avaliacoes => {
+
+        this.avaliacaoLista.avaliacoes = avaliacoes;
+        this.avaliacaoLista.atualizarAvaliacoesFiltradas();
       });
+    }
+
+    // Atualiza o status das avaliações conforme o tempo
+    if (this.verificacaoStatusInterval == null) {
+      this.verificacaoStatusInterval = setInterval(() => {
+        for (let avaliacao of this.avaliacaoLista.avaliacoes) {
+
+          var statusAnterior = avaliacao.status;
+          avaliacao.status = this.avaliacaoService.getStatusConformeTempo(avaliacao);
+
+          if (statusAnterior != avaliacao.status) {
+            this.avaliacaoService.updateAvaliacao(avaliacao);
+            return;
+          }
+
+        }
+      }, 5500);
+    }
 
 
+  }
 
-
+  ngOnDestroy() {
+    this.avaliacoesSubscription.unsubscribe();
+    clearInterval(this.verificacaoStatusInterval);
   }
 
   // Geral

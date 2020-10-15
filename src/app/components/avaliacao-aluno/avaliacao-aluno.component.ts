@@ -322,22 +322,10 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
   }
   atualizarStatusConformeTempo() {
     setTimeout(() => {
-      var agora = new Date();
 
       var statusAntes = this.avaliacao.status;
 
-      if (agora < new Date(this.avaliacao.dtInicio) || (this.avaliacao.status == 0 && this.avaliacao.isInicioIndeterminado)) {
-        this.avaliacao.status = 0;
-      }
-      else if (agora < new Date(this.avaliacao.dtInicioCorrecao) || (this.avaliacao.status == 1 && this.avaliacao.isInicioCorrecaoIndeterminado)) {
-        this.avaliacao.status = 1;
-      }
-      else if (agora < new Date(this.avaliacao.dtTermino) || (this.avaliacao.status == 2 && this.avaliacao.isTerminoIndeterminado)) {
-        this.avaliacao.status = 2;
-      }
-      else {
-        this.avaliacao.status = 3;
-      }
+      this.avaliacao.status = this.avaliacaoService.getStatusConformeTempo(this.avaliacao);
 
       this.countDown.iniciarTimer();
 
