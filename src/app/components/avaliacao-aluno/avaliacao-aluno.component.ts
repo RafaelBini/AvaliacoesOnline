@@ -91,6 +91,13 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
         // Começa a ouvir mudanças na avaliação
         this.avaliacaoSubscription = this.avaliacaoService.onAvaliacaoChange(AVALIACAO_ID).subscribe(avaliacao => {
 
+          if (avaliacao == undefined) {
+            this.snack.open('Essa avaliação não existe', null, { duration: 4500 });
+            this.router.navigate(['']);
+            this.avaliacaoSubscription.unsubscribe();
+            return;
+          }
+
           console.log("Houveram mudanças na avaliação, atualizando...");
 
           var avaliacaoAnterior = { ...this.avaliacao };
@@ -343,7 +350,11 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
   // EM PREPARAÇÃO
   addGrupo() {
-    const novoLength = this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, provaId: null, alunos: [] });
+    const novoLength = this.avaliacao.grupos.push({
+      numero: this.avaliacao.grupos.length + 1,
+      provaId: null,
+      alunos: []
+    });
     this.entrarNoGrupo(this.avaliacao.grupos[novoLength - 1]);
     setTimeout(() => {
       window.scroll({

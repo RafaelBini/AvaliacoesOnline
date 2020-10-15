@@ -84,6 +84,7 @@ export class SelecionarAlunosComponent implements OnInit {
     var alunosSemDuplicados: Array<Usuario> = [];
     var alunosEmGrupos = this.getAlunosFromTodosGrupos();
     this.alunos = this.credencialService.loggedUser.alunos;
+
     for (let aluno of this.alunos) {
       var estaEmGrupo = false;
       for (let alunoEmGrupo of alunosEmGrupos) {
@@ -100,6 +101,10 @@ export class SelecionarAlunosComponent implements OnInit {
   }
   addSelecionadosParaAvaliacao() {
     for (let alunoSelecionado of this.alunosSelecionados) {
+
+      // Seta status para 0
+      alunoSelecionado.statusId = 0;
+
       // Passa por cada grupo
       var foiAlocado = false;
       for (let grupo of this.avaliacao.grupos) {
@@ -108,11 +113,12 @@ export class SelecionarAlunosComponent implements OnInit {
           foiAlocado = true;
         }
       }
+
       // Se não consegui nenhum grupo,
       if (!foiAlocado) {
         // Cria um novo grupo
         this.addGrupo();
-        // Entra nele
+        // Entra nele        
         this.avaliacao.grupos[this.avaliacao.grupos.length - 1].alunos.push(alunoSelecionado);
       }
     }

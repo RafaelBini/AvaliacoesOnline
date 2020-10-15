@@ -25,13 +25,7 @@ export class ProfessorComponent implements OnInit {
 
   public alunosSelecionados = [];
   public alunosFiltrados = [];
-  public alunos: Array<Usuario> = [
-    { email: "godo@gmail.com", nome: "Godofredo", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "rub@gmail.com", nome: "Ruberlinda", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "cdnleon@outlook.com", nome: "Leon Martins", tags: ['Web II', 'Interação Humano Computador'] },
-    { email: "nil@gmail.com", nome: "Nilce Moretto", tags: ['Web II', 'Interação Humano Computador'] },
-
-  ];
+  public alunos: Array<Usuario> = [];
 
 
   public avaliacoes: Array<Avaliacao> = []

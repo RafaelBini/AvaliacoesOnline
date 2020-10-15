@@ -117,10 +117,10 @@
                         <span *ngIf="aluno.statusId > 2">
                             <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">check_circle</mat-icon>
                         </span>
-                        <div *ngIf="aluno.statusId <= 2">
+                        <div *ngIf="aluno.statusId == 2">
                             <mat-icon matTooltip="O aluno está relizando as questões">create</mat-icon>
                         </div>
-                        <div *ngIf="aluno.statusId == null">
+                        <div *ngIf="aluno.statusId == null || aluno.statusId < 2">
                             <mat-icon matTooltip="O aluno não iniciou a avaliação">not_interested</mat-icon>
                         </div>
                     </div>
@@ -144,10 +144,10 @@
                                 <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">check_circle
                                 </mat-icon>
                             </span>
-                            <div *ngIf="aluno.statusId <= 2">
+                            <div *ngIf="aluno.statusId == 2">
                                 <mat-icon matTooltip="O aluno está relizando as questões">create</mat-icon>
                             </div>
-                            <div *ngIf="aluno.statusId == null">
+                            <div *ngIf="aluno.statusId == null || aluno.statusId < 2">
                                 <mat-icon matTooltip="O aluno não iniciou a avaliação">not_interested</mat-icon>
                             </div>
                         </div>

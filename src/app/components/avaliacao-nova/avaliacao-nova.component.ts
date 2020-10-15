@@ -56,7 +56,14 @@ export class AvaliacaoNovaComponent implements OnInit {
     correcaoParesQtdNumero: 1,
     tipoPontuacao: 0,
     tags: [],
-    grupos: [],
+    grupos: [
+      {
+        numero: 1,
+        alunos: [],
+        provaId: null,
+
+      }
+    ],
     provas: [],
     provaGabarito: "",
 

@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProvaService } from 'src/app/services/prova.service';
 import { Grupo } from './../../models/grupo';
 import { UsuarioService } from './../../services/usuario.service';
@@ -63,6 +64,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     private usuarioService: UsuarioService,
     public router: Router,
     public route: ActivatedRoute,
+    private snack: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -78,6 +80,13 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
         // Começa a ouvir mudanças na avaliação
         this.avaliacaoSubscription = this.avaliacaoService.onAvaliacaoChange(AVALIACAO_ID).subscribe(avaliacao => {
+
+          if (avaliacao == undefined) {
+            this.snack.open('Essa avaliação não existe', null, { duration: 4500 });
+            this.router.navigate(['']);
+            this.avaliacaoSubscription.unsubscribe();
+            return;
+          }
 
           this.avaliacao = avaliacao;
 
@@ -294,6 +303,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
       }
       if (!tenhoAluno) {
         alunoOnline.online = false;
+        alunoOnline.statusId = 0;
         this.credencialService.loggedUser.alunos.push(alunoOnline);
         adicioneiAluno = true;
       }

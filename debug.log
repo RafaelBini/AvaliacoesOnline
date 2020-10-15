@@ -15,3 +15,8 @@
 [1014/153944.821:ERROR:crash_report_database_win.cc(498)] failed to stat report
 [1014/155444.932:ERROR:crash_report_database_win.cc(498)] failed to stat report
 [1014/160740.536:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1015/093018.567:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1015/103203.542:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1015/104203.635:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1015/104203.638:ERROR:filesystem_win.cc(116)] GetFileAttributes C:\Users\rfabini\AppData\Local\Temp\.profile\Crashpad\reports\797414f6-e7c1-4f45-9738-608c4fe634d6.dmp: O sistema não pode encontrar o arquivo especificado. (0x2)
+[1015/104203.641:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)

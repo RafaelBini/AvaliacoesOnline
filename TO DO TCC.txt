@@ -1,28 +1,18 @@
 
-
-- Esquema de correção de um grupo feito por outro grupo
-- Equema de correção de um individuo feito por outro individuo
-- Esquema de consulta de avaliação de um indiviuo à sua propria prova
-- Esquema de consulta de avaliação de um grupo à sua propria prova
-- Validar se tenho permissão para corrigir antes de sair liberando
-- Testar metodo de correção autoavaliação
-- Testar pontuação por participação
-- Testar pontuação comparativa
-
--------------------
-
-
 - Corrigir bug onde todos os alunos já iniciam no status 2
-
-- Colocar listener na tela do professor e aluno
-
 - Tratar quando avaliação aluno não existe!
 - Tratar quando avaliação professor não existe!
 
 
+-------------------
+
+- Colocar listener na tela do professor e aluno
+
 - Anexo de imagens / arquivos nas questões (1 ou mais)
 	- Na pergunta
 	- Nas respostas (dissertativas e envio de arquivo)
+
+- Colocar spinner de loading
 
 - Cadastrar alunos por CSV no bd
 
