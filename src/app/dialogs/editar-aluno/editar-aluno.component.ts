@@ -32,6 +32,9 @@ export class EditarAlunoComponent implements OnInit {
     const input = event.input;
     const value = event.value;
 
+    if (this.aluno.tags == undefined)
+      this.aluno.tags = [];
+
     if ((value || '').trim()) {
       this.aluno.tags.push(value);
     }

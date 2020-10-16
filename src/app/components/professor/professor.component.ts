@@ -206,6 +206,8 @@ export class ProfessorComponent implements OnInit, OnDestroy {
         const alunoTipado: Usuario = aluno;
         for (let aluno of this.credencialService.loggedUser.alunos) {
           if (this.alunosSelecionados.includes(aluno.email)) {
+            if (aluno.tags == undefined)
+              aluno.tags = [];
             for (let tag of alunoTipado.tags) {
               aluno.tags.push(tag);
             }
