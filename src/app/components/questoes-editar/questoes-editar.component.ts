@@ -1,9 +1,10 @@
+import { Alternativa } from './../../models/alternativa';
 import { Prova } from 'src/app/models/prova';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { InfoQuestaoComponent } from 'src/app/dialogs/info-questao/info-questao.component';
@@ -19,7 +20,9 @@ export class QuestoesEditarComponent implements OnInit {
   @Input() prova: Prova;
   @Input() avaliacao: Avaliacao;
 
-  constructor(public comumService: ComumService, private dialog: MatDialog, private elementRef: ElementRef) { }
+  constructor(public comumService: ComumService,
+    private dialog: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
   }
@@ -80,14 +83,14 @@ export class QuestoesEditarComponent implements OnInit {
   removerAlternativa(questao, alternativaIndesejadaIndex) {
     questao.alternativas.splice(alternativaIndesejadaIndex, 1);
   }
-  addAlternativa(questao, novaAlternativInput) {
-    questao.alternativas.push({ texto: novaAlternativInput.value, selecionada: false });
-    novaAlternativInput.value = "";
+  addAlternativa(questao: Questao, tabelaAlternativas: HTMLElement) {
+    questao.alternativas.push({ texto: '', selecionada: false });
+    this.changeDetectorRef.detectChanges();
+    (tabelaAlternativas.children[questao.alternativas.length - 1].children[0].children[0].children[0].children[1].children[1] as HTMLInputElement).focus();
   }
-  onNovaAlterKeyUp(event, questao, novaAlternativInput) {
-
+  onNovaAlterKeyUp(event, questao: Questao, tabelaAlternativas) {
     if (event.key == 'Enter' && event.ctrlKey) {
-      this.addAlternativa(questao, novaAlternativInput);
+      this.addAlternativa(questao, tabelaAlternativas);
     }
   }
   desmarcarTudoMenosUma(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
@@ -104,17 +107,18 @@ export class QuestoesEditarComponent implements OnInit {
   removerAssociacao(questao, associacaoIndesejadaIndex) {
     questao.associacoes.splice(associacaoIndesejadaIndex, 1);
   }
-  addAssociacao(questao, novaAssociacaoInput, novaAssociacaoOpcaoInput) {
+  addAssociacao(questao, tabelaAssociacoes) {
     questao.associacoes.push({
-      texto: novaAssociacaoInput.value,
-      opcaoSelecionada: novaAssociacaoOpcaoInput.value,
+      texto: '',
+      opcaoSelecionada: '',
     });
-    novaAssociacaoInput.value = "";
-    novaAssociacaoOpcaoInput.value = "";
+    this.changeDetectorRef.detectChanges();
+
+    (tabelaAssociacoes.children[questao.associacoes.length - 1].children[0].children[0].children[0] as HTMLInputElement).focus();
   }
-  onNovaAssocKeyUp(event, questao, novaAssociacaoInput, novaAssociacaoOpcaoInput) {
+  onNovaAssocKeyUp(event, questao, tabelaAssociacoes) {
     if (event.key == 'Enter' && event.ctrlKey) {
-      this.addAssociacao(questao, novaAssociacaoInput, novaAssociacaoOpcaoInput);
+      this.addAssociacao(questao, tabelaAssociacoes);
     }
   }
   getAssociacoesOrdenadas(questao: Questao) {
@@ -137,17 +141,20 @@ export class QuestoesEditarComponent implements OnInit {
   }
 
   // PREENCHIMENTO / COMPLETAR
-  inserirOpcaoPreeencherSelecionado(questao: Questao, novaOpcaoPreencherInput, editorElement) {
-    novaOpcaoPreencherInput.value = questao.textoParaPreencher.substring(editorElement.selectionStart, editorElement.selectionEnd);
-    this.addOpcaoPreencher(questao, novaOpcaoPreencherInput, editorElement);
-  }
-  removerOpcaoPreencher(questao: Questao, opcaoPreencherIndesejadaIndex) {
-    questao.opcoesParaPreencher[opcaoPreencherIndesejadaIndex].ativa = false;
-    questao.partesPreencher = this.getPreenchimentoPartes(questao);
-  }
-  addOpcaoPreencher(questao: Questao, novaOpcaoPreencherInput, editorElement) {
-    questao.opcoesParaPreencher.push({ texto: novaOpcaoPreencherInput.value, opcaoSelecionada: "", ativa: true });
-    novaOpcaoPreencherInput.value = "";
+  inserirOpcaoPreeencherSelecionado(questao: Questao, editorElement) {
+    const TRECHO_SELECIONADO = questao.textoParaPreencher.substring(editorElement.selectionStart, editorElement.selectionEnd);
+
+    if (questao.opcoesParaPreencher[questao.opcoesParaPreencher.length - 1].texto == '') {
+      questao.opcoesParaPreencher[questao.opcoesParaPreencher.length - 1].texto = TRECHO_SELECIONADO;
+    }
+    else {
+      questao.opcoesParaPreencher.push({
+        texto: TRECHO_SELECIONADO,
+        opcaoSelecionada: "",
+        ativa: true
+      });
+    }
+
     questao.textoParaPreencher =
       questao.textoParaPreencher.substring(0, editorElement.selectionStart)
       + `(${questao.opcoesParaPreencher.length})` +
@@ -155,9 +162,22 @@ export class QuestoesEditarComponent implements OnInit {
 
     questao.partesPreencher = this.getPreenchimentoPartes(questao);
   }
-  onNovaOpcaoPreencherKeyUp(event, questao, novaOpcaoPreencherInput, editorElement) {
+  removerOpcaoPreencher(questao: Questao, opcaoPreencherIndesejadaIndex) {
+    questao.opcoesParaPreencher[opcaoPreencherIndesejadaIndex].ativa = false;
+    questao.partesPreencher = this.getPreenchimentoPartes(questao);
+  }
+  addOpcaoPreencher(questao: Questao, tabelaOpcoesPreencher: HTMLElement) {
+    questao.opcoesParaPreencher.push({ texto: '', opcaoSelecionada: "", ativa: true });
+
+    questao.partesPreencher = this.getPreenchimentoPartes(questao);
+
+    this.changeDetectorRef.detectChanges();
+    (tabelaOpcoesPreencher.children[questao.opcoesParaPreencher.length - 1].children[1].children[0].children[0] as HTMLInputElement).focus()
+  }
+  onNovaOpcaoPreencherKeyUp(event, questao, tabelaOpcoesPreencher) {
+
     if (event.key == 'Enter' && event.ctrlKey) {
-      this.addOpcaoPreencher(questao, novaOpcaoPreencherInput, editorElement);
+      this.addOpcaoPreencher(questao, tabelaOpcoesPreencher);
     }
   }
   onEditorPreencherKeyUp(questao) {
@@ -198,5 +218,16 @@ export class QuestoesEditarComponent implements OnInit {
 
   }
 
+  // VERDADEIRO OU FALSO
+  addAlternativaVouF(questao: Questao, tabelaAlternativaVerdadeiroOuFalso: HTMLElement) {
+    questao.alternativas.push({ texto: '', selecionada: false });
+    this.changeDetectorRef.detectChanges();
+    (tabelaAlternativaVerdadeiroOuFalso.children[questao.alternativas.length - 1].children[1].children[0].children[0] as HTMLInputElement).focus();
+  }
+  onNovaAlterKeyUpVouF(event, questao: Questao, tabelaAlternativaVerdadeiroOuFalso) {
+    if (event.key == 'Enter' && event.ctrlKey) {
+      this.addAlternativaVouF(questao, tabelaAlternativaVerdadeiroOuFalso);
+    }
+  }
 
 }

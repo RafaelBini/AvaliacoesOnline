@@ -217,4 +217,10 @@ export class ProvaService {
     return maiorNota;
 
   }
+  isProvaRespondida(prova: Prova): boolean{
+    for (let [qi, questao] of prova.questoes.entries()){
+
+    }
+    return true;
+  }
 }

@@ -1,9 +1,5 @@
 
-- Corrigir bug data_inicio sem dt_correcao e s/ dt_termino que vai direto pra encerrado
-- Corrigir bug: Gabarito preenchimento não aparece
-- Colocar listener na tela do professor e aluno
-- Atualizar avaliações conforme tempo (tela professor e aluno)
-- Arrumar correção de preenchimento
+- Criar uma forma mais intuitiva de adicionar alternativas
 
 -------------------
 
@@ -11,6 +7,8 @@
 
 
 - Impedir que a avaliação seja criada sem nenhuma resposta certa
+
+- Ler somente letras minusculas no email de login
 
 - Anexo de imagens / arquivos nas questões (1 ou mais)
 	- Na pergunta
@@ -21,9 +19,9 @@
 - Cadastrar alunos por CSV no bd
 
 - Melhorar timing de pegar prova em grupo
-- Confirmar antes de fechar sem salvar (avaliacao-nova)
+
 - Criar hash da senha para inserir e conferir com banco de dados
-- Ler somente letras minusculas no email de login
-- Professor, grupos: rolar tela somente se estiver arrastando algo
+
+
 
 

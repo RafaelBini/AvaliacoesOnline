@@ -6,3 +6,6 @@
 
 - Salvar o nome das pessoas em com a Primeira Letra Maiúscula ao cadastrar novo usuario
 
+- Confirmar antes de fechar sem salvar (avaliacao-nova)
+
+- Professor, grupos: rolar tela somente se estiver arrastando algo

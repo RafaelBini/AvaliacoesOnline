@@ -49,24 +49,28 @@
                 <!-- Resposta Associativa -->
                 <tr *ngIf="questao.tipo == 0">
                     <td>
-                        <table width="100%" cdkDropList [cdkDropListData]="questao.associacoes"
+                        <table width="100%" #tabelaAssociacoes cdkDropList [cdkDropListData]="questao.associacoes"
                             (cdkDropListDropped)="drop($event)">
 
                             <!-- LISTA DE ASSOCIASSOES -->
                             <tr cdkDrag *ngFor="let associacao of questao.associacoes; index as ai">
-                                <td width="15%" class="alternativa">
+                                <td width="35%" class="alternativa">
                                     <div style="display: inline-flex; width: 100%;">
-                                        <textarea (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
+                                        <textarea (input)="ajustarAltura($event)"
+                                            (keyup)="onNovaAssocKeyUp($event, questao, tabelaAssociacoes)"
+                                            placeholder="Digite uma opção" (click)="ajustarAltura($event)"
                                             [(ngModel)]="associacao.opcaoSelecionada" class="invisible-input"
                                             style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                     </div>
                                 </td>
-                                <td width="80%" class="alternativa">
+                                <td width="60%" class="alternativa">
                                     <div style="display: inline-flex; width: 100%; position: relative;">
                                         <textarea #associacaoTextarea maxlength="500" (input)="ajustarAltura($event)"
-                                            (click)="ajustarAltura($event)" [(ngModel)]="associacao.texto"
-                                            class="invisible-input" style="width: 95%; height: 100%; padding: 10px;"
-                                            rows="1"></textarea>
+                                            (click)="ajustarAltura($event)"
+                                            (keyup)="onNovaAssocKeyUp($event, questao, tabelaAssociacoes)"
+                                            [(ngModel)]="associacao.texto" class="invisible-input"
+                                            placeholder="Descrição da opção"
+                                            style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                         <span *ngIf="estaEmFoco(associacaoTextarea)"
                                             class="contador-caracteres">{{associacao.texto.length}}/500</span>
                                     </div>
@@ -87,26 +91,9 @@
 
                             <!-- ADICIONAR ASSOCIACAO -->
                             <tr>
-                                <td width="15%" style="background-color: white; height: 40px; padding: 10px;">
-                                    <input type="text" class="invisible-input" #novaAssociacaoOpcaoInput maxlength="20"
-                                        placeholder="Digite uma opção" />
-                                </td>
-                                <td width="80%" style="background-color: white; height: 40px; padding: 10px;">
-                                    <div style="display: inline-flex; width: 100%; position: relative;">
-                                        <textarea (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
-                                            rows="1" maxlength="500"
-                                            (keyup)="onNovaAssocKeyUp($event, questao, novaAssociacaoInput, novaAssociacaoOpcaoInput);"
-                                            #novaAssociacaoInput class="invisible-input"
-                                            placeholder="Descrição da opção"
-                                            style="width: 95%; height: 100%; padding: 10px;"></textarea>
-                                        <span *ngIf="estaEmFoco(novaAssociacaoInput)"
-                                            class="contador-caracteres">{{novaAssociacaoInput.value.length}}/500</span>
-                                    </div>
-                                </td>
-                                <td width="5%" style="background-color: white; text-align: center;">
+                                <td width="5%" colspan="3" style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
-                                        (click)="addAssociacao(questao, novaAssociacaoInput, novaAssociacaoOpcaoInput);"
-                                        mat-icon-button>
+                                        (click)="addAssociacao(questao, tabelaAssociacoes);" mat-icon-button>
                                         <mat-icon
                                             style="background-color: var(--cor-primaria); color: white; border-radius: 50%;">
                                             add
@@ -178,7 +165,7 @@
                 <!-- Resposta Multipla Escolha - Múltipla ou Única Resposta -->
                 <tr *ngIf="questao.tipo == 3 || questao.tipo == 4">
                     <td>
-                        <table width="100%" cdkDropList [cdkDropListData]="questao.alternativas"
+                        <table width="100%" #tabelaAlternativas cdkDropList [cdkDropListData]="questao.alternativas"
                             (cdkDropListDropped)="drop($event)">
 
                             <!-- LISTA DE ALTERNATIVAS -->
@@ -186,7 +173,10 @@
                                 <td width="95%" class="alternativa">
                                     <mat-checkbox [(ngModel)]="alternativa.selecionada"
                                         (ngModelChange)="desmarcarTudoMenosUma(questao, ai, true)">
-                                        <textarea #alternativaTextarea maxlength="500" (input)="ajustarAltura($event)"
+                                        <textarea #alternativaTextarea
+                                            (keyup)="onNovaAlterKeyUp($event,questao,tabelaAlternativas)"
+                                            maxlength="500" (input)="ajustarAltura($event)"
+                                            placeholder="Digite aqui uma nova alternativa"
                                             (click)="ajustarAltura($event)" [(ngModel)]="alternativa.texto"
                                             class="invisible-input" style="width: 95%; height: 100%; padding: 10px;"
                                             rows="1"></textarea>
@@ -204,27 +194,14 @@
                                         (click)="removerAlternativa(questao, ai)">
                                         <mat-icon style="color: var(--cor-perigosa)">cancel</mat-icon>
                                     </button>
-
                                 </td>
                             </tr>
 
                             <!-- ADICIONAR ALTERNATIVA -->
                             <tr>
-                                <td width="95%"
-                                    style="background-color: white; height: 40px; padding: 10px; position: relative;">
-                                    <mat-checkbox [disabled]="true">
-                                        <textarea #novaAlternativInput maxlength="500" (input)="ajustarAltura($event)"
-                                            (click)="ajustarAltura($event)" rows="1"
-                                            (keyup)="onNovaAlterKeyUp($event, questao, novaAlternativInput);"
-                                            class="invisible-input" placeholder="Digite aqui uma nova alternativa"
-                                            style="width: 95%; height: 100%; padding: 10px;"></textarea>
-                                    </mat-checkbox>
-                                    <span *ngIf="estaEmFoco(novaAlternativInput)"
-                                        class="contador-caracteres">{{novaAlternativInput.value.length}}/500</span>
-                                </td>
-                                <td style="background-color: white; text-align: center;">
+                                <td colspan="2" style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
-                                        (click)="addAlternativa(questao, novaAlternativInput);" mat-icon-button>
+                                        (click)="addAlternativa(questao, tabelaAlternativas);" mat-icon-button>
                                         <mat-icon
                                             style="background-color: var(--cor-primaria); color: white; border-radius: 50%;">
                                             add
@@ -241,7 +218,7 @@
                     <td>
                         Selecione uma palavra do texto e clique aqui:
                         <button mat-icon-button matTooltip="Adicionar opção de preenchimento"
-                            (click)="inserirOpcaoPreeencherSelecionado(questao, novaOpcaoPreencherInput, editorPreencher)">
+                            (click)="inserirOpcaoPreeencherSelecionado(questao, editorPreencher)">
                             <mat-icon>space_bar</mat-icon>
                         </button>
                         <div style="position: relative;">
@@ -254,7 +231,7 @@
                                 class="contador-caracteres">{{preenchimentoTextarea.value.length}}/500</span>
                         </div>
 
-                        <table width="100%">
+                        <table #tabelaOpcoesPreencher width="100%">
 
                             <!-- LISTA DE OPÇÕES PARA PREENCHER -->
                             <tr *ngFor="let opcaoParaPreencher of questao.opcoesParaPreencher; index as ai">
@@ -267,8 +244,10 @@
                                     <div style="display: inline-flex; width: 100%; position: relative;">
                                         <textarea #opcaoPreencherTextarea (input)="ajustarAltura($event)"
                                             (click)="ajustarAltura($event)" [(ngModel)]="opcaoParaPreencher.texto"
-                                            class="invisible-input" style="width: 95%; height: 100%; padding: 10px;"
-                                            rows="1"></textarea>
+                                            (keyup)="onNovaOpcaoPreencherKeyUp($event, questao, tabelaOpcoesPreencher)"
+                                            class=" invisible-input"
+                                            placeholder="Digite aqui uma opção para completar o texto"
+                                            style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                         <span *ngIf="estaEmFoco(opcaoPreencherTextarea)"
                                             class="contador-caracteres">{{opcaoPreencherTextarea.value.length}}/500</span>
                                     </div>
@@ -284,26 +263,9 @@
 
                             <!-- ADICIONAR OPÇÃO PARA PREENCHER -->
                             <tr>
-                                <td width="5%" style="background-color: white; height: 40px; padding: 10px;">
-                                    ({{questao.opcoesParaPreencher.length + 1}})
-                                </td>
-                                <td width="90%" style="background-color: white; height: 40px; padding: 10px;">
-                                    <div style="display: inline-flex; width: 100%; position: relative;">
-                                        <textarea #novaOpcaoPreencherInput maxlength="500"
-                                            (input)="ajustarAltura($event)" (click)="ajustarAltura($event)" type="text"
-                                            rows="1"
-                                            (keyup)="onNovaOpcaoPreencherKeyUp($event, questao, novaOpcaoPreencherInput, editorPreencher);"
-                                            class="invisible-input"
-                                            placeholder="Digite aqui uma opção para completar o texto"
-                                            style="width: 95%; height: 100%; padding: 10px;"></textarea>
-                                        <span *ngIf="estaEmFoco(novaOpcaoPreencherInput)"
-                                            class="contador-caracteres">{{novaOpcaoPreencherInput.value.length}}/500</span>
-                                    </div>
-                                </td>
-                                <td style="background-color: white; text-align: center;">
+                                <td colspan="3" style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar opção (Ctrl + Enter)"
-                                        (click)="addOpcaoPreencher(questao, novaOpcaoPreencherInput, editorPreencher);"
-                                        mat-icon-button>
+                                        (click)="addOpcaoPreencher(questao, tabelaOpcoesPreencher);" mat-icon-button>
                                         <mat-icon
                                             style="background-color: var(--cor-primaria); color: white; border-radius: 50%;">
                                             add
@@ -318,8 +280,8 @@
                 <!-- Resposta Verdadeiro ou Falso - Com ou sem justificativa -->
                 <tr *ngIf="questao.tipo == 6 || questao.tipo == 7">
                     <td>
-                        <table width="100%" cdkDropList [cdkDropListData]="questao.alternativas"
-                            (cdkDropListDropped)="drop($event)">
+                        <table width="100%" #tabelaVerdadeiroOuFalso cdkDropList
+                            [cdkDropListData]="questao.alternativas" (cdkDropListDropped)="drop($event)">
 
                             <!-- LISTA DE ALTERNATIVAS -->
                             <tr cdkDrag *ngFor="let alternativa of questao.alternativas; index as ai">
@@ -336,7 +298,8 @@
                                         <textarea #verdadeiroFalsoAlternativaTextarea maxlength="2500"
                                             (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
                                             [(ngModel)]="alternativa.texto" class="invisible-input"
-                                            [style.color]="alternativa.selecionada ? 'green' : 'red'"
+                                            placeholder="Digite aqui uma nova afirmação"
+                                            (keyup)="onNovaAlterKeyUpVouF($event, questao, tabelaVerdadeiroOuFalso);"
                                             style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                         <span *ngIf="estaEmFoco(verdadeiroFalsoAlternativaTextarea)"
                                             class="contador-caracteres">{{verdadeiroFalsoAlternativaTextarea.value.length}}/2500</span>
@@ -357,28 +320,9 @@
 
                             <!-- ADICIONAR ALTERNATIVA -->
                             <tr>
-                                <td width="5%" class="alternativa">
-                                    <mat-button-toggle-group [disabled]="true">
-                                        <mat-button-toggle>V</mat-button-toggle>
-                                        <mat-button-toggle>F</mat-button-toggle>
-                                    </mat-button-toggle-group>
-                                </td>
-                                <td width="90%" style="background-color: white; height: 40px; padding: 10px;">
-
-                                    <div style="display: inline-flex; width: 100%; position: relative;">
-                                        <textarea #novaAlternativInput maxlength="2500" (input)="ajustarAltura($event)"
-                                            (click)="ajustarAltura($event)" type="text" rows="1"
-                                            (keyup)="onNovaAlterKeyUp($event, questao, novaAlternativInput);"
-                                            class="invisible-input" placeholder="Digite aqui uma nova afirmação"
-                                            style="width: 95%; height: 100%; padding: 10px;"></textarea>
-                                        <span *ngIf="estaEmFoco(novaAlternativInput)"
-                                            class="contador-caracteres">{{novaAlternativInput.value.length}}/2500</span>
-                                    </div>
-
-                                </td>
-                                <td style="background-color: white; text-align: center;">
+                                <td colspan="3" style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
-                                        (click)="addAlternativa(questao, novaAlternativInput);" mat-icon-button>
+                                        (click)="addAlternativaVouF(questao, tabelaVerdadeiroOuFalso);" mat-icon-button>
                                         <mat-icon
                                             style="background-color: var(--cor-primaria); color: white; border-radius: 50%;">
                                             add

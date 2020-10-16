@@ -164,6 +164,13 @@ export class ComumService {
         }
         return nota - ComumService.getDescontoTentativas(questao);
       },
+      isRespondida(questao: Questao) {
+        for (let associacao of questao.associacoes) {
+          if (associacao.opcaoSelecionada) {
+
+          }
+        }
+      }
     },
     {
       codigo: 1,

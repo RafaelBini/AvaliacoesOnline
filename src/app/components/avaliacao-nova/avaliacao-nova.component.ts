@@ -77,13 +77,19 @@ export class AvaliacaoNovaComponent implements OnInit {
         pergunta: "",
         tipo: 4,
         resposta: "",
-        alternativas: [],
+        alternativas: [
+          { texto: '', selecionada: false }
+        ],
         valor: 10,
         nivelDificuldade: 2,
         tags: [],
-        associacoes: [],
+        associacoes: [
+          { texto: '', opcaoSelecionada: '' }
+        ],
         textoParaPreencher: "",
-        opcoesParaPreencher: [],
+        opcoesParaPreencher: [
+          { texto: '', opcaoSelecionada: '', ativa: true }
+        ],
         tentativas: 0,
         extensoes: [],
         correcoes: [],
@@ -266,13 +272,19 @@ export class AvaliacaoNovaComponent implements OnInit {
       pergunta: "",
       tipo: 4,
       resposta: "",
-      alternativas: [],
+      alternativas: [
+        { texto: '', selecionada: false }
+      ],
       valor: 10,
       nivelDificuldade: 2,
       tags: [],
-      associacoes: [],
+      associacoes: [
+        { texto: '', opcaoSelecionada: '' }
+      ],
       textoParaPreencher: "",
-      opcoesParaPreencher: [],
+      opcoesParaPreencher: [
+        { texto: '', opcaoSelecionada: '', ativa: true }
+      ],
       tentativas: 0,
       extensoes: [],
       correcoes: [],
