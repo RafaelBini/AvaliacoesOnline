@@ -86,29 +86,65 @@
                             MEU GRUPO
                         </div>
                         <div class="aluno" style="cursor: default;"
-                            *ngFor="let aluno of getMeuGrupoNaAvaliacao().alunos"
+                            *ngFor="let aluno of getMeuGrupoNaAvaliacao().alunos; index as ai"
                             [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                             <app-aluno-card-avaliacao-professor [aluno]="aluno">
                             </app-aluno-card-avaliacao-professor>
-                            <div style="position: absolute; top: 30%; right: 20px;">
-                                <span *ngIf="aluno.statusId > 2">
-                                    <mat-icon matTooltip="O aluno sinalizou que finalizou a avaliação">check_circle
-                                    </mat-icon>
+                            <!-- IDENTIFICAÇÕES -->
+
+                            <div style="position: absolute; top: 30%; right: 6%; display: flex; align-items: center;">
+
+                                <!-- FINALIZADO -->
+
+                                <span *ngIf=" aluno.statusId> 2" style="margin-right: 6px;">
+                                    Finalizou {{comumService.getDataAmigavel(aluno.dtStatus[3])}}
                                 </span>
-                                <div *ngIf="aluno.statusId == 2">
-                                    <mat-icon matTooltip="O aluno está relizando as questões">create</mat-icon>
-                                </div>
-                                <div *ngIf="aluno.statusId == null || aluno.statusId < 2">
-                                    <mat-icon matTooltip="O aluno não iniciou a avaliação">not_interested</mat-icon>
-                                </div>
+                                <mat-icon *ngIf=" aluno.statusId> 2"
+                                    matTooltip="O aluno sinalizou que finalizou a avaliação">
+                                    check_circle
+                                </mat-icon>
+
+                                <!-- FAZENDO A PROVA -->
+
+                                <span *ngIf="aluno.statusId == 2" style="margin-right: 6px;">
+                                    Iniciou {{comumService.getDataAmigavel(aluno.dtStatus[2])}}
+                                </span>
+                                <mat-icon *ngIf="aluno.statusId == 2" matTooltip="O aluno está relizando as questões">
+                                    create
+                                </mat-icon>
+
+                                <!-- NÃO ENTROU -->
+
+                                <span *ngIf="aluno.statusId == null || aluno.statusId < 2" style="margin-right: 6px;">
+                                    Não acessou
+                                </span>
+                                <mat-icon *ngIf="aluno.statusId == null || aluno.statusId < 2"
+                                    matTooltip="O aluno não iniciou a avaliação">
+                                    not_interested
+                                </mat-icon>
+
                             </div>
+
+                            <!-- AÇÕES -->
+
+                            <button class="menu-opcoes-aluno" mat-icon-button [matMenuTriggerFor]="userMenu"
+                                matTooltip="Opções">
+                                <mat-icon>
+                                    more_vert
+                                </mat-icon>
+                            </button>
+                            <mat-menu #userMenu="matMenu">
+                                <button mat-menu-item (click)="abrirDetalhes(aluno)">
+                                    Ver detalhes
+                                </button>
+                            </mat-menu>
                         </div>
                     </div>
 
                 </div>
 
-                <app-questoes-responder (respostaAlterada)="respostaAlterada()" [prova]="prova" [avaliacao]="avaliacao"
-                    [gabarito]="gabarito">
+                <app-questoes-responder *ngIf="!getFinalizado()" (respostaAlterada)="respostaAlterada()" [prova]="prova"
+                    [avaliacao]="avaliacao" [gabarito]="gabarito">
 
                 </app-questoes-responder>
 
@@ -122,10 +158,17 @@
                 </button>
                 <div *ngIf="getFinalizado()"
                     style="margin: auto; text-align: center; width: 60%; background-color: whitesmoke; border-radius: 10px; margin-top: 15px; margin-bottom: 40px; font-size: 14px; padding: 10px; display: block;">
-                    <h2>Finalização sinalizada!</h2>
+                    <h2>Finalização sinalizada! </h2>
+                    Aguarde o término da avaliação.
+                    <br />
+                    <br />
+                    Caso necessário alterar algo nas suas respostas, solicite ao
+                    professor.
+                    <br />
                     <span *ngIf="avaliacao.tipoDisposicao != 0">Esta avaliação será finalizada quando todos do seu grupo
                         sinalizarem
-                        também.</span>
+                        também.
+                    </span>
                 </div>
             </div>
 

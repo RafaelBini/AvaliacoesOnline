@@ -1,3 +1,5 @@
+import { DetalhesProvaComponent } from './../../dialogs/detalhes-prova/detalhes-prova.component';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProvaService } from 'src/app/services/prova.service';
 import { Grupo } from './../../models/grupo';
@@ -65,6 +67,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     public router: Router,
     public route: ActivatedRoute,
     private snack: MatSnackBar,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -291,6 +294,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
       if (!tenhoAluno) {
         alunoOnline.online = false;
         alunoOnline.statusId = 0;
+        alunoOnline.dtStatus = this.comumService.insertInArray(alunoOnline.dtStatus, 0, new Date().toISOString());
         this.credencialService.loggedUser.alunos.push(alunoOnline);
         adicioneiAluno = true;
       }
@@ -399,6 +403,23 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   updateAvaliacao(motivo: string) {
     console.log(`FIREBASE UPDATE: ${motivo}`);
     this.avaliacaoService.updateAvaliacao(this.avaliacao);
+  }
+
+  // DURANTE AVALIAÇÃO
+
+  voltarStatusProva(grupoIndex, alunoIndex) {
+    if (this.avaliacao.tipoDisposicao == 0) {
+      this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 2;
+    }
+    else if (this.avaliacao.tipoDisposicao != 0) {
+      this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 2;
+    }
+    this.updateAvaliacao("Professor retornou status de um aluno");
+  }
+  abrirDetalhes(aluno: Usuario) {
+    this.dialog.open(DetalhesProvaComponent, {
+      data: aluno
+    });
   }
 
 }

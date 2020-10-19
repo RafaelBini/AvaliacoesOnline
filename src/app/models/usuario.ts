@@ -13,4 +13,5 @@ export interface Usuario {
     provaCorrigida?: boolean;
     notaTotal?: number;
     valorTotal?: number;
+    dtStatus?: Array<string>;
 }

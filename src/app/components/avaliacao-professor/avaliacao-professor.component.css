@@ -112,6 +112,12 @@
   border-radius: 7px;
 }
 
+.menu-opcoes-aluno{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
 .grupo-title{
   padding: 5px;
 }

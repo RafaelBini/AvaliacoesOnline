@@ -55,6 +55,10 @@ export class AvaliacaoNovaComponent implements OnInit {
     correcaoParesQtdTipo: "1",
     correcaoParesQtdNumero: 1,
     tipoPontuacao: 0,
+    duracaoIndividual: 1,
+    duracaoIndividualUnidade: 'horas',
+    duracaoIndividualMs: 0,
+    isDuracaoIndividualIndeterminada: true,
     tags: [],
     grupos: [
       {
@@ -118,6 +122,8 @@ export class AvaliacaoNovaComponent implements OnInit {
   isEditando = false;
 
   idEmEdicao: string;
+
+
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
 
@@ -311,6 +317,10 @@ export class AvaliacaoNovaComponent implements OnInit {
   finalizar() {
     if (this.idJaExiste) {
       this.snack.open(`Já existe uma avaliação com o ID ${this.avaliacao.id}`, null, { duration: 3500 });
+      return;
+    }
+    else if (this.isDuracaoIndividualValida() == false) {
+      this.snack.open(`Duração individual inválida`, null, { duration: 4500 });
       return;
     }
     this.validarDatas().then(() => {
@@ -521,6 +531,61 @@ export class AvaliacaoNovaComponent implements OnInit {
       count++;
     }
     return `${base}_${count}`;
+  }
+
+  // DURAÇÃO INDIVIDUAL
+  atualizarDuracaoIndividualMs() {
+    this.avaliacao.duracaoIndividualMs = this.getDuracaoIndividualEmMs();
+  }
+  getDuracaoIndividualEmMs() {
+    if (this.avaliacao.duracaoIndividualUnidade == 'segundos') {
+      return this.avaliacao.duracaoIndividual * 1000;
+    }
+    else if (this.avaliacao.duracaoIndividualUnidade == 'minutos') {
+      return this.avaliacao.duracaoIndividual * 60 * 1000;
+    }
+    else if (this.avaliacao.duracaoIndividualUnidade == 'horas') {
+      return this.avaliacao.duracaoIndividual * 60 * 60 * 1000;
+    }
+    else if (this.avaliacao.duracaoIndividualUnidade == 'dias') {
+      return this.avaliacao.duracaoIndividual * 24 * 60 * 60 * 1000;
+    }
+    else {
+      return 0;
+    }
+  }
+  getNumeroNaUnidadeSelecionada(numero) {
+    if (this.avaliacao.duracaoIndividualUnidade == 'segundos') {
+      return numero / 1000;
+    }
+    else if (this.avaliacao.duracaoIndividualUnidade == 'minutos') {
+      return (numero / 60) / 1000;
+    }
+    else if (this.avaliacao.duracaoIndividualUnidade == 'horas') {
+      return ((numero / 60) / 60) / 1000;
+    }
+    else if (this.avaliacao.duracaoIndividualUnidade == 'dias') {
+      return (((numero / 24) / 60) / 60) / 1000;
+    }
+    else {
+      return 0;
+    }
+  }
+  isDuracaoIndividualValida() {
+    var duracao = this.getDuracaoIndividualEmMs();
+
+    if (duracao <= 1000) {
+      return false;
+    }
+
+    if (!this.avaliacao.isInicioIndeterminado && !this.avaliacao.isInicioCorrecaoIndeterminado) {
+      const INICIO = new Date(this.avaliacao.dtInicio).getTime();
+      const FIM = new Date(this.avaliacao.dtInicioCorrecao).getTime();
+      if (duracao >= (FIM - INICIO)) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }

@@ -1,0 +1,17 @@
+<div style="text-align: center;">
+    <h2>{{aluno.nome}}</h2>
+
+</div>
+
+<div>
+    <b>Adicionado na avaliação</b>: {{comumService.getDataAmigavel(aluno.dtStatus[0])}}
+    <br />
+    <b>Iniciou a prova</b>: {{comumService.getDataAmigavel(aluno.dtStatus[2])}}
+    <br />
+    <b>Finalizou a prova</b>: {{comumService.getDataAmigavel(aluno.dtStatus[3])}}
+
+</div>
+<br />
+<div style="text-align: center;">
+    <button mat-dialog-close mat-button>Ok</button>
+</div>

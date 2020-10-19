@@ -104,6 +104,7 @@ export class SelecionarAlunosComponent implements OnInit {
 
       // Seta status para 0
       alunoSelecionado.statusId = 0;
+      alunoSelecionado.dtStatus = this.comumService.insertInArray(alunoSelecionado.dtStatus, 0, new Date().toISOString());
 
       // Passa por cada grupo
       var foiAlocado = false;

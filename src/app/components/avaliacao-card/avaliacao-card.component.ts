@@ -31,8 +31,9 @@ export class AvaliacaoCardComponent implements OnInit {
   deletar(avaliacao: Avaliacao) {
     const dialgogRef = this.dialog.open(ConfirmarComponent, {
       data: {
+        titulo: "Excluir avaliação",
         mensagem: "Você tem certeza de que deseja excluir essa avaliação?",
-        mensagem2: "Excluir avaliação: Não será possível recuperar a avaliação após exluir."
+        mensagem2: "Não será possível recuperar a avaliação após exluir."
       }
     });
     dialgogRef.afterClosed().subscribe(result => {
@@ -42,8 +43,9 @@ export class AvaliacaoCardComponent implements OnInit {
           avaliacao.isArquivada = true;
           const dialgogRef2 = this.dialog.open(ConfirmarComponent, {
             data: {
+              titulo: "Excluir questões",
               mensagem: "Você deseja excluir as questões dessa avaliação?",
-              mensagem2: "Excluir questões: Não será possível usar as questões dessa avaliação em outras avaliações após excluir."
+              mensagem2: "Não será possível usar as questões dessa avaliação em outras avaliações após excluir."
             }
           });
           dialgogRef2.afterClosed().subscribe(result => {

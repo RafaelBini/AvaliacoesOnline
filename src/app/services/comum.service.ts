@@ -355,4 +355,48 @@ export class ComumService {
     console.log(errorObj);
   }
 
+  insertInArray(vetor: Array<string>, index: number, valor: string) {
+    if (vetor == null)
+      vetor = [];
+
+    for (var i = 0; i <= index; i++) {
+      if (vetor.length <= i) {
+        vetor.push('');
+      }
+    }
+    vetor[index] = valor;
+
+    return vetor;
+  }
+
+  getDataAmigavel(dataISO: string): string {
+    const REAL_DATE = new Date(dataISO);
+
+    if (REAL_DATE.toString() == "Invalid Date") {
+      return "-"
+    }
+
+    var dataAmigavel = "";
+    const HOJE = new Date();
+    var ONTEM = new Date();
+    ONTEM.setDate(HOJE.getDate() - 1);
+
+    // Recebe o dia
+    if (REAL_DATE.toDateString() == HOJE.toDateString()) {
+      dataAmigavel += "hoje ";
+    }
+    else if (REAL_DATE.toDateString() == ONTEM.toDateString()) {
+      dataAmigavel += "ontem ";
+    }
+    else {
+      dataAmigavel += `${REAL_DATE.toDateString()}, `;
+    }
+
+    // Recebe a hora
+    dataAmigavel += ` às ${REAL_DATE.toTimeString().substr(0, 5)}`;
+
+    return dataAmigavel;
+
+  }
+
 }

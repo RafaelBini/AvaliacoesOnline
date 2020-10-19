@@ -1,3 +1,4 @@
+import { MatDialog } from '@angular/material/dialog';
 import { Questao } from './../../models/questao';
 import { CredencialService } from './../../services/credencial.service';
 import { CountdownComponent } from './../countdown/countdown.component';
@@ -14,6 +15,7 @@ import { ProvaService } from 'src/app/services/prova.service';
 import { AvaliacaoAlunoCabecalhoComponent } from './avaliacao-aluno-cabecalho/avaliacao-aluno-cabecalho.component';
 import { Usuario } from 'src/app/models/usuario';
 import { Grupo } from 'src/app/models/grupo';
+import { DetalhesProvaComponent } from 'src/app/dialogs/detalhes-prova/detalhes-prova.component';
 
 
 @Component({
@@ -29,7 +31,8 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     public comumService: ComumService,
     private avaliacaoService: AvaliacaoService,
     public provaService: ProvaService,
-    private snack: MatSnackBar) { }
+    private snack: MatSnackBar,
+    private dialog: MatDialog,) { }
 
 
   public avaliacao: Avaliacao = {
@@ -228,24 +231,65 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
   getDataObjetivo() {
+
+    // Em preparação
     if (this.avaliacao.status == 0) {
       if (this.avaliacao.isInicioIndeterminado)
         return '2020-09-05T13:55:30.000Z';
       else
         return this.avaliacao.dtInicio;
     }
+
+    // Durante avaliação
     else if (this.avaliacao.status == 1) {
-      if (this.avaliacao.isInicioCorrecaoIndeterminado)
-        return '2020-09-05T13:55:30.000Z';
-      else
-        return this.avaliacao.dtInicioCorrecao;
+
+      // Individual (com duração individual)
+      if (this.avaliacao.tipoDisposicao == 0 && !this.avaliacao.isDuracaoIndividualIndeterminada) {
+
+
+        var terminoDuracaoIndividual = new Date(new Date(this.getEuNaAvaliacao().dtStatus[2]).getTime() + this.avaliacao.duracaoIndividualMs).toISOString();
+
+
+        // Sem fim na avaliação
+        if (this.avaliacao.isInicioCorrecaoIndeterminado) {
+          return terminoDuracaoIndividual;
+        }
+
+        // Com fim na avaliação
+        else {
+          if (new Date(terminoDuracaoIndividual) > new Date(this.avaliacao.dtInicioCorrecao) || this.getEuNaAvaliacao().statusId > 2) {
+            return this.avaliacao.dtInicioCorrecao;
+          }
+          else {
+            return terminoDuracaoIndividual;
+          }
+        }
+
+      }
+
+      // Em grupo ou individual (sem duracao indivudual)
+      else {
+        // Sem fim na avaliacao
+        if (this.avaliacao.isInicioCorrecaoIndeterminado)
+          return '2020-09-05T13:55:30.000Z';
+        // Com fim na avaliaçao
+        else
+          return this.avaliacao.dtInicioCorrecao;
+      }
+
+
+
     }
+
+    // Durante correção
     else if (this.avaliacao.status == 2) {
       if (this.avaliacao.isTerminoIndeterminado)
         return '2020-09-05T13:55:30.000Z';
       else
         return this.avaliacao.dtTermino;
     }
+
+    // Encerrada
     else {
       return '2020-09-05T13:55:30.000Z';
     }
@@ -289,6 +333,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
           if (this.avaliacao.status == 1 && (aluno.statusId < 2 || aluno.statusId == null)) {
             aluno.statusId = 2;
+            aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 2, new Date().toISOString());
             mudeiAlgo = true;
           }
 
@@ -324,13 +369,27 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     setTimeout(() => {
 
       var statusAntes = this.avaliacao.status;
+      var altereiStatusIndividual = false;
 
       this.avaliacao.status = this.avaliacaoService.getStatusConformeTempo(this.avaliacao);
 
-      this.countDown.iniciarTimer();
 
-      if (statusAntes != this.avaliacao.status)
+
+      if (this.avaliacao.tipoDisposicao == 0 && !this.avaliacao.isDuracaoIndividualIndeterminada) {
+
+        var duracaoIndividual = new Date(this.getEuNaAvaliacao().dtStatus[2]).getTime() + this.avaliacao.duracaoIndividualMs;
+        var agoraMs = new Date().getTime();
+        if (duracaoIndividual < agoraMs && this.getEuNaAvaliacao().statusId < 3) {
+          altereiStatusIndividual = true;
+          this.getEuNaAvaliacao().dtStatus[3] = new Date().toISOString();
+          this.getEuNaAvaliacao().statusId = 3;
+        }
+      }
+
+      if (statusAntes != this.avaliacao.status || altereiStatusIndividual)
         this.updateAvaliacao("Atualizei o status da avaliacao conforme o tempo!!");
+
+      this.countDown.iniciarTimer();
 
     }, 3000);
 
@@ -358,12 +417,15 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       email: this.credencialService.loggedUser.email,
       online: true,
       statusId: 0,
+      dtStatus: ['', '', '', '', '', ''],
     };
+    me.dtStatus = this.comumService.insertInArray(me.dtStatus, 0, new Date().toISOString());
 
     // Atualiza o status
-    if (this.avaliacao.status == 1 && (me.statusId < 2 || me.statusId == null))
+    if (this.avaliacao.status == 1 && (me.statusId < 2 || me.statusId == null)) {
       me.statusId = 2;
-
+      me.dtStatus = this.comumService.insertInArray(me.dtStatus, 2, new Date().toISOString());
+    }
 
     // Se o grupo já tem o máximo de integrantes
     if (grupo.alunos.length >= this.avaliacao.maxIntegrantes && this.avaliacao.limitarNumIntegrantes && this.avaliacao.tipoDisposicao != 0) {
@@ -434,8 +496,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
 
     this.getEuNaAvaliacao().statusId = 3;
-
-
+    this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 3, new Date().toISOString());
     this.updateAvaliacao("Sinalizei a finalização!");
   }
   getEuNaAvaliacao(): Usuario {
@@ -553,6 +614,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       this.getMeuGrupoNaAvaliacao().provaId = this.prova.id;
       this.getEuNaAvaliacao().statusId = 2;
       this.getEuNaProva().statusId = 2;
+      this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 2, new Date().toISOString());
       this.provaService.updateProva(this.prova); // Atualizando o id de dentro da prova
 
       this.updateAvaliacao("Inseri no banco uma nova prova!");
@@ -621,7 +683,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             this.prova = novaProva;
             this.getEuNaAvaliacao().provaId = this.prova.id;
             this.getEuNaAvaliacao().statusId = 2;
-
+            this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 2, new Date().toISOString());
             this.updateAvaliacao("Inseri uma nova prova!")
 
           }).catch(reason => this.snack.open('Falha ao receber a prova', null, { duration: 3500 }));
@@ -739,6 +801,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             if (this.getEuNaProva() == null) {
 
               EU_NA_AVALIACAO.statusId = 2;
+              EU_NA_AVALIACAO.dtStatus = this.comumService.insertInArray(EU_NA_AVALIACAO.dtStatus, 2, new Date().toISOString());
               this.prova.alunos.push(EU_NA_AVALIACAO);
               this.provaService.updateProva(this.prova);
 
@@ -759,7 +822,11 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
     }
   }
-
+  abrirDetalhes(aluno: Usuario) {
+    this.dialog.open(DetalhesProvaComponent, {
+      data: aluno
+    });
+  }
 
 
   // EM CORREÇÃO

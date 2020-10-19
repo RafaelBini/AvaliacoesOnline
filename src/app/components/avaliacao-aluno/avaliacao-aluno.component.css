@@ -72,6 +72,12 @@
   position: relative;
 }
 
+.menu-opcoes-aluno{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
 .container {
     width: 60%;
     margin: auto;

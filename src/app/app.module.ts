@@ -62,6 +62,7 @@ import { AvaliacaoAlunoCabecalhoComponent } from './components/avaliacao-aluno/a
 import { SelecionarAlunosComponent } from './dialogs/selecionar-alunos/selecionar-alunos.component';
 import { HttpClientModule } from '@angular/common/http';
 import { GabaritoQuestaoComponent } from './dialogs/gabarito-questao/gabarito-questao.component';
+import { DetalhesProvaComponent } from './dialogs/detalhes-prova/detalhes-prova.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { GabaritoQuestaoComponent } from './dialogs/gabarito-questao/gabarito-qu
     AvaliacaoAlunoCabecalhoComponent,
     SelecionarAlunosComponent,
     GabaritoQuestaoComponent,
+    DetalhesProvaComponent,
   ],
   imports: [
     BrowserModule,

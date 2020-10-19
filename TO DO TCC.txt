@@ -1,19 +1,56 @@
-
-git clone https://github.com/RafaelBini/ProjetoTCC.git
-npm install
+-- Dia 30/10
 
 -------------------
 
 
 
+- Confirmar Dialog: Colocar no título o que está ocorrendo ao invés de "Atenção"
+
+- Esconder a prova ao finalizar (professor pode liberar)
+
+- Permitir o professor liberar prova finalizada
+
+- Permitir o professor bloquear a prova
+
+
+
+- Duração da prova (nas individuais) & Cadastrar a duração & Finalizar prova do aluno quando der o tempo dele
+
+- Colocar cronometro
+
+- Colocar a duração da avaliação e duração da correção próximo às datas
+
+- Colocar balão explicativo nas datas
+
+- Ao duplicar, zerar a data
+
+- Corrigir bug de selecionar alunos para avaliação
+
+- Colocar data de inicio e fim do aluno na prova
+
+
+- Colocar as seguintes regras de sincronização:
+	- O status do aluno NUNCA deve diminuir (se uma atualização tentar diminuir, eu coloco status de antes atualizo o firebase)
+	- O status da avaliação NUNCA deve diminuir	
 
 - Impedir que a avaliação seja criada sem nenhuma resposta certa
 
-- Ler somente letras minusculas no email de login
+- Quando o componente avaliacao-professor estiver com avalicao status 2 ou 3, já deve passar por cada prova e atribuindo a nota padrão
+
 
 - Anexo de imagens / arquivos nas questões (1 ou mais)
 	- Na pergunta
 	- Nas respostas (dissertativas e envio de arquivo)
+
+- Hospedar
+
+- Enviar o link no grupo
+
+
+
+-----------------------------------------------------------------------
+
+- Ler somente letras minusculas no email de login
 
 - Colocar spinner de loading
 

@@ -102,7 +102,30 @@
                     </mat-checkbox>
                 </td>
             </tr>
-
+            <tr *ngIf="avaliacao.tipoDisposicao == 0">
+                <td>
+                    Duração individual:
+                </td>
+                <td style="display: flex;">
+                    <span *ngIf="!avaliacao.isDuracaoIndividualIndeterminada">
+                        <input type="number" class="input-basico" min="0"
+                            style="width: 50px; display: inline; padding: 5px;"
+                            [(ngModel)]="avaliacao.duracaoIndividual"
+                            (ngModelChange)="atualizarDuracaoIndividualMs()" />
+                        <select class="select-basico" style="display: inline;"
+                            [(ngModel)]="avaliacao.duracaoIndividualUnidade"
+                            (ngModelChange)="atualizarDuracaoIndividualMs()">
+                            <option value='segundos'>segundos</option>
+                            <option value='minutos'>minutos</option>
+                            <option value='horas'>horas</option>
+                            <option value='dias'>dias</option>
+                        </select>
+                    </span>
+                    <mat-checkbox style="margin-left: 5px;" [(ngModel)]="avaliacao.isDuracaoIndividualIndeterminada">
+                        <span style="font-size: 12px;">Indeterminado</span>
+                    </mat-checkbox>
+                </td>
+            </tr>
             <tr>
                 <td>
 

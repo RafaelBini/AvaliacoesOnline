@@ -177,7 +177,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
     var diagRef = this.dialog.open(ConfirmarComponent, {
       data: {
         mensagem: `Tem certeza de que deseja remover ${this.alunosSelecionados.length > 1 ? 'os' : 'o'} ${this.alunosSelecionados.length} ${this.alunosSelecionados.length > 1 ? 'alunos selecionados' : 'aluno selecionado'}?`,
-        mensagem2: "Remover alunos"
+        titulo: "Remover alunos"
       }
     });
     diagRef.afterClosed().subscribe((result) => {

@@ -35,3 +35,7 @@
   .status-offline {
     background-color: var(--cor-primaria);
   }
+
+  .container{
+    position: relative;
+  }
