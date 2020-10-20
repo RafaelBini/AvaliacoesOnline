@@ -106,3 +106,88 @@ textarea {
 .avaliacao-stepper .mat-step-header  {
   pointer-events: none !important;
 }
+
+
+.input-invisivel{
+  display: none;
+}
+.item-texto{
+  display: flex;
+  margin:auto;
+  margin-left: 5px;
+  z-index: 1000;
+}
+.mask{
+    position: absolute;
+    top: 0px;
+    left: 0px;  
+    background-color: rgb(8, 154, 173);
+    border-radius: 6px;
+    height: 100%;
+    margin: 0px;
+}
+.item{
+  background-color: white;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  height: 35px;
+  padding: 5px;
+}
+.image-container{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: 1px dashed transparent;
+  border-radius: 7px;
+  padding: 3px;
+  padding-bottom: 40px;
+  box-sizing: content-box;
+  position: relative;
+}
+.imagem-controle{
+  position: absolute !important;
+  opacity: 0;
+}
+.image-container:hover .imagem-controle{
+  opacity: 0.85;
+}
+.imagem-descricao-ativa{
+  opacity: 1 !important;
+  background-color: rgba(255, 255, 255, 0.65) !important;
+}
+.imagem-descricao{
+  padding: 6px;
+  border-radius: 4px;
+  background-color:white;
+  position: absolute;
+  bottom: 0px;
+  left: 10%;  
+  width: 80%;
+  text-align: center;  
+  padding: 5px;
+}
+.input-transparente{
+  background-color: transparent;
+  outline: none;
+  border: none;
+  width: 100%;
+  text-align: center;
+}
+
+.anexo-container{
+  background-color: white;
+  border: 1px dashed var(--cor-secundaria);
+  padding: 7px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+.anexo-container:hover{
+  border: 1px solid var(--cor-secundaria);
+}

@@ -1,3 +1,7 @@
+import { ConfirmarComponent } from 'src/app/dialogs/confirmar/confirmar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ImagemAmpliadaComponent } from './../../dialogs/imagem-ampliada/imagem-ampliada.component';
+import { FileService } from './../../services/file.service';
 import { Alternativa } from './../../models/alternativa';
 import { Prova } from 'src/app/models/prova';
 
@@ -8,6 +12,7 @@ import { Component, OnInit, Input, ElementRef, ChangeDetectorRef } from '@angula
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { InfoQuestaoComponent } from 'src/app/dialogs/info-questao/info-questao.component';
+import { Arquivo } from 'src/app/models/arquivo';
 
 
 
@@ -22,7 +27,10 @@ export class QuestoesEditarComponent implements OnInit {
 
   constructor(public comumService: ComumService,
     private dialog: MatDialog,
-    private changeDetectorRef: ChangeDetectorRef) { }
+    private snack: MatSnackBar,
+    private changeDetectorRef: ChangeDetectorRef,
+    private fileService: FileService,
+  ) { }
 
   ngOnInit(): void {
   }
@@ -46,7 +54,7 @@ export class QuestoesEditarComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
     }
-    console.log(this.prova);
+
   }
   tipoQuestaoChanged(questao, novoTipo) {
     questao.tipo = novoTipo;
@@ -228,6 +236,182 @@ export class QuestoesEditarComponent implements OnInit {
     if (event.key == 'Enter' && event.ctrlKey) {
       this.addAlternativaVouF(questao, tabelaAlternativaVerdadeiroOuFalso);
     }
+  }
+
+  // IMAGENS
+  onImagemSelected(event, questao: Questao) {
+    this.uploadImagens(event.target.files, questao);
+  }
+  uploadImagens(files, questao: Questao) {
+    const tiposPermitidos = ['image']
+
+    for (let file of files) {
+
+      const TIPO = file.type.split('/')[0];
+      const TAMANHO_MAXIMO = 50000000;
+
+      if (!tiposPermitidos.includes(TIPO)) {
+        this.snack.open(`O formato ${TIPO} não é permitido`, null, {
+          duration: 3500,
+        });
+        continue;
+      }
+      if (file.size > TAMANHO_MAXIMO) {
+        this.snack.open(`Não é possivel subir arquivos com mais de 50MB`, null, {
+          duration: 3500,
+        });
+        continue;
+      }
+
+      const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+
+      const newFileIndex = questao.imagens.push({
+        nomeArquivo: file.name,
+        caminhoArquivo: CAMINHO,
+        tamanho: file.size,
+        tipo: TIPO,
+        tipoCompleto: file.type,
+        percentual: 0,
+        url: '',
+      }) - 1;
+
+
+      var uploadTask = this.fileService.upload(CAMINHO, file);
+
+      uploadTask.percentageChanges().subscribe(percentual => {
+        if (questao.imagens[newFileIndex].descricao == "cancelar") {
+          uploadTask.cancel();
+          questao.imagens.splice(newFileIndex, 1);
+          return;
+        }
+        questao.imagens[newFileIndex].percentual = percentual;
+      });
+
+      uploadTask.then(uploadTaskSnap => {
+
+        uploadTaskSnap.ref.getDownloadURL().then(url => {
+          questao.imagens[newFileIndex].url = url;
+        })
+          .catch(reason => {
+            console.log(reason);
+          });
+      })
+        .catch(reason => {
+          console.log(reason);
+        });
+
+    }
+  }
+  removerImagem(questao: Questao, imagemIndex: number) {
+    // Remove no fire
+    this.fileService.delete(questao.imagens[imagemIndex].caminhoArquivo);
+
+    // Remove daqui
+    questao.imagens.splice(imagemIndex, 1);
+  }
+  cancelarUploadImagem(anexo: Arquivo) {
+    var diagRef = this.dialog.open(ConfirmarComponent, {
+      data: {
+        titulo: "Cancelar Upload",
+        mensagem: `Você tem certeza de que deseja cancelar o upload do arquivo ${anexo.nomeArquivo}?`
+      }
+    });
+    diagRef.afterClosed().subscribe(result => {
+      if (result == true) {
+        anexo.descricao = "cancelar";
+      }
+    });
+
+  }
+  ampliarImagem(imagem: Arquivo) {
+    this.dialog.open(ImagemAmpliadaComponent, {
+      data: imagem,
+      width: '85%',
+      height: '90%',
+    })
+  }
+
+  // ANEXOS
+  onAnexoSelected(event, questao: Questao) {
+    this.uploadAnexos(event.target.files, questao);
+  }
+  uploadAnexos(files, questao: Questao) {
+
+    for (let file of files) {
+
+      const TIPO = file.type.split('/')[0];
+      const TAMANHO_MAXIMO = 50000000;
+      if (file.size > TAMANHO_MAXIMO) {
+        this.snack.open(`Não é possivel subir arquivos com mais de 50MB`, null, {
+          duration: 3500,
+        });
+        continue;
+      }
+
+      const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+
+      const newFileIndex = questao.anexos.push({
+        nomeArquivo: file.name,
+        caminhoArquivo: CAMINHO,
+        tamanho: file.size,
+        tipo: TIPO,
+        tipoCompleto: file.type,
+        percentual: 0,
+        url: '',
+      }) - 1;
+
+
+      var uploadTask = this.fileService.upload(CAMINHO, file);
+
+      uploadTask.percentageChanges().subscribe(percentual => {
+        if (questao.anexos[newFileIndex].descricao == "cancelar") {
+          uploadTask.cancel();
+          questao.anexos.splice(newFileIndex, 1);
+          return;
+        }
+        questao.anexos[newFileIndex].percentual = percentual;
+
+      });
+
+      uploadTask.then(uploadTaskSnap => {
+
+        uploadTaskSnap.ref.getDownloadURL().then(url => {
+          questao.anexos[newFileIndex].url = url;
+        })
+          .catch(reason => {
+            console.log(reason);
+          });
+      })
+        .catch(reason => {
+          console.log(reason);
+        });
+
+    }
+  }
+  cancelarUploadAnexo(anexo: Arquivo) {
+    var diagRef = this.dialog.open(ConfirmarComponent, {
+      data: {
+        titulo: "Cancelar Upload",
+        mensagem: `Você tem certeza de que deseja cancelar o upload do arquivo ${anexo.nomeArquivo}?`
+      }
+    });
+    diagRef.afterClosed().subscribe(result => {
+      if (result == true) {
+        anexo.descricao = "cancelar";
+      }
+    });
+
+  }
+  removerAnexo(questao: Questao, anexoIndex: number) {
+    // Remove no fire
+    this.fileService.delete(questao.anexos[anexoIndex].caminhoArquivo);
+
+    // Remove daqui
+    questao.anexos.splice(anexoIndex, 1);
+  }
+  baixarAnexo(anexo: Arquivo) {
+
+    window.open(anexo.url, '_blank');
   }
 
 }

@@ -101,6 +101,8 @@ export class AvaliacaoNovaComponent implements OnInit {
           nota: null,
           observacao: ""
         },
+        anexos: [],
+        imagens: [],
       },
     ],
   };
@@ -298,6 +300,8 @@ export class AvaliacaoNovaComponent implements OnInit {
         nota: null,
         observacao: ""
       },
+      anexos: [],
+      imagens: [],
     });
 
     this.comumService.scrollToBottom();

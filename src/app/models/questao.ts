@@ -3,6 +3,7 @@ import { Alternativa } from './alternativa';
 import { Associacao } from './associacao';
 import { Correcao } from './correcao';
 import { Usuario } from './usuario';
+import { Arquivo } from './arquivo';
 
 
 export interface Questao {
@@ -27,4 +28,6 @@ export interface Questao {
     ultimaModificacao?: number;
     usuarioUltimaModificacao?: Usuario;
     isValidadaCorreta?: boolean;
+    anexos?: Array<Arquivo>;
+    imagens?: Array<Arquivo>;
 }

@@ -63,6 +63,7 @@ import { SelecionarAlunosComponent } from './dialogs/selecionar-alunos/seleciona
 import { HttpClientModule } from '@angular/common/http';
 import { GabaritoQuestaoComponent } from './dialogs/gabarito-questao/gabarito-questao.component';
 import { DetalhesProvaComponent } from './dialogs/detalhes-prova/detalhes-prova.component';
+import { ImagemAmpliadaComponent } from './dialogs/imagem-ampliada/imagem-ampliada.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { DetalhesProvaComponent } from './dialogs/detalhes-prova/detalhes-prova.
     SelecionarAlunosComponent,
     GabaritoQuestaoComponent,
     DetalhesProvaComponent,
+    ImagemAmpliadaComponent,
   ],
   imports: [
     BrowserModule,
