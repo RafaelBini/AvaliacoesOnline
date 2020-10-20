@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { animationFrameScheduler } from 'rxjs';
 import { Avaliacao } from '../models/avaliacao';
 import { DatePipe } from '@angular/common';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,16 +12,6 @@ import { DatePipe } from '@angular/common';
 export class ComumService {
 
   constructor(private snack: MatSnackBar) { }
-
-  getStringFromDate(date: Date) {
-    return date.toISOString().substr(0, 10) + "T00:00";
-  }
-
-  getStrDateFormatada(strDate: string) {
-    const date = new Date(strDate);
-    var strDate = date.toLocaleString();
-    return strDate.substr(0, 8) + " " + strDate.substr(11, 5);
-  }
 
   public statusAvaliacao = [
     {
@@ -398,5 +389,63 @@ export class ComumService {
     return dataAmigavel;
 
   }
+
+  getPeriodoAmigavel(PERIODO_EM_MS: number): string {
+
+    if (PERIODO_EM_MS <= 1000) {
+      return "indeterminado";
+    }
+    else if (PERIODO_EM_MS <= 60000) {
+      return `${Math.round(PERIODO_EM_MS / 1000)} seg`;
+    }
+    else if (PERIODO_EM_MS <= 3600000) {
+      return `${Math.round(PERIODO_EM_MS / 60000)} min`;
+    }
+    else if (PERIODO_EM_MS <= 86400000) {
+      const HORAS = PERIODO_EM_MS / 3600000;
+      var horaFloor = Math.floor(HORAS);
+      var minutos = Math.round(60 * (HORAS - horaFloor)).toString();
+      return `${horaFloor} h ${minutos} min`;
+    }
+    else if (PERIODO_EM_MS <= 604800000) {
+      var dias = Math.round(PERIODO_EM_MS / 86400000);
+      if (dias <= 1)
+        return `${dias} dia`;
+      else
+        return `${dias} dias`;
+    }
+    else if (PERIODO_EM_MS <= 2592000000) {
+      var semanas = Math.round(PERIODO_EM_MS / 604800000);
+      if (semanas <= 1)
+        return `${semanas} semana`;
+      else
+        return `${semanas} semanas`;
+    }
+    else {
+      var meses = Math.round(PERIODO_EM_MS / 2592000000);
+      if (meses <= 1)
+        return `${meses} mês`;
+      else
+        return `${meses} meses`;
+    }
+
+  }
+
+
+  getStringFromDate(date: Date, horasMais: number = 0) {
+    date.toLocaleString();
+    date.setTime(date.getTime() + ((horasMais - 3) * 60 * 60 * 1000));
+    var strDate = date.toISOString().substr(0, 16);
+    return strDate;
+  }
+
+  getStrDateFormatada(strDate: string) {
+    const date = new Date(strDate);
+    var strDate = date.toLocaleString();
+    return strDate.substr(0, 8) + " " + strDate.substr(11, 5);
+  }
+
+
+
 
 }

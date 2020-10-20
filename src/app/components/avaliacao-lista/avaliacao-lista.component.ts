@@ -52,10 +52,11 @@ export class AvaliacaoListaComponent implements OnInit {
         return false;
 
       texto = this.comumService.normalizar(texto);
+      var titulo = this.comumService.normalizar(avaliacao.titulo);
+      var descricao = this.comumService.normalizar(avaliacao.descricao);
 
       for (let parteTexto of texto.split(" ")) {
-        var titulo = this.comumService.normalizar(avaliacao.titulo);
-        var descricao = this.comumService.normalizar(avaliacao.descricao);
+
 
         const FOI_ENCONTRADO = this.estaEmAlgumLugar(parteTexto, titulo, descricao, avaliacao.tags);
 

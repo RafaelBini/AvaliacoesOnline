@@ -331,7 +331,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             mudeiAlgo = true;
           }
 
-          if (this.avaliacao.status == 1 && (aluno.statusId < 2 || aluno.statusId == null)) {
+          if (this.avaliacao.status == 1 && (aluno.statusId == 0 || aluno.statusId == null)) {
             aluno.statusId = 2;
             aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 2, new Date().toISOString());
             mudeiAlgo = true;
@@ -571,6 +571,15 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     if (this.avaliacao.grupos.length > 0) {
       if (this.getEuNaAvaliacao())
         return this.getEuNaAvaliacao().statusId >= 3;
+    }
+
+    return false;
+  }
+  estouBloqueado() {
+
+    if (this.avaliacao.grupos.length > 0) {
+      if (this.getEuNaAvaliacao())
+        return this.getEuNaAvaliacao().statusId == 1;
     }
 
     return false;

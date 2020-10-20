@@ -40,28 +40,21 @@ export class SelecionarAlunosComponent implements OnInit {
     this.alunos = this.getAlunosSemGrupo();
     this.alunosFiltrados = this.alunos.filter(aluno => {
 
-      this.textoBusca = this.comumService.normalizar(this.textoBusca);
+      var texto = this.comumService.normalizar(this.textoBusca);
       var nome = this.comumService.normalizar(aluno.nome);
       var email = this.comumService.normalizar(aluno.email);
 
-      if (nome.includes(this.textoBusca))
-        return true;
+      for (let parteTexto of texto.split(" ")) {
 
-      if (email.includes(this.textoBusca))
-        return true;
+        const FOI_ENCONTRADO = this.estaEmAlgumLugar(parteTexto, nome, email, aluno.tags);
 
-      for (let parteTexto of this.textoBusca.split(" ")) {
-        if (nome.includes(parteTexto))
-          return true;
+        if (!FOI_ENCONTRADO)
+          return false;
+
       }
 
-      if (aluno.tags != null) {
-        for (let tag of aluno.tags) {
-          if (this.comumService.normalizar(tag).includes(this.textoBusca))
-            return true;
-        }
-      }
-      return false;
+      return true;
+
     });
 
   }
@@ -112,6 +105,7 @@ export class SelecionarAlunosComponent implements OnInit {
         if (grupo.alunos.length < this.avaliacao.maxIntegrantes) {
           grupo.alunos.push(alunoSelecionado);
           foiAlocado = true;
+          break;
         }
       }
 
@@ -142,28 +136,21 @@ export class SelecionarAlunosComponent implements OnInit {
   onBuscaAlunoAvaliacaoKeyUp() {
     this.alunosAvaliacaoFiltrados = this.getAlunosFromTodosGrupos().filter(aluno => {
 
-      this.textoBuscaAvaliacao = this.comumService.normalizar(this.textoBuscaAvaliacao);
+      var texto = this.comumService.normalizar(this.textoBuscaAvaliacao);
       var nome = this.comumService.normalizar(aluno.nome);
       var email = this.comumService.normalizar(aluno.email);
 
-      if (nome.includes(this.textoBuscaAvaliacao))
-        return true;
+      for (let parteTexto of texto.split(" ")) {
 
-      if (email.includes(this.textoBuscaAvaliacao))
-        return true;
+        const FOI_ENCONTRADO = this.estaEmAlgumLugar(parteTexto, nome, email, aluno.tags);
 
-      for (let parteTexto of this.textoBuscaAvaliacao.split(" ")) {
-        if (nome.includes(parteTexto))
-          return true;
+        if (!FOI_ENCONTRADO)
+          return false;
+
       }
 
-      if (aluno.tags != null) {
-        for (let tag of aluno.tags) {
-          if (this.comumService.normalizar(tag).includes(this.textoBuscaAvaliacao))
-            return true;
-        }
-      }
-      return false;
+      return true;
+
     });
 
   }
@@ -181,13 +168,39 @@ export class SelecionarAlunosComponent implements OnInit {
   }
   removerSelecionadosDaAvaliacao() {
     for (let grupo of this.avaliacao.grupos) {
-      for (let aluno of grupo.alunos) {
-        grupo.alunos = grupo.alunos.filter(a => this.alunosAvaliacaoSelecionados.filter(aa => aa.id == a.id).length <= 0);
-      }
+
+      grupo.alunos = grupo.alunos.filter(a => this.alunosAvaliacaoSelecionados.filter(aa => aa.id == a.id).length <= 0);
+
     }
     this.onBuscaAlunoAvaliacaoKeyUp();
     this.onBuscaAlunoKeyUp();
   }
+
+  // GERAL
+
+  estaEmAlgumLugar(parteTexto, nome, email, tags) {
+
+    // Nome
+    for (let parteNome of nome.split(" ")) {
+      if (parteNome.includes(parteTexto))
+        return true;
+    }
+
+    // Descrição
+
+    if (email.includes(parteTexto))
+      return true;
+
+
+    // Tags
+    if (tags != null) {
+      for (let tag of tags) {
+        if (this.comumService.normalizar(tag).includes(parteTexto))
+          return true;
+      }
+    }
+  }
+
 
 
 }

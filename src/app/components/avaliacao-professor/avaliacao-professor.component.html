@@ -138,12 +138,21 @@
 
                         <!-- NÃO ENTROU -->
 
-                        <span *ngIf="aluno.statusId == null || aluno.statusId < 2" style="margin-right: 6px;">
+                        <span *ngIf="aluno.statusId == null || aluno.statusId == 0" style="margin-right: 6px;">
                             Não acessou
                         </span>
-                        <mat-icon *ngIf="aluno.statusId == null || aluno.statusId < 2"
+                        <mat-icon *ngIf="aluno.statusId == null || aluno.statusId == 0"
                             matTooltip="O aluno não iniciou a avaliação">
                             not_interested
+                        </mat-icon>
+
+                        <!-- BLOQUEADO -->
+
+                        <span *ngIf="aluno.statusId == 1" style="margin-right: 6px;">
+                            Bloqueado
+                        </span>
+                        <mat-icon *ngIf="aluno.statusId == 1" matTooltip="O aluno foi bloqueado pelo professor">
+                            lock
                         </mat-icon>
 
                     </div>
@@ -160,9 +169,14 @@
                         <button mat-menu-item (click)="abrirDetalhes(aluno)">
                             Ver detalhes
                         </button>
-                        <button mat-menu-item *ngIf="aluno.statusId > 2" (click)="voltarStatusProva(0, ai)"
-                            matTooltip="Clique aqui para liberar a prova para o aluno">
+                        <button mat-menu-item *ngIf="aluno.statusId == 3 || aluno.statusId == 1"
+                            (click)="voltarStatusProva(0, ai)"
+                            matTooltip="Clique aqui para liberar a prova novamente para o aluno">
                             Devolver prova
+                        </button>
+                        <button mat-menu-item *ngIf="aluno.statusId == 2" (click)="bloquearProva(0, ai)"
+                            matTooltip="Clique aqui para bloquear a prova do aluno">
+                            Bloquear Prova
                         </button>
                     </mat-menu>
                 </div>
@@ -206,12 +220,21 @@
 
                             <!-- NÃO ENTROU -->
 
-                            <span *ngIf="aluno.statusId == null || aluno.statusId < 2" style="margin-right: 6px;">
+                            <span *ngIf="aluno.statusId == null || aluno.statusId == 0" style="margin-right: 6px;">
                                 Não acessou
                             </span>
-                            <mat-icon *ngIf="aluno.statusId == null || aluno.statusId < 2"
+                            <mat-icon *ngIf="aluno.statusId == null || aluno.statusId == 0"
                                 matTooltip="O aluno não iniciou a avaliação">
                                 not_interested
+                            </mat-icon>
+
+                            <!-- BLOQUEADO -->
+
+                            <span *ngIf="aluno.statusId == 1" style="margin-right: 6px;">
+                                Bloqueado
+                            </span>
+                            <mat-icon *ngIf="aluno.statusId == 1" matTooltip="O aluno foi bloqueado pelo professor">
+                                lock
                             </mat-icon>
 
                         </div>
@@ -228,9 +251,14 @@
                             <button mat-menu-item (click)="abrirDetalhes(aluno)">
                                 Ver detalhes
                             </button>
-                            <button mat-menu-item *ngIf="aluno.statusId > 2" (click)="voltarStatusProva(0, ai)"
+                            <button mat-menu-item *ngIf="aluno.statusId == 3 || aluno.statusId == 1"
+                                (click)="voltarStatusProva(0, ai)"
                                 matTooltip="Clique aqui para liberar a prova para o aluno">
                                 Devolver prova
+                            </button>
+                            <button mat-menu-item *ngIf="aluno.statusId == 2" (click)="bloquearProva(0, ai)"
+                                matTooltip="Clique aqui para bloquear a prova do aluno">
+                                Bloquear Prova
                             </button>
                         </mat-menu>
                     </div>

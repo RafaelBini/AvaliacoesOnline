@@ -408,13 +408,13 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   // DURANTE AVALIAÇÃO
 
   voltarStatusProva(grupoIndex, alunoIndex) {
-    if (this.avaliacao.tipoDisposicao == 0) {
-      this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 2;
-    }
-    else if (this.avaliacao.tipoDisposicao != 0) {
-      this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 2;
-    }
+    this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 2;
     this.updateAvaliacao("Professor retornou status de um aluno");
+  }
+  bloquearProva(grupoIndex, alunoIndex) {
+    this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 1;
+    this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus = this.comumService.insertInArray(this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus, 1, new Date().toISOString());
+    this.updateAvaliacao("Professor bloqueou a prova de um aluno");
   }
   abrirDetalhes(aluno: Usuario) {
     this.dialog.open(DetalhesProvaComponent, {

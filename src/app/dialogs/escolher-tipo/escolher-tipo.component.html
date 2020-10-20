@@ -14,7 +14,7 @@
 
             <div *ngIf="codigoDisposicaoSelecionado != 0" class="box-especial"
                 style="background-color: whitesmoke; text-align: center; color: var(--cor-primaria);">
-                <mat-checkbox [(ngModel)]="data.avaliacao.limitarNumIntegrantes">
+                <mat-checkbox class="checkbox-full" [(ngModel)]="data.avaliacao.limitarNumIntegrantes">
                     Limitar número de integrantes
                 </mat-checkbox>
                 <div *ngIf="data.avaliacao.limitarNumIntegrantes" class="box-especial">

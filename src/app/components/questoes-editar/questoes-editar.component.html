@@ -171,7 +171,7 @@
                             <!-- LISTA DE ALTERNATIVAS -->
                             <tr cdkDrag *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td width="95%" class="alternativa">
-                                    <mat-checkbox [(ngModel)]="alternativa.selecionada"
+                                    <mat-checkbox class="checkbox-full" [(ngModel)]="alternativa.selecionada"
                                         (ngModelChange)="desmarcarTudoMenosUma(questao, ai, true)">
                                         <textarea #alternativaTextarea
                                             (keyup)="onNovaAlterKeyUp($event,questao,tabelaAlternativas)"

@@ -78,6 +78,10 @@
   top: 0px;
 }
 
+.mensagem-whitesmoke{
+  margin: auto; text-align: center; width: 60%; background-color: whitesmoke; border-radius: 10px; margin-top: 15px; margin-bottom: 40px; font-size: 14px; padding: 10px; display: block;
+}
+
 .container {
     width: 60%;
     margin: auto;

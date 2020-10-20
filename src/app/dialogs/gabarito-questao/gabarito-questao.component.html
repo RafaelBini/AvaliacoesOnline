@@ -74,7 +74,8 @@
                     <table width="100%">
                         <tr *ngFor="let alternativa of questao.alternativas; index as ai">
                             <td valign="middle" class="alternativa">
-                                <mat-checkbox disabled="true" [(ngModel)]="alternativa.selecionada">
+                                <mat-checkbox class="checkbox-full" disabled="true"
+                                    [(ngModel)]="alternativa.selecionada">
                                     <span style="white-space: pre-line;">{{alternativa.texto}}</span>
                                 </mat-checkbox>
                             </td>

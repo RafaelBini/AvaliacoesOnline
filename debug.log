@@ -24,3 +24,21 @@
 [1016/180622.643:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
 [1019/061655.381:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
 [1019/102038.243:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1019/124038.256:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1019/125538.265:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1019/131038.274:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1019/132538.278:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1019/134038.289:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1019/135538.291:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1019/141038.294:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1019/142538.295:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1019/144038.297:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1020/070429.601:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1020/092034.074:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1020/092034.077:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1020/093034.092:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1020/093034.097:ERROR:crash_report_database_win.cc(498)] failed to stat report
+[1020/093034.099:ERROR:filesystem_win.cc(116)] GetFileAttributes C:\Users\rfabini\AppData\Local\Temp\.profile\Crashpad\reports\5760229b-3182-4f08-836a-131c149a3516.dmp: O sistema não pode encontrar o arquivo especificado. (0x2)
+[1020/093034.102:ERROR:filesystem_win.cc(116)] GetFileAttributes C:\Users\rfabini\AppData\Local\Temp\.profile\Crashpad\reports\ac61ff23-aadd-4282-8a26-d42ac6a5c07a.dmp: O sistema não pode encontrar o arquivo especificado. (0x2)
+[1020/093034.102:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1020/123140.479:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)

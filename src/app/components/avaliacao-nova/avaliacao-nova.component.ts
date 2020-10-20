@@ -44,9 +44,9 @@ export class AvaliacaoNovaComponent implements OnInit {
     maxIntegrantes: 3,
     dtInicio: this.comumService.getStringFromDate(new Date()),
     isInicioIndeterminado: true,
-    dtInicioCorrecao: this.comumService.getStringFromDate(new Date()),
+    dtInicioCorrecao: this.comumService.getStringFromDate(new Date(), 1),
     isInicioCorrecaoIndeterminado: true,
-    dtTermino: this.comumService.getStringFromDate(new Date()),
+    dtTermino: this.comumService.getStringFromDate(new Date(), 2),
     isTerminoIndeterminado: true,
     isOrdemAleatoria: false,
     isBloqueadoAlunoAtrasado: false,
@@ -305,12 +305,53 @@ export class AvaliacaoNovaComponent implements OnInit {
   }
 
   limitarIndeterminados() {
+
+
     if (this.avaliacao.isInicioIndeterminado) {
       this.avaliacao.isInicioCorrecaoIndeterminado = true;
     }
     if (this.avaliacao.isInicioCorrecaoIndeterminado) {
       this.avaliacao.isTerminoIndeterminado = true;
     }
+
+
+  }
+
+  corrigirDatas(dtAlterada: 'inicio' | 'correcao' | 'termino') {
+
+    var dtInicio = new Date(this.avaliacao.dtInicio);
+    var dtInicioCorrecao = new Date(this.avaliacao.dtInicioCorrecao);
+    var dtTermino = new Date(this.avaliacao.dtTermino);
+
+    if (dtInicioCorrecao <= dtInicio && dtAlterada != 'correcao') {
+      this.avaliacao.dtInicioCorrecao = this.comumService.getStringFromDate(dtInicio, 1);
+      this.avaliacao.dtTermino = this.comumService.getStringFromDate(new Date(this.avaliacao.dtInicioCorrecao), 1);
+      console.log(`Alterei dtCorrecao para ${this.avaliacao.dtInicioCorrecao} e dtTermino para ${this.avaliacao.dtTermino}`);
+    }
+    else if (dtTermino <= dtInicioCorrecao && dtAlterada != 'termino') {
+      this.avaliacao.dtTermino = this.comumService.getStringFromDate(dtInicioCorrecao, 1);
+      console.log(`Alterei dtTermino para ${this.avaliacao.dtTermino}`);
+    }
+  }
+
+  getPeriodoAvaliacao() {
+
+    if (this.avaliacao.isInicioCorrecaoIndeterminado || this.avaliacao.isInicioIndeterminado)
+      return "indeterminado";
+
+    var periodoMs = new Date(this.avaliacao.dtInicioCorrecao).getTime() - new Date(this.avaliacao.dtInicio).getTime();
+
+    return this.comumService.getPeriodoAmigavel(periodoMs);
+  }
+
+  getPeriodoCorrecao() {
+
+    if (this.avaliacao.isInicioCorrecaoIndeterminado || this.avaliacao.isTerminoIndeterminado)
+      return "indeterminado";
+
+    var periodoMs = new Date(this.avaliacao.dtTermino).getTime() - new Date(this.avaliacao.dtInicioCorrecao).getTime();
+
+    return this.comumService.getPeriodoAmigavel(periodoMs);
   }
 
   // FINAL

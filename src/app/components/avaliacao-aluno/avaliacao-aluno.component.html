@@ -115,12 +115,21 @@
 
                                 <!-- NÃO ENTROU -->
 
-                                <span *ngIf="aluno.statusId == null || aluno.statusId < 2" style="margin-right: 6px;">
+                                <span *ngIf="aluno.statusId == null || aluno.statusId == 0" style="margin-right: 6px;">
                                     Não acessou
                                 </span>
-                                <mat-icon *ngIf="aluno.statusId == null || aluno.statusId < 2"
+                                <mat-icon *ngIf="aluno.statusId == null || aluno.statusId == 0"
                                     matTooltip="O aluno não iniciou a avaliação">
                                     not_interested
+                                </mat-icon>
+
+                                <!-- BLOQUEADO -->
+
+                                <span *ngIf="aluno.statusId == 1" style="margin-right: 6px;">
+                                    Bloqueado
+                                </span>
+                                <mat-icon *ngIf="aluno.statusId == 1" matTooltip="O aluno foi bloqueado pelo professor">
+                                    lock
                                 </mat-icon>
 
                             </div>
@@ -143,8 +152,9 @@
 
                 </div>
 
-                <app-questoes-responder *ngIf="!getFinalizado()" (respostaAlterada)="respostaAlterada()" [prova]="prova"
-                    [avaliacao]="avaliacao" [gabarito]="gabarito">
+                <app-questoes-responder *ngIf="!getFinalizado() && !estouBloqueado()"
+                    (respostaAlterada)="respostaAlterada()" [prova]="prova" [avaliacao]="avaliacao"
+                    [gabarito]="gabarito">
 
                 </app-questoes-responder>
 
@@ -152,12 +162,20 @@
 
 
             <div style="width: 100%;">
-                <button *ngIf="!getFinalizado()" (click)="sinalizarFinalizacao()" mat-raised-button
+                <button *ngIf="!getFinalizado() && !estouBloqueado()" (click)="sinalizarFinalizacao()" mat-raised-button
                     style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
                     Sinalizar Finalização
                 </button>
-                <div *ngIf="getFinalizado()"
-                    style="margin: auto; text-align: center; width: 60%; background-color: whitesmoke; border-radius: 10px; margin-top: 15px; margin-bottom: 40px; font-size: 14px; padding: 10px; display: block;">
+                <div *ngIf="estouBloqueado()" class="mensagem-whitesmoke">
+                    <h2>Você foi bloqueado pelo professor</h2>
+                    Aguarde o término da avaliação.
+                    <br />
+                    <mat-icon>
+                        lock
+                    </mat-icon>
+                    <br />
+                </div>
+                <div *ngIf="getFinalizado()" class="mensagem-whitesmoke">
                     <h2>Finalização sinalizada! </h2>
                     Aguarde o término da avaliação.
                     <br />
@@ -165,10 +183,7 @@
                     Caso necessário alterar algo nas suas respostas, solicite ao
                     professor.
                     <br />
-                    <span *ngIf="avaliacao.tipoDisposicao != 0">Esta avaliação será finalizada quando todos do seu grupo
-                        sinalizarem
-                        também.
-                    </span>
+
                 </div>
             </div>
 

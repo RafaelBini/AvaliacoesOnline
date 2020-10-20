@@ -57,11 +57,15 @@ textarea {
   background-color: var(--cor-primaria) !important;
 }
 
-.mat-checkbox-layout, .mat-checkbox-label{
+.checkbox-full .mat-checkbox-layout, .checkbox-full .mat-checkbox-label {
   white-space: normal !important;
   word-wrap: break-all !important;
   width: 100%;
   display: inline-flex;
+}
+
+.checkbox-indeterminado{
+  width: fit-content !important;
 }
 
 .mat-radio-button.mat-accent .mat-radio-inner-circle, .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple{
