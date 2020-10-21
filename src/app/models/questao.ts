@@ -18,7 +18,8 @@ export interface Questao {
     nivelDificuldade?: number;
     tags?: Array<string>;
     extensoes?: Array<string>;
-    arquivosEntregues?: Array<string>;
+    arquivosEntregues?: Array<Arquivo>;
+    imagensEntregues?: Array<Arquivo>;
     textoParaPreencher?: string;
     opcoesParaPreencher?: Array<OpcaoPreencher>;
     partesPreencher?: Array<{ tipo: 'texto' | 'select', conteudo: any }>;

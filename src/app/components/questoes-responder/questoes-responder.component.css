@@ -96,13 +96,35 @@
 
 /* ENVIO DE ARQUIVOS */
 
-.upload-area{
+
+.drop-here{
   background-color: white; color: gray; 
   cursor: pointer; user-select: none; 
   line-height: 200px; height: 200px; 
   width: 90%; margin: auto;  border: 1px dashed gray; border-radius: 10px; 
   text-align: center; font-size: 19px;
 }
+.drop-here:hover {
+    background-color: var(--cor-secundaria); color: white;
+    animation-name: on-me;
+    animation-duration: 0.3s;
+}
+
+.drop-here-texto{   
+    font-size: 18px;
+    user-select: none;
+}
+
+.file-over{
+    background-color: var(--cor-primaria); color: white;
+    animation-name: on-me;
+    animation-duration: 0.3s;
+}
+
+@keyframes on-me {
+    0%   {background-color: white; color: black}
+    100%   {background-color: var(--cor-secundaria); color: white;}
+  }
 
 .upload-area:hover {
   color: var(--cor-primaria);

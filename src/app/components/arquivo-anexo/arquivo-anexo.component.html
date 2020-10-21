@@ -1,0 +1,42 @@
+<div>
+    <div *ngIf="file.percentual < 100" class="item">
+        <div class="mask" [style.width]="file.percentual + '%'">
+        </div>
+        <div class="item-texto">
+            {{file.nomeArquivo}}
+            (<b>{{ file.percentual | number : '1.0-0' }}%</b>)
+        </div>
+        <button (click)="cancelarUploadAnexo(file)"
+            style="color: var(--cor-perigosa); position: absolute; top: 1px; right: 1px;" matTooltip="Cancelar upload"
+            mat-icon-button>
+            <mat-icon>
+                cancel
+            </mat-icon>
+        </button>
+    </div>
+    <div *ngIf="file.percentual >= 100" (click)="baixarAnexo(file)" class="anexo-container">
+        <mat-icon *ngIf="file.tipo == 'image'">
+            panorama
+        </mat-icon>
+
+        <mat-icon *ngIf="file.tipo == 'video'">
+            movie
+        </mat-icon>
+
+        <mat-icon *ngIf="file.tipoCompleto == 'application/pdf'">
+            picture_as_pdf
+        </mat-icon>
+
+        <mat-icon *ngIf="file.tipo != 'image' && file.tipo != 'video' && file.tipoCompleto != 'application/pdf'">
+            attach_file
+        </mat-icon>
+
+        <span style="margin-left: 10px;">{{file.nomeArquivo}}</span>
+        <button *ngIf="editando" mat-icon-button matTooltip="Remover anexo" (click)="removerAnexo(questao, anexoIndex)"
+            style="position: absolute; right: 3px; top: 1px; color: var(--cor-perigosa)">
+            <mat-icon>
+                cancel
+            </mat-icon>
+        </button>
+    </div>
+</div>

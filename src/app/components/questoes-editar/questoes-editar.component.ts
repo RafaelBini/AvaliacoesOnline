@@ -302,34 +302,7 @@ export class QuestoesEditarComponent implements OnInit {
 
     }
   }
-  removerImagem(questao: Questao, imagemIndex: number) {
-    // Remove no fire
-    this.fileService.delete(questao.imagens[imagemIndex].caminhoArquivo);
 
-    // Remove daqui
-    questao.imagens.splice(imagemIndex, 1);
-  }
-  cancelarUploadImagem(anexo: Arquivo) {
-    var diagRef = this.dialog.open(ConfirmarComponent, {
-      data: {
-        titulo: "Cancelar Upload",
-        mensagem: `Você tem certeza de que deseja cancelar o upload do arquivo ${anexo.nomeArquivo}?`
-      }
-    });
-    diagRef.afterClosed().subscribe(result => {
-      if (result == true) {
-        anexo.descricao = "cancelar";
-      }
-    });
-
-  }
-  ampliarImagem(imagem: Arquivo) {
-    this.dialog.open(ImagemAmpliadaComponent, {
-      data: imagem,
-      width: '85%',
-      height: '90%',
-    })
-  }
 
   // ANEXOS
   onAnexoSelected(event, questao: Questao) {
@@ -388,30 +361,6 @@ export class QuestoesEditarComponent implements OnInit {
 
     }
   }
-  cancelarUploadAnexo(anexo: Arquivo) {
-    var diagRef = this.dialog.open(ConfirmarComponent, {
-      data: {
-        titulo: "Cancelar Upload",
-        mensagem: `Você tem certeza de que deseja cancelar o upload do arquivo ${anexo.nomeArquivo}?`
-      }
-    });
-    diagRef.afterClosed().subscribe(result => {
-      if (result == true) {
-        anexo.descricao = "cancelar";
-      }
-    });
 
-  }
-  removerAnexo(questao: Questao, anexoIndex: number) {
-    // Remove no fire
-    this.fileService.delete(questao.anexos[anexoIndex].caminhoArquivo);
-
-    // Remove daqui
-    questao.anexos.splice(anexoIndex, 1);
-  }
-  baixarAnexo(anexo: Arquivo) {
-
-    window.open(anexo.url, '_blank');
-  }
 
 }

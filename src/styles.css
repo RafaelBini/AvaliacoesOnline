@@ -179,7 +179,6 @@ textarea {
 .anexo-container{
   background-color: white;
   border: 1px dashed var(--cor-secundaria);
-  padding: 7px;
   position: relative;
   display: flex;
   align-items: center;
@@ -187,6 +186,8 @@ textarea {
   margin-top: 5px;
   margin-bottom: 5px;
   cursor: pointer;
+  height: 35px;
+  padding: 5px;
 }
 .anexo-container:hover{
   border: 1px solid var(--cor-secundaria);

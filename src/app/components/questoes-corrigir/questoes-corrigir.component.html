@@ -4,10 +4,34 @@
 
             <table style="width: 100%;">
 
+                <!-- Imagens -->
+                <tr *ngIf="questao.imagens.length > 0">
+                    <td>
+
+                        <app-arquivo-imagem [editando]="false" [file]="file" [questao]="questao"
+                            [imagemIndex]="imagemIndex" *ngFor="let file of questao.imagens; index as imagemIndex">
+
+                        </app-arquivo-imagem>
+
+                    </td>
+                </tr>
+
                 <!-- PERGUNTA -->
                 <tr>
                     <td style="padding-bottom: 20px; font-size: 15px; white-space: pre-line;">
                         <b>Questão {{qi + 1}}</b>/{{prova.questoes.length}}. {{questao.pergunta}}
+                    </td>
+                </tr>
+
+                <!-- Anexos -->
+                <tr *ngIf="questao.anexos.length > 0">
+                    <td>
+
+                        <app-arquivo-anexo [editando]="false" [file]="file" [questao]="questao"
+                            [anexoIndex]="anexoIndex" *ngFor="let file of questao.anexos; index as anexoIndex">
+
+                        </app-arquivo-anexo>
+
                     </td>
                 </tr>
 
@@ -47,6 +71,23 @@
                                 class="contador-caracteres">{{respostaAlunoTextarea.value.length}}/2500</span>
                         </div>
 
+                        <div>
+
+                            <app-arquivo-anexo [editando]="false" tipo="arquivosEntregues" [file]="file"
+                                [questao]="questao" [anexoIndex]="anexoIndex"
+                                *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
+
+                            </app-arquivo-anexo>
+
+                            <app-arquivo-imagem [editando]="false" tipo="imagensEntregues" [file]="file"
+                                [questao]="questao" [imagemIndex]="imagemIndex"
+                                *ngFor="let file of questao.imagensEntregues; index as imagemIndex">
+
+                            </app-arquivo-imagem>
+
+                        </div>
+
+
                         <br />
                     </td>
                 </tr>
@@ -54,15 +95,17 @@
                 <!-- RESPOSTA ENVIO DE ARQUIVO -->
                 <tr *ngIf="questao.tipo == 2">
                     <td>
-                        <div matTooltip="Enviar arquivos" class="upload-area">
-                            ARRASTE E SOLTE O(S) ARQUIVO(S) AQUI
-                        </div>
                         <div style="width: 90%; margin: auto; color: gray;">
                             <br />
                             Extensões permitidas: {{questao.extensoes.join('; ')}}
                             <br />
                             Tamanho total máximo: 60 MB
                         </div>
+                        <app-arquivo-anexo [editando]="false" [file]="file" [questao]="questao"
+                            [anexoIndex]="anexoIndex"
+                            *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
+
+                        </app-arquivo-anexo>
                     </td>
                 </tr>
 

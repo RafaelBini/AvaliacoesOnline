@@ -64,6 +64,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { GabaritoQuestaoComponent } from './dialogs/gabarito-questao/gabarito-questao.component';
 import { DetalhesProvaComponent } from './dialogs/detalhes-prova/detalhes-prova.component';
 import { ImagemAmpliadaComponent } from './dialogs/imagem-ampliada/imagem-ampliada.component';
+import { DropFileDirective } from './directives/drop-file.directive';
+import { ArquivoAnexoComponent } from './components/arquivo-anexo/arquivo-anexo.component';
+import { ArquivoImagemComponent } from './components/arquivo-imagem/arquivo-imagem.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +103,9 @@ import { ImagemAmpliadaComponent } from './dialogs/imagem-ampliada/imagem-amplia
     GabaritoQuestaoComponent,
     DetalhesProvaComponent,
     ImagemAmpliadaComponent,
+    DropFileDirective,
+    ArquivoAnexoComponent,
+    ArquivoImagemComponent,
   ],
   imports: [
     BrowserModule,

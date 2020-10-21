@@ -1,3 +1,5 @@
+import { ConfirmarComponent } from './../../dialogs/confirmar/confirmar.component';
+import { FileService } from './../../services/file.service';
 import { SelecionarAlunosComponent } from './../../dialogs/selecionar-alunos/selecionar-alunos.component';
 import { CredencialService } from './../../services/credencial.service';
 import { ProvaService } from './../../services/prova.service';
@@ -9,30 +11,34 @@ import { Avaliacao } from './../../models/avaliacao';
 import { BuscarQuestaoComponent } from './../../dialogs/buscar-questao/buscar-questao.component';
 import { AvaliacaoCriadaDialogComponent } from './../../dialogs/avaliacao-criada-dialog/avaliacao-criada-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UrlNode } from 'src/app/models/url-node';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { Prova } from 'src/app/models/prova';
 import { Usuario } from 'src/app/models/usuario';
-
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-avaliacao-nova',
   templateUrl: './avaliacao-nova.component.html',
   styleUrls: ['./avaliacao-nova.component.css']
 })
-export class AvaliacaoNovaComponent implements OnInit {
+export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
 
-  constructor(public router: Router,
+  constructor(
+    private location: Location,
+    public router: Router,
     public route: ActivatedRoute,
     public dialog: MatDialog,
     private snack: MatSnackBar,
     public comumService: ComumService,
     public credencialService: CredencialService,
     public avaliacaoService: AvaliacaoService,
-    public provaService: ProvaService) { }
+    public provaService: ProvaService,
+    private fileService: FileService,
+  ) { }
 
 
   public avaliacao: Avaliacao = {
@@ -103,6 +109,8 @@ export class AvaliacaoNovaComponent implements OnInit {
         },
         anexos: [],
         imagens: [],
+        arquivosEntregues: [],
+        imagensEntregues: [],
       },
     ],
   };
@@ -125,6 +133,7 @@ export class AvaliacaoNovaComponent implements OnInit {
 
   idEmEdicao: string;
 
+  salvo: boolean = false;
 
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
@@ -196,6 +205,31 @@ export class AvaliacaoNovaComponent implements OnInit {
         this.isEditando = false;
       }
     });
+  }
+
+  ngOnDestroy() {
+    // if (!this.salvo) {
+    //   var diagRef = this.dialog.open(ConfirmarComponent, {
+    //     data: {
+    //       titulo: "Sair sem salvar",
+    //       mensagem: "Você tem certeza de que deseja sair sem salvar?"
+    //     }
+    //   });
+    //   diagRef.afterClosed().subscribe((result) => {
+    //     if (result != true) {
+    //       this.location.back();
+
+    //     }
+    //   })
+    // }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload(event) {
+    event.preventDefault();
+
+    return false;
+
   }
 
   puxarAvaliacaoParaEditar(avaliacaoId) {
@@ -302,6 +336,8 @@ export class AvaliacaoNovaComponent implements OnInit {
       },
       anexos: [],
       imagens: [],
+      arquivosEntregues: [],
+      imagensEntregues: [],
     });
 
     this.comumService.scrollToBottom();
@@ -447,6 +483,16 @@ export class AvaliacaoNovaComponent implements OnInit {
     });
   }
   mudarVisao(tipoVisao) {
+    if (this.provaExemplo) {
+      for (let questao of this.provaExemplo.questoes) {
+        for (let arquivo of questao.imagensEntregues) {
+          this.fileService.delete(arquivo.caminhoArquivo);
+        }
+        for (let arquivo of questao.arquivosEntregues) {
+          this.fileService.delete(arquivo.caminhoArquivo);
+        }
+      }
+    }
     this.provaExemplo = this.provaService.getProvaFromGabarito(this.provaGabarito);
     this.visao = tipoVisao;
   }

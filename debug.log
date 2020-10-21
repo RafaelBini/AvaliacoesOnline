@@ -42,3 +42,4 @@
 [1020/093034.102:ERROR:filesystem_win.cc(116)] GetFileAttributes C:\Users\rfabini\AppData\Local\Temp\.profile\Crashpad\reports\ac61ff23-aadd-4282-8a26-d42ac6a5c07a.dmp: O sistema não pode encontrar o arquivo especificado. (0x2)
 [1020/093034.102:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
 [1020/123140.479:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)
+[1021/070644.159:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)

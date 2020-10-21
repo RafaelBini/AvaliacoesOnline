@@ -3,10 +3,34 @@
         <div class="questao" *ngFor="let questao of prova.questoes; index as qi; trackBy:identificarQuestao">
             <table style="width: 100%;" *ngIf="estaNoContextoCerto(questao)">
 
+                <!-- Imagens -->
+                <tr *ngIf="questao.imagens.length > 0">
+                    <td>
+
+                        <app-arquivo-imagem [editando]="false" [file]="file" [questao]="questao"
+                            [imagemIndex]="imagemIndex" *ngFor="let file of questao.imagens; index as imagemIndex">
+
+                        </app-arquivo-imagem>
+
+                    </td>
+                </tr>
+
                 <!-- PERGUNTA -->
                 <tr>
                     <td style="padding-bottom: 20px; font-size: 15px; white-space: pre-line;">
                         <b>Questão {{qi + 1}}</b>/{{prova.questoes.length}}. {{questao.pergunta}}
+                    </td>
+                </tr>
+
+                <!-- Anexos -->
+                <tr *ngIf="questao.anexos.length > 0">
+                    <td>
+
+                        <app-arquivo-anexo [editando]="false" [file]="file" [questao]="questao"
+                            [anexoIndex]="anexoIndex" *ngFor="let file of questao.anexos; index as anexoIndex">
+
+                        </app-arquivo-anexo>
+
                     </td>
                 </tr>
 
@@ -52,27 +76,62 @@
                         </div>
 
                         <br />
-                        <button mat-icon-button matTooltip="Adicionar Imagem">
+                        <button (click)="imagemSelectInput.click()" mat-icon-button matTooltip="Adicionar Imagem">
                             <mat-icon>insert_photo</mat-icon>
                         </button>
-                        <button mat-icon-button matTooltip="Adicionar Anexo">
+                        <button (click)="anexoSelectInput.click()" mat-icon-button matTooltip="Adicionar Anexo">
                             <mat-icon>attach_file</mat-icon>
                         </button>
+                        <div>
+
+                            <app-arquivo-anexo [editando]="true" tipo="arquivosEntregues" [file]="file"
+                                [questao]="questao" [anexoIndex]="anexoIndex" (anexoRemovido)="anexoRemovido()"
+                                *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
+
+                            </app-arquivo-anexo>
+
+                            <app-arquivo-imagem [editando]="true" tipo="imagensEntregues" [file]="file"
+                                [questao]="questao" [imagemIndex]="imagemIndex" (imagemRemovida)="imagemRemovida()"
+                                *ngFor="let file of questao.imagensEntregues; index as imagemIndex">
+
+                            </app-arquivo-imagem>
+
+                            <input #anexoSelectInput (change)="onAnexoSelected($event, questao)" type="file"
+                                class="input-invisivel" value="Selecione os arquivos" multiple />
+
+                            <input #imagemSelectInput (change)="onImagemSelected($event, questao)" type="file"
+                                class="input-invisivel" accept="image/*" value="Selecione os arquivos" multiple />
+                        </div>
+
                     </td>
                 </tr>
 
                 <!-- RESPOSTA ENVIO DE ARQUIVO -->
                 <tr *ngIf="questao.tipo == 2">
                     <td>
-                        <div matTooltip="Enviar arquivos" class="upload-area">
-                            ARRASTE E SOLTE O(S) ARQUIVO(S) AQUI
+                        <div class="drop-here" (fileDropped)="uploadAnexos($event, questao)"
+                            (click)="anexoSelectInput.click()" appDropFile>
+                            <span class="drop-here-texto">
+                                ARRASTE E SOLTE O(S) ARQUIVO(S) AQUI
+                            </span>
                         </div>
                         <div style="width: 90%; margin: auto; color: gray;">
                             <br />
                             Extensões permitidas: {{questao.extensoes.join('; ')}}
                             <br />
-                            Tamanho total máximo: 60 MB
+                            Tamanho máximo de cada arquivo: 50 MB
                         </div>
+                        <div>
+
+                            <app-arquivo-anexo [editando]="true" tipo="arquivosEntregues" [file]="file"
+                                [questao]="questao" [anexoIndex]="anexoIndex" (anexoRemovido)="anexoRemovido()"
+                                *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
+
+                            </app-arquivo-anexo>
+
+                        </div>
+                        <input #anexoSelectInput (change)="onAnexoSelected($event, questao)" type="file"
+                            class="input-invisivel" value="Selecione os arquivos" multiple />
                     </td>
                 </tr>
 

@@ -1,3 +1,4 @@
+import { FileService } from './file.service';
 import { Correcao } from './../models/correcao';
 import { ComumService } from './comum.service';
 import { Questao } from './../models/questao';
@@ -13,7 +14,11 @@ import { Md5 } from 'ts-md5/dist/md5';
 })
 export class ProvaService {
 
-  constructor(private db: AngularFirestore, private comumService: ComumService) { }
+  constructor(
+    private db: AngularFirestore,
+    private comumService: ComumService,
+    private fileService: FileService,
+  ) { }
 
   insertProvaGabarito(prova: Prova) {
     return new Promise((resolve, reject) => {
@@ -165,8 +170,29 @@ export class ProvaService {
 
   }
 
-  deletarProva(provaId: string) {
-    return this.db.collection('provas').doc(provaId).delete();
+  deletarProva(prova: Prova) {
+
+    // Deleta todos os arquivos da prova
+    for (let questao of prova.questoes) {
+
+      if (prova.isGabarito) {
+        for (let arquivo of questao.imagens) {
+          this.fileService.delete(arquivo.caminhoArquivo);
+        }
+        for (let arquivo of questao.anexos) {
+          this.fileService.delete(arquivo.caminhoArquivo);
+        }
+      }
+
+      for (let arquivo of questao.arquivosEntregues) {
+        this.fileService.delete(arquivo.caminhoArquivo);
+      }
+
+    }
+
+    return this.db.collection('provas').doc(prova.id).delete();
+
+
   }
 
   getMinhaNota(prova: Prova, gabarito: Prova) {
@@ -217,8 +243,8 @@ export class ProvaService {
     return maiorNota;
 
   }
-  isProvaRespondida(prova: Prova): boolean{
-    for (let [qi, questao] of prova.questoes.entries()){
+  isProvaRespondida(prova: Prova): boolean {
+    for (let [qi, questao] of prova.questoes.entries()) {
 
     }
     return true;

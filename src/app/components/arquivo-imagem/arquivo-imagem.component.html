@@ -1,0 +1,33 @@
+<div>
+    <div *ngIf="file.percentual < 100" class="item">
+        <div class="mask" [style.width]="file.percentual + '%'">
+        </div>
+        <div class="item-texto">{{file.nomeArquivo}}
+            (<b>{{ file.percentual | number : '1.0-0' }}%</b>)</div>
+        <button (click)="cancelarUploadImagem(file)"
+            style="color: var(--cor-perigosa); position: absolute; top: 1px; right: 1px;" matTooltip="Cancelar upload"
+            mat-icon-button>
+            <mat-icon>
+                cancel
+            </mat-icon>
+        </button>
+    </div>
+    <div *ngIf="file.percentual >= 100" class="image-container">
+        <img (click)="ampliarImagem(file)" [src]="file.url"
+            style="height: 200px; object-fit: contain; margin: auto; display: block" />
+        <button *ngIf="editando" (click)="removerImagem(questao, imagemIndex)" class="imagem-controle"
+            style="top: 0px; right: 0px" mat-icon-button matTooltip="Remover imagem">
+            <mat-icon>
+                delete
+            </mat-icon>
+        </button>
+        <div *ngIf="editando" class="imagem-controle imagem-descricao" [class.imagem-descricao-ativa]="file.descricao">
+            <input type="text" maxlength="50" class="input-transparente" placeholder="Coloque aqui uma descrição"
+                [(ngModel)]="file.descricao" />
+        </div>
+        <div *ngIf="!editando && file.descricao" class="imagem-controle imagem-descricao"
+            [class.imagem-descricao-ativa]="file.descricao">
+            {{file.descricao}}
+        </div>
+    </div>
+</div>

@@ -9,6 +9,9 @@ import { Questao } from './../../models/questao';
 import { Component, OnInit, Input, ElementRef, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { Usuario } from 'src/app/models/usuario';
+import { Arquivo } from 'src/app/models/arquivo';
+import { ConfirmarComponent } from 'src/app/dialogs/confirmar/confirmar.component';
+import { FileService } from 'src/app/services/file.service';
 
 
 @Component({
@@ -26,6 +29,7 @@ export class QuestoesResponderComponent implements OnInit {
   constructor(
     public comumService: ComumService,
     public credencialService: CredencialService,
+    private fileService: FileService,
     private timeService: TimeService,
     private dialog: MatDialog,
     private snack: MatSnackBar) { }
@@ -236,7 +240,153 @@ export class QuestoesResponderComponent implements OnInit {
   }
 
 
-  // VERDADEIRO OU FALSO
+  // ENVIO DE ARQUIVOS
+  onAnexoSelected(event, questao: Questao) {
+    this.uploadAnexos(event.target.files, questao);
+  }
+  isExtensaoValida(nomeArquivo: string, questao: Questao) {
+    for (let extensao of questao.extensoes) {
+      if (nomeArquivo.split('.')[nomeArquivo.split('.').length - 1] == extensao.replace(".", "")) {
+        return true;
+      }
+    }
+    return false;
+  }
+  uploadAnexos(files, questao: Questao) {
+
+    for (let file of files) {
+
+      const TIPO = file.type.split('/')[0];
+      const TAMANHO_MAXIMO = 50000000;
+
+      if (file.size > TAMANHO_MAXIMO) {
+        this.snack.open(`Não é possivel subir arquivos com mais de 50MB`, null, {
+          duration: 3500,
+        });
+        continue;
+      }
+      else if (questao.tipo == 2) {
+        if (!this.isExtensaoValida(file.name, questao)) {
+          this.snack.open(`Não é permitido subir arquivos do tipo .${file.name.split('.')[file.name.split('.').length - 1]}`, null, {
+            duration: 3500,
+          });
+          continue;
+        }
+      }
+
+      const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+
+      const newFileIndex = questao.arquivosEntregues.push({
+        nomeArquivo: file.name,
+        caminhoArquivo: CAMINHO,
+        tamanho: file.size,
+        tipo: TIPO,
+        tipoCompleto: file.type,
+        percentual: 0,
+        url: '',
+      }) - 1;
+
+
+      var uploadTask = this.fileService.upload(CAMINHO, file);
+
+      uploadTask.percentageChanges().subscribe(percentual => {
+        if (questao.arquivosEntregues[newFileIndex].descricao == "cancelar") {
+          uploadTask.cancel();
+          questao.arquivosEntregues.splice(newFileIndex, 1);
+          return;
+        }
+        questao.arquivosEntregues[newFileIndex].percentual = percentual;
+
+      });
+
+      uploadTask.then(uploadTaskSnap => {
+
+        uploadTaskSnap.ref.getDownloadURL().then(url => {
+          questao.arquivosEntregues[newFileIndex].url = url;
+          this.respostaAlterada.emit();
+        })
+          .catch(reason => {
+            console.log(reason);
+          });
+      })
+        .catch(reason => {
+          console.log(reason);
+        });
+
+    }
+  }
+  anexoRemovido() {
+    this.respostaAlterada.emit();
+  }
+
+  // ENVIO DE IMAGENS
+  onImagemSelected(event, questao: Questao) {
+    this.uploadImagens(event.target.files, questao);
+  }
+  uploadImagens(files, questao: Questao) {
+    const tiposPermitidos = ['image']
+
+    for (let file of files) {
+
+      const TIPO = file.type.split('/')[0];
+      const TAMANHO_MAXIMO = 50000000;
+
+      if (!tiposPermitidos.includes(TIPO)) {
+        this.snack.open(`O formato ${TIPO} não é permitido`, null, {
+          duration: 3500,
+        });
+        continue;
+      }
+      if (file.size > TAMANHO_MAXIMO) {
+        this.snack.open(`Não é possivel subir arquivos com mais de 50MB`, null, {
+          duration: 3500,
+        });
+        continue;
+      }
+
+      const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+
+      const newFileIndex = questao.imagensEntregues.push({
+        nomeArquivo: file.name,
+        caminhoArquivo: CAMINHO,
+        tamanho: file.size,
+        tipo: TIPO,
+        tipoCompleto: file.type,
+        percentual: 0,
+        url: '',
+      }) - 1;
+
+
+      var uploadTask = this.fileService.upload(CAMINHO, file);
+
+      uploadTask.percentageChanges().subscribe(percentual => {
+        if (questao.imagensEntregues[newFileIndex].descricao == "cancelar") {
+          uploadTask.cancel();
+          questao.imagensEntregues.splice(newFileIndex, 1);
+          return;
+        }
+        questao.imagensEntregues[newFileIndex].percentual = percentual;
+      });
+
+      uploadTask.then(uploadTaskSnap => {
+
+        uploadTaskSnap.ref.getDownloadURL().then(url => {
+          questao.imagensEntregues[newFileIndex].url = url;
+          this.respostaAlterada.emit();
+        })
+          .catch(reason => {
+            console.log(reason);
+          });
+      })
+        .catch(reason => {
+          console.log(reason);
+        });
+
+    }
+  }
+  imagemRemovida() {
+    this.respostaAlterada.emit();
+  }
 
 
 
