@@ -186,8 +186,8 @@ export class QuestoesCorrigirComponent implements OnInit {
   }
 
   // PREENCHER
-  getOpcoesPreencherAtivas(questao: Questao) {
-    return questao.opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.texto > b.texto ? 1 : -1);
+  getOpcoesPreencherAtivas(questao: Questao, questaoIndex: number) {
+    return this.gabarito.questoes[questaoIndex].opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.opcaoSelecionada > b.opcaoSelecionada ? 1 : -1);
   }
   getPreenchimentoPartes(questao: Questao) {
     var texto = questao.textoParaPreencher;

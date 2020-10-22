@@ -67,6 +67,8 @@ import { ImagemAmpliadaComponent } from './dialogs/imagem-ampliada/imagem-amplia
 import { DropFileDirective } from './directives/drop-file.directive';
 import { ArquivoAnexoComponent } from './components/arquivo-anexo/arquivo-anexo.component';
 import { ArquivoImagemComponent } from './components/arquivo-imagem/arquivo-imagem.component';
+import { CronometroComponent } from './components/cronometro/cronometro.component';
+import { AjudaComponent } from './dialogs/ajuda/ajuda.component';
 
 @NgModule({
   declarations: [
@@ -106,6 +108,8 @@ import { ArquivoImagemComponent } from './components/arquivo-imagem/arquivo-imag
     DropFileDirective,
     ArquivoAnexoComponent,
     ArquivoImagemComponent,
+    CronometroComponent,
+    AjudaComponent,
   ],
   imports: [
     BrowserModule,

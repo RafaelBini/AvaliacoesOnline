@@ -192,3 +192,14 @@ textarea {
 .anexo-container:hover{
   border: 1px solid var(--cor-secundaria);
 }
+
+.btn-help{
+  font-size: 15px;
+  color: var(--cor-secundaria);
+  user-select: none;
+  opacity: 0.6;
+  cursor: pointer;
+}
+.btn-help:hover{
+  opacity: 1;
+}

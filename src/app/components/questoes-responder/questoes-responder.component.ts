@@ -117,8 +117,8 @@ export class QuestoesResponderComponent implements OnInit {
     }
     // PREENCHIMENTO
     else if (questao.tipo == 5) {
-      for (let opcao of questao.opcoesParaPreencher) {
-        if (opcao.opcaoSelecionada != opcao.texto && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
+      for (let [i, opcao] of questao.opcoesParaPreencher.entries()) {
+        if (opcao.opcaoSelecionada != this.gabarito.questoes[questaoIndex].opcoesParaPreencher[i].opcaoSelecionada && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
           opcao.opcaoSelecionada = null;
           tudoCerto = false;
           break;
@@ -203,8 +203,8 @@ export class QuestoesResponderComponent implements OnInit {
   }
 
   // PREENCHER
-  getOpcoesPreencherAtivas(questao: Questao) {
-    return questao.opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.texto > b.texto ? 1 : -1);
+  getOpcoesPreencherAtivas(questao: Questao, questaoIndex: number) {
+    return this.gabarito.questoes[questaoIndex].opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.opcaoSelecionada > b.opcaoSelecionada ? 1 : -1);
   }
   getPreenchimentoPartes(questao: Questao) {
     var texto = questao.textoParaPreencher;

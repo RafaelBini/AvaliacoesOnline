@@ -26,20 +26,19 @@
     </div>
 
     <div *ngIf="!avaliacao.isInicioIndeterminado">
-        <b>Periodo de Avaliação</b>:
+        <span>Período de Avaliação</span>
+        <br />
         <span>
-            {{avaliacao.isInicioIndeterminado ? 'Indeterminado' : comumService.getStrDateFormatada(avaliacao.dtInicio)}}
-            -
-            {{avaliacao.isInicioCorrecaoIndeterminado ? 'Indeterminado' : comumService.getStrDateFormatada(avaliacao.dtInicioCorrecao)}}
+            {{avaliacao.isInicioIndeterminado ? 'Indeterminado' : comumService.getIntervaloAmigavel(avaliacao.dtInicio, avaliacao.dtInicioCorrecao)}}
         </span>
     </div>
+    <br />
 
     <div *ngIf="!avaliacao.isInicioCorrecaoIndeterminado">
-        <b>Periodo de Correção</b>:
+        <span>Período de Correção</span>
+        <br />
         <span>
-            {{avaliacao.isInicioCorrecaoIndeterminado ? 'Indeterminado' : comumService.getStrDateFormatada(avaliacao.dtInicioCorrecao)}}
-            -
-            {{avaliacao.isTerminoIndeterminado ? 'Indeterminado' : comumService.getStrDateFormatada(avaliacao.dtTermino)}}
+            {{avaliacao.isInicioCorrecaoIndeterminado ? 'Indeterminado' : comumService.getIntervaloAmigavel(avaliacao.dtInicioCorrecao, avaliacao.dtTermino)}}
         </span>
     </div>
 
@@ -80,6 +79,6 @@
         <hr />
         {{tipoAcesso=="professor" ? status.acaoProfessor : status.acaoAluno}}
     </a>
-
+    <br />
 
 </div>

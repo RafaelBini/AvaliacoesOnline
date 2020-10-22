@@ -16,6 +16,7 @@ import { AvaliacaoAlunoCabecalhoComponent } from './avaliacao-aluno-cabecalho/av
 import { Usuario } from 'src/app/models/usuario';
 import { Grupo } from 'src/app/models/grupo';
 import { DetalhesProvaComponent } from 'src/app/dialogs/detalhes-prova/detalhes-prova.component';
+import { CronometroComponent } from '../cronometro/cronometro.component';
 
 
 @Component({
@@ -80,6 +81,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
   private estouIndoInserirProva = false;
 
   @ViewChild(CountdownComponent) countDown: CountdownComponent;
+  @ViewChild(CronometroComponent) cronometro: CronometroComponent;
 
   ngOnInit(): void {
 
@@ -176,6 +178,10 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
               }
               else if (this.avaliacao.status == 3) {
+
+                this.cronometro.pararCronometro();
+
+                // Coloca minha nota
                 const MINHA_NOTA = this.provaService.getMinhaNota(this.prova, this.gabarito);
                 const NOTA_MAXIMA = this.provaService.getPontuacaoMaxima(this.prova);
 
@@ -235,7 +241,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     // Em preparação
     if (this.avaliacao.status == 0) {
       if (this.avaliacao.isInicioIndeterminado)
-        return '2020-09-05T13:55:30.000Z';
+        return null;
       else
         return this.avaliacao.dtInicio;
     }
@@ -271,7 +277,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       else {
         // Sem fim na avaliacao
         if (this.avaliacao.isInicioCorrecaoIndeterminado)
-          return '2020-09-05T13:55:30.000Z';
+          return null;
         // Com fim na avaliaçao
         else
           return this.avaliacao.dtInicioCorrecao;
@@ -284,14 +290,14 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     // Durante correção
     else if (this.avaliacao.status == 2) {
       if (this.avaliacao.isTerminoIndeterminado)
-        return '2020-09-05T13:55:30.000Z';
+        return null;
       else
         return this.avaliacao.dtTermino;
     }
 
     // Encerrada
     else {
-      return '2020-09-05T13:55:30.000Z';
+      return null;
     }
 
   }
@@ -373,13 +379,11 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
       this.avaliacao.status = this.avaliacaoService.getStatusConformeTempo(this.avaliacao);
 
-
-
       if (this.avaliacao.tipoDisposicao == 0 && !this.avaliacao.isDuracaoIndividualIndeterminada) {
 
         var duracaoIndividual = new Date(this.getEuNaAvaliacao().dtStatus[2]).getTime() + this.avaliacao.duracaoIndividualMs;
         var agoraMs = new Date().getTime();
-        if (duracaoIndividual < agoraMs && this.getEuNaAvaliacao().statusId < 3) {
+        if (duracaoIndividual < agoraMs && (this.getEuNaAvaliacao().dtStatus[3] == '' || this.getEuNaAvaliacao().dtStatus[3] == null)) {
           altereiStatusIndividual = true;
           this.getEuNaAvaliacao().dtStatus[3] = new Date().toISOString();
           this.getEuNaAvaliacao().statusId = 3;

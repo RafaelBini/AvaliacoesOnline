@@ -1,3 +1,4 @@
+import { AjudaComponent } from './../../dialogs/ajuda/ajuda.component';
 import { ConfirmarComponent } from './../../dialogs/confirmar/confirmar.component';
 import { FileService } from './../../services/file.service';
 import { SelecionarAlunosComponent } from './../../dialogs/selecionar-alunos/selecionar-alunos.component';
@@ -63,7 +64,7 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
     tipoPontuacao: 0,
     duracaoIndividual: 1,
     duracaoIndividualUnidade: 'horas',
-    duracaoIndividualMs: 0,
+    duracaoIndividualMs: (1000 * 60 * 60),
     isDuracaoIndividualIndeterminada: true,
     tags: [],
     grupos: [
@@ -98,7 +99,7 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
         ],
         textoParaPreencher: "",
         opcoesParaPreencher: [
-          { texto: '', opcaoSelecionada: '', ativa: true }
+          { opcaoSelecionada: '', ativa: true }
         ],
         tentativas: 0,
         extensoes: [],
@@ -111,6 +112,7 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
         imagens: [],
         arquivosEntregues: [],
         imagensEntregues: [],
+        isEditando: true,
       },
     ],
   };
@@ -167,6 +169,9 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
                 provaId: null,
               }
             ];
+            this.avaliacao.dtInicio = this.comumService.getStringFromDate(new Date());
+            this.avaliacao.dtInicioCorrecao = this.comumService.getStringFromDate(new Date(), 1);
+            this.avaliacao.dtTermino = this.comumService.getStringFromDate(new Date(), 2);
           });
         });
         this.isEditando = false;
@@ -325,7 +330,7 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
       ],
       textoParaPreencher: "",
       opcoesParaPreencher: [
-        { texto: '', opcaoSelecionada: '', ativa: true }
+        { opcaoSelecionada: '', ativa: true }
       ],
       tentativas: 0,
       extensoes: [],
@@ -339,9 +344,19 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
       arquivosEntregues: [],
       imagensEntregues: [],
     });
-
+    this.marcarEdicao(this.provaGabarito.questoes.length - 1);
     this.comumService.scrollToBottom();
 
+  }
+  marcarEdicao(questaoIndex: number) {
+    for (var i = 0; i < this.provaGabarito.questoes.length; i++) {
+      if (i != questaoIndex) {
+        this.provaGabarito.questoes[i].isEditando = false;
+      }
+      else {
+        this.provaGabarito.questoes[i].isEditando = true;
+      }
+    }
   }
 
   limitarIndeterminados() {
@@ -394,6 +409,116 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
     return this.comumService.getPeriodoAmigavel(periodoMs);
   }
 
+  // AJUDAS
+  abrirAjudaPeriodoAvaliacao() {
+    this.dialog.open(AjudaComponent, {
+      data: {
+        titulo: "Período de Avaliação",
+        mensagem:
+          `        
+        O Período de Avaliação é o momento em que os alunos atuam na prova respondendo as questões. Esse período é limitado por duas informações: Data de Início e Data de Término.
+        <br /><br />
+        <b>Data de Início</b>: Indica quando a avaliação será iniciada. Se estiver marcada para <i>iniciar manualmente</i>, o professor poderá iniciar a avaliação quando desejar. 
+        Caso não esteja marcada para <i>Iniciar manualmente</i>, o professor deverá informar a data e hora de quando a avaliação será iniciada automaticamente.
+        <br /><br />
+        <b>Data de Término</b>: Indica quando a avaliação será encerrada. Se estiver marcada para <i>encerrar manualmente</i>, o professor poderá encerrar a avaliação quando desejar. 
+        Caso não esteja marcada para <i>encerrar manualmente</i>, o professor deverá informar a data e hora de quando a avaliação será encerrada automaticamente.
+        <br /><br />
+        Obs.: Além de indicar quando a avaliação será encerrada, a <b>Data de Término</b> também indica quando o Período de Correção será iniciado.
+        `
+      }
+    })
+  }
+  abrirAjudaPeriodoCorrecao() {
+    this.dialog.open(AjudaComponent, {
+      data: {
+        titulo: "Período de Correção",
+        mensagem:
+          `        
+        O Período de Correção é o momento em que o professor (ou alunos) atua(m) corrigindo as provas. Esse período é limitado por duas informações: Data de Início e Data de Término.
+        <br /><br />
+        <b>Data de Início</b>: Indica quando as correções serão iniciadas. Se estiver marcada para <i>iniciar manualmente</i>, o professor poderá iniciar a correção quando desejar. 
+        Caso não esteja marcada para <i>iniciar manualmente</i>, o professor deverá informar a data e hora em que as correções serão iniciadas automaticamente.
+        <br /><br />
+        <b>Data de Término</b>: Indica quando as correções serão encerradas. Se estiver marcada para <i>encerrar manualmente</i>, o professor poderá encerrar as correções quando desejar. 
+        Caso não esteja marcada para <i>encerrar manualmente</i>, o professor deverá informar a data e hora de quando as correções serão encerradas automaticamente.
+        <br /><br />
+        Obs.: Além de indicar quando as correções serão iniciadas, a <b>Data de Início</b> também indica quando o Período de Avaliação será encerrado.
+        `
+      }
+    })
+  }
+  abrirAjudaDuracaoIndividual() {
+    this.dialog.open(AjudaComponent, {
+      data: {
+        titulo: "Duração Individual",
+        mensagem:
+          `       
+        A Duração Individual é um período determinado pelo professor para o aluno responder individualmente às questões.        
+        O tempo começa a contar para o aluno a partir do momento em que ele acessa à avaliação.
+        <br /><br />
+        Exemplo: Um aluno iniciou a avaliação às 18:00. Se a <i>Duração Individual</i> for de uma hora, às 19:00 a prova desse aluno será finalizada automaticamente.
+        `
+      }
+    })
+  }
+  abrirAjudaOrdenarAleatorio() {
+    this.dialog.open(AjudaComponent, {
+      data: {
+        titulo: "Ordenar questões de forma aleatória",
+        mensagem:
+          `
+        Ao marcar a opção <i>ordenar questões de forma aleatória</i>, as questões aparecerão em uma sequência diferente para cada aluno (ou grupo).
+        `
+      }
+    })
+  }
+  abrirAjudaBloquearAtrasados() {
+    this.dialog.open(AjudaComponent, {
+      data: {
+        titulo: "Bloquear participação de alunos atrasados",
+        mensagem:
+          `
+        Ao marcar a opção <i>bloquear participação de alunos atrasados</i>, serão impedidos os alunos que tentarem acessar a avaliação depois que ela já estiver sido iniciada.
+        `
+      }
+    })
+  }
+  abrirAjudaTitulo() {
+    this.dialog.open(AjudaComponent, {
+      data: {
+        titulo: "Identificação da Avaliação",
+        mensagem:
+          `
+        O título, a descrição e as tags da avaliação ajudam o professor e os alunos a identificarem a avaliação.
+        <br /><br />
+        O <b>Título</b> irá aparecer no topo da avaliçao para os alunos. Preencha essa informação da forma que preferir. Exemplo de títulos seriam: <i>Avaliação 01 de Matemática</i>; <i>Lingua Portuguesa (Av. 1)</i>.
+        <br /><br />
+        A <b>Descrição</b> irá sempre aparecer abaixo do título. Use esse campo para informar aos alunos detalhes mais específicos sobre a avaliação.
+        <br /><br />
+        As <b>Tags</b> servem para identificar melhor esta avaliação. Você pode padronizar suas avaliações com uma tag da disciplina e outra do turno. Por exemplo: <i>Matemática</i>; <i>Noite</i>; <i>Lingua Portuguesa</i>; <i>Tarde</i>.
+        `
+      }
+    })
+  }
+
+  // AVISOS
+  avisarBloqueioTerminoAvaliacao() {
+    if (this.avaliacao.isInicioIndeterminado) {
+      this.snack.open('Desmarque o inicio manual da avaliação para desmarcar esta', null, { duration: 3500 });
+    }
+  }
+  avisarBloqueioInicioCorrecao() {
+    if (this.avaliacao.isInicioIndeterminado) {
+      this.snack.open('Desmarque o encerramento manual da avaliação para desmarcar esta', null, { duration: 3500 });
+    }
+  }
+  avisarBloqueioTerminoCorrecao() {
+    if (this.avaliacao.isInicioCorrecaoIndeterminado) {
+      this.snack.open('Desmarque o inicio manual da correção para desmarcar esta', null, { duration: 3500 });
+    }
+  }
+
   // FINAL
   finalizar() {
     if (this.idJaExiste) {
@@ -404,9 +529,17 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
       this.snack.open(`Duração individual inválida`, null, { duration: 4500 });
       return;
     }
+    else if (this.getIndexQuestaoGabaritoNaoPreenchida() != -1) {
+      this.snack.open(`Preencha a resposta gabarito da questão ${this.getIndexQuestaoGabaritoNaoPreenchida() + 1}`, null, { duration: 5500 });
+      return;
+    }
     this.validarDatas().then(() => {
       this.avaliacao.professorId = this.credencialService.loggedUser.id;
       this.avaliacao.professorNome = this.credencialService.loggedUser.nome;
+      if (this.avaliacao.isInicioIndeterminado)
+        this.avaliacao.dtInicio = null;
+      if (this.avaliacao.titulo == '')
+        this.avaliacao.titulo = 'Sem Título';
 
       this.avaliacaoService.insertNovaAvaliacao(this.avaliacao).then(() => {
         this.provaGabarito.avaliacaoId = this.avaliacao.id;
@@ -442,6 +575,10 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
       return;
     if (this.idJaExiste) {
       this.snack.open(`Já existe uma avaliação com o ID ${this.avaliacao.id}`, null, { duration: 3500 });
+      return;
+    }
+    else if (this.getIndexQuestaoGabaritoNaoPreenchida() != -1) {
+      this.snack.open(`Preencha a resposta gabarito da questão ${this.getIndexQuestaoGabaritoNaoPreenchida() + 1}`, null, { duration: 5500 });
       return;
     }
     this.validarDatas().then(() => {
@@ -663,9 +800,12 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
     }
   }
   isDuracaoIndividualValida() {
+    if (this.avaliacao.isDuracaoIndividualIndeterminada)
+      return true;
+
     var duracao = this.getDuracaoIndividualEmMs();
 
-    if (duracao <= 1000) {
+    if (duracao < 999) {
       return false;
     }
 
@@ -677,6 +817,14 @@ export class AvaliacaoNovaComponent implements OnInit, OnDestroy {
       }
     }
     return true;
+  }
+  getIndexQuestaoGabaritoNaoPreenchida() {
+    for (let [i, questao] of this.provaGabarito.questoes.entries()) {
+      if (!this.comumService.questaoTipos[questao.tipo].isRespondida(questao)) {
+        return i;
+      }
+    }
+    return -1;
   }
 
 }

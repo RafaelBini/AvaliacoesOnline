@@ -20,6 +20,10 @@
     border-left: 12px solid transparent;
 }
 
+.escondido{
+  visibility: hidden;
+}
+
 .choose-btn:hover {
     border-color: var(--cor-secundaria) !important;
     background-color: white;

@@ -385,8 +385,15 @@
 
     </mat-horizontal-stepper>
 
-    <div style="position: fixed; top: 30%; right: 4%; width: 15%;">
-        <app-countdown [dataObjetivo]="getDataObjetivo()" (tempoEsgotado)="atualizarStatusConformeTempo()"
-            [mensagem]="comumService.statusAvaliacao[avaliacao.status].mensagemCountdown"></app-countdown>
-    </div>
+
+</div>
+
+<div style="position: fixed; top: 30%; right: 4%; width: 15%;">
+
+    <app-countdown [dataObjetivo]="getDataObjetivo()" (tempoEsgotado)="atualizarStatusConformeTempo()"
+        [mensagem]="comumService.statusAvaliacao[avaliacao.status].mensagemCountdown"></app-countdown>
+
+    <app-cronometro *ngIf="getDataObjetivo() == null" tipoAcesso="aluno" [dataInicio]="avaliacao.dtInicio">
+    </app-cronometro>
+
 </div>

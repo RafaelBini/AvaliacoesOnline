@@ -19,7 +19,7 @@ export class GabaritoQuestaoComponent implements OnInit {
   }
 
   getOpcoesPreencherAtivas(questao: Questao) {
-    return questao.opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.texto > b.texto ? 1 : -1);
+    return questao.opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.opcaoSelecionada > b.opcaoSelecionada ? 1 : -1);
   }
 
 }

@@ -1,3 +1,4 @@
+import { OpcaoPreencher } from './../models/opcao-preencher';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Questao } from './../models/questao';
 import { Injectable } from '@angular/core';
@@ -157,10 +158,11 @@ export class ComumService {
       },
       isRespondida(questao: Questao) {
         for (let associacao of questao.associacoes) {
-          if (associacao.opcaoSelecionada) {
-
+          if (associacao.opcaoSelecionada == '' || associacao.opcaoSelecionada == null || associacao.texto == '' || associacao.texto == null) {
+            return false;
           }
         }
+        return true;
       }
     },
     {
@@ -170,6 +172,11 @@ export class ComumService {
       getNota(questao, questaoGabarito): number {
         return 0;
       },
+      isRespondida(questao: Questao) {
+        if (questao.resposta == '' || questao.resposta == null)
+          return false;
+        return true;
+      }
     },
     {
       codigo: 2,
@@ -178,6 +185,9 @@ export class ComumService {
       getNota(questao, questaoGabarito): number {
         return 0;
       },
+      isRespondida(questao: Questao) {
+        return true;
+      }
     },
     {
       codigo: 3,
@@ -192,6 +202,14 @@ export class ComumService {
           }
         }
         return questao.valor - ComumService.getDescontoTentativas(questao);
+      },
+      isRespondida(questao: Questao) {
+        for (let alternativa of questao.alternativas) {
+          if (alternativa.selecionada) {
+            return true;
+          }
+        }
+        return false;
       },
     },
     {
@@ -208,25 +226,35 @@ export class ComumService {
         }
         return questao.valor - ComumService.getDescontoTentativas(questao);
       },
+      isRespondida(questao: Questao) {
+        for (let alternativa of questao.alternativas) {
+          if (alternativa.selecionada) {
+            return true;
+          }
+        }
+        return false;
+      },
     },
     {
       codigo: 5,
       nome: "Preenchimento",
       temCorrecaoAutomatica: true,
-      getNota(questao: Questao, questaoGabarito): number {
+      getNota(questao: Questao, questaoGabarito: Questao): number {
         var nota = questao.valor;
-        // for (let parte of questao.partesPreencher) {
-        //   if (parte.tipo == 'select') {
-        //     if (questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada != questao.opcoesParaPreencher[parte.conteudo].texto)
-
-        //   }
-        // }
-        for (let opcao of questao.opcoesParaPreencher) {
-          if (opcao.opcaoSelecionada != opcao.texto && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
+        for (let [i, opcao] of questao.opcoesParaPreencher.entries()) {
+          if (opcao.opcaoSelecionada != questaoGabarito.opcoesParaPreencher[i].opcaoSelecionada && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
             nota -= (questao.valor / questao.partesPreencher.filter(p => p.tipo == 'select').length);
           }
         }
         return nota - ComumService.getDescontoTentativas(questao);
+      },
+      isRespondida(questao: Questao) {
+        for (let opcao of questao.opcoesParaPreencher) {
+          if (opcao.opcaoSelecionada == '' || opcao.opcaoSelecionada == null) {
+            return false;
+          }
+        }
+        return true;
       },
     },
     {
@@ -242,6 +270,14 @@ export class ComumService {
         }
         return nota - ComumService.getDescontoTentativas(questao);
       },
+      isRespondida(questao: Questao) {
+        for (let alternativa of questao.alternativas) {
+          if (alternativa.selecionada == null) {
+            return false;
+          }
+        }
+        return true;
+      },
     },
     {
       codigo: 7,
@@ -255,6 +291,14 @@ export class ComumService {
           }
         }
         return nota;
+      },
+      isRespondida(questao: Questao) {
+        for (let alternativa of questao.alternativas) {
+          if (alternativa.selecionada == null) {
+            return false;
+          }
+        }
+        return true;
       },
     },
   ];
@@ -380,7 +424,7 @@ export class ComumService {
       dataAmigavel += "ontem ";
     }
     else {
-      dataAmigavel += `${REAL_DATE.toDateString()}, `;
+      dataAmigavel += `dia ${REAL_DATE.toLocaleDateString().substr(0, 5)}, `;
     }
 
     // Recebe a hora
@@ -431,6 +475,16 @@ export class ComumService {
 
   }
 
+  getIntervaloAmigavel(dataIsoInicio: string, dataIsoFim: string) {
+    var dataInicio = new Date(dataIsoInicio);
+    var dataFim = new Date(dataIsoFim);
+    if (dataInicio.getDay() == dataFim.getDay() && dataInicio.getMonth() == dataFim.getMonth() && dataInicio.getFullYear() == dataFim.getFullYear()) {
+      return `${this.getDataAmigavel(dataIsoInicio).replace('às', 'das')} às ${dataFim.getHours()}:${dataFim.getMinutes()}`;
+    }
+    else {
+      return `do ${this.getDataAmigavel(dataIsoInicio)} até ${this.getDataAmigavel(dataIsoFim)}`;
+    }
+  }
 
   getStringFromDate(date: Date, horasMais: number = 0) {
     date.toLocaleString();

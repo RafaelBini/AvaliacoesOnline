@@ -9,3 +9,5 @@
 - Confirmar antes de fechar sem salvar (avaliacao-nova)
 
 - Professor, grupos: rolar tela somente se estiver arrastando algo
+
+- Colocar opção de excluir questão no banco de questões

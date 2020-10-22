@@ -31,4 +31,5 @@ export interface Questao {
     isValidadaCorreta?: boolean;
     anexos?: Array<Arquivo>;
     imagens?: Array<Arquivo>;
+    isEditando?: boolean;
 }

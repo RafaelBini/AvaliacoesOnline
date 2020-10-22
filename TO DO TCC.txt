@@ -38,13 +38,16 @@
 - Quando o componente avaliacao-professor estiver com avalicao status 2 ou 3, já deve passar por cada prova e atribuindo a nota padrão
 
 
-- Anexo de imagens / arquivos nas questões (1 ou mais)
-	- Na pergunta
-	- Nas respostas (dissertativas e envio de arquivo)
+- Salvar sempre o rascunho de nova avalição no firebase
+
+- Adicionar opção para limpar excluir o rascunho de nova avaliação
+
+- Não deixar inserir aluno duplicado
 
 - Hospedar
 
 - Enviar o link no grupo
+
 
 
 

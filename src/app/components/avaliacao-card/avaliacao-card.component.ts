@@ -70,7 +70,7 @@ export class AvaliacaoCardComponent implements OnInit {
                     this.provaService.deletarProva(prova);
                 }
 
-                this.snack.open("Questões excluidas com sucesso.", null, { duration: 3500 });
+
               });
             }
 

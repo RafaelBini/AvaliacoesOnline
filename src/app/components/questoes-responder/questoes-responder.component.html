@@ -159,9 +159,9 @@
                             <select *ngIf="parte.tipo == 'select'" class="select-basico"
                                 [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada"
                                 (ngModelChange)="sinalizarRespostaAlterada(questao)">
-                                <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao)"
-                                    [value]="opcaoPreencher.texto">
-                                    {{opcaoPreencher.texto}}
+                                <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao, qi)"
+                                    [value]="opcaoPreencher.opcaoSelecionada">
+                                    {{opcaoPreencher.opcaoSelecionada}}
                                 </option>
                             </select>
                         </span>

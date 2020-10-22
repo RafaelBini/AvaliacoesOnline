@@ -2,18 +2,18 @@
     <div cdkDropList [cdkDropListData]="prova.questoes" (cdkDropListDropped)="drop($event)"
         style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
 
-        <div cdkDrag class="questao" *ngFor="let questao of prova.questoes; index as qi">
+        <div cdkDrag class="questao" (click)="marcarEdicao(qi)" *ngFor="let questao of prova.questoes; index as qi">
             <table style="width: 100%;">
 
                 <!-- Drag Handle -->
-                <tr>
+                <tr class="ferramenta-edicao" [class.is-editando]="questao.isEditando">
                     <td align="center">
                         <mat-icon style="cursor: move;" cdkDragHandle>drag_handle</mat-icon>
                     </td>
                 </tr>
 
                 <!-- Tipo Questão / Nivel Dificuldade -->
-                <tr>
+                <tr class="ferramenta-edicao" [class.is-editando]="questao.isEditando">
                     <td align="left" style="padding-bottom: 18px; position: relative;">
 
                         <select class="select-basico" style="padding: 8px;" #tipo
@@ -31,6 +31,13 @@
                     </td>
                 </tr>
 
+                <!-- Numero da Questão -->
+                <tr>
+                    <td style="padding-bottom: 20px; font-size: 15px; white-space: pre-line;">
+                        <b>Questão {{qi + 1}}</b>/{{prova.questoes.length}}.
+                    </td>
+                </tr>
+
                 <!-- Imagens -->
                 <tr *ngIf="questao.imagens.length > 0">
                     <td>
@@ -44,7 +51,7 @@
                 </tr>
 
                 <!-- Pergunta -->
-                <tr>
+                <tr *ngIf="questao.tipo != 5">
                     <td style="position: relative;">
 
                         <textarea #perguntaTextarea (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
@@ -114,7 +121,7 @@
                             </tr>
 
                             <!-- ADICIONAR ASSOCIACAO -->
-                            <tr>
+                            <tr class="ferramenta-edicao" [class.is-editando]="questao.isEditando">
                                 <td width="5%" colspan="3" style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
                                         (click)="addAssociacao(questao, tabelaAssociacoes);" mat-icon-button>
@@ -222,7 +229,7 @@
                             </tr>
 
                             <!-- ADICIONAR ALTERNATIVA -->
-                            <tr>
+                            <tr class="ferramenta-edicao" [class.is-editando]="questao.isEditando">
                                 <td colspan="2" style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
                                         (click)="addAlternativa(questao, tabelaAlternativas);" mat-icon-button>
@@ -267,7 +274,8 @@
                                     style="cursor: default">
                                     <div style="display: inline-flex; width: 100%; position: relative;">
                                         <textarea #opcaoPreencherTextarea (input)="ajustarAltura($event)"
-                                            (click)="ajustarAltura($event)" [(ngModel)]="opcaoParaPreencher.texto"
+                                            (click)="ajustarAltura($event)"
+                                            [(ngModel)]="opcaoParaPreencher.opcaoSelecionada"
                                             (keyup)="onNovaOpcaoPreencherKeyUp($event, questao, tabelaOpcoesPreencher)"
                                             class=" invisible-input"
                                             placeholder="Digite aqui uma opção para completar o texto"
@@ -286,7 +294,7 @@
                             </tr>
 
                             <!-- ADICIONAR OPÇÃO PARA PREENCHER -->
-                            <tr>
+                            <tr class="ferramenta-edicao" [class.is-editando]="questao.isEditando">
                                 <td colspan="3" style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar opção (Ctrl + Enter)"
                                         (click)="addOpcaoPreencher(questao, tabelaOpcoesPreencher);" mat-icon-button>
@@ -343,7 +351,7 @@
                             </tr>
 
                             <!-- ADICIONAR ALTERNATIVA -->
-                            <tr>
+                            <tr class="ferramenta-edicao" [class.is-editando]="questao.isEditando">
                                 <td colspan="3" style="background-color: white; text-align: center;">
                                     <button matTooltip="Adicionar alternativa (Ctrl + Enter)"
                                         (click)="addAlternativaVouF(questao, tabelaVerdadeiroOuFalso);" mat-icon-button>
@@ -367,18 +375,21 @@
                             <span
                                 style="padding: 9px; color: gray;">{{ ( (questao.valor/getPontuacaoMaxima())*100 ) |  number:'1.0-0' }}%</span>
                         </div>
-                        <button (click)="imagemSelectInput.click()" mat-icon-button matTooltip="Adicionar Imagem">
-                            <mat-icon>insert_photo</mat-icon>
-                        </button>
-                        <button (click)="anexoSelectInput.click()" mat-icon-button matTooltip="Adicionar Anexo">
-                            <mat-icon>attach_file</mat-icon>
-                        </button>
-                        <button matTooltip="Alterar tags" mat-icon-button (click)="openInfoQuestao(questao)">
-                            <mat-icon>local_offer</mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="deletarQuestao(qi)" matTooltip="Remover Questão">
-                            <mat-icon style="color: rgb(143, 12, 12);">delete</mat-icon>
-                        </button>
+                        <div class="ferramenta-edicao opcoes-questao" [class.is-editando]="questao.isEditando">
+                            <button (click)="imagemSelectInput.click()" mat-icon-button matTooltip="Adicionar Imagem">
+                                <mat-icon>insert_photo</mat-icon>
+                            </button>
+                            <button (click)="anexoSelectInput.click()" mat-icon-button matTooltip="Adicionar Anexo">
+                                <mat-icon>attach_file</mat-icon>
+                            </button>
+                            <button matTooltip="Alterar tags" mat-icon-button (click)="openInfoQuestao(questao)">
+                                <mat-icon>local_offer</mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="deletarQuestao(qi)" matTooltip="Remover Questão">
+                                <mat-icon style="color: rgb(143, 12, 12);">delete</mat-icon>
+                            </button>
+                        </div>
+
                     </td>
                 </tr>
             </table>

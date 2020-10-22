@@ -1,3 +1,4 @@
+import { CronometroComponent } from './../cronometro/cronometro.component';
 import { DetalhesProvaComponent } from './../../dialogs/detalhes-prova/detalhes-prova.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -57,6 +58,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   public scrolling = false;
 
   @ViewChild(CountdownComponent) countDown: CountdownComponent;
+  @ViewChild(CronometroComponent) cronometro: CronometroComponent;
 
   constructor(
     public credencialService: CredencialService,
@@ -130,6 +132,10 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
               this.updateAvaliacao("Pulei o status 2 porque é por participação")
             }
           }
+          else if (this.avaliacao.status == 3) {
+
+            this.cronometro.pararCronometro();
+          }
 
         });
 
@@ -151,24 +157,24 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   getDataObjetivo() {
     if (this.avaliacao.status == 0) {
       if (this.avaliacao.isInicioIndeterminado)
-        return '2020-09-05T13:55:30.000Z';
+        return null;
       else
         return this.avaliacao.dtInicio;
     }
     else if (this.avaliacao.status == 1) {
       if (this.avaliacao.isInicioCorrecaoIndeterminado)
-        return '2020-09-05T13:55:30.000Z';
+        return null;
       else
         return this.avaliacao.dtInicioCorrecao;
     }
     else if (this.avaliacao.status == 2) {
       if (this.avaliacao.isTerminoIndeterminado)
-        return '2020-09-05T13:55:30.000Z';
+        return null;
       else
         return this.avaliacao.dtTermino;
     }
     else {
-      return '2020-09-05T13:55:30.000Z';
+      return null;
     }
 
   }

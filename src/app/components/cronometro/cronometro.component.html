@@ -1,21 +1,23 @@
-<div *ngIf="tempoRestante != 'indeterminado'">
+<div *ngIf="tempoDecorrido != 'indeterminado'">
     <div *ngIf="tipoAcesso == 'aluno'" class="painel">
         <table style="width: 100%; height: 100%;">
             <tr>
                 <td>
-                    <span style="font-size: 12px;">{{mensagem}}</span>
+                    <span style="font-size: 12px;">
+                        Tempo decorrido
+                    </span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span class="tempo">{{tempoRestante}}</span>
+                    <span class="tempo">{{tempoDecorrido}}</span>
                 </td>
             </tr>
         </table>
     </div>
     <div *ngIf="tipoAcesso == 'professor'" style="padding: 5px; border-radius: 7px; background-color: whitesmoke;">
         <span style="font-size: 15px;">
-            {{mensagem}}: <b>{{tempoRestante}}</b>
+            Tempo de avaliação: <b>{{tempoDecorrido}}</b>
         </span>
     </div>
 </div>

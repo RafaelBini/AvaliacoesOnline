@@ -86,10 +86,24 @@ export class QuestoesEditarComponent implements OnInit {
     if (this.prova.questoes.length > 1)
       this.prova.questoes.splice(questaoIndex, 1);
   }
+  marcarEdicao(questaoIndex: number) {
+    for (var i = 0; i < this.prova.questoes.length; i++) {
+      if (i != questaoIndex) {
+        this.prova.questoes[i].isEditando = false;
+      }
+      else {
+        this.prova.questoes[i].isEditando = true;
+      }
+    }
+  }
 
   // Alternativa
-  removerAlternativa(questao, alternativaIndesejadaIndex) {
-    questao.alternativas.splice(alternativaIndesejadaIndex, 1);
+  removerAlternativa(questao: Questao, alternativaIndesejadaIndex) {
+    if (questao.alternativas.length > 1)
+      questao.alternativas.splice(alternativaIndesejadaIndex, 1);
+    else {
+      this.snack.open("Deve existir pelo menos uma alternativa", null, { duration: 3500 });
+    }
   }
   addAlternativa(questao: Questao, tabelaAlternativas: HTMLElement) {
     questao.alternativas.push({ texto: '', selecionada: false });
@@ -152,13 +166,12 @@ export class QuestoesEditarComponent implements OnInit {
   inserirOpcaoPreeencherSelecionado(questao: Questao, editorElement) {
     const TRECHO_SELECIONADO = questao.textoParaPreencher.substring(editorElement.selectionStart, editorElement.selectionEnd);
 
-    if (questao.opcoesParaPreencher[questao.opcoesParaPreencher.length - 1].texto == '') {
-      questao.opcoesParaPreencher[questao.opcoesParaPreencher.length - 1].texto = TRECHO_SELECIONADO;
+    if (questao.opcoesParaPreencher[questao.opcoesParaPreencher.length - 1].opcaoSelecionada == '') {
+      questao.opcoesParaPreencher[questao.opcoesParaPreencher.length - 1].opcaoSelecionada = TRECHO_SELECIONADO;
     }
     else {
       questao.opcoesParaPreencher.push({
-        texto: TRECHO_SELECIONADO,
-        opcaoSelecionada: "",
+        opcaoSelecionada: TRECHO_SELECIONADO,
         ativa: true
       });
     }
@@ -175,7 +188,7 @@ export class QuestoesEditarComponent implements OnInit {
     questao.partesPreencher = this.getPreenchimentoPartes(questao);
   }
   addOpcaoPreencher(questao: Questao, tabelaOpcoesPreencher: HTMLElement) {
-    questao.opcoesParaPreencher.push({ texto: '', opcaoSelecionada: "", ativa: true });
+    questao.opcoesParaPreencher.push({ opcaoSelecionada: "", ativa: true });
 
     questao.partesPreencher = this.getPreenchimentoPartes(questao);
 
@@ -191,8 +204,8 @@ export class QuestoesEditarComponent implements OnInit {
   onEditorPreencherKeyUp(questao) {
     questao.partesPreencher = this.getPreenchimentoPartes(questao);
   }
-  getOpcoesPreencherAtivas(questao: Questao) {
-    return questao.opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.texto > b.texto ? 1 : -1);
+  getOpcoesPreencherAtivas(questao: Questao, questaoIndex: number) {
+    return questao.opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.opcaoSelecionada > b.opcaoSelecionada ? 1 : -1);
   }
   getPreenchimentoPartes(questao: Questao) {
     var texto = questao.textoParaPreencher;
