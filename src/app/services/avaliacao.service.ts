@@ -128,5 +128,25 @@ export class AvaliacaoService {
     return this.db.collection('avaliacoes').valueChanges();
   }
 
+  updateAvaliacaoByTransacao(modificar:(avaliacaoParaModificar: Avaliacao)=> Avaliacao, docId) {
+
+    var docRef = this.db.collection("avaliacoes").doc(docId).ref;
+
+    return this.db.firestore.runTransaction(transaction => {
+
+      return transaction.get(docRef).then(doc => {
+
+        if (!doc.exists) {
+          throw "Document does not exist!";
+        }
+
+        var avaliacaoAtualizada = doc.data() as Avaliacao;        
+
+        transaction.update(docRef, modificar(avaliacaoAtualizada));
+
+      });
+    });
+  }
+
 
 }

@@ -253,25 +253,15 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
   finalizarCorrecao() {
 
     this.validarNotas().then(() => {
-      if (this.avaliacao.tipoDisposicao != 0) {
-        this.getGrupoNaAvaliacao().provaCorrigida = true;
-        this.getGrupoNaAvaliacao().notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
-        this.getGrupoNaAvaliacao().valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
 
-      }
-      else {
-        this.getAlunoNaAvaliacao().provaCorrigida = true;
-        this.getAlunoNaAvaliacao().notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
-        this.getAlunoNaAvaliacao().valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
-      }
+      this.getGrupoOuAlunoNaAvaliacao().provaCorrigida = true;
+      this.getGrupoOuAlunoNaAvaliacao().notaTotal = this.provaService.getMinhaNota(this.prova, this.gabarito);
+      this.getGrupoOuAlunoNaAvaliacao().valorTotal = this.provaService.getPontuacaoMaxima(this.prova);
 
       if (this.userTipo == 'aluno') {
         var MINHA_PROVA_ID = null;
 
-        if (this.avaliacao.tipoDisposicao != 0)
-          MINHA_PROVA_ID = this.getMeuGrupoNaAvaliacao().provaId;
-        else
-          MINHA_PROVA_ID = this.getEuNaAvaliacao().provaId;
+        MINHA_PROVA_ID = this.getGrupoOuAlunoNaAvaliacao().provaId;
 
         this.provaService.getProvaFromId(MINHA_PROVA_ID).then(minhaProva => {
           var acheiProva = false;
@@ -291,8 +281,15 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
         });
       }
 
-      console.log('FIREBASE UPDATE: atualizei avaliação com a prova corrigida');
-      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+
+      this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+        this.getGrupoOuAlunoFromAvaliacao(avaliacaoParaModificar).notaTotal = this.getGrupoOuAlunoNaAvaliacao().notaTotal;
+        this.getGrupoOuAlunoFromAvaliacao(avaliacaoParaModificar).valorTotal = this.getGrupoOuAlunoNaAvaliacao().valorTotal;
+        this.getGrupoOuAlunoFromAvaliacao(avaliacaoParaModificar).provaCorrigida = this.getGrupoOuAlunoNaAvaliacao().provaCorrigida;
+        return avaliacaoParaModificar;
+      }, this.avaliacao.id);
+      console.log("FIREBASE UPDATE: atualizei avaliação com a prova corrigida -> TRANSACAO");
+
       this.router.navigate([`professor/avaliacao/${this.avaliacao.id}`]);
     }).catch(reason => {
       this.snack.open(reason, null, { duration: 5500 });
@@ -453,6 +450,41 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
       count++;
     }
     return null;
+  }
+
+  getGrupoOuAlunoNaAvaliacao() {
+    if (this.avaliacao.tipoDisposicao == 0)
+      return this.getAlunoNaAvaliacao();
+    else
+      return this.getGrupoNaAvaliacao();
+  }
+
+  getGrupoFromAvaliacao(avaliacao: Avaliacao) {
+    if (this.avaliacao.id != '1')
+      return avaliacao.grupos[avaliacao.grupos.indexOf(avaliacao.grupos.filter(g => g.provaId == this.prova.id)[0])];
+    else
+      return {
+        alunos: []
+      }
+
+  }
+
+  getAlunoFromAvaliacao(avaliacao: Avaliacao) {
+    var count = 0;
+    for (let aluno of avaliacao.grupos[0].alunos) {
+      if (aluno.id == this.prova.alunos[0].id) {
+        return avaliacao.grupos[0].alunos[count];
+      }
+      count++;
+    }
+    return null;
+  }
+
+  getGrupoOuAlunoFromAvaliacao(avaliacao: Avaliacao) {
+    if (this.avaliacao.tipoDisposicao == 0)
+      return this.getAlunoFromAvaliacao(avaliacao);
+    else
+      return this.getGrupoFromAvaliacao(avaliacao);
   }
 
   getMeuGrupoNaAvaliacao(): Grupo {

@@ -370,15 +370,16 @@
                     <a *ngIf="aluno.provaId" mat-button class=" btn-corrigir"
                         [routerLink]="'/professor/avaliacao/correcao/' + aluno.provaId">
                         <!-- PONTUAÇÃO NORMAL -->
-                        <span *ngIf="avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
-                            NOTA: {{aluno.notaTotal || 0}}/{{aluno.valorTotal || 0}} - REVISAR
+                        <span
+                            *ngIf="aluno.provaCorrigida && avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
+                            NOTA: {{aluno.notaTotal || 0}}/{{aluno.valorTotal || 0}} -
                         </span>
                         <!-- PONTUAÇÃO COMPARATIVA -->
-                        <span *ngIf="avaliacao.tipoPontuacao == 1">
+                        <span *ngIf="aluno.provaCorrigida && avaliacao.tipoPontuacao == 1">
                             NOTA COMPARATIVA:
                             {{comumService.getRounded((aluno.notaTotal/provaService.getMaiorNota(avaliacao)) *
-                                100) || 0}}/100
-                        </span>
+                                100) || 0}}/100 -
+                        </span> REVISAR
                     </a>
 
                     <!-- PONTUAÇÃO POR PARTICIPAÇÃO -->
@@ -418,15 +419,17 @@
                         <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId">
 
                             <!-- PONTUAÇÃO NORMAL -->
-                            <span *ngIf="avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
-                                NOTA: {{grupo.notaTotal || 0}}/{{grupo.valorTotal || 0}} - REVISAR
+                            <span
+                                *ngIf="grupo.provaCorrigida && avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
+                                NOTA:
+                                {{grupo.notaTotal || 0}}/{{grupo.valorTotal || 0}} -
                             </span>
                             <!-- PONTUAÇÃO COMPARATIVA -->
-                            <span *ngIf="avaliacao.tipoPontuacao == 1">
+                            <span *ngIf="grupo.provaCorrigida && avaliacao.tipoPontuacao == 1">
                                 NOTA COMPARATIVA:
                                 {{comumService.getRounded((grupo.notaTotal/provaService.getMaiorNota(avaliacao)) *
-                                100) || 0}}/100
-                            </span>
+                                100) || 0}}/100 -
+                            </span> REVISAR
                         </a>
                     </div>
 

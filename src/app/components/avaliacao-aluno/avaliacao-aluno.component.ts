@@ -172,8 +172,14 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
                   this.receberProvasCorrigirIndividual();
                 }
                 else if (this.avaliacao.tipoPontuacao == 3) {
+
                   this.avaliacao.status = 3;
-                  this.updateAvaliacao("Passei direto para próxima por não precisar de correção");
+                  this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+                    avaliacaoParaModificar.status = this.avaliacao.status;
+                    return avaliacaoParaModificar;
+                  }, this.avaliacao.id);
+                  console.log("Passei direto para próxima por não precisar de correção! TRANSACAO");
+
                 }
 
               }
@@ -185,20 +191,23 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
                 const MINHA_NOTA = this.provaService.getMinhaNota(this.prova, this.gabarito);
                 const NOTA_MAXIMA = this.provaService.getPontuacaoMaxima(this.prova);
 
-                if (this.avaliacao.tipoDisposicao == 0) {
-                  if (this.getEuNaAvaliacao().notaTotal != MINHA_NOTA || this.getEuNaAvaliacao().valorTotal != NOTA_MAXIMA) {
-                    this.getEuNaAvaliacao().notaTotal = MINHA_NOTA;
-                    this.getEuNaAvaliacao().valorTotal = NOTA_MAXIMA;
-                    this.updateAvaliacao("Inseri minha nota");
-                  }
+
+                if (this.getGrupoOuEuNaAvaliacao().notaTotal != MINHA_NOTA || this.getGrupoOuEuNaAvaliacao().valorTotal != NOTA_MAXIMA) {
+
+                  this.getGrupoOuEuNaAvaliacao().notaTotal = MINHA_NOTA;
+                  this.getGrupoOuEuNaAvaliacao().valorTotal = NOTA_MAXIMA;
+                  this.getGrupoOuEuNaAvaliacao().provaCorrigida = true;
+
+                  this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+                    avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].notaTotal = this.getGrupoOuEuNaAvaliacao().notaTotal;
+                    avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].valorTotal = this.getGrupoOuEuNaAvaliacao().valorTotal;
+                    avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].provaCorrigida = this.getGrupoOuEuNaAvaliacao().provaCorrigida;
+                    return avaliacaoParaModificar;
+                  }, this.avaliacao.id);
+                  console.log("Inseri minha nota -> TRANSACAO");
+
                 }
-                else if (this.avaliacao.tipoDisposicao != 0) {
-                  if (this.getMeuGrupoNaAvaliacao().notaTotal != MINHA_NOTA || this.getMeuGrupoNaAvaliacao().valorTotal != NOTA_MAXIMA) {
-                    this.getMeuGrupoNaAvaliacao().notaTotal = MINHA_NOTA;
-                    this.getMeuGrupoNaAvaliacao().valorTotal = NOTA_MAXIMA;
-                    this.updateAvaliacao("Inseri minha nota");
-                  }
-                }
+
               }
               clearInterval(temProvaInterval);
             }
@@ -315,7 +324,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     var estouNaAvaliacao = false;
     var mudeiAlgo = false;
 
-    for (let grupo of this.avaliacao.grupos) {
+    for (let [grupoIndex, grupo] of this.avaliacao.grupos.entries()) {
       for (let aluno of grupo.alunos) {
         if (aluno.id == this.credencialService.getLoggedUserIdFromCookie()) {
 
@@ -337,6 +346,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             mudeiAlgo = true;
           }
 
+          // SE ESTOU REALIZANDO A AVALIAÇÃO MAS MEU STATUS ESTÁ DESATUALIZADO,
           if (this.avaliacao.status == 1 && (aluno.statusId == 0 || aluno.statusId == null)) {
             aluno.statusId = 2;
             aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 2, new Date().toISOString());
@@ -348,7 +358,17 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
         }
       }
       if (estouNaAvaliacao && mudeiAlgo) {
-        this.updateAvaliacao("Me atualizei na avaliacao!!")
+
+        this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+          this.getEuFromAvaliacao(avaliacaoParaModificar).statusId = this.getEuNaAvaliacao().statusId;
+          this.getEuFromAvaliacao(avaliacaoParaModificar).dtStatus = this.getEuNaAvaliacao().dtStatus;
+          this.getEuFromAvaliacao(avaliacaoParaModificar).online = this.getEuNaAvaliacao().online;
+          return avaliacaoParaModificar;
+        }, this.avaliacao.id)
+          .then(() => {
+            console.log('FIREBASE UPDATE: Atualizei eu avaliação por TRANSACTION');
+          });
+
         break;
       }
     }
@@ -367,7 +387,6 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       }
 
       this.entrarEmGrupoAleatorio();
-      this.updateAvaliacao("Entrei em um grupo aleatorio");
     }
     return !estouNaAvaliacao || (estouNaAvaliacao && mudeiAlgo);
   }
@@ -390,8 +409,13 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (statusAntes != this.avaliacao.status || altereiStatusIndividual)
-        this.updateAvaliacao("Atualizei o status da avaliacao conforme o tempo!!");
+      if (statusAntes != this.avaliacao.status || altereiStatusIndividual) {
+        this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+          avaliacaoParaModificar.status = this.avaliacao.status;
+          return avaliacaoParaModificar;
+        }, this.avaliacao.id);
+        console.log("Atualizei o status da avaliacao conforme o tempo!! TRANSACAO");
+      }
 
       this.countDown.iniciarTimer();
 
@@ -497,11 +521,17 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
   // DURANTE AVALIAÇÃO
   sinalizarFinalizacao() {
-
-
     this.getEuNaAvaliacao().statusId = 3;
     this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 3, new Date().toISOString());
-    this.updateAvaliacao("Sinalizei a finalização!");
+
+    this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+      avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].statusId = this.getEuNaAvaliacao().statusId;
+      avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].dtStatus = this.getEuNaAvaliacao().dtStatus;
+      return avaliacaoParaModificar;
+    }, this.avaliacao.id);
+
+    console.log("Sinalizei a finalização! TRANSACAO");
+
   }
   getEuNaAvaliacao(): Usuario {
     for (let grupo of this.avaliacao.grupos) {
@@ -571,6 +601,12 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       alunos: []
     }
   }
+  getGrupoOuEuNaAvaliacao(): Grupo | Usuario {
+    if (this.avaliacao.tipoDisposicao == 0)
+      return this.getEuNaAvaliacao();
+    else
+      return this.getMeuGrupoNaAvaliacao();
+  }
   getFinalizado() {
     if (this.avaliacao.grupos.length > 0) {
       if (this.getEuNaAvaliacao())
@@ -605,37 +641,17 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     this.estouIndoInserirProva = true;
     console.log("AVISO: estou indo inserir prova!!");
 
-
     const PROVA_EM_BRANCO = this.provaService.getProvaFromGabarito(this.gabarito);
-    PROVA_EM_BRANCO.alunos = [];
-    PROVA_EM_BRANCO.provasParaCorrigir = [];
     PROVA_EM_BRANCO.alunos.push(this.getEuNaAvaliacao());
 
-    // Se já tenho prova para meu grupo, cancelo
-    if (this.meuGrupoTemProva) {
-      console.log("Ops, alguém já colocou uma prova para o grupo. Não vou mais tentar criar prova")
-      return;
-    }
-
     // Insere uma nova prova
-    this.provaService.insertProva(PROVA_EM_BRANCO).then(novaProva => {
-
-      console.log("Inseri no banco uma nova prova!!", novaProva.id);
-      this.meuGrupoTemProva = true;
-
-      this.prova = novaProva;
-      this.getMeuGrupoNaAvaliacao().provaId = this.prova.id;
-      this.getEuNaAvaliacao().statusId = 2;
-      this.getEuNaProva().statusId = 2;
-      this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 2, new Date().toISOString());
-      this.provaService.updateProva(this.prova); // Atualizando o id de dentro da prova
-
-      this.updateAvaliacao("Inseri no banco uma nova prova!");
-
-    }).catch(reason => this.comumService.notificarErro('Falha ao receber a prova', reason));
-
-
-
+    this.provaService.insertProvaByTransacao(PROVA_EM_BRANCO, this.getIndexMeuGrupoNaAvaliacao()).then(() => {
+      console.log('Inseri um prova para o grupo -- TRANSAÇÃO MODE');
+    })
+      .catch(reason => {
+        console.log("Tentei, mas não consegui inserir prova -- TRANSACAO MODE");
+        console.log(reason);
+      });
 
   }
   meRemoverDasQuestoes() {
@@ -734,46 +750,9 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
           return;
         }
 
-        // Inicio um contador que vai determinar de quem é a vez de tentar criar a prova
-        var count = 0;
+        // Insiro a prova
+        this.inserirNovaProva();
 
-        // Se sou o primeiro do grupo, já crio a prova
-        if (this.getMeuGrupoNaAvaliacao().alunos[count].id == this.credencialService.getLoggedUserIdFromCookie()) {
-          console.log("Sou o primeiro da lista de alunos do grupo, vou inserir prova!");
-          this.inserirNovaProva();
-        }
-        // Se não sou, crio um intervalo para deixar os outros alunos criarem a prova antes de mim                
-        else {
-          console.log("Não sou o primeiro da lista de alunos do grupo, vou esperar um pouco");
-          var intervalRef = setInterval(() => {
-
-            // Se é minha vez de tentar criar a prova,
-            if (this.getMeuGrupoNaAvaliacao().alunos[count].id == this.credencialService.getLoggedUserIdFromCookie()) {
-              console.log("Está na minha vez de criar a prova!");
-
-              // Se eu já estou com uma prova (criada por outro aluno do grupo), encerro
-              if (this.getMeuGrupoNaAvaliacao().provaId != null) {
-                console.log("Opa! Já estou com a prova! Tchau");
-                clearInterval(intervalRef);
-                return;
-              }
-
-              // Se ninguém criou a prova ainda, eu crio
-              else {
-                console.log("Ainda não estou com a prova... Vou criar uma nova!");
-                this.inserirNovaProva();
-                clearInterval(intervalRef);
-              }
-
-            }
-            else {
-              console.log("Ainda não é minha vez de criar a prova");
-            }
-            count++;
-
-          }, 4000);
-
-        }
 
       }
 

@@ -129,12 +129,20 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
           if (this.avaliacao.status == 2) {
             if (this.avaliacao.tipoPontuacao == 3) {
               this.avaliacao.status = 3;
-              this.updateAvaliacao("Pulei o status 2 porque é por participação")
+              this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+                avaliacaoParaModificar.status = this.avaliacao.status;
+                return avaliacaoParaModificar;
+              }, this.avaliacao.id);
+              console.log("Pulei o status 2 porque é por participação TRANSACAO");
             }
           }
           else if (this.avaliacao.status == 3) {
 
             this.cronometro.pararCronometro();
+
+            this.corrigirProvas();
+
+
           }
 
         });
@@ -153,6 +161,59 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     if (this.avaliacaoSubscription)
       this.avaliacaoSubscription.unsubscribe();
   }
+
+  corrigirProvas() {
+    var corrigiPeloMenosUmaProva = false;
+
+    this.provaService.getProvaFromId(this.avaliacao.provaGabarito).then(gabarito => {
+
+      var indexAlterados: Array<number> = [];
+
+
+      for (let [i, grupoOuAluno] of this.getGruposOuAlunos().entries()) {
+        if (!grupoOuAluno.provaCorrigida) {
+          this.provaService.getProvaFromId(grupoOuAluno.provaId).then(prova => {
+            grupoOuAluno.notaTotal = this.provaService.getMinhaNota(prova, gabarito);
+            grupoOuAluno.valorTotal = this.provaService.getPontuacaoMaxima(prova);
+            grupoOuAluno.provaCorrigida = true;
+          });
+          corrigiPeloMenosUmaProva = true;
+          indexAlterados.push(i);
+        }
+      }
+
+
+      if (corrigiPeloMenosUmaProva) {
+        this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaAlterar => {
+          for (let indexAlterado of indexAlterados) {
+            if (this.avaliacao.tipoDisposicao == 0) {
+              this.getGruposOuAlunosFromAvaliacao(avaliacaoParaAlterar)[indexAlterado].notaTotal = this.getGruposOuAlunos()[indexAlterado].notaTotal;
+              this.getGruposOuAlunosFromAvaliacao(avaliacaoParaAlterar)[indexAlterado].valorTotal = this.getGruposOuAlunos()[indexAlterado].valorTotal;
+              this.getGruposOuAlunosFromAvaliacao(avaliacaoParaAlterar)[indexAlterado].provaCorrigida = this.getGruposOuAlunos()[indexAlterado].provaCorrigida;
+            }
+          }
+          return avaliacaoParaAlterar;
+        }, this.avaliacao.id);
+        console.log("Corrigi provas automaticamente -> TRANSACAO")
+      }
+
+    });
+  }
+
+  getGruposOuAlunos(): Array<Usuario> | Array<Grupo> {
+    if (this.avaliacao.tipoDisposicao == 0)
+      return this.avaliacao.grupos[0].alunos;
+    else
+      return this.avaliacao.grupos;
+  }
+
+  getGruposOuAlunosFromAvaliacao(avaliacao: Avaliacao): Array<Usuario> | Array<Grupo> {
+    if (avaliacao.tipoDisposicao == 0)
+      return avaliacao.grupos[0].alunos;
+    else
+      return avaliacao.grupos;
+  }
+
 
   getDataObjetivo() {
     if (this.avaliacao.status == 0) {
@@ -187,8 +248,13 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
       this.countDown.iniciarTimer();
 
-      if (statusAntes != this.avaliacao.status)
-        this.updateAvaliacao("Alterei o status da avaliação conforme o tempo!");
+      if (statusAntes != this.avaliacao.status) {
+        this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+          avaliacaoParaModificar.status = this.avaliacao.status;
+          return avaliacaoParaModificar;
+        }, this.avaliacao.id);
+        console.log("Alterei o status da avaliação conforme o tempo! TRANSACAO");
+      }
 
     }, 3000);
 
@@ -394,17 +460,38 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   iniciarAvaliacao() {
     this.avaliacao.status = 1;
     this.avaliacao.dtInicio = new Date().toISOString();
-    this.updateAvaliacao("Alterei o status da avaliacao para DURANTE AVALIACAO")
+
+    this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+      avaliacaoParaModificar.status = this.avaliacao.status;
+      avaliacaoParaModificar.dtInicio = this.avaliacao.dtInicio;
+      return avaliacaoParaModificar;
+    }, this.avaliacao.id);
+    console.log("Alterei o status da avaliacao para DURANTE AVALIACAO -> TRANSACAO");
+
   }
   inicarCorrecoes() {
     this.avaliacao.status = 2;
     this.avaliacao.dtInicioCorrecao = new Date().toISOString();
-    this.updateAvaliacao("Alterei o status da avaliação para EM CORRECAO");
+
+    this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+      avaliacaoParaModificar.status = this.avaliacao.status;
+      avaliacaoParaModificar.dtInicio = this.avaliacao.dtInicio;
+      return avaliacaoParaModificar;
+    }, this.avaliacao.id);
+    console.log("Alterei o status da avaliação para EM CORRECAO -> TRANSACAO");
+
   }
   encerrarCorrecoes() {
     this.avaliacao.status = 3;
     this.avaliacao.dtTermino = new Date().toISOString();
-    this.updateAvaliacao("Alterei o status da avaliação para ENCERRADA");
+
+    this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+      avaliacaoParaModificar.status = this.avaliacao.status;
+      avaliacaoParaModificar.dtInicio = this.avaliacao.dtInicio;
+      return avaliacaoParaModificar;
+    }, this.avaliacao.id);
+    console.log("Alterei o status da avaliação para ENCERRADA -> TRANSACAO");
+
   }
   updateAvaliacao(motivo: string) {
     console.log(`FIREBASE UPDATE: ${motivo}`);
@@ -415,12 +502,25 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
   voltarStatusProva(grupoIndex, alunoIndex) {
     this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 2;
-    this.updateAvaliacao("Professor retornou status de um aluno");
+
+    this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+      avaliacaoParaModificar.grupos[grupoIndex].alunos[alunoIndex].statusId = this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId;
+      return avaliacaoParaModificar;
+    }, this.avaliacao.id);
+
+    console.log("Professor retornou status de um aluno TRANSACAO");
   }
   bloquearProva(grupoIndex, alunoIndex) {
     this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 1;
     this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus = this.comumService.insertInArray(this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus, 1, new Date().toISOString());
-    this.updateAvaliacao("Professor bloqueou a prova de um aluno");
+
+    this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+      avaliacaoParaModificar.grupos[grupoIndex].alunos[alunoIndex].statusId = this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId;
+      avaliacaoParaModificar.grupos[grupoIndex].alunos[alunoIndex].dtStatus = this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus;
+      return avaliacaoParaModificar;
+    }, this.avaliacao.id);
+
+    console.log("Professor bloqueou a prova de um aluno TRANSACAO");
   }
   abrirDetalhes(aluno: Usuario) {
     this.dialog.open(DetalhesProvaComponent, {

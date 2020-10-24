@@ -46,6 +46,45 @@ export class ProvaService {
     });
   }
 
+  insertProvaByTransacao(prova: Prova, meuIndex: number) {
+    prova.isGabarito = false;
+
+    var avaliacaoDocRef = this.db.collection("avaliacoes").doc(prova.avaliacaoId).ref;
+    var novaProvaDocRef = this.db.collection("provas").doc(this.db.createId()).ref;
+
+    return this.db.firestore.runTransaction(transaction => {
+
+      return transaction.get(avaliacaoDocRef).then(doc => {
+
+        if (!doc.exists) {
+          throw "Document does not exist!";
+        }
+
+        var avaliacao = doc.data() as Avaliacao;
+
+        // INDIVIDUAL (SEM PROVA ATRIBUIDA)
+        if (avaliacao.tipoDisposicao == 0 && (avaliacao.grupos[0].alunos[meuIndex].provaId == null || avaliacao.grupos[0].alunos[meuIndex].provaId == '')) {
+          // INSERE A NOVA PROVA NO FIRE
+          prova.id = novaProvaDocRef.id;
+          transaction.set(novaProvaDocRef, prova);
+          avaliacao.grupos[0].alunos[meuIndex].provaId = novaProvaDocRef.id;
+          transaction.update(avaliacaoDocRef, avaliacao);
+        }
+
+        // EM GRUPO (SEM PROVA ATRIBUIDA)
+        else if (avaliacao.tipoDisposicao != 0 && (avaliacao.grupos[meuIndex].provaId == null || avaliacao.grupos[meuIndex].provaId == '')) {
+          // INSERE A NOVA PROVA NO FIRE
+          prova.id = novaProvaDocRef.id;
+          transaction.set(novaProvaDocRef, prova);
+          avaliacao.grupos[meuIndex].provaId = novaProvaDocRef.id;
+          transaction.update(avaliacaoDocRef, avaliacao);
+        }
+
+      })
+
+    });
+  }
+
   onProvaChange(provaId: string) {
     console.log(`pegando a prova ${provaId}...`)
     return this.db.collection('provas').doc(provaId).valueChanges();
@@ -130,6 +169,11 @@ export class ProvaService {
         }
       }
     }
+
+    prova.isGabarito = false;
+    prova.alunos = [];
+    prova.provasParaCorrigir = [];
+
     return prova;
   }
 

@@ -102,7 +102,13 @@ export class ProfessorComponent implements OnInit, OnDestroy {
           avaliacao.status = this.avaliacaoService.getStatusConformeTempo(avaliacao);
 
           if (statusAnterior != avaliacao.status) {
-            this.avaliacaoService.updateAvaliacao(avaliacao);
+
+            this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+              avaliacaoParaModificar.status = avaliacao.status;              
+              return avaliacaoParaModificar;
+            }, avaliacao.id);      
+            console.log("Alterei o status da avaliação conforme o tempo -> TRANSACAO");
+            
             return;
           }
 

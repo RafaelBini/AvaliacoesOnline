@@ -314,30 +314,45 @@
                 <div *ngIf="avaliacao.id != '1'">
 
                     <!-- PONTUAÇÃO NORMAL -->
-                    <div *ngIf="avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
-                        <span *ngIf="avaliacao.tipoDisposicao != 0" class="pontuacao-card">Sua
-                            nota:
+                    <div class="pontuacao-card" *ngIf="avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
+
+                        Sua nota:
+
+                        <!-- EM GRUPO -->
+
+                        <span *ngIf="getMeuGrupoNaAvaliacao().provaCorrigida && avaliacao.tipoDisposicao != 0">
                             {{getMeuGrupoNaAvaliacao().notaTotal || 0}}/{{getMeuGrupoNaAvaliacao().valorTotal|| 0}}
                         </span>
-                        <span *ngIf="avaliacao.tipoDisposicao == 0" class="pontuacao-card">Sua
-                            nota: {{getEuNaAvaliacao().notaTotal || 0}}/{{getEuNaAvaliacao().valorTotal|| 0}}
+
+                        <!-- INDIVIDUAL -->
+
+                        <span *ngIf="getEuNaAvaliacao().provaCorrigida && avaliacao.tipoDisposicao == 0">
+                            {{getEuNaAvaliacao().notaTotal || 0}}/{{getEuNaAvaliacao().valorTotal|| 0}}
                         </span>
+
                     </div>
 
                     <!-- PONTUAÇÃO COMPARATIVA -->
-                    <div *ngIf="avaliacao.tipoPontuacao == 1">
+                    <div class="pontuacao-card" *ngIf="avaliacao.tipoPontuacao == 1">
+
+                        Sua nota comaprativa:
+
                         <!-- EM GRUPO -->
-                        <span *ngIf="avaliacao.tipoDisposicao != 0" class="pontuacao-card">
-                            Sua nota comaprativa: {{
+
+                        <span *ngIf="getMeuGrupoNaAvaliacao().provaCorrigida && avaliacao.tipoDisposicao != 0">
+                            {{
                             comumService.getRounded((getMeuGrupoNaAvaliacao().notaTotal/provaService.getMaiorNota(avaliacao)) *
                             100) || 0}}/100
                         </span>
+
                         <!-- INDIVIDUAL -->
-                        <span *ngIf="avaliacao.tipoDisposicao == 0" class="pontuacao-card">
-                            Sua nota comaprativa: {{
+
+                        <span *ngIf="getEuNaAvaliacao().provaCorrigida && avaliacao.tipoDisposicao == 0">
+                            {{
                             comumService.getRounded((getEuNaAvaliacao().notaTotal/provaService.getMaiorNota(avaliacao)) *
                             100) || 0}}/100
                         </span>
+
                     </div>
 
                     <!-- PONTUAÇÃO POR PARTICIPAÇÃO -->
