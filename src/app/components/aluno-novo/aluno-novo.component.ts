@@ -22,6 +22,7 @@ export class AlunoNovoComponent implements OnInit {
   };
   private todosUsuarios: Array<Usuario> = [];
   public novoUsuario: boolean = true;
+  public usuarioJaAdicionado: boolean = false;
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
 
@@ -41,9 +42,11 @@ export class AlunoNovoComponent implements OnInit {
     const USUARIOS_ENCONTRADOS = this.todosUsuarios.concat().filter(u => u.email == this.aluno.email);
     if (USUARIOS_ENCONTRADOS.length <= 0) {
       this.novoUsuario = true;
+      this.usuarioJaAdicionado = false;
     }
     else {
       this.novoUsuario = false;
+      this.usuarioJaAdicionado = this.credencialService.loggedUser.alunos.filter(meuAluno => meuAluno.id == USUARIOS_ENCONTRADOS[0].id).length > 0;
       this.aluno = { ...USUARIOS_ENCONTRADOS[0] };
       this.aluno.senha = "";
       this.aluno.tags = [];

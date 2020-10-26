@@ -17,13 +17,15 @@
                     <td align="left" style="padding-bottom: 18px; position: relative;">
 
                         <select class="select-basico" style="padding: 8px;" #tipo
-                            (change)="tipoQuestaoChanged(questao, tipo.value)" [(ngModel)]="questao.tipo">
+                            (change)="tipoQuestaoChanged(questao, tipo.value)" (ngModelChange)="sinalizarAlteracao()"
+                            [(ngModel)]="questao.tipo">
                             <option *ngFor="let questaoTipo of getQuestaoTiposAdequados()" [value]="questaoTipo.codigo">
                                 {{questaoTipo.nome}}
                             </option>
                         </select>
-                        <select [(ngModel)]="questao.nivelDificuldade" matTooltip="Nível de Dificuldade"
-                            class="select-basico" style="padding: 8px; position: absolute; right: 0px;" #tipo
+                        <select (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.nivelDificuldade"
+                            matTooltip="Nível de Dificuldade" class="select-basico"
+                            style="padding: 8px; position: absolute; right: 0px;" #tipo
                             (change)="questao.tipo = tipo.value">
                             <option *ngFor="let nivelDificuldade of comumService.niveisDificuldade; index as ni"
                                 [value]='ni'>{{nivelDificuldade}}</option>
@@ -59,7 +61,7 @@
                             [placeholder]="questao.perguntaPlaceholder ? questao.perguntaPlaceholder : 'Digite aqui uma pergunta ou uma descrição para a questão'"
                             class="input-basico"
                             style=" margin: auto; width: 98%; max-width: 98%; padding: 5px; padding-top: 14px;"
-                            [(ngModel)]="questao.pergunta" rows="4"></textarea>
+                            (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.pergunta" rows="4"></textarea>
                         <span *ngIf="estaEmFoco(perguntaTextarea)"
                             class="contador-caracteres">{{questao.pergunta.length}}/3500</span>
                     </td>
@@ -90,6 +92,7 @@
                                         <textarea (input)="ajustarAltura($event)"
                                             (keyup)="onNovaAssocKeyUp($event, questao, tabelaAssociacoes)"
                                             placeholder="Digite uma opção" (click)="ajustarAltura($event)"
+                                            (ngModelChange)="sinalizarAlteracao()"
                                             [(ngModel)]="associacao.opcaoSelecionada" class="invisible-input"
                                             style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                     </div>
@@ -99,8 +102,8 @@
                                         <textarea #associacaoTextarea maxlength="500" (input)="ajustarAltura($event)"
                                             (click)="ajustarAltura($event)"
                                             (keyup)="onNovaAssocKeyUp($event, questao, tabelaAssociacoes)"
-                                            [(ngModel)]="associacao.texto" class="invisible-input"
-                                            placeholder="Descrição da opção"
+                                            (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="associacao.texto"
+                                            class="invisible-input" placeholder="Descrição da opção"
                                             style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                         <span *ngIf="estaEmFoco(associacaoTextarea)"
                                             class="contador-caracteres">{{associacao.texto.length}}/500</span>
@@ -143,7 +146,7 @@
                             (click)="ajustarAltura($event)"
                             placeholder="Escreva aqui algo para auxiliar no momento da correção" class="input-basico"
                             style="width: 98%; margin: auto; padding: 5px; padding-top: 14px;"
-                            [(ngModel)]="questao.resposta" rows="4"></textarea>
+                            (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.resposta" rows="4"></textarea>
                         <span *ngIf="estaEmFoco(dissertativaTextarea)"
                             class="contador-caracteres">{{dissertativaTextarea.value.length}}/2500</span>
                     </td>
@@ -170,7 +173,7 @@
 
                         <mat-form-field *ngIf="tipoArquivoSelecionado.value != 'Todos'" appearance="fill">
                             <mat-label>Extensões aceitas</mat-label>
-                            <mat-select multiple [(ngModel)]="questao.extensoes">
+                            <mat-select multiple (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.extensoes">
                                 <mat-option [value]="extensao"
                                     *ngFor="let extensao of comumService.arquivosPossiveis[tipoArquivoSelecionado.value].extensoes">
                                     {{extensao}}
@@ -180,7 +183,7 @@
 
                         <mat-form-field *ngIf="tipoArquivoSelecionado.value == 'Todos'" appearance="fill">
                             <mat-label>Extensões aceitas</mat-label>
-                            <mat-select multiple [(ngModel)]="questao.extensoes">
+                            <mat-select multiple (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.extensoes">
                                 <mat-optgroup *ngFor="let arquivoPossivel of comumService.arquivosPossiveis"
                                     [label]="arquivoPossivel.categoria">
                                     <mat-option *ngFor="let extensao of arquivoPossivel.extensoes" [value]="extensao">
@@ -202,15 +205,16 @@
                             <!-- LISTA DE ALTERNATIVAS -->
                             <tr cdkDrag *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td width="95%" class="alternativa">
-                                    <mat-checkbox class="checkbox-full" [(ngModel)]="alternativa.selecionada"
+                                    <mat-checkbox class="checkbox-full" (ngModelChange)="sinalizarAlteracao()"
+                                        [(ngModel)]="alternativa.selecionada"
                                         (ngModelChange)="desmarcarTudoMenosUma(questao, ai, true)">
                                         <textarea #alternativaTextarea
                                             (keyup)="onNovaAlterKeyUp($event,questao,tabelaAlternativas)"
                                             maxlength="500" (input)="ajustarAltura($event)"
                                             placeholder="Digite aqui uma nova alternativa"
-                                            (click)="ajustarAltura($event)" [(ngModel)]="alternativa.texto"
-                                            class="invisible-input" style="width: 95%; height: 100%; padding: 10px;"
-                                            rows="1"></textarea>
+                                            (click)="ajustarAltura($event)" (ngModelChange)="sinalizarAlteracao()"
+                                            [(ngModel)]="alternativa.texto" class="invisible-input"
+                                            style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                     </mat-checkbox>
                                     <span *ngIf="estaEmFoco(alternativaTextarea)"
                                         class="contador-caracteres">{{alternativaTextarea.value.length}}/500</span>
@@ -254,8 +258,9 @@
                         </button>
                         <div style="position: relative;">
                             <textarea #preenchimentoTextarea maxlength="500" rows="4" (input)="ajustarAltura($event)"
-                                (click)="ajustarAltura($event)" [(ngModel)]="questao.textoParaPreencher"
-                                #editorPreencher (keyup)="onEditorPreencherKeyUp(questao)"
+                                (click)="ajustarAltura($event)" (ngModelChange)="sinalizarAlteracao()"
+                                [(ngModel)]="questao.textoParaPreencher" #editorPreencher
+                                (keyup)="onEditorPreencherKeyUp(questao)"
                                 placeholder="Escreva aqui um texto para ser completado" class="input-basico"
                                 style="width: 98%; margin: auto; padding: 5px; padding-top: 14px;"></textarea>
                             <span *ngIf="estaEmFoco(preenchimentoTextarea)"
@@ -274,7 +279,7 @@
                                     style="cursor: default">
                                     <div style="display: inline-flex; width: 100%; position: relative;">
                                         <textarea #opcaoPreencherTextarea (input)="ajustarAltura($event)"
-                                            (click)="ajustarAltura($event)"
+                                            (click)="ajustarAltura($event)" (ngModelChange)="sinalizarAlteracao()"
                                             [(ngModel)]="opcaoParaPreencher.opcaoSelecionada"
                                             (keyup)="onNovaOpcaoPreencherKeyUp($event, questao, tabelaOpcoesPreencher)"
                                             class=" invisible-input"
@@ -318,7 +323,8 @@
                             <!-- LISTA DE ALTERNATIVAS -->
                             <tr cdkDrag *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td width="5%" class="alternativa">
-                                    <mat-button-toggle-group [(ngModel)]="alternativa.selecionada">
+                                    <mat-button-toggle-group (ngModelChange)="sinalizarAlteracao()"
+                                        [(ngModel)]="alternativa.selecionada">
                                         <mat-button-toggle matTooltip="Marcar como verdadeiro" [value]="true">V
                                         </mat-button-toggle>
                                         <mat-button-toggle matTooltip="Marcar como falso" [value]="false">F
@@ -329,8 +335,8 @@
                                     <div style=" display: inline-flex; width: 100%; position: relative;">
                                         <textarea #verdadeiroFalsoAlternativaTextarea maxlength="2500"
                                             (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
-                                            [(ngModel)]="alternativa.texto" class="invisible-input"
-                                            placeholder="Digite aqui uma nova afirmação"
+                                            (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="alternativa.texto"
+                                            class="invisible-input" placeholder="Digite aqui uma nova afirmação"
                                             (keyup)="onNovaAlterKeyUpVouF($event, questao, tabelaVerdadeiroOuFalso);"
                                             style="width: 95%; height: 100%; padding: 10px;" rows="1"></textarea>
                                         <span *ngIf="estaEmFoco(verdadeiroFalsoAlternativaTextarea)"
@@ -371,7 +377,7 @@
                     <td align="right" style="position: relative; padding-top: 20px;">
                         <div *ngIf="avaliacao.tipoPontuacao != 3" style="position: absolute; left: 0px;">
                             Valor: <input style="padding: 7px;" type="number" max="100" min="1"
-                                [(ngModel)]="questao.valor" />
+                                (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.valor" />
                             <span
                                 style="padding: 9px; color: gray;">{{ ( (questao.valor/getPontuacaoMaxima())*100 ) |  number:'1.0-0' }}%</span>
                         </div>

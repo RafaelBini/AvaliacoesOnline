@@ -50,6 +50,14 @@
     margin-bottom: 7px;
 }
 
+.btn-descartar-rascunho{
+  opacity: 0.55;
+}
+.btn-descartar-rascunho:hover{
+  opacity: 1;
+}
+
+
 /* CDK DRAG & DROP */
 
 .cdk-drag-preview {

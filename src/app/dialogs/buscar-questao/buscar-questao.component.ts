@@ -77,13 +77,29 @@ export class BuscarQuestaoComponent implements OnInit {
     }
   }
 
+  isQuestaoPermitida(questao: Questao) {
+    if (this.comumService.precisaDeCorrecaoAutomatica(this.data.avaliacao) && !this.comumService.questaoTipos[questao.tipo].temCorrecaoAutomatica)
+      return false;
+    return true;
+  }
+
 
   add(index) {
-    var questaoParaAdicionar = this.questoesFiltradas.splice(index, 1);
-    this.data.prova.questoes.push(questaoParaAdicionar[0].q);
-    this.snack.open("Questão adicionada", null, {
-      duration: 3000
-    });
+
+    var questaoParaAdicionar = this.questoesFiltradas[index].q;
+    if (this.isQuestaoPermitida(questaoParaAdicionar)) {
+      questaoParaAdicionar = this.questoesFiltradas.splice(index, 1)[0].q;
+      this.data.prova.questoes.push(questaoParaAdicionar);
+      this.snack.open("Questão adicionada", null, {
+        duration: 3000
+      });
+    }
+    else {
+      this.snack.open("A questão deve ser de correção automática!", null, {
+        duration: 3000
+      });
+    }
+
 
   }
 

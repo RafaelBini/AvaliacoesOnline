@@ -1,3 +1,4 @@
+import { CredencialService } from 'src/app/services/credencial.service';
 import { FileService } from './file.service';
 import { Correcao } from './../models/correcao';
 import { ComumService } from './comum.service';
@@ -17,6 +18,7 @@ export class ProvaService {
   constructor(
     private db: AngularFirestore,
     private comumService: ComumService,
+    private credencialService: CredencialService,
     private fileService: FileService,
   ) { }
 
@@ -83,6 +85,10 @@ export class ProvaService {
       })
 
     });
+  }
+
+  setRascunhoProvaGabarito(prova: Prova) {
+    return this.db.collection('provas').doc(this.credencialService.getLoggedUserIdFromCookie()).set(prova);
   }
 
   onProvaChange(provaId: string) {
@@ -237,6 +243,54 @@ export class ProvaService {
     return this.db.collection('provas').doc(prova.id).delete();
 
 
+  }
+
+  deletarProvaSemExcuirArquivos(provaId: string) {
+    return this.db.collection('provas').doc(provaId).delete();
+  }
+
+  getGabaritoDefault(): Prova {
+    return {
+      id: '1',
+      isGabarito: true,
+      professorId: '',
+      questoes: [
+        this.getQuestaoDefault(),
+      ],
+    };
+  }
+
+  getQuestaoDefault(): Questao {
+    return {
+      pergunta: "",
+      tipo: 4,
+      resposta: "",
+      alternativas: [
+        { texto: '', selecionada: false }
+      ],
+      valor: 10,
+      nivelDificuldade: 2,
+      tags: [],
+      associacoes: [
+        { texto: '', opcaoSelecionada: '' }
+      ],
+      textoParaPreencher: "",
+      opcoesParaPreencher: [
+        { opcaoSelecionada: '', ativa: true }
+      ],
+      tentativas: 0,
+      extensoes: [],
+      correcoes: [],
+      correcaoProfessor: {
+        nota: null,
+        observacao: ""
+      },
+      anexos: [],
+      imagens: [],
+      arquivosEntregues: [],
+      imagensEntregues: [],
+      isEditando: true,
+    }
   }
 
   getMinhaNota(prova: Prova, gabarito: Prova) {

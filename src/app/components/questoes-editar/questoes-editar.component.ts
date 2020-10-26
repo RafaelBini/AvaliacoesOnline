@@ -8,7 +8,7 @@ import { Prova } from 'src/app/models/prova';
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
-import { Component, OnInit, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { InfoQuestaoComponent } from 'src/app/dialogs/info-questao/info-questao.component';
@@ -24,6 +24,8 @@ import { Arquivo } from 'src/app/models/arquivo';
 export class QuestoesEditarComponent implements OnInit {
   @Input() prova: Prova;
   @Input() avaliacao: Avaliacao;
+
+  @Output() algoAlterado = new EventEmitter<void>();
 
   constructor(public comumService: ComumService,
     private dialog: MatDialog,
@@ -95,6 +97,9 @@ export class QuestoesEditarComponent implements OnInit {
         this.prova.questoes[i].isEditando = true;
       }
     }
+  }
+  sinalizarAlteracao() {
+    this.algoAlterado.emit();
   }
 
   // Alternativa
@@ -304,6 +309,7 @@ export class QuestoesEditarComponent implements OnInit {
 
         uploadTaskSnap.ref.getDownloadURL().then(url => {
           questao.imagens[newFileIndex].url = url;
+          this.sinalizarAlteracao();
         })
           .catch(reason => {
             console.log(reason);
@@ -363,6 +369,7 @@ export class QuestoesEditarComponent implements OnInit {
 
         uploadTaskSnap.ref.getDownloadURL().then(url => {
           questao.anexos[newFileIndex].url = url;
+          this.sinalizarAlteracao();
         })
           .catch(reason => {
             console.log(reason);

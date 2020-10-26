@@ -1,14 +1,14 @@
 -- Dia 30/10
 
-- Colocar emit() ao alterar a descrição das imagens
-
-
--------------------
-
+- Add validaçao ao add questao
 
 - Salvar sempre o rascunho de nova avalição no firebase
 
 - Adicionar opção para limpar excluir o rascunho de nova avaliação
+
+-------------------
+
+
 
 - Não deixar inserir aluno duplicado
 

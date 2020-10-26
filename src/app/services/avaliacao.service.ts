@@ -1,3 +1,4 @@
+import { CredencialService } from 'src/app/services/credencial.service';
 import { ComumService } from './comum.service';
 import { Usuario } from './../models/usuario';
 import { Prova } from './../models/prova';
@@ -11,7 +12,9 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class AvaliacaoService {
 
-  constructor(private db: AngularFirestore) { }
+  constructor(private db: AngularFirestore,
+    private credencialService: CredencialService,
+    private comumService: ComumService) { }
 
 
 
@@ -29,6 +32,10 @@ export class AvaliacaoService {
         return;
       });
     })
+  }
+
+  setRascunhoAvaliacao(avaliacao: Avaliacao) {
+    return this.db.collection('avaliacoes').doc(this.credencialService.getLoggedUserIdFromCookie()).set(avaliacao);
   }
 
   onAvaliacaoChange(avaliacaoId: string) {
@@ -128,7 +135,7 @@ export class AvaliacaoService {
     return this.db.collection('avaliacoes').valueChanges();
   }
 
-  updateAvaliacaoByTransacao(modificar:(avaliacaoParaModificar: Avaliacao)=> Avaliacao, docId) {
+  updateAvaliacaoByTransacao(modificar: (avaliacaoParaModificar: Avaliacao) => Avaliacao, docId) {
 
     var docRef = this.db.collection("avaliacoes").doc(docId).ref;
 
@@ -140,12 +147,52 @@ export class AvaliacaoService {
           throw "Document does not exist!";
         }
 
-        var avaliacaoAtualizada = doc.data() as Avaliacao;        
+        var avaliacaoAtualizada = doc.data() as Avaliacao;
 
         transaction.update(docRef, modificar(avaliacaoAtualizada));
 
       });
     });
+  }
+
+  getAvaliacaoDefault(): Avaliacao {
+    return {
+      id: '1',
+      status: 0,
+      titulo: "",
+      descricao: "",
+      limitarNumIntegrantes: true,
+      maxIntegrantes: 3,
+      dtInicio: this.comumService.getStringFromDate(new Date()),
+      isInicioIndeterminado: true,
+      dtInicioCorrecao: this.comumService.getStringFromDate(new Date(), 1),
+      isInicioCorrecaoIndeterminado: true,
+      dtTermino: this.comumService.getStringFromDate(new Date(), 2),
+      isTerminoIndeterminado: true,
+      isOrdemAleatoria: false,
+      isBloqueadoAlunoAtrasado: false,
+      tipoDisposicao: 0,
+      tipoCorrecao: 0,
+      correcaoParesQtdTipo: "1",
+      correcaoParesQtdNumero: 1,
+      tipoPontuacao: 0,
+      duracaoIndividual: 1,
+      duracaoIndividualUnidade: 'horas',
+      duracaoIndividualMs: (1000 * 60 * 60),
+      isDuracaoIndividualIndeterminada: true,
+      tags: [],
+      grupos: [
+        {
+          numero: 1,
+          alunos: [],
+          provaId: null,
+
+        }
+      ],
+      provas: [],
+      provaGabarito: "",
+
+    }
   }
 
 

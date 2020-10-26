@@ -10,7 +10,7 @@
                 <label for="email">E-mail:</label>
             </td>
             <td>
-                <input required type="email" class="form-control" name="email" value="{{aluno.email}}"
+                <input class="input-clean" required type="email" name="email" value="{{aluno.email}}"
                     [(ngModel)]="aluno.email" (ngModelChange)="verificarEmail()">
             </td>
         </tr>
@@ -19,8 +19,7 @@
                 <label for="senha">Senha:</label>
             </td>
             <td>
-                <input type="text" class="form-control" [disabled]="!novoUsuario" [(ngModel)]="aluno.senha"
-                    name="senha">
+                <input class="input-clean" type="text" [disabled]="!novoUsuario" [(ngModel)]="aluno.senha" name="senha">
             </td>
         </tr>
         <tr>
@@ -28,11 +27,11 @@
                 <label for="nome">Nome:</label>
             </td>
             <td>
-                <input required type="text" [disabled]="!novoUsuario" class="form-control" name="nome"
+                <input class="input-clean" required type="text" [disabled]="!novoUsuario" name="nome"
                     value="{{aluno.nome}}" [(ngModel)]="aluno.nome">
             </td>
         </tr>
-        <tr>
+        <tr *ngIf="!usuarioJaAdicionado">
             <td colspan='2'>
                 <mat-form-field style="width: 90%; padding: 15px; margin: auto;">
                     <mat-chip-list #chipList>
@@ -54,8 +53,9 @@
             <td colspan="2" align="center">
                 <button *ngIf="novoUsuario" mat-button (click)="cadastrar()"
                     style="background-color: var(--cor-primaria); color: white; margin-top: 5px;">Cadastrar</button>
-                <button *ngIf="!novoUsuario" mat-button (click)="adicionar()"
+                <button *ngIf="!novoUsuario && !usuarioJaAdicionado" mat-button (click)="adicionar()"
                     style="background-color: var(--cor-primaria); color: white; margin-top: 5px;">Adicionar</button>
+                <span *ngIf="usuarioJaAdicionado">Usuário já adicionado</span>
             </td>
         </tr>
 
