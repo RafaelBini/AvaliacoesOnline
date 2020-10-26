@@ -1,3 +1,4 @@
+import { CredencialService } from 'src/app/services/credencial.service';
 import { FileService } from './../../services/file.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Arquivo } from './../../models/arquivo';
@@ -5,6 +6,7 @@ import { Questao } from 'src/app/models/questao';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ImagemAmpliadaComponent } from 'src/app/dialogs/imagem-ampliada/imagem-ampliada.component';
 import { ConfirmarComponent } from 'src/app/dialogs/confirmar/confirmar.component';
+import { Usuario } from 'src/app/models/usuario';
 
 @Component({
   selector: 'app-arquivo-imagem',
@@ -16,6 +18,7 @@ export class ArquivoImagemComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private fileService: FileService,
+    private credencialService: CredencialService,
   ) { }
 
   @Input() questao: Questao;
@@ -25,6 +28,7 @@ export class ArquivoImagemComponent implements OnInit {
   @Input() tipo: 'imagens' | 'imagensEntregues' = 'imagens';
 
   @Output() imagemRemovida = new EventEmitter<void>();
+  @Output() descricaoAlterada = new EventEmitter<void>();
 
   ngOnInit(): void {
   }
@@ -66,5 +70,25 @@ export class ArquivoImagemComponent implements OnInit {
       height: '90%',
     })
   }
-
+  notificarDescricaoAlterada() {
+    this.descricaoAlterada.emit();
+  }
+  isLocked(questao: Questao) {
+    if (questao.usuarioUltimaModificacao == null) {
+      return false;
+    }
+    return (questao.usuarioUltimaModificacao.id != this.credencialService.getLoggedUserIdFromCookie());
+  }
+  onDissertativaFocus(questao: Questao) {
+    var usuario: Usuario = {
+      id: this.credencialService.getLoggedUserIdFromCookie(),
+      nome: this.credencialService.loggedUser.nome,
+    }
+    questao.usuarioUltimaModificacao = usuario;
+    this.descricaoAlterada.emit();
+  }
+  onDissertativaBlur(questao: Questao) {
+    questao.usuarioUltimaModificacao = null;
+    this.descricaoAlterada.emit();
+  }
 }

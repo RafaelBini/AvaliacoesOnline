@@ -769,7 +769,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
             const provaTipada = prova as Prova;
 
-            console.log("Peguei uma prova pra mim!!", provaTipada.id);
+            console.log("Prova alterada", provaTipada.id);
 
 
             // Recebe a prova toda

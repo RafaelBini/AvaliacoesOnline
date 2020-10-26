@@ -1,3 +1,4 @@
+import { ENTER } from '@angular/cdk/keycodes';
 import { TimeService } from './../../services/time.service';
 import { CredencialService } from './../../services/credencial.service';
 import { Prova } from 'src/app/models/prova';
@@ -23,6 +24,11 @@ export class QuestoesResponderComponent implements OnInit {
   @Input() avaliacao: Avaliacao;
   @Input() gabarito: Prova;
   @Input() prova: Prova;
+  public provaCache: Prova = {
+    questoes: [
+      { arquivosEntregues: [] }
+    ]
+  };
 
   @Output() respostaAlterada = new EventEmitter<void>();
 
@@ -35,6 +41,12 @@ export class QuestoesResponderComponent implements OnInit {
     private snack: MatSnackBar) { }
 
   ngOnInit(): void {
+    var interval = setInterval(() => {
+      if (this.prova.id != '1') {
+        this.provaCache = JSON.parse(JSON.stringify(this.prova));
+        clearInterval(interval);
+      }
+    })
   }
 
 
@@ -275,8 +287,9 @@ export class QuestoesResponderComponent implements OnInit {
       }
 
       const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+      const questaoIndex = this.prova.questoes.indexOf(questao);
 
-      const newFileIndex = questao.arquivosEntregues.push({
+      const newFileIndex = this.provaCache.questoes[questaoIndex].arquivosEntregues.push({
         nomeArquivo: file.name,
         caminhoArquivo: CAMINHO,
         tamanho: file.size,
@@ -290,19 +303,20 @@ export class QuestoesResponderComponent implements OnInit {
       var uploadTask = this.fileService.upload(CAMINHO, file);
 
       uploadTask.percentageChanges().subscribe(percentual => {
-        if (questao.arquivosEntregues[newFileIndex].descricao == "cancelar") {
+        if (this.provaCache.questoes[questaoIndex].arquivosEntregues[newFileIndex].descricao == "cancelar") {
           uploadTask.cancel();
-          questao.arquivosEntregues.splice(newFileIndex, 1);
+          this.provaCache.questoes[questaoIndex].arquivosEntregues.splice(newFileIndex, 1);
           return;
         }
-        questao.arquivosEntregues[newFileIndex].percentual = percentual;
-
+        this.provaCache.questoes[questaoIndex].arquivosEntregues[newFileIndex].percentual = percentual;
+        // console.log(percentual);
       });
 
       uploadTask.then(uploadTaskSnap => {
 
         uploadTaskSnap.ref.getDownloadURL().then(url => {
-          questao.arquivosEntregues[newFileIndex].url = url;
+          this.provaCache.questoes[questaoIndex].arquivosEntregues[newFileIndex].url = url;
+          this.prova.questoes[questaoIndex].arquivosEntregues.push(this.provaCache.questoes[questaoIndex].arquivosEntregues[newFileIndex]);
           this.respostaAlterada.emit();
         })
           .catch(reason => {
@@ -316,8 +330,10 @@ export class QuestoesResponderComponent implements OnInit {
     }
   }
   anexoRemovido() {
+
     this.respostaAlterada.emit();
   }
+
 
   // ENVIO DE IMAGENS
   onImagemSelected(event, questao: Questao) {
@@ -345,8 +361,9 @@ export class QuestoesResponderComponent implements OnInit {
       }
 
       const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+      const questaoIndex = this.prova.questoes.indexOf(questao);
 
-      const newFileIndex = questao.imagensEntregues.push({
+      const newFileIndex = this.provaCache.questoes[questaoIndex].imagensEntregues.push({
         nomeArquivo: file.name,
         caminhoArquivo: CAMINHO,
         tamanho: file.size,
@@ -360,18 +377,19 @@ export class QuestoesResponderComponent implements OnInit {
       var uploadTask = this.fileService.upload(CAMINHO, file);
 
       uploadTask.percentageChanges().subscribe(percentual => {
-        if (questao.imagensEntregues[newFileIndex].descricao == "cancelar") {
+        if (this.provaCache.questoes[questaoIndex].imagensEntregues[newFileIndex].descricao == "cancelar") {
           uploadTask.cancel();
-          questao.imagensEntregues.splice(newFileIndex, 1);
+          this.provaCache.questoes[questaoIndex].imagensEntregues.splice(newFileIndex, 1);
           return;
         }
-        questao.imagensEntregues[newFileIndex].percentual = percentual;
+        this.provaCache.questoes[questaoIndex].imagensEntregues[newFileIndex].percentual = percentual;
       });
 
       uploadTask.then(uploadTaskSnap => {
 
         uploadTaskSnap.ref.getDownloadURL().then(url => {
-          questao.imagensEntregues[newFileIndex].url = url;
+          this.provaCache.questoes[questaoIndex].imagensEntregues[newFileIndex].url = url;
+          this.prova.questoes[questaoIndex].imagensEntregues.push(this.provaCache.questoes[questaoIndex].imagensEntregues[newFileIndex]);
           this.respostaAlterada.emit();
         })
           .catch(reason => {
@@ -387,7 +405,9 @@ export class QuestoesResponderComponent implements OnInit {
   imagemRemovida() {
     this.respostaAlterada.emit();
   }
-
+  onDescricaImagemAlterada() {
+    this.respostaAlterada.emit();
+  }
 
 
 

@@ -23,7 +23,9 @@ export class ArquivoAnexoComponent implements OnInit {
   @Input() editando: boolean = false;
   @Input() tipo: 'anexo' | 'arquivosEntregues' = 'anexo';
 
+  @Output() uploadCancelado = new EventEmitter<void>();
   @Output() anexoRemovido = new EventEmitter<void>();
+
 
   ngOnInit(): void {
   }
@@ -37,6 +39,7 @@ export class ArquivoAnexoComponent implements OnInit {
     });
     diagRef.afterClosed().subscribe(result => {
       if (result == true) {
+        console.log("vou cancelar");
         anexo.descricao = "cancelar";
       }
     });

@@ -16,14 +16,16 @@
         <img (click)="ampliarImagem(file)" [src]="file.url"
             style="height: 200px; object-fit: contain; margin: auto; display: block" />
         <button *ngIf="editando" (click)="removerImagem(questao, imagemIndex)" class="imagem-controle"
-            style="top: 0px; right: 0px" mat-icon-button matTooltip="Remover imagem">
+            style="top: 0px; right: 0px" [disabled]="isLocked(questao)" mat-icon-button matTooltip="Remover imagem">
             <mat-icon>
                 delete
             </mat-icon>
         </button>
         <div *ngIf="editando" class="imagem-controle imagem-descricao" [class.imagem-descricao-ativa]="file.descricao">
-            <input type="text" maxlength="50" class="input-transparente" placeholder="Coloque aqui uma descrição"
-                [(ngModel)]="file.descricao" />
+            <input type="text" maxlength="50" (blur)="onDissertativaBlur(questao)"
+                (focus)="onDissertativaFocus(questao)" [disabled]="isLocked(questao)" class="input-transparente"
+                placeholder="Coloque aqui uma descrição" [(ngModel)]="file.descricao"
+                (ngModelChange)="notificarDescricaoAlterada()" />
         </div>
         <div *ngIf="!editando && file.descricao" class="imagem-controle imagem-descricao"
             [class.imagem-descricao-ativa]="file.descricao">

@@ -76,23 +76,44 @@
                         </div>
 
                         <br />
-                        <button (click)="imagemSelectInput.click()" mat-icon-button matTooltip="Adicionar Imagem">
+                        <button [disabled]="isLocked(questao)" (click)="imagemSelectInput.click()" mat-icon-button
+                            matTooltip="Adicionar Imagem">
                             <mat-icon>insert_photo</mat-icon>
                         </button>
-                        <button (click)="anexoSelectInput.click()" mat-icon-button matTooltip="Adicionar Anexo">
+                        <button [disabled]="isLocked(questao)" (click)="anexoSelectInput.click()" mat-icon-button
+                            matTooltip="Adicionar Anexo">
                             <mat-icon>attach_file</mat-icon>
                         </button>
                         <div>
 
+                            <!-- ANEXO CARREGADO -->
                             <app-arquivo-anexo [editando]="true" tipo="arquivosEntregues" [file]="file"
                                 [questao]="questao" [anexoIndex]="anexoIndex" (anexoRemovido)="anexoRemovido()"
                                 *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
 
                             </app-arquivo-anexo>
 
+                            <!-- ANEXO CARREGANDO -->
+                            <app-arquivo-anexo [style.display]="file.percentual >= 100 ? 'none' : ''" [editando]="true"
+                                tipo="arquivosEntregues" [file]="file" [questao]="questao" [anexoIndex]="anexoIndex"
+                                *ngFor="let file of provaCache.questoes[qi].arquivosEntregues; index as anexoIndex">
+
+                            </app-arquivo-anexo>
+
+
+                            <!-- IMAGEM CARREGADA -->
                             <app-arquivo-imagem [editando]="true" tipo="imagensEntregues" [file]="file"
                                 [questao]="questao" [imagemIndex]="imagemIndex" (imagemRemovida)="imagemRemovida()"
-                                *ngFor="let file of questao.imagensEntregues; index as imagemIndex">
+                                (descricaoAlterada)="onDescricaImagemAlterada()"
+                                *ngFor="let file of questao.imagensEntregues; index as imagemIndex; trackBy:identificarQuestao">
+
+                            </app-arquivo-imagem>
+
+                            <!-- IMAGEM CARREGANDO (CACHE) -->
+                            <app-arquivo-imagem [style.display]="file.percentual >= 100 ? 'none' : ''" [editando]="true"
+                                tipo="imagensEntregues" [file]="file" [questao]="questao" [imagemIndex]="imagemIndex"
+                                (imagemRemovida)="imagemRemovida()"
+                                *ngFor="let file of provaCache.questoes[qi].imagensEntregues; index as imagemIndex">
 
                             </app-arquivo-imagem>
 
@@ -126,6 +147,13 @@
                             <app-arquivo-anexo [editando]="true" tipo="arquivosEntregues" [file]="file"
                                 [questao]="questao" [anexoIndex]="anexoIndex" (anexoRemovido)="anexoRemovido()"
                                 *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
+
+                            </app-arquivo-anexo>
+
+                            <app-arquivo-anexo [style.display]="file.percentual >= 100 ? 'none': ''" [editando]="true"
+                                tipo="arquivosEntregues" [file]="file" [questao]="questao" [anexoIndex]="anexoIndex"
+                                (anexoRemovido)="anexoRemovido()"
+                                *ngFor="let file of provaCache.questoes[qi].arquivosEntregues; index as anexoIndex">
 
                             </app-arquivo-anexo>
 
