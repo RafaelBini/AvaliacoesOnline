@@ -1,13 +1,12 @@
 export const environment = {
   production: true,
-  firebaseConfig = {
-    apiKey: "AIzaSyALbdEnJ7v6AkBqtn4UTwYjCdLVWBmwUDE",
-    authDomain: "avaliacao-online-dev.firebaseapp.com",
-    databaseURL: "https://avaliacao-online-dev.firebaseio.com",
-    projectId: "avaliacao-online-dev",
-    storageBucket: "avaliacao-online-dev.appspot.com",
-    messagingSenderId: "5135874583",
-    appId: "1:5135874583:web:d2f6e7bfb6b1f2cf177a52",
-    measurementId: "G-WZGRRMTNGF"
-  }
+  firebaseConfig: {
+    apiKey: "AIzaSyB5_JffBpBZFuvSYmX1YogJSmXTPqXxvtk",
+    authDomain: "avaliacoes-online-ufpr.firebaseapp.com",
+    databaseURL: "https://avaliacoes-online-ufpr.firebaseio.com",
+    projectId: "avaliacoes-online-ufpr",
+    storageBucket: "avaliacoes-online-ufpr.appspot.com",
+    messagingSenderId: "1012393638480",
+    appId: "1:1012393638480:web:01b94e9e262e3dfb7bef55"
+  },
 };

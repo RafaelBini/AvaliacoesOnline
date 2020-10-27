@@ -1,32 +1,18 @@
 -- Dia 30/10
 
 
--------------------
-
-
-
-- Permitir o aluno colocar sua foto
-
-- Hospedar
-
-- Enviar o link no grupo
-
-
-
-
 -----------------------------------------------------------------------
 
+
 - Ler somente letras minusculas no email de login
+- Criar hash da senha para inserir e conferir com banco de dados
+
 
 - Colocar spinner de loading
 
 - Cadastrar alunos por CSV no bd
 
-- Melhorar timing de pegar prova em grupo
 
-- Melhorar design da aba "Meu Perfil"
-
-- Criar hash da senha para inserir e conferir com banco de dados
 
 
 
