@@ -15,6 +15,7 @@ export class UsuarioService {
   }
 
 
+
   getAll(): Promise<Array<Usuario>> {
     return new Promise((resolve, reject) => {
       this.db.collection('usuarios').get().toPromise().then(ref => {

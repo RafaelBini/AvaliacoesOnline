@@ -12,7 +12,7 @@
 
 .minha-conta{
     height: 5vh;
-    height: 5vh;
+    width: 5vh;
     background-color: white;
     border: 1px solid var(--cor-primaria);
     border-radius: 50%;

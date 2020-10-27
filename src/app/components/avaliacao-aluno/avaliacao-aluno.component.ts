@@ -362,7 +362,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
         this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
           this.getEuFromAvaliacao(avaliacaoParaModificar).statusId = this.getEuNaAvaliacao().statusId;
           this.getEuFromAvaliacao(avaliacaoParaModificar).dtStatus = this.getEuNaAvaliacao().dtStatus;
-          this.getEuFromAvaliacao(avaliacaoParaModificar).online = this.getEuNaAvaliacao().online;
+          this.getEuFromAvaliacao(avaliacaoParaModificar).online = true;
           return avaliacaoParaModificar;
         }, this.avaliacao.id)
           .then(() => {
@@ -443,6 +443,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       id: this.credencialService.loggedUser.id,
       nome: this.credencialService.loggedUser.nome,
       email: this.credencialService.loggedUser.email,
+      img: this.credencialService.loggedUser.img || null,
       online: true,
       statusId: 0,
       dtStatus: ['', '', '', '', '', ''],

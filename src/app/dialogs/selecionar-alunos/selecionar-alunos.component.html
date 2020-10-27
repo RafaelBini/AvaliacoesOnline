@@ -53,8 +53,10 @@
                             <table style="width: 100%;">
                                 <tr class="aluno-line">
                                     <td width="10">
-                                        <img src="assets/avatares/padrao.jpg"
-                                            style="height: 5vh; width: 5vh; object-fit: cover;" />
+                                        <img *ngIf="aluno.img" [src]="aluno.img.url || 'assets/avatares/padrao.jpg'"
+                                            style="height: 5vh; width: 5vh; object-fit: cover; border-radius: 5px;" />
+                                        <img *ngIf="!aluno.img" src="assets/avatares/padrao.jpg"
+                                            style="height: 5vh; width: 5vh; object-fit: cover; border-radius: 5px;" />
                                     </td>
                                     <td width="25%">
                                         {{aluno.nome}}
@@ -131,7 +133,9 @@
                             <table style="width: 100%;">
                                 <tr class="aluno-line">
                                     <td width="10">
-                                        <img src="assets/avatares/padrao.jpg"
+                                        <img *ngIf="aluno.img" [src]="aluno.img.url || assets/avatares/padrao.jpg"
+                                            style="height: 5vh; width: 5vh; object-fit: cover;" />
+                                        <img *ngIf="!aluno.img" src="assets/avatares/padrao.jpg"
                                             style="height: 5vh; width: 5vh; object-fit: cover;" />
                                     </td>
                                     <td width="25%">

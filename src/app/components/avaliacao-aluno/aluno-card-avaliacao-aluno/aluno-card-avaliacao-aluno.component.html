@@ -3,7 +3,9 @@
         <tr>
             <td rowspan="2">
                 <div style="position: relative;">
-                    <img src="assets/avatares/padrao.jpg"
+                    <img *ngIf="aluno.img" [src]="aluno.img.url || 'assets/avatares/padrao.jpg'"
+                        style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
+                    <img *ngIf="!aluno.img" src="assets/avatares/padrao.jpg"
                         style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
                     <span *ngIf="aluno.online" class="etiqueta status-online">online</span>
                     <span *ngIf="!aluno.online" class="etiqueta status-offline">offline</span>

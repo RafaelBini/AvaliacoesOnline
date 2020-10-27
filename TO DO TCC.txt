@@ -1,16 +1,9 @@
 -- Dia 30/10
 
-- Add validaçao ao add questao
-
-- Salvar sempre o rascunho de nova avalição no firebase
-
-- Adicionar opção para limpar excluir o rascunho de nova avaliação
 
 -------------------
 
 
-
-- Não deixar inserir aluno duplicado
 
 - Permitir o aluno colocar sua foto
 

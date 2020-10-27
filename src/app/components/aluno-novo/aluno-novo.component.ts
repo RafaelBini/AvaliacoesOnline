@@ -89,6 +89,7 @@ export class AlunoNovoComponent implements OnInit {
       nome: this.aluno.nome,
       email: this.aluno.email,
       tags: this.aluno.tags,
+      img: this.aluno.img,
     });
     this.usuarioService.update(this.credencialService.loggedUser);
     this.aluno = {
@@ -96,7 +97,8 @@ export class AlunoNovoComponent implements OnInit {
       email: "",
       senha: "",
       tipo: "",
-      tags: []
+      tags: [],
+      img: null,
     };
     this.snack.open("Aluno adicionado!", null, { duration: 3500 });
   }

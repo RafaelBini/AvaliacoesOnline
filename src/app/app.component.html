@@ -11,8 +11,13 @@
         </div>
       </td>
       <td width="5%" align="center" valign="middle" style="position: relative;">
-        <img *ngIf="credencialService.estouLogado()" class="minha-conta" src="assets/avatares/padrao.jpg"
-          [matMenuTriggerFor]="userMenu" />
+
+        <img *ngIf="credencialService.estouLogado() && credencialService.loggedUser.img" class="minha-conta"
+          [src]="credencialService.loggedUser.img.url || 'assets/avatares/padrao.jpg'" [matMenuTriggerFor]="userMenu" />
+
+        <img *ngIf="credencialService.estouLogado() && !credencialService.loggedUser.img" class="minha-conta"
+          src="assets/avatares/padrao.jpg" [matMenuTriggerFor]="userMenu" />
+
         <mat-menu #userMenu="matMenu">
 
           <!--div style="text-align: center;">

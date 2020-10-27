@@ -1,3 +1,4 @@
+import { Arquivo } from './arquivo';
 export interface Usuario {
     id?: string,
     nome?: string,
@@ -14,4 +15,5 @@ export interface Usuario {
     notaTotal?: number;
     valorTotal?: number;
     dtStatus?: Array<string>;
+    img?: Arquivo;
 }
