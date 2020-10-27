@@ -104,11 +104,11 @@ export class ProfessorComponent implements OnInit, OnDestroy {
           if (statusAnterior != avaliacao.status) {
 
             this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
-              avaliacaoParaModificar.status = avaliacao.status;              
+              avaliacaoParaModificar.status = avaliacao.status;
               return avaliacaoParaModificar;
-            }, avaliacao.id);      
+            }, avaliacao.id);
             console.log("Alterei o status da avaliação conforme o tempo -> TRANSACAO");
-            
+
             return;
           }
 
@@ -135,7 +135,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
   // Alunos
   addAluno() {
     this.dialog.open(AlunoNovoComponent, {
-
+      width: '40%',
     });
   }
   onBuscaAlunoKeyUp(texto: string) {

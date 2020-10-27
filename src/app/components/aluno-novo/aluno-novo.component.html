@@ -6,11 +6,11 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="width: 1%">
                 <label for="email">E-mail:</label>
             </td>
             <td>
-                <input class="input-clean" required type="email" name="email" value="{{aluno.email}}"
+                <input class="input-simple" required type="email" name="email" value="{{aluno.email}}"
                     [(ngModel)]="aluno.email" (ngModelChange)="verificarEmail()">
             </td>
         </tr>
@@ -19,7 +19,8 @@
                 <label for="senha">Senha:</label>
             </td>
             <td>
-                <input class="input-clean" type="text" [disabled]="!novoUsuario" [(ngModel)]="aluno.senha" name="senha">
+                <input class="input-simple" type="text" [disabled]="!novoUsuario" [(ngModel)]="aluno.senha"
+                    name="senha">
             </td>
         </tr>
         <tr>
@@ -27,7 +28,7 @@
                 <label for="nome">Nome:</label>
             </td>
             <td>
-                <input class="input-clean" required type="text" [disabled]="!novoUsuario" name="nome"
+                <input class="input-simple" required type="text" [disabled]="!novoUsuario" name="nome"
                     value="{{aluno.nome}}" [(ngModel)]="aluno.nome">
             </td>
         </tr>
