@@ -499,12 +499,8 @@ export class AvaliacaoNovaComponent implements OnInit {
       return;
     }
     this.validarDatas().then(() => {
-      this.avaliacao.professorId = this.credencialService.loggedUser.id;
-      this.avaliacao.professorNome = this.credencialService.loggedUser.nome;
-      if (this.avaliacao.isInicioIndeterminado)
-        this.avaliacao.dtInicio = null;
-      if (this.avaliacao.titulo == '')
-        this.avaliacao.titulo = 'Sem Título';
+
+      this.atualizarAvaliacao();
 
       this.avaliacaoService.insertNovaAvaliacao(this.avaliacao).then(() => {
         this.provaGabarito.avaliacaoId = this.avaliacao.id;
@@ -570,6 +566,14 @@ export class AvaliacaoNovaComponent implements OnInit {
       duration: 3500
     });
   }
+  atualizarAvaliacao() {
+    this.avaliacao.professorId = this.credencialService.loggedUser.id;
+    this.avaliacao.professorNome = this.credencialService.loggedUser.nome;
+    if (this.avaliacao.isInicioIndeterminado)
+      this.avaliacao.dtInicio = null;
+    if (this.avaliacao.titulo == '')
+      this.avaliacao.titulo = 'Sem Título';
+  }
 
 
   // DIALOGS
@@ -615,6 +619,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     }
     this.provaExemplo = this.provaService.getProvaFromGabarito(this.provaGabarito);
     this.visao = tipoVisao;
+    this.atualizarAvaliacao();
   }
   abirSelecionarAunos() {
     var diagRef = this.dialog.open(SelecionarAlunosComponent, {

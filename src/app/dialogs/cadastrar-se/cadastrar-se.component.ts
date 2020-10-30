@@ -55,5 +55,11 @@ export class CadastrarSeComponent implements OnInit {
       });
   }
 
+  onKeyUp(event) {
+    if (event.key == 'Enter') {
+      this.cadastrar();
+    }
+  }
+
 
 }

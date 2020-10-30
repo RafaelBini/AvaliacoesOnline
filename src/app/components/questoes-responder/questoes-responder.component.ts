@@ -258,7 +258,7 @@ export class QuestoesResponderComponent implements OnInit {
   }
   isExtensaoValida(nomeArquivo: string, questao: Questao) {
     for (let extensao of questao.extensoes) {
-      if (nomeArquivo.split('.')[nomeArquivo.split('.').length - 1] == extensao.replace(".", "")) {
+      if (nomeArquivo.split('.')[nomeArquivo.split('.').length - 1].toLowerCase() == extensao.replace(".", "").toLowerCase()) {
         return true;
       }
     }

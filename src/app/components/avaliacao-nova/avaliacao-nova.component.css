@@ -57,6 +57,15 @@
   opacity: 1;
 }
 
+.cabecalho {
+  padding: 20px; 
+  background-color: whitesmoke;  
+  color: black; 
+  border-radius: 10px;
+  margin: auto;
+  width: 100%;
+}
+
 
 /* CDK DRAG & DROP */
 

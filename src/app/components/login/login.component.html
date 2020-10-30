@@ -3,7 +3,7 @@
     <div class="container">
 
         <span class="label">Email</span>
-        <input type="text" [(ngModel)]="usuario.email" autofocus />
+        <input type="text" [(ngModel)]="usuario.email" (keyup)="onKeyUp($event)" autofocus />
         <span class="label">Senha</span>
         <input type="password" [(ngModel)]="usuario.senha" (keyup)="onKeyUp($event)" />
         <br />

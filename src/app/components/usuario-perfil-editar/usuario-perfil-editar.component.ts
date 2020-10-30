@@ -120,6 +120,7 @@ export class UsuarioPerfilEditarComponent implements OnInit {
         this.snack.open("Dados salvos", null, {
           duration: 3500,
         });
+        this.credencialService.loggedUser = this.usuario;
       }).catch(reason => {
         this.snack.open(reason, null, {
           duration: 3500,

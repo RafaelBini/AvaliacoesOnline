@@ -375,7 +375,7 @@
                 <!-- Opções da questão -->
                 <tr>
                     <td align="right" style="position: relative; padding-top: 20px;">
-                        <div *ngIf="avaliacao.tipoPontuacao != 3" style="position: absolute; left: 0px;">
+                        <div *ngIf="avaliacao.tipoPontuacao != 3" style="position: absolute; z-index:1000; left: 0px;">
                             Valor: <input style="padding: 7px;" type="number" max="100" min="1"
                                 (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.valor" />
                             <span

@@ -1,6 +1,7 @@
 import { Usuario } from './../models/usuario';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { Md5 } from 'ts-md5/dist/md5';
 
 @Injectable({
   providedIn: 'root'
@@ -34,14 +35,14 @@ export class UsuarioService {
 
   async exists(usuario: Usuario) {
 
-    const ref = await this.db.collection('usuarios', ref => ref.where('email', '==', usuario.email)).get().toPromise();
+    const ref = await this.db.collection('usuarios', ref => ref.where('email', '==', usuario.email.toLowerCase())).get().toPromise();
     return ref.docs.length > 0;
 
   }
 
   podeLogar(usuario: Usuario) {
     return new Promise((resolve, reject) => {
-      this.db.collection('usuarios', ref => ref.where('email', '==', usuario.email)).get().toPromise().then(ref => {
+      this.db.collection('usuarios', ref => ref.where('email', '==', usuario.email.toLowerCase())).get().toPromise().then(ref => {
 
         if (ref.docs.length <= 0) {
           reject('Usuario ou senha incorreta.');
@@ -49,7 +50,7 @@ export class UsuarioService {
         }
 
 
-        if (ref.docs[0].data().senha == usuario.senha) {
+        if (ref.docs[0].data().senha == Md5.hashStr(usuario.senha).toString()) {
           var usuarioLogado: Usuario = ref.docs[0].data();
           usuarioLogado.id = ref.docs[0].id;
           resolve(usuarioLogado);

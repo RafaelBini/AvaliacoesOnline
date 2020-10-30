@@ -60,7 +60,7 @@
 }
 
 .main-btn{
-  position: fixed; 
+  position: absolute; 
   top: 9%; 
   right: 4%; 
   margin: auto; 

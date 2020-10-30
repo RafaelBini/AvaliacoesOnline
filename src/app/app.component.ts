@@ -16,9 +16,18 @@ import { Usuario } from './models/usuario';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private dialog: MatDialog, private snack: MatSnackBar, private usuarioService: UsuarioService, public credencialService: CredencialService, private router: Router, private route: ActivatedRoute) {
+  private url: string;
+
+  constructor(
+    private dialog: MatDialog,
+    private snack: MatSnackBar,
+    private usuarioService: UsuarioService,
+    public credencialService: CredencialService,
+    private router: Router, private route: ActivatedRoute) {
+
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd || e instanceof RouterEvent) {
+        this.url = e.url;
         if (e.url.includes('professor')) {
           this.credencialService.loggedUser.acesso = "professor";
         }
@@ -27,6 +36,9 @@ export class AppComponent implements OnInit {
         }
       }
     });
+
+
+
   }
 
   ngOnInit() {
@@ -43,8 +55,6 @@ export class AppComponent implements OnInit {
         });
     }
 
-
-
   }
 
   fazerLogout() {
@@ -57,11 +67,17 @@ export class AppComponent implements OnInit {
     const ref = this.dialog.open(CadastrarSeComponent, {
 
     });
-    ref.afterClosed().subscribe((usuarioCadastrado) => {
+    ref.afterClosed().subscribe((usuarioCadastrado: Usuario) => {
+
+      if (usuarioCadastrado == undefined)
+        return;
 
       this.credencialService.fazerLogin(usuarioCadastrado).then((usuarioLogado: Usuario) => {
 
-        this.router.navigate(['professor']);
+        if (this.url == '/login')
+          this.router.navigate(['/professor']);
+        else
+          window.location.href = window.location.href;
 
       })
         .catch(reason => {

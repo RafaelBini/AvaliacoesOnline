@@ -3,6 +3,7 @@ import { UsuarioService } from './usuario.service';
 import { Usuario } from './../models/usuario';
 import { ComumService } from 'src/app/services/comum.service';
 import { Injectable } from '@angular/core';
+import { Md5 } from 'ts-md5/dist/md5';
 
 @Injectable({
   providedIn: 'root'
@@ -62,8 +63,32 @@ export class CredencialService {
   }
 
   public cadastrar(usuario: Usuario) {
-    return this.usuarioService.insert(usuario);
 
+    var usuarioInserir = { ...usuario };
+    usuarioInserir.email = usuario.email.toLowerCase();
+    usuarioInserir.nome = this.getProperCase(usuario.nome);
+    usuarioInserir.senha = Md5.hashStr(usuario.senha).toString();
+    return this.usuarioService.insert(usuarioInserir);
+
+  }
+
+  getProperCase(texto: string): string {
+    const PALAVRAS_EXCESSAO = ['de', 'da', 'das', 'dos', 'do'];
+
+    var partes = texto.toLowerCase().split(' ');
+    var nomeProper = "";
+
+    for (let [i, parte] of partes.entries()) {
+      if (!PALAVRAS_EXCESSAO.includes(parte))
+        nomeProper += parte.substr(0, 1).toUpperCase() + parte.substr(1, parte.length).toLowerCase();
+      else
+        nomeProper += parte.toLowerCase();
+
+      if (i < partes.length)
+        nomeProper += ' ';
+    }
+
+    return nomeProper;
   }
 
   isNovoUsuarioValido(usuario: Usuario, confirmacaoSenha) {

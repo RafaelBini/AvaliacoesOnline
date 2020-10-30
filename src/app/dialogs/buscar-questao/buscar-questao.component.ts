@@ -35,7 +35,7 @@ export class BuscarQuestaoComponent implements OnInit {
 
     this.provaService.geProvasFromProfessor(this.credencialService.getLoggedUserIdFromCookie()).then(provas => {
       for (let prova of provas) {
-        if (!prova.isGabarito)
+        if (!prova.isGabarito || prova.id == this.credencialService.getLoggedUserIdFromCookie())
           continue;
 
         var avaliacao = this.data.minhasAvaliacoes.filter(a => a.provaGabarito == prova.id)[0];

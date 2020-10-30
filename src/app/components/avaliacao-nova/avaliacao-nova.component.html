@@ -359,37 +359,10 @@
 
     <div *ngIf="visao == 'aluno'" style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
 
-        <div
-            style="padding: 20px; background-color: whitesmoke;  color: black; width: 100%; border-radius: 10px; text-align: center;">
-            <span style="font-size: 22px; font-weight: bold;">{{avaliacao.titulo || 'Sem Título'}}</span>
-            <br /><br />
+        <div class="cabecalho">
 
-            <div style="text-align: justify;">
-                {{avaliacao.descricao || 'Sem Descrição'}}
-                <br /><br />
-                Professor: Rafael Bini
-                <br /><br />
-                <table>
-                    <tr>
-                        <td>
-                            Inicio:
-                        </td>
-                        <td>
-                            <input type="datetime-local" [value]="avaliacao.dtInicio" disabled />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Término:
-                        </td>
-                        <td>
-                            <input type="datetime-local" [value]="avaliacao.dtTermino" disabled />
-                        </td>
-                    </tr>
-                </table>
+            <app-avaliacao-aluno-cabecalho [avaliacao]="avaliacao"></app-avaliacao-aluno-cabecalho>
 
-                <br />
-            </div>
         </div>
 
         <div style="width: 100%;">
