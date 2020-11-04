@@ -65,6 +65,9 @@ export class LoginComponent implements OnInit {
     if (this.id) {
       this.router.navigate([`/aluno/avaliacao/${this.id}`]);
     }
+    else if (this.credencialService.loggedUser.acesso == 'aluno') {
+      this.router.navigate(['/aluno']);
+    }
     else {
       this.router.navigate(['/professor']);
     }

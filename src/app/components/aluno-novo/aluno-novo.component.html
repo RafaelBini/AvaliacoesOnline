@@ -52,10 +52,9 @@
         </tr>
         <tr>
             <td colspan="2" align="center">
-                <button *ngIf="novoUsuario" mat-button (click)="cadastrar()"
-                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;">Cadastrar</button>
-                <button *ngIf="!novoUsuario && !usuarioJaAdicionado" mat-button (click)="adicionar()"
-                    style="background-color: var(--cor-primaria); color: white; margin-top: 5px;">Adicionar</button>
+                <button *ngIf="novoUsuario" mat-button (click)="cadastrar()" class="ultimo-btn">Cadastrar</button>
+                <button *ngIf="!novoUsuario && !usuarioJaAdicionado" mat-button (click)="adicionar(aluno)"
+                    class="ultimo-btn">Adicionar</button>
                 <span *ngIf="usuarioJaAdicionado">Usuário já adicionado</span>
             </td>
         </tr>

@@ -10,9 +10,18 @@ export class UsuarioService {
 
   constructor(private db: AngularFirestore) { }
 
-  insert(usuario: Usuario) {
+  insert(usuario: Usuario): Promise<Usuario> {
     usuario.alunos = [];
-    return this.db.collection('usuarios').add(usuario);
+    return new Promise<Usuario>((resolve, reject) => {
+      this.db.collection('usuarios').add(usuario).then(docRef => {
+        usuario.id = docRef.id;
+        resolve(usuario);
+      })
+        .catch(reason => {
+          reject(reason);
+        });
+    });
+
   }
 
 

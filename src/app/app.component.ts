@@ -57,6 +57,11 @@ export class AppComponent implements OnInit {
 
   }
 
+  mudarPara(tipoAcesso: 'aluno' | 'professor') {
+    this.credencialService.loggedUser.acesso = tipoAcesso;
+    this.usuarioService.update(this.credencialService.loggedUser);
+  }
+
   fazerLogout() {
     this.router.navigate(['login']);
     this.credencialService.fazerLogout();

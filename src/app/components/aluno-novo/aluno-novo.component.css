@@ -16,3 +16,7 @@
     border: 1px dashed var(--cor-primaria);
     background-color: white;
   }
+
+  .ultimo-btn{
+    background-color: var(--cor-primaria); color: white; margin-top: 5px;
+  }

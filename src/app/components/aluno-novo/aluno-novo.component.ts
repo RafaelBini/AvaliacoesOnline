@@ -18,7 +18,9 @@ export class AlunoNovoComponent implements OnInit {
     email: "",
     senha: "",
     tipo: "",
-    tags: []
+    tags: [],
+    img: null,
+    acesso: 'aluno',
   };
   private todosUsuarios: Array<Usuario> = [];
   public novoUsuario: boolean = true;
@@ -76,31 +78,33 @@ export class AlunoNovoComponent implements OnInit {
 
   cadastrar() {
     this.credencialService.isNovoUsuarioValido(this.aluno, this.aluno.senha).then(() => {
-      this.usuarioService.insert(this.aluno).then(docRef => {
-        this.aluno.id = docRef.id;
-        this.adicionar();
+      this.credencialService.cadastrar(this.aluno).then(usuarioInserido => {
+        this.adicionar(usuarioInserido);
       }).catch(reason => this.comumService.notificarErro("Falha ao cadastrar aluno no banco de dados", reason));;
     }).catch(reason => this.comumService.notificarErro(reason, reason));
   }
 
-  adicionar() {
+  adicionar(aluno: Usuario) {
     this.credencialService.loggedUser.alunos.push({
-      id: this.aluno.id,
-      nome: this.aluno.nome,
-      email: this.aluno.email,
-      tags: this.aluno.tags,
-      img: this.aluno.img,
+      id: aluno.id,
+      nome: aluno.nome,
+      email: aluno.email,
+      tags: aluno.tags,
+      img: aluno.img,
     });
-    this.usuarioService.update(this.credencialService.loggedUser);
-    this.aluno = {
-      nome: "",
-      email: "",
-      senha: "",
-      tipo: "",
-      tags: [],
-      img: null,
-    };
-    this.snack.open("Aluno adicionado!", null, { duration: 3500 });
+    this.usuarioService.update(this.credencialService.loggedUser).then(() => {
+      this.aluno = {
+        nome: "",
+        email: "",
+        senha: "",
+        tipo: "",
+        tags: [],
+        img: null,
+      };
+      this.snack.open("Aluno adicionado!", null, { duration: 3500 });
+    })
+      .catch(reason => this.comumService.notificarErro("Falha ao adicionar aluno ao Professor", reason));
+
   }
 
 }

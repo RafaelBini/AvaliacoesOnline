@@ -1,12 +1,6 @@
 -- Dia 30/10
 
-- Corrigir exeção de quando fecha cadastro de cima colcoar nada
-- Colocar para redirecionar para o link quando cadastra-se pelo botão de cima
-- Deixar o botão de iniciar correcao/etc fixo
-- Não questões de gabarito de rasucnho
-- Colocar componente de cabeçalho na visao aluno nova avaliacao
-- Ler somente letras minusculas no email de login
-- Criar hash da senha para inserir e conferir com banco de dados
+
 
 -----------------------------------------------------------------------
 

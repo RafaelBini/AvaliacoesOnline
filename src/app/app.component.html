@@ -30,7 +30,7 @@
           <hr />
 
           <!-- ALUNO -->
-          <a routerLink="/professor" (click)="credencialService.loggedUser.acesso='professor'" mat-menu-item
+          <a routerLink="/professor" (click)="mudarPara('professor')" mat-menu-item
             *ngIf="credencialService.loggedUser.acesso == 'aluno'">
             <mat-icon>swap_horiz</mat-icon>Mudar para Professor
           </a>
@@ -42,7 +42,7 @@
           </a>
 
           <!-- PROFESSOR -->
-          <a routerLink="/aluno" (click)="credencialService.loggedUser.acesso='aluno'" mat-menu-item
+          <a routerLink="/aluno" (click)="mudarPara('aluno')" mat-menu-item
             *ngIf="credencialService.loggedUser.acesso == 'professor'">
             <mat-icon>swap_horiz</mat-icon>Mudar para Aluno
           </a>

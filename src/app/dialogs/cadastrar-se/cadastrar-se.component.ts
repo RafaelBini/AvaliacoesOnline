@@ -31,13 +31,13 @@ export class CadastrarSeComponent implements OnInit {
   cadastrar() {
 
     this.credencialService.isNovoUsuarioValido(this.novoUsuario, this.confirmacaoSenha).then(() => {
-      this.credencialService.cadastrar(this.novoUsuario).then(() => {
+      this.credencialService.cadastrar(this.novoUsuario).then(docRef => {
 
         this.snack.open("Cadastrado com sucesso!", null, {
           duration: 3500
         });
 
-        this.novoUsuario.id = this.novoUsuario.email;
+        this.novoUsuario.id = docRef.id;
         this.dialogRef.close(this.novoUsuario);
 
       })

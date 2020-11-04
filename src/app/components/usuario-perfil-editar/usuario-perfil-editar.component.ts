@@ -1,3 +1,4 @@
+import { Md5 } from 'ts-md5/dist/md5';
 import { FileService } from './../../services/file.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsuarioService } from './../../services/usuario.service';
@@ -110,17 +111,28 @@ export class UsuarioPerfilEditarComponent implements OnInit {
 
   salvar() {
 
+    var usuarioParaInserir = { ...this.usuario };
+
     if (!this.alterar) {
-      delete this.usuario.senha;
+      delete usuarioParaInserir.senha;
       this.confirmacaoSenha = null;
     }
 
-    this.credencialService.isNovoUsuarioValido(this.usuario, this.confirmacaoSenha).then(() => {
-      this.usuarioService.update(this.usuario).then(() => {
+
+    this.credencialService.isNovoUsuarioValido(usuarioParaInserir, this.confirmacaoSenha).then(() => {
+
+      if (this.alterar)
+        usuarioParaInserir.senha = Md5.hashStr(usuarioParaInserir.senha).toString();
+
+      this.usuarioService.update(usuarioParaInserir).then(() => {
         this.snack.open("Dados salvos", null, {
           duration: 3500,
         });
-        this.credencialService.loggedUser = this.usuario;
+        this.credencialService.loggedUser = usuarioParaInserir;
+        if (this.alterar) {
+          this.usuario.senha = "";
+          this.alterar = false;
+        }
       }).catch(reason => {
         this.snack.open(reason, null, {
           duration: 3500,

@@ -36,8 +36,10 @@
                 Senha<br />
                 <input required [disabled]="!alterar" [(ngModel)]="usuario.senha" type="password">
 
-                <button (click)="alterar = true" mat-button matTooltip="Alterar senha">
-                    <mat-icon>create</mat-icon>
+                <button (click)="alterar = !alterar" mat-button
+                    [matTooltip]="alterar ? 'Não alterar senha' : 'Alterar senha'">
+                    <mat-icon *ngIf="!alterar">create</mat-icon>
+                    <mat-icon *ngIf="alterar">close</mat-icon>
                 </button>
             </td>
         </tr>
