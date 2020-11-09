@@ -6,15 +6,26 @@
     <table class="tabela-editar-perfil">
         <tr>
             <td align="center" rowspan="5">
-                <img *ngIf="usuario.img" [src]="usuario.img.url || 'assets/avatares/padrao.jpg'"
-                    style="height: 20vh; width: 20vh; object-fit: cover; border-radius: 7px;" />
-                <br />
-                <img *ngIf="!usuario.img" [src]="'assets/avatares/padrao.jpg'"
-                    style="height: 20vh; width: 20vh; object-fit: cover; border-radius: 7px;" />
-                <br />
+
+                <div style="position: relative;">
+                    <img *ngIf="usuario.img" [src]="usuario.img.url || 'assets/avatares/padrao.jpg'"
+                        style="height: 20vh; width: 20vh; object-fit: cover; border-radius: 7px;" />
+                    <img *ngIf="!usuario.img" [src]="'assets/avatares/padrao.jpg'"
+                        style="height: 20vh; width: 20vh; object-fit: cover; border-radius: 7px;" />
+                    <button *ngIf="usuario.img" mat-icon-button matTooltip="Remover imagem"
+                        style="color: var(--cor-perigosa); position: absolute; top: 0px; right: 1px;"
+                        (click)="removerImagem()">
+                        <mat-icon>
+                            cancel
+                        </mat-icon>
+                    </button>
+                </div>
+
+
                 <button mat-button (click)="imagemSelectInput.click()">
                     Alterar Foto
                 </button>
+
                 <input #imagemSelectInput accept="image/*" (change)="onImagemSelected($event)" type="file"
                     class="input-invisivel" value="Selecione os arquivos" />
             </td>
@@ -41,6 +52,7 @@
                     <mat-icon *ngIf="!alterar">create</mat-icon>
                     <mat-icon *ngIf="alterar">close</mat-icon>
                 </button>
+
             </td>
         </tr>
         <tr *ngIf="alterar">

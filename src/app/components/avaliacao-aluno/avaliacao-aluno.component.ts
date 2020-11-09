@@ -1,3 +1,4 @@
+import { TimeService } from './../../services/time.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Questao } from './../../models/questao';
 import { CredencialService } from './../../services/credencial.service';
@@ -32,6 +33,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     public comumService: ComumService,
     private avaliacaoService: AvaliacaoService,
     public provaService: ProvaService,
+    private timeService: TimeService,
     private snack: MatSnackBar,
     private dialog: MatDialog,) { }
 
@@ -349,7 +351,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
           // SE ESTOU REALIZANDO A AVALIAÇÃO MAS MEU STATUS ESTÁ DESATUALIZADO,
           if (this.avaliacao.status == 1 && (aluno.statusId == 0 || aluno.statusId == null)) {
             aluno.statusId = 2;
-            aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 2, new Date().toISOString());
+            aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 2, this.timeService.getCurrentDateTime().toISOString());
             mudeiAlgo = true;
           }
 
@@ -401,10 +403,10 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       if (this.avaliacao.tipoDisposicao == 0 && !this.avaliacao.isDuracaoIndividualIndeterminada) {
 
         var duracaoIndividual = new Date(this.getEuNaAvaliacao().dtStatus[2]).getTime() + this.avaliacao.duracaoIndividualMs;
-        var agoraMs = new Date().getTime();
+        var agoraMs = this.timeService.getCurrentDateTime().getTime();
         if (duracaoIndividual < agoraMs && (this.getEuNaAvaliacao().dtStatus[3] == '' || this.getEuNaAvaliacao().dtStatus[3] == null)) {
           altereiStatusIndividual = true;
-          this.getEuNaAvaliacao().dtStatus[3] = new Date().toISOString();
+          this.getEuNaAvaliacao().dtStatus[3] = this.timeService.getCurrentDateTime().toISOString();
           this.getEuNaAvaliacao().statusId = 3;
         }
       }
@@ -448,12 +450,12 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       statusId: 0,
       dtStatus: ['', '', '', '', '', ''],
     };
-    me.dtStatus = this.comumService.insertInArray(me.dtStatus, 0, new Date().toISOString());
+    me.dtStatus = this.comumService.insertInArray(me.dtStatus, 0, this.timeService.getCurrentDateTime().toISOString());
 
     // Atualiza o status
     if (this.avaliacao.status == 1 && (me.statusId < 2 || me.statusId == null)) {
       me.statusId = 2;
-      me.dtStatus = this.comumService.insertInArray(me.dtStatus, 2, new Date().toISOString());
+      me.dtStatus = this.comumService.insertInArray(me.dtStatus, 2, this.timeService.getCurrentDateTime().toISOString());
     }
 
     // Se o grupo já tem o máximo de integrantes
@@ -523,7 +525,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
   // DURANTE AVALIAÇÃO
   sinalizarFinalizacao() {
     this.getEuNaAvaliacao().statusId = 3;
-    this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 3, new Date().toISOString());
+    this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 3, this.timeService.getCurrentDateTime().toISOString());
 
     this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
       avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].statusId = this.getEuNaAvaliacao().statusId;
@@ -713,7 +715,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             this.prova = novaProva;
             this.getEuNaAvaliacao().provaId = this.prova.id;
             this.getEuNaAvaliacao().statusId = 2;
-            this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 2, new Date().toISOString());
+            this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 2, this.timeService.getCurrentDateTime().toISOString());
             this.updateAvaliacao("Inseri uma nova prova!")
 
           }).catch(reason => this.snack.open('Falha ao receber a prova', null, { duration: 3500 }));
@@ -794,7 +796,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             if (this.getEuNaProva() == null) {
 
               EU_NA_AVALIACAO.statusId = 2;
-              EU_NA_AVALIACAO.dtStatus = this.comumService.insertInArray(EU_NA_AVALIACAO.dtStatus, 2, new Date().toISOString());
+              EU_NA_AVALIACAO.dtStatus = this.comumService.insertInArray(EU_NA_AVALIACAO.dtStatus, 2, this.timeService.getCurrentDateTime().toISOString());
               this.prova.alunos.push(EU_NA_AVALIACAO);
               this.provaService.updateProva(this.prova);
 

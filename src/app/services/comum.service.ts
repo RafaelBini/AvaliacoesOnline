@@ -6,13 +6,15 @@ import { animationFrameScheduler } from 'rxjs';
 import { Avaliacao } from '../models/avaliacao';
 import { DatePipe } from '@angular/common';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
+import { TimeService } from './time.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComumService {
 
-  constructor(private snack: MatSnackBar) { }
+  constructor(private snack: MatSnackBar,
+    private timeService: TimeService,) { }
 
   public statusAvaliacao = [
     {
@@ -412,8 +414,8 @@ export class ComumService {
     }
 
     var dataAmigavel = "";
-    const HOJE = new Date();
-    var ONTEM = new Date();
+    const HOJE = this.timeService.getCurrentDateTime();
+    var ONTEM = this.timeService.getCurrentDateTime();
     ONTEM.setDate(HOJE.getDate() - 1);
 
     // Recebe o dia
@@ -477,13 +479,25 @@ export class ComumService {
 
   getIntervaloAmigavel(dataIsoInicio: string, dataIsoFim: string) {
     var dataInicio = new Date(dataIsoInicio);
+    var dataInicioAmigavel = this.getDataAmigavel(dataIsoInicio);
     var dataFim = new Date(dataIsoFim);
-    if (dataInicio.getDay() == dataFim.getDay() && dataInicio.getMonth() == dataFim.getMonth() && dataInicio.getFullYear() == dataFim.getFullYear()) {
-      return `${this.getDataAmigavel(dataIsoInicio).replace('às', 'das')} às ${dataFim.getHours()}:${dataFim.getMinutes()}`;
+    var dataFimAmigavel = this.getDataAmigavel(dataIsoFim);
+
+
+    if (dataIsoFim.toLowerCase() == 'indeterminado') {
+      return `inicia ${dataInicioAmigavel}`;
+    }
+    else if (dataIsoInicio.toLowerCase() == 'indeterminado') {
+      return `encerra ${dataFimAmigavel}`;
+    }
+    else if (dataInicio.getDay() == dataFim.getDay() && dataInicio.getMonth() == dataFim.getMonth() && dataInicio.getFullYear() == dataFim.getFullYear()) {
+      return `${dataInicioAmigavel.replace('às', 'das')} às ${dataFim.getHours()}:${dataFim.getMinutes()}`;
     }
     else {
-      return `do ${this.getDataAmigavel(dataIsoInicio)} até ${this.getDataAmigavel(dataIsoFim)}`;
+      return `${dataInicioAmigavel.includes('dia') ? 'do' : 'de'} ${dataInicioAmigavel} até ${dataFimAmigavel}`;
     }
+
+
   }
 
   getStringFromDate(date: Date, horasMais: number = 0) {

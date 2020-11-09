@@ -24,9 +24,10 @@ export interface Avaliacao {
     tags?: Array<string>,
     status?: number,
     grupos?: Array<Grupo>;
+    alunosIds?: Array<string>;
     maxIntegrantes?: number;
     limitarNumIntegrantes?: boolean;
-    isArquivada?: boolean;
+    usuariosIdQueArquivaram?: Array<string>;
     provas?: Array<string>;
     provaGabarito?: string;
 

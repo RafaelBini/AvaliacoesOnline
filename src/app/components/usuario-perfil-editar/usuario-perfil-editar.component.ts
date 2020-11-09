@@ -1,3 +1,4 @@
+import { AvaliacaoService } from 'src/app/services/avaliacao.service';
 import { Md5 } from 'ts-md5/dist/md5';
 import { FileService } from './../../services/file.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -5,6 +6,7 @@ import { UsuarioService } from './../../services/usuario.service';
 import { CredencialService } from 'src/app/services/credencial.service';
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario';
+import { TimeService } from 'src/app/services/time.service';
 
 @Component({
   selector: 'app-usuario-perfil-editar',
@@ -17,7 +19,8 @@ export class UsuarioPerfilEditarComponent implements OnInit {
   public usuario: Usuario = {
     id: '',
     nome: '',
-    email: ''
+    email: '',
+    img: null,
   };
   public confirmacaoSenha: string;
 
@@ -25,6 +28,8 @@ export class UsuarioPerfilEditarComponent implements OnInit {
     private snack: MatSnackBar,
     public credencialService: CredencialService,
     private usuarioService: UsuarioService,
+    private avaliacaoService: AvaliacaoService,
+    private timeService: TimeService,
     private fileService: FileService
   ) { }
 
@@ -69,7 +74,7 @@ export class UsuarioPerfilEditarComponent implements OnInit {
       return;
     }
 
-    const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+    const CAMINHO: string = `${this.timeService.getCurrentDateTime().getTime()}_${file.name}`;
 
     this.usuario.img = {
       nomeArquivo: file.name,
@@ -109,6 +114,16 @@ export class UsuarioPerfilEditarComponent implements OnInit {
 
   }
 
+  removerImagem() {
+    if (this.usuario.img != null) {
+      if (this.usuario.img.url != '' && this.usuario.img.url != null) {
+        this.fileService.delete(this.usuario.img.caminhoArquivo);
+        this.usuario.img = null;
+        this.salvar();
+      }
+    }
+  }
+
   salvar() {
 
     var usuarioParaInserir = { ...this.usuario };
@@ -118,13 +133,40 @@ export class UsuarioPerfilEditarComponent implements OnInit {
       this.confirmacaoSenha = null;
     }
 
-
     this.credencialService.isNovoUsuarioValido(usuarioParaInserir, this.confirmacaoSenha).then(() => {
 
       if (this.alterar)
         usuarioParaInserir.senha = Md5.hashStr(usuarioParaInserir.senha).toString();
 
       this.usuarioService.update(usuarioParaInserir).then(() => {
+
+        // Atualiza o usuario nos professores
+        this.usuarioService.getProfessoresFrom(this.credencialService.getLoggedUserIdFromCookie()).then(professores => {
+          for (let professor of professores) {
+
+            const myIndex = professor.alunos.findIndex(usu => usu.id == this.credencialService.getLoggedUserIdFromCookie());
+            professor.alunos[myIndex].nome = usuarioParaInserir.nome;
+            professor.alunos[myIndex].img = usuarioParaInserir.img ? usuarioParaInserir.img : null;
+            professor.alunos[myIndex].email = usuarioParaInserir.email;
+            this.usuarioService.update(professor);
+          }
+        });
+
+        // Atualiza o usuario nas avaliações
+        this.avaliacaoService.getAvaliacoesFromAluno(this.credencialService.getLoggedUserIdFromCookie()).then(avaliacoes => {
+          for (let avaliacao of avaliacoes) {
+
+            this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+              const myGrupoIndex = avaliacaoParaModificar.grupos.findIndex(grupo => grupo.alunos.filter(aluno => aluno.id == this.credencialService.getLoggedUserIdFromCookie()).length > 0);
+              const myIndex = avaliacaoParaModificar.grupos[myGrupoIndex].alunos.findIndex(usu => usu.id == this.credencialService.getLoggedUserIdFromCookie());
+              avaliacaoParaModificar.grupos[myGrupoIndex].alunos[myIndex].nome = usuarioParaInserir.nome;
+              avaliacaoParaModificar.grupos[myGrupoIndex].alunos[myIndex].img = usuarioParaInserir.img ? usuarioParaInserir.img : null;
+              avaliacaoParaModificar.grupos[myGrupoIndex].alunos[myIndex].email = usuarioParaInserir.email;
+              return avaliacaoParaModificar;
+            }, avaliacao.id);
+          }
+        });
+
         this.snack.open("Dados salvos", null, {
           duration: 3500,
         });
@@ -143,11 +185,6 @@ export class UsuarioPerfilEditarComponent implements OnInit {
         duration: 3500,
       });
     });
-
-
-
-
-
   }
 
 }

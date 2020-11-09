@@ -42,6 +42,22 @@ export class UsuarioService {
 
   }
 
+  getProfessoresFrom(usuarioId: string): Promise<Array<Usuario>> {
+    return new Promise((resolve, reject) => {
+      this.db.collection('usuarios', ref => ref.where('alunosIds', 'array-contains', usuarioId)).get().toPromise().then(ref => {
+        var usuarios: Array<Usuario> = [];
+        for (let doc of ref.docs) {
+          var usuario: Usuario = doc.data() as Usuario;
+          usuario.id = doc.id;
+          usuarios.push(usuario);
+        }
+        resolve(usuarios);
+      }).catch(reason => reject(reason));
+
+    });
+
+  }
+
   async exists(usuario: Usuario) {
 
     const ref = await this.db.collection('usuarios', ref => ref.where('email', '==', usuario.email.toLowerCase())).get().toPromise();
@@ -91,7 +107,19 @@ export class UsuarioService {
   }
 
   update(usuario: Usuario) {
+    this.setAlunosIds(usuario);
     return this.db.collection('usuarios').doc(usuario.id).update(usuario);
+  }
+
+  setAlunosIds(usuario: Usuario) {
+    if (usuario.alunos == null)
+      return;
+
+    var alunosIds = [];
+    for (let aluno of usuario.alunos) {
+      alunosIds.push(aluno.id);
+    }
+    usuario.alunosIds = alunosIds;
   }
 
 }

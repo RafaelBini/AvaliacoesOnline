@@ -7,6 +7,7 @@ export interface Usuario {
     tipo?: string;
     tags?: Array<string>;
     alunos?: Array<Usuario>;
+    alunosIds?: Array<string>;
     online?: boolean;
     statusId?: number;
     provaId?: string;

@@ -5,6 +5,7 @@ import { Avaliacao } from 'src/app/models/avaliacao';
 import { Usuario } from 'src/app/models/usuario';
 import { ComumService } from 'src/app/services/comum.service';
 import { AlunoNovoComponent } from 'src/app/components/aluno-novo/aluno-novo.component';
+import { TimeService } from 'src/app/services/time.service';
 
 @Component({
   selector: 'app-selecionar-alunos',
@@ -17,7 +18,7 @@ export class SelecionarAlunosComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public avaliacao: Avaliacao,
     private credencialService: CredencialService,
     private comumService: ComumService,
-    private dialog: MatDialog,
+    private timeService: TimeService,
   ) { }
 
   textoBuscaAvaliacao: string;
@@ -97,7 +98,7 @@ export class SelecionarAlunosComponent implements OnInit {
 
       // Seta status para 0
       alunoSelecionado.statusId = 0;
-      alunoSelecionado.dtStatus = this.comumService.insertInArray(alunoSelecionado.dtStatus, 0, new Date().toISOString());
+      alunoSelecionado.dtStatus = this.comumService.insertInArray(alunoSelecionado.dtStatus, 0, this.timeService.getCurrentDateTime().toISOString());
 
       // Passa por cada grupo
       var foiAlocado = false;

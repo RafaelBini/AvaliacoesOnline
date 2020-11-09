@@ -1,8 +1,27 @@
--- Dia 30/10
+
+- Fazer esquema do tempo do servidor
+- Salvar automaticamente ao editar e colocar botão Finalizar
+- Corrigi bug duplicar e salvar rascunho
+- Corrigir bug de data inicio sem data fim
+- Colocar exemplo de tags para saber como separar
+- Atualizar o aluno em todas as suas esferas ao atualizar o perfil
+- Adicionei opção excluir foto ao atualizar perfil
+
+---------------------------------
 
 
+
+
+- Fazer o máximo da documentação possivel 
+
+- Fazer tutoriais (por funcionalidades)
 
 -----------------------------------------------------------------------
+
+
+- Colocar editor de texto
+	- Biblioteca: https://openbase.io/js/ngx-editor
+	- Exemplo: https://stackblitz.com/edit/ngx-editor-8htfq5?file=src%2Fapp%2Fapp.component.ts
 
 
 - Cadastrar alunos por CSV no bd

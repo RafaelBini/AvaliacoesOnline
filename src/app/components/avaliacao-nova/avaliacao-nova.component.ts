@@ -1,3 +1,4 @@
+import { TimeService } from './../../services/time.service';
 import { AjudaComponent } from './../../dialogs/ajuda/ajuda.component';
 import { ConfirmarComponent } from './../../dialogs/confirmar/confirmar.component';
 import { FileService } from './../../services/file.service';
@@ -38,13 +39,13 @@ export class AvaliacaoNovaComponent implements OnInit {
     public credencialService: CredencialService,
     public avaliacaoService: AvaliacaoService,
     public provaService: ProvaService,
+    private timeService: TimeService,
     private fileService: FileService,
   ) { }
 
 
-  public avaliacao: Avaliacao = this.avaliacaoService.getAvaliacaoDefault();
-
-  public provaGabarito: Prova = this.provaService.getGabaritoDefault();
+  public avaliacao: Avaliacao = { ...this.avaliacaoService.getAvaliacaoDefault() };
+  public provaGabarito: Prova = { ...this.provaService.getGabaritoDefault() };
 
   private avaliacoesId: Array<string> = [];
   private minhasAvaliacoes: Array<Avaliacao> = [];
@@ -67,7 +68,7 @@ export class AvaliacaoNovaComponent implements OnInit {
   salvo: boolean = false;
 
 
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   ngOnInit(): void {
 
@@ -81,13 +82,15 @@ export class AvaliacaoNovaComponent implements OnInit {
 
       // DUPLICANDO 
       if (params.id && params.tipo == 'duplicar') {
+
         this.puxarAvaliacaoParaEditar(params.id).then(() => {
+
           if (this.avaliacao.professorId != this.credencialService.getLoggedUserIdFromCookie()) {
             this.snack.open('Sem permissao para duplicar', null, { duration: 4500 });
             this.router.navigate(['']);
             return;
           }
-          this.provaGabarito.professorId = this.credencialService.getLoggedUserIdFromCookie();
+          this.avaliacao.professorId = null;
           this.receberTodasAvaliacoes().then(() => {
             this.setIdDuplicado(params.id);
             this.avaliacao.status = 0;
@@ -98,12 +101,18 @@ export class AvaliacaoNovaComponent implements OnInit {
                 provaId: null,
               }
             ];
-            this.avaliacao.dtInicio = this.comumService.getStringFromDate(new Date());
-            this.avaliacao.dtInicioCorrecao = this.comumService.getStringFromDate(new Date(), 1);
-            this.avaliacao.dtTermino = this.comumService.getStringFromDate(new Date(), 2);
+            this.avaliacao.dtInicio = this.comumService.getStringFromDate(this.timeService.getCurrentDateTime());
+            this.avaliacao.dtInicioCorrecao = this.comumService.getStringFromDate(this.timeService.getCurrentDateTime(), 1);
+            this.avaliacao.dtTermino = this.comumService.getStringFromDate(this.timeService.getCurrentDateTime(), 2);
+            this.avaliacaoService.setRascunhoAvaliacao(this.avaliacao).then(() => {
+              this.provaService.setRascunhoProvaGabarito(this.provaGabarito).then(() => {
+                console.log("Rascunho criado");
+              });
+            });
           });
         });
         this.isEditando = false;
+
       }
 
       // EDITANDO
@@ -146,8 +155,9 @@ export class AvaliacaoNovaComponent implements OnInit {
 
         this.provaService.getProvaFromId(this.credencialService.getLoggedUserIdFromCookie()).then(gabarito => {
 
-          this.avaliacao = avaliacao;
-          this.provaGabarito = gabarito;
+
+          this.avaliacao = { ...avaliacao };
+          this.provaGabarito = { ...gabarito };
           this.setIdAleatorio();
           this.receberTodasAvaliacoes();
           this.provaGabarito.professorId = this.credencialService.getLoggedUserIdFromCookie();
@@ -168,7 +178,7 @@ export class AvaliacaoNovaComponent implements OnInit {
 
         this.avaliacaoService.setRascunhoAvaliacao(this.avaliacao).then(() => {
           this.provaService.setRascunhoProvaGabarito(this.provaGabarito).then(() => {
-            console.log("Rascunho cirado");
+            console.log("Rascunho criado");
           });
         });
 
@@ -177,20 +187,39 @@ export class AvaliacaoNovaComponent implements OnInit {
 
   atualizarRascunhoProva() {
     setTimeout(() => {
-      if (this.provaGabarito.id == '1')
-        this.provaGabarito.id = this.credencialService.getLoggedUserIdFromCookie();
-      this.provaService.updateProva(this.provaGabarito);
-      console.log("FIREBASE UPDATE: prova rascunho atualizado");
+
+      if (!this.isEditando) {
+        if (this.provaGabarito.id == '1')
+          this.provaGabarito.id = this.credencialService.getLoggedUserIdFromCookie();
+        this.provaService.updateProva(this.provaGabarito);
+        console.log("FIREBASE UPDATE: prova rascunho atualizado");
+      }
+      else {
+        this.provaService.updateProva(this.provaGabarito);
+        console.log(`FIREBASE UPDATE: prova ${this.provaGabarito.id} atualizada`);
+      }
+
     });
 
   }
 
   atualizarRascunhoAvaliacao() {
+    setTimeout(() => {
 
-    var avaliacaoRascunho = { ...this.avaliacao };
-    avaliacaoRascunho.id = this.credencialService.getLoggedUserIdFromCookie();
-    this.avaliacaoService.updateAvaliacao(avaliacaoRascunho);
-    console.log("FIREBASE UPDATE: avaliacao rascunho atualizado");
+
+      if (!this.isEditando) {
+        var avaliacaoRascunho = { ...this.avaliacao };
+        avaliacaoRascunho.id = this.credencialService.getLoggedUserIdFromCookie();
+        this.avaliacaoService.updateAvaliacao(avaliacaoRascunho);
+        console.log("FIREBASE UPDATE: avaliacao rascunho atualizado");
+      }
+      else {
+        this.avaliacaoService.updateAvaliacao(this.avaliacao);
+        console.log(`FIREBASE UPDATE: avaliacao ${this.avaliacao.id} atualizada`);
+      }
+
+    });
+
   }
 
   puxarAvaliacaoParaEditar(avaliacaoId) {
@@ -508,9 +537,11 @@ export class AvaliacaoNovaComponent implements OnInit {
           this.provaService.deletarProvaSemExcuirArquivos(this.credencialService.getLoggedUserIdFromCookie());
           this.avaliacaoService.deletarAvaliacao(this.credencialService.getLoggedUserIdFromCookie());
           this.router.navigate(['/professor']);
-          this.dialog.open(AvaliacaoCriadaDialogComponent, {
-            data: this.avaliacao.id
-          });
+          if (!this.isEditando) {
+            this.dialog.open(AvaliacaoCriadaDialogComponent, {
+              data: this.avaliacao.id
+            });
+          }
         }).catch(reason => {
           this.comumService.notificarErro("Não foi possível adicionar a prova", reason);
         });
@@ -556,9 +587,10 @@ export class AvaliacaoNovaComponent implements OnInit {
     });
 
   }
+
   descartarRascunho() {
-    this.avaliacao = this.avaliacaoService.getAvaliacaoDefault();
-    this.provaGabarito = this.provaService.getGabaritoDefault();
+    this.avaliacao = { ...this.avaliacaoService.getAvaliacaoDefault() };
+    this.provaGabarito = { ...this.provaService.getGabaritoDefault() };
     this.atualizarRascunhoAvaliacao();
     this.atualizarRascunhoProva();
     this.carregarRascunho();
@@ -680,7 +712,7 @@ export class AvaliacaoNovaComponent implements OnInit {
         reject('O início da correção não pode ser antes do início da avaliaçao');
         return;
       }
-      else if (dtInicio < new Date() && !this.avaliacao.isInicioIndeterminado) {
+      else if (dtInicio < this.timeService.getCurrentDateTime() && !this.avaliacao.isInicioIndeterminado) {
         reject('O início da avaliação não pode ser colocado no passado.');
         return;
       }
@@ -690,7 +722,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     });
   }
   getNowStr() {
-    return this.comumService.getStringFromDate(new Date());
+    return this.comumService.getStringFromDate(this.timeService.getCurrentDateTime());
   }
 
   // ID DA AVALIAÇÃO
@@ -741,7 +773,9 @@ export class AvaliacaoNovaComponent implements OnInit {
     return idAleatorio;
   }
   setIdDuplicado(base: string) {
-    this.avaliacao.id = this.getIdDuplicado(base);
+    var id = this.getIdDuplicado(base);
+    this.avaliacao.id = id;
+    this.provaGabarito.avaliacaoId = id;
   }
   getIdDuplicado(base: string) {
     var count = 2;

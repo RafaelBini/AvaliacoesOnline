@@ -1,3 +1,4 @@
+import { AvaliacaoService } from 'src/app/services/avaliacao.service';
 import { ComumService } from './../../services/comum.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
@@ -18,7 +19,8 @@ export class AvaliacaoListaComponent implements OnInit {
   @Input() avaliacoes: Array<Avaliacao>;
   @Input() tipoAcesso;
 
-  constructor(public comumService: ComumService) { }
+  constructor(public comumService: ComumService,
+    private avaliacaoService: AvaliacaoService) { }
 
   ngOnInit(): void {
     if (this.tipoAcesso != 'professor') {
@@ -35,11 +37,11 @@ export class AvaliacaoListaComponent implements OnInit {
     return this.comumService.statusAvaliacao.concat().sort((a, b) => b.prioridade - a.prioridade);
   }
   getAvaliacoesNoStatus(status) {
-    return this.avaliacoesFiltradas.concat().filter(avaliacao => avaliacao.status == status && (!avaliacao.isArquivada || this.mostrarArquivadas));
+    return this.avaliacoesFiltradas.concat().filter(avaliacao => avaliacao.status == status && (!this.avaliacaoService.isArquivada(avaliacao) || this.mostrarArquivadas));
   }
   selecionarStatusTabAdequada() {
     for (let status of this.comumService.statusAvaliacao) {
-      if (this.avaliacoesFiltradas.concat().filter(ava => ava.status == status.id && (!ava.isArquivada || this.mostrarArquivadas)).length > 0) {
+      if (this.avaliacoesFiltradas.concat().filter(ava => ava.status == status.id && (!this.avaliacaoService.isArquivada(ava) || this.mostrarArquivadas)).length > 0) {
         this.selectedStatusTab = status.id;
         return;
       }
@@ -48,7 +50,7 @@ export class AvaliacaoListaComponent implements OnInit {
   onBuscaKeyUp(texto: string) {
     this.avaliacoesFiltradas = this.avaliacoes.filter(avaliacao => {
 
-      if (avaliacao.isArquivada && !this.mostrarArquivadas)
+      if (this.avaliacaoService.isArquivada(avaliacao) && !this.mostrarArquivadas)
         return false;
 
       texto = this.comumService.normalizar(texto);
@@ -93,7 +95,7 @@ export class AvaliacaoListaComponent implements OnInit {
     }
   }
   getTodasAvaliacoes() {
-    return this.avaliacoesFiltradas.concat().filter(avaliacao => (!avaliacao.isArquivada || this.mostrarArquivadas));
+    return this.avaliacoesFiltradas.concat().filter(avaliacao => (!this.avaliacaoService.isArquivada(avaliacao) || this.mostrarArquivadas));
   }
   toggleMostrarArquivadas() {
     this.mostrarArquivadas = !this.mostrarArquivadas;

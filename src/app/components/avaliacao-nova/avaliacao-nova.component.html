@@ -15,9 +15,11 @@
             Link da Avaliação:
             <span class="link-span">
                 http://{{comumService.getHostName()}}/<input type="text" (ngModelChange)="corrigirId()"
-                    (change)="corrigirIdVazio()" [(ngModel)]="avaliacao.id" class="link-input" maxlength="20" />
+                    (change)="corrigirIdVazio()" [disabled]="isEditando" [(ngModel)]="avaliacao.id" class="link-input"
+                    maxlength="20" />
 
-                <mat-icon class="btn-aleatorio" (click)="setIdAleatorio()" matTooltip="Gerar aleatório">refresh
+                <mat-icon class="btn-aleatorio" *ngIf="!isEditando" (click)="setIdAleatorio()"
+                    matTooltip="Gerar aleatório">refresh
                 </mat-icon>
 
             </span>
@@ -67,8 +69,9 @@
                             [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)" />
 
                     </mat-chip-list>
-                    <mat-placeholder class="placeholder">Digite aqui algumas tags para te ajudarem a encontrar essa
-                        avaliação</mat-placeholder>
+                    <mat-placeholder class="placeholder">Tags para localizar a avaliação (Ex.: turno noite, avaliação
+                        final,
+                        matemática)</mat-placeholder>
                 </mat-form-field>
 
 
@@ -323,11 +326,8 @@
         </app-questoes-editar>
 
         <div style="width: 100%; text-align: center;">
-            <button *ngIf="isEditando" mat-raised-button (click)="salvar()"
-                style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: inline-block;">
-                Salvar
-            </button>
-            <button *ngIf="!isEditando" mat-raised-button (click)="finalizar()"
+
+            <button mat-raised-button (click)="finalizar()"
                 style="margin: auto; margin-top: 40px; margin-left: 20px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: inline-block; background-color: var(--cor-primaria); color: white;">
                 Tudo pronto, Finalizar!
             </button>
@@ -348,8 +348,8 @@
             <mat-icon>visibility</mat-icon>
         </button>
 
-        <button class="btn-descartar-rascunho" mat-fab matTooltip="Descartar Rascunho" (click)="descartarRascunho()"
-            style="position: fixed; bottom: 30px; left: 30px; background-color: red;">
+        <button *ngIf="!isEditando" class="btn-descartar-rascunho" mat-fab matTooltip="Descartar Rascunho"
+            (click)="descartarRascunho()" style="position: fixed; bottom: 30px; left: 30px; background-color: red;">
             <mat-icon style="color: white;">delete</mat-icon>
         </button>
 

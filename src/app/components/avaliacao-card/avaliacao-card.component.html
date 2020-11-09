@@ -1,4 +1,5 @@
-<div class="avalicao-card" [style.borderColor]="status.cor" [style.opacity]="avaliacao.isArquivada? '0.85' : '1'">
+<div class="avalicao-card" [style.borderColor]="status.cor"
+    [style.opacity]="avaliacaoService.isArquivada(avaliacao)? '0.85' : '1'">
 
 
     <div>
@@ -29,7 +30,7 @@
         <span>Período de Avaliação</span>
         <br />
         <span>
-            {{avaliacao.isInicioIndeterminado ? 'Indeterminado' : comumService.getIntervaloAmigavel(avaliacao.dtInicio, avaliacao.dtInicioCorrecao)}}
+            {{avaliacao.isInicioCorrecaoIndeterminado ? comumService.getIntervaloAmigavel(avaliacao.dtInicio, 'indeterminado') : comumService.getIntervaloAmigavel(avaliacao.dtInicio, avaliacao.dtInicioCorrecao)}}
         </span>
     </div>
     <br />
@@ -38,19 +39,18 @@
         <span>Período de Correção</span>
         <br />
         <span>
-            {{avaliacao.isInicioCorrecaoIndeterminado ? 'Indeterminado' : comumService.getIntervaloAmigavel(avaliacao.dtInicioCorrecao, avaliacao.dtTermino)}}
+            {{avaliacao.isTerminoIndeterminado  ? comumService.getIntervaloAmigavel(avaliacao.dtInicioCorrecao, 'indeterminado') : comumService.getIntervaloAmigavel(avaliacao.dtInicioCorrecao, avaliacao.dtTermino)}}
         </span>
     </div>
 
 
-    <span *ngIf="avaliacao.isArquivada && tipoAcesso=='professor' " (click)="desarquivar(avaliacao)"
+    <span *ngIf="avaliacaoService.isArquivada(avaliacao)" (click)="desarquivar(avaliacao)"
         matTooltip="Clique para desarquivar"
         style="position: absolute; top: 12px; right: 50px; cursor: pointer; text-decoration: underline dashed;">
         ARQUIVADA
     </span>
 
-    <button *ngIf="tipoAcesso=='professor'" mat-icon-button style="position: absolute; top: 3px; right: 3px;"
-        [matMenuTriggerFor]="aboveMenu">
+    <button mat-icon-button style="position: absolute; top: 3px; right: 3px;" [matMenuTriggerFor]="aboveMenu">
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #aboveMenu="matMenu">
@@ -62,10 +62,10 @@
             [routerLink]="'/professor/avaliacao/editar/' + avaliacao.id" mat-menu-item>
             <mat-icon>create</mat-icon>Editar
         </a>
-        <button *ngIf="avaliacao.isArquivada != true" mat-menu-item (click)="arquivar(avaliacao)">
+        <button *ngIf="avaliacaoService.isArquivada(avaliacao) != true" mat-menu-item (click)="arquivar(avaliacao)">
             <mat-icon>remove</mat-icon>Arquivar
         </button>
-        <button *ngIf="avaliacao.isArquivada == true" mat-menu-item (click)="desarquivar(avaliacao)">
+        <button *ngIf="avaliacaoService.isArquivada(avaliacao) == true" mat-menu-item (click)="desarquivar(avaliacao)">
             <mat-icon>add</mat-icon>Desarquivar
         </button>
         <button *ngIf="tipoAcesso=='professor'" mat-menu-item (click)="deletar(avaliacao)">

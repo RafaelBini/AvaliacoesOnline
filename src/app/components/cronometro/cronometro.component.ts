@@ -1,5 +1,6 @@
 import { ComumService } from './../../services/comum.service';
 import { Component, Input, OnInit } from '@angular/core';
+import { TimeService } from 'src/app/services/time.service';
 
 @Component({
   selector: 'app-cronometro',
@@ -18,6 +19,7 @@ export class CronometroComponent implements OnInit {
 
   constructor(
     private comumService: ComumService,
+    private timeService: TimeService,
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +49,7 @@ export class CronometroComponent implements OnInit {
       return 'indeterminado';
     }
     const DATA_INICIO = new Date(this.dataInicio);
-    const AGORA = new Date();
+    const AGORA = this.timeService.getCurrentDateTime();
 
     const TEMPO_DECORRIDO = AGORA.getTime() - DATA_INICIO.getTime();
 

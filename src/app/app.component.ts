@@ -1,3 +1,4 @@
+import { TimeService } from './services/time.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsuarioService } from './services/usuario.service';
 import { Router, ActivatedRoute, NavigationEnd, RouterEvent } from '@angular/router';
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
     private snack: MatSnackBar,
     private usuarioService: UsuarioService,
     public credencialService: CredencialService,
+    private timeService: TimeService,
     private router: Router, private route: ActivatedRoute) {
 
     this.router.events.subscribe((e) => {

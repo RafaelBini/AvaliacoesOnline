@@ -13,6 +13,7 @@ import { Avaliacao } from 'src/app/models/avaliacao';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { InfoQuestaoComponent } from 'src/app/dialogs/info-questao/info-questao.component';
 import { Arquivo } from 'src/app/models/arquivo';
+import { TimeService } from 'src/app/services/time.service';
 
 
 
@@ -31,6 +32,7 @@ export class QuestoesEditarComponent implements OnInit {
     private dialog: MatDialog,
     private snack: MatSnackBar,
     private changeDetectorRef: ChangeDetectorRef,
+    private timeService: TimeService,
     private fileService: FileService,
   ) { }
 
@@ -281,7 +283,7 @@ export class QuestoesEditarComponent implements OnInit {
         continue;
       }
 
-      const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+      const CAMINHO: string = `${this.timeService.getCurrentDateTime().getTime()}_${file.name}`;
 
       const newFileIndex = questao.imagens.push({
         nomeArquivo: file.name,
@@ -340,7 +342,7 @@ export class QuestoesEditarComponent implements OnInit {
         continue;
       }
 
-      const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+      const CAMINHO: string = `${this.timeService.getCurrentDateTime().getTime()}_${file.name}`;
 
       const newFileIndex = questao.anexos.push({
         nomeArquivo: file.name,

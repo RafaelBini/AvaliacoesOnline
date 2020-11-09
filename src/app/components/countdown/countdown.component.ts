@@ -1,5 +1,6 @@
 import { ComumService } from './../../services/comum.service';
 import { Component, OnInit, Input, Output, EventEmitter, ValueSansProvider } from '@angular/core';
+import { TimeService } from 'src/app/services/time.service';
 
 @Component({
   selector: 'app-countdown',
@@ -20,7 +21,8 @@ export class CountdownComponent implements OnInit {
   interval;
 
   constructor(
-    private comumService: ComumService
+    private comumService: ComumService,
+    private timeService: TimeService,
   ) { }
 
   ngOnInit(): void {
@@ -44,7 +46,7 @@ export class CountdownComponent implements OnInit {
       return 'indeterminado';
 
     const DATA_OBJETIVO = new Date(this.dataObjetivo);
-    const AGORA = new Date();
+    const AGORA = this.timeService.getCurrentDateTime();
 
     const TEMPO_RESTANTE = DATA_OBJETIVO.getTime() - AGORA.getTime();
 

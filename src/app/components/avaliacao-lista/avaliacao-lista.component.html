@@ -62,7 +62,7 @@
     <button mat-menu-item (click)="agruparAvaliacoes = !agruparAvaliacoes">
         {{agruparAvaliacoes ? 'Desagrupar' : 'Agrupar'}}
     </button>
-    <button *ngIf="tipoAcesso == 'professor'" mat-menu-item (click)="toggleMostrarArquivadas()">
+    <button mat-menu-item (click)="toggleMostrarArquivadas()">
         {{mostrarArquivadas ? 'Esconder Arquivadas' : 'Mostrar Arquivadas'}}
     </button>
 </mat-menu>

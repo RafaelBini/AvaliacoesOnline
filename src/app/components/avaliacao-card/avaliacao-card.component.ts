@@ -19,7 +19,7 @@ export class AvaliacaoCardComponent implements OnInit {
   public status;
 
   constructor(public comumService: ComumService,
-    private avaliacaoService: AvaliacaoService,
+    public avaliacaoService: AvaliacaoService,
     private provaService: ProvaService,
     public dialog: MatDialog,
     private snack: MatSnackBar) { }
@@ -40,7 +40,6 @@ export class AvaliacaoCardComponent implements OnInit {
       if (result == true) {
         this.avaliacaoService.deletarAvaliacao(avaliacao.id).then(() => {
           this.snack.open("Avaliação excluida com sucesso.", null, { duration: 3500 });
-          avaliacao.isArquivada = true;
           const dialgogRef2 = this.dialog.open(ConfirmarComponent, {
             data: {
               titulo: "Excluir questões",
@@ -81,12 +80,11 @@ export class AvaliacaoCardComponent implements OnInit {
   }
 
   arquivar(avaliacao) {
-    avaliacao.isArquivada = true;
     this.avaliacaoService.arquivarAvaliacao(avaliacao.id);
   }
 
   desarquivar(avaliacao) {
-    avaliacao.isArquivada = false;
+
     this.avaliacaoService.desarquivarAvaliacao(avaliacao.id);
   }
 

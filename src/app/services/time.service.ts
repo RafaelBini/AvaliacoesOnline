@@ -8,12 +8,30 @@ export class TimeService {
 
   constructor(private http: HttpClient) { }
 
-  getCurrentTime() {
+  private delta: number = null;
+
+  updateDelta() {
+
     return new Promise<number>((resolve, reject) => {
-      this.http.get<any>('http://worldtimeapi.org/api/timezone/America/Argentina/Salta').toPromise().then(data => {
-        resolve(data.unixtime as number);
-      }).catch(reason => reject(reason));
+      this.http.get<any>('http://worldtimeapi.org/api/timezone/America/Sao_Paulo').toPromise().then(data => {
+        const DATETIME_SERVIDOR = new Date((data.datetime as string).substr(0, 19));
+        const DATETIME_AGORA = new Date();
+
+        this.delta = DATETIME_SERVIDOR.getTime() - DATETIME_AGORA.getTime();
+        resolve(this.delta);
+
+      }).catch(() => reject("erro ao tentar receber delta"));
     });
+
+
+  }
+
+  getCurrentDateTime(): Date {
+    if (this.delta)
+      return new Date(new Date().getTime() + this.delta);
+    else {
+      return null;
+    }
 
   }
 

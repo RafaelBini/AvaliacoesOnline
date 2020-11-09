@@ -1,4 +1,6 @@
 
+- Adaptar para mobile
+
 - Colocar horario do servidor nas etapas avaliação.
 - Dar um jeito de conseguir pegar a data atual do servidor para comparar
 

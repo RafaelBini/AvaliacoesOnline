@@ -10,6 +10,7 @@ import { Avaliacao } from 'src/app/models/avaliacao';
 import { Prova } from 'src/app/models/prova';
 import { Grupo } from 'src/app/models/grupo';
 import { Usuario } from 'src/app/models/usuario';
+import { TimeService } from 'src/app/services/time.service';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class QuestoesCorrigirComponent implements OnInit {
     public comumService: ComumService,
     private credencialService: CredencialService,
     private provaService: ProvaService,
+    private timeService: TimeService,
     private dialog: MatDialog,
     private elementRef: ElementRef) { }
 
@@ -56,7 +58,7 @@ export class QuestoesCorrigirComponent implements OnInit {
     return pontuacaoMaxima;
   }
   sinalizarCorrecaoAlterada(questao: Questao) {
-    questao.ultimaModificacao = new Date().getTime();
+    questao.ultimaModificacao = this.timeService.getCurrentDateTime().getTime();
     this.correcaoAlterada.emit();
   }
   identificarQuestao(index: Number, questao: Questao) {

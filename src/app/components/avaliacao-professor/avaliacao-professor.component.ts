@@ -17,6 +17,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Usuario } from 'src/app/models/usuario';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { CountdownComponent } from '../countdown/countdown.component';
+import { TimeService } from 'src/app/services/time.service';
 
 @Component({
   selector: 'app-avaliacao-professor',
@@ -66,6 +67,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     private avaliacaoService: AvaliacaoService,
     public provaService: ProvaService,
     private usuarioService: UsuarioService,
+    private timeService: TimeService,
     public router: Router,
     public route: ActivatedRoute,
     private snack: MatSnackBar,
@@ -366,7 +368,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
       if (!tenhoAluno) {
         alunoOnline.online = false;
         alunoOnline.statusId = 0;
-        alunoOnline.dtStatus = this.comumService.insertInArray(alunoOnline.dtStatus, 0, new Date().toISOString());
+        alunoOnline.dtStatus = this.comumService.insertInArray(alunoOnline.dtStatus, 0, this.timeService.getCurrentDateTime().toISOString());
         this.credencialService.loggedUser.alunos.push(alunoOnline);
         adicioneiAluno = true;
       }
@@ -459,7 +461,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   }
   iniciarAvaliacao() {
     this.avaliacao.status = 1;
-    this.avaliacao.dtInicio = new Date().toISOString();
+    this.avaliacao.dtInicio = this.timeService.getCurrentDateTime().toISOString();
 
     this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
       avaliacaoParaModificar.status = this.avaliacao.status;
@@ -471,7 +473,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   }
   inicarCorrecoes() {
     this.avaliacao.status = 2;
-    this.avaliacao.dtInicioCorrecao = new Date().toISOString();
+    this.avaliacao.dtInicioCorrecao = this.timeService.getCurrentDateTime().toISOString();
 
     this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
       avaliacaoParaModificar.status = this.avaliacao.status;
@@ -483,7 +485,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   }
   encerrarCorrecoes() {
     this.avaliacao.status = 3;
-    this.avaliacao.dtTermino = new Date().toISOString();
+    this.avaliacao.dtTermino = this.timeService.getCurrentDateTime().toISOString();
 
     this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
       avaliacaoParaModificar.status = this.avaliacao.status;
@@ -512,7 +514,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   }
   bloquearProva(grupoIndex, alunoIndex) {
     this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 1;
-    this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus = this.comumService.insertInArray(this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus, 1, new Date().toISOString());
+    this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus = this.comumService.insertInArray(this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus, 1, this.timeService.getCurrentDateTime().toISOString());
 
     this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
       avaliacaoParaModificar.grupos[grupoIndex].alunos[alunoIndex].statusId = this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId;

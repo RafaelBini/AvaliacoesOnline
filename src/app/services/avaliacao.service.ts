@@ -6,6 +6,9 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Avaliacao } from '../models/avaliacao';
 import { Observable } from 'rxjs/internal/Observable';
+import { GroupedObservable } from 'rxjs';
+import { TimeService } from './time.service';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +17,9 @@ export class AvaliacaoService {
 
   constructor(private db: AngularFirestore,
     private credencialService: CredencialService,
-    private comumService: ComumService) { }
+    private comumService: ComumService,
+    private timeService: TimeService,
+  ) { }
 
 
 
@@ -86,7 +91,7 @@ export class AvaliacaoService {
 
   getStatusConformeTempo(avaliacao: Avaliacao) {
 
-    var agora = new Date();
+    var agora = this.timeService.getCurrentDateTime();
 
 
     if (agora > new Date(avaliacao.dtTermino) && !avaliacao.isTerminoIndeterminado && avaliacao.status < 3) {
@@ -108,19 +113,34 @@ export class AvaliacaoService {
   }
 
   updateAvaliacao(avaliacao: Avaliacao) {
+    this.setAlunosIds(avaliacao);
     return this.db.collection('avaliacoes').doc(avaliacao.id).update(avaliacao);
   }
 
   arquivarAvaliacao(avaliacaoId) {
     this.db.collection('avaliacoes').doc(avaliacaoId).update({
-      isArquivada: true
+      usuariosIdQueArquivaram: firebase.firestore.FieldValue.arrayUnion(this.credencialService.getLoggedUserIdFromCookie())
     });
+  }
+
+  isArquivada(avaliacao: Avaliacao) {
+    return avaliacao.usuariosIdQueArquivaram.includes(this.credencialService.getLoggedUserIdFromCookie());
   }
 
   desarquivarAvaliacao(avaliacaoId) {
     this.db.collection('avaliacoes').doc(avaliacaoId).update({
-      isArquivada: false
+      usuariosIdQueArquivaram: firebase.firestore.FieldValue.arrayRemove(this.credencialService.getLoggedUserIdFromCookie())
     });
+  }
+
+  setAlunosIds(avaliacao: Avaliacao) {
+    var alunosIds = [];
+    for (let grupo of avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        alunosIds.push(aluno.id);
+      }
+    }
+    avaliacao.alunosIds = alunosIds;
   }
 
   deletarAvaliacao(avaliacaoId) {
@@ -148,8 +168,9 @@ export class AvaliacaoService {
         }
 
         var avaliacaoAtualizada = doc.data() as Avaliacao;
-
-        transaction.update(docRef, modificar(avaliacaoAtualizada));
+        avaliacaoAtualizada = modificar(avaliacaoAtualizada);
+        this.setAlunosIds(avaliacaoAtualizada);
+        transaction.update(docRef, avaliacaoAtualizada);
 
       });
     });
@@ -163,11 +184,11 @@ export class AvaliacaoService {
       descricao: "",
       limitarNumIntegrantes: true,
       maxIntegrantes: 3,
-      dtInicio: this.comumService.getStringFromDate(new Date()),
+      dtInicio: this.comumService.getStringFromDate(this.timeService.getCurrentDateTime()),
       isInicioIndeterminado: true,
-      dtInicioCorrecao: this.comumService.getStringFromDate(new Date(), 1),
+      dtInicioCorrecao: this.comumService.getStringFromDate(this.timeService.getCurrentDateTime(), 1),
       isInicioCorrecaoIndeterminado: true,
-      dtTermino: this.comumService.getStringFromDate(new Date(), 2),
+      dtTermino: this.comumService.getStringFromDate(this.timeService.getCurrentDateTime(), 2),
       isTerminoIndeterminado: true,
       isOrdemAleatoria: false,
       isBloqueadoAlunoAtrasado: false,
@@ -181,6 +202,7 @@ export class AvaliacaoService {
       duracaoIndividualMs: (1000 * 60 * 60),
       isDuracaoIndividualIndeterminada: true,
       tags: [],
+      usuariosIdQueArquivaram: [],
       grupos: [
         {
           numero: 1,

@@ -1,5 +1,6 @@
+import { TimeService } from './services/time.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -69,6 +70,12 @@ import { ArquivoAnexoComponent } from './components/arquivo-anexo/arquivo-anexo.
 import { ArquivoImagemComponent } from './components/arquivo-imagem/arquivo-imagem.component';
 import { CronometroComponent } from './components/cronometro/cronometro.component';
 import { AjudaComponent } from './dialogs/ajuda/ajuda.component';
+
+export function initializeApp(timeService: TimeService) {
+  return (): Promise<number> => {
+    return timeService.updateDelta();
+  }
+}
 
 @NgModule({
   declarations: [
@@ -143,7 +150,8 @@ import { AjudaComponent } from './dialogs/ajuda/ajuda.component';
     HttpClientModule
   ],
   providers: [
-
+    TimeService,
+    { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [TimeService], multi: true }
   ],
   bootstrap: [AppComponent],
   exports: [],

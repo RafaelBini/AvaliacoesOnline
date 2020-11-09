@@ -37,7 +37,6 @@ export class QuestoesResponderComponent implements OnInit {
     public credencialService: CredencialService,
     private fileService: FileService,
     private timeService: TimeService,
-    private dialog: MatDialog,
     private snack: MatSnackBar) { }
 
   ngOnInit(): void {
@@ -83,12 +82,12 @@ export class QuestoesResponderComponent implements OnInit {
 
   }
   sinalizarRespostaAlterada(questao: Questao) {
-    questao.ultimaModificacao = new Date().getTime();
+    questao.ultimaModificacao = this.timeService.getCurrentDateTime().getTime();
     questao.isValidadaCorreta = false;
     this.respostaAlterada.emit();
   }
   sinalizarRespostaAlteradaSemInvalidar(questao: Questao) {
-    questao.ultimaModificacao = new Date().getTime();
+    questao.ultimaModificacao = this.timeService.getCurrentDateTime().getTime();
     this.respostaAlterada.emit();
   }
   identificarQuestao(index: Number, questao: Questao) {
@@ -286,7 +285,7 @@ export class QuestoesResponderComponent implements OnInit {
         }
       }
 
-      const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+      const CAMINHO: string = `${this.timeService.getCurrentDateTime().getTime()}_${file.name}`;
       const questaoIndex = this.prova.questoes.indexOf(questao);
 
       const newFileIndex = this.provaCache.questoes[questaoIndex].arquivosEntregues.push({
@@ -360,7 +359,7 @@ export class QuestoesResponderComponent implements OnInit {
         continue;
       }
 
-      const CAMINHO: string = `${new Date().getTime()}_${file.name}`;
+      const CAMINHO: string = `${this.timeService.getCurrentDateTime().getTime()}_${file.name}`;
       const questaoIndex = this.prova.questoes.indexOf(questao);
 
       const newFileIndex = this.provaCache.questoes[questaoIndex].imagensEntregues.push({

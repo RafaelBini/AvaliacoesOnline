@@ -9,14 +9,14 @@
     <div *ngIf="!avaliacao.isInicioIndeterminado">
         <b>Período de Avaliação</b>:
         <span>
-            {{avaliacao.isInicioIndeterminado || avaliacao.isInicioCorrecaoIndeterminado ? 'Indeterminado' : comumService.getIntervaloAmigavel(avaliacao.dtInicio, avaliacao.dtInicioCorrecao)}}
+            {{avaliacao.isInicioCorrecaoIndeterminado ? comumService.getIntervaloAmigavel(avaliacao.dtInicio, 'indeterminado') : comumService.getIntervaloAmigavel(avaliacao.dtInicio, avaliacao.dtInicioCorrecao)}}
         </span>
     </div>
 
     <div *ngIf="!avaliacao.isInicioCorrecaoIndeterminado">
         <b>Período de Correção</b>:
         <span>
-            {{avaliacao.isInicioCorrecaoIndeterminado || avaliacao.isTerminoIndeterminado ? 'Indeterminado' : comumService.getIntervaloAmigavel(avaliacao.dtInicioCorrecao, avaliacao.dtTermino)}}
+            {{avaliacao.isTerminoIndeterminado  ? comumService.getIntervaloAmigavel(avaliacao.dtInicioCorrecao, 'indeterminado') : comumService.getIntervaloAmigavel(avaliacao.dtInicioCorrecao, avaliacao.dtTermino)}}
         </span>
     </div>
 
