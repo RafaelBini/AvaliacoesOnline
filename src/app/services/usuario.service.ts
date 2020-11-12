@@ -33,6 +33,7 @@ export class UsuarioService {
         for (let doc of ref.docs) {
           var usuario: Usuario = doc.data() as Usuario;
           usuario.id = doc.id;
+          delete usuario.senha;
           usuarios.push(usuario);
         }
         resolve(usuarios);

@@ -1,16 +1,11 @@
 
-- Fazer esquema do tempo do servidor
-- Salvar automaticamente ao editar e colocar botão Finalizar
-- Corrigi bug duplicar e salvar rascunho
-- Corrigir bug de data inicio sem data fim
-- Colocar exemplo de tags para saber como separar
-- Atualizar o aluno em todas as suas esferas ao atualizar o perfil
-- Adicionei opção excluir foto ao atualizar perfil
+
 
 ---------------------------------
 
+- Iniciar esquma de importar alunos
 
-
+- Iniciar esquma de exportar avaliação
 
 - Fazer o máximo da documentação possivel 
 

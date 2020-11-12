@@ -1,3 +1,4 @@
+import { ImportarAlunosComponent } from './../../dialogs/importar-alunos/importar-alunos.component';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmarComponent } from './../../dialogs/confirmar/confirmar.component';
 import { UsuarioService } from './../../services/usuario.service';
@@ -120,7 +121,8 @@ export class ProfessorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.avaliacoesSubscription.unsubscribe();
+    if (this.avaliacoesSubscription != null)
+      this.avaliacoesSubscription.unsubscribe();
     clearInterval(this.verificacaoStatusInterval);
   }
 
@@ -239,6 +241,15 @@ export class ProfessorComponent implements OnInit, OnDestroy {
       this.usuarioService.update(this.credencialService.loggedUser);
     });
 
+  }
+  abrirImportarAlunos() {
+    var diagRef = this.dialog.open(ImportarAlunosComponent, {
+      width: '75%',
+      height: '88%',
+    });
+    diagRef.afterClosed().subscribe(result => {
+
+    });
   }
 
 

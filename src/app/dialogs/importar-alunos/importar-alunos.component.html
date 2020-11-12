@@ -1,0 +1,90 @@
+<div>
+    <div style="text-align: center;">
+        <h1>Importar Alunos</h1>
+    </div>
+    <div class="drop-here" (fileDropped)="receberArquivo($event, 'dropped')" (click)="anexoSelectInput.click()"
+        appDropFile>
+        <span class="drop-here-texto">
+            ARRASTE E SOLTE O(S) ARQUIVO(S) AQUI
+        </span>
+    </div>
+    <div style="width: 90%; margin: auto; color: gray;">
+        <br />
+        Extensão permitida: .csv
+        <br />
+        <br />
+    </div>
+
+    <div style="overflow: auto; height: 200px;">
+        <div class="aluno" [class.alunoJaCadastrado]="isAlunoJaPersistido(ai)"
+            [class.alunoJaAdicionado]="isAlunoJaAdicionado(ai)" *ngFor="let aluno of novosAlunos; index as ai">
+            <table style="width: 100%;">
+                <tr class="aluno-line">
+                    <td width="10">
+                        <img *ngIf="aluno.img" [src]="aluno.img.url || 'assets/avatares/padrao.jpg'"
+                            style="height: 5vh; width: 5vh; border-radius: 5px; object-fit: cover;" />
+                        <img *ngIf="!aluno.img" src="assets/avatares/padrao.jpg"
+                            style="height: 5vh; width: 5vh; border-radius: 5px; object-fit: cover;" />
+                    </td>
+                    <td width="25%">
+                        {{aluno.nome}}
+                    </td>
+                    <td width="25%">
+                        {{aluno.email}}
+                    </td>
+                    <td width="40%">
+                        <div style="display: flex; flex-wrap: wrap;">
+                            <div *ngFor="let tag of aluno.tags" class="tag">
+                                {{tag}}
+                            </div>
+                            <div *ngIf="isAlunoJaPersistido(ai) && !isAlunoJaAdicionado(ai)">
+                                <mat-icon style="color: green" matTooltip="Aluno localizado no sistema pelo e-mail">
+                                    check_circle_outline
+                                </mat-icon>
+                            </div>
+                            <div *ngIf="isAlunoJaAdicionado(ai)">
+                                <mat-icon style="color: red" matTooltip="Este aluno já foi adicionado">
+                                    report_problem
+                                </mat-icon>
+                            </div>
+                            <div *ngIf="isAlunoParaSerCadastrado(aluno) && isAlunoParaSerAdicionado(aluno)">
+                                <mat-icon style="color: green" matTooltip="Será criada uma conta para este aluno">
+                                    add_task
+                                </mat-icon>
+                            </div>
+                            <div *ngIf="isAlunoComProblemas(ai)">
+                                <mat-icon style="color: red" [matTooltip]="getAlunoIndexComProblemas(ai).problema">
+                                    report
+                                </mat-icon>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+            <button (click)="removerAluno(ai)" mat-icon-button matTooltip="Remover Aluno"
+                style="position: absolute; top: 2px; right: 2px;">
+                <mat-icon style="color: red">
+                    cancel
+                </mat-icon>
+            </button>
+        </div>
+
+    </div>
+    <input #anexoSelectInput (change)="receberArquivo($event, 'clicked')" type="file" class="input-invisivel"
+        value="Selecione os arquivos" multiple />
+    <div *ngIf="alunosParaAdicionar.length > 0" class="message-area">
+        <span *ngIf="alunosParaCadastrar.length > 0">{{alunosParaCadastrar.length}} alunos serão cadastrados</span>
+        <span *ngIf="alunosParaAdicionar.length > 0 && alunosParaCadastrar.length > 0"> - </span>
+        <span *ngIf="alunosParaAdicionar.length > 0">{{alunosParaAdicionar.length}} alunos serão adicionados</span>
+        <span
+            *ngIf="alunosParaAdicionar.length > 0 && (alunosIndexJaAdicionados.length + alunosIndexComProblemas.length)">
+            - </span>
+        <span *ngIf="(alunosIndexJaAdicionados.length + alunosIndexComProblemas.length) > 0"
+            style="color: red;">{{alunosIndexJaAdicionados.length + alunosIndexComProblemas.length}} alunos
+            não serão adicionados</span>
+        <button (click)="finalizarImportacao()" class="btn-adicionar" mat-button>
+            Finalizar Importação
+        </button>
+    </div>
+</div>

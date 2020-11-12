@@ -1,0 +1,89 @@
+
+
+.drop-here{
+    background-color: white; color: gray; 
+    cursor: pointer; user-select: none; 
+    line-height: 100px; height: 100px; 
+    width: 90%; margin: auto;  border: 1px dashed gray; border-radius: 10px; 
+    text-align: center; font-size: 19px;
+  }
+  .drop-here:hover {
+      background-color: var(--cor-secundaria); color: white;
+      animation-name: on-me;
+      animation-duration: 0.3s;
+  }
+  
+  .drop-here-texto{   
+      font-size: 18px;
+      user-select: none;
+  }
+  
+  .file-over{
+      background-color: var(--cor-primaria); color: white;
+      animation-name: on-me;
+      animation-duration: 0.3s;
+  }
+  
+  @keyframes on-me {
+      0%   {background-color: white; color: black}
+      100%   {background-color: var(--cor-secundaria); color: white;}
+    }
+  
+  .upload-area:hover {
+    color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+  
+  }
+
+  
+  .tag{
+    padding: 5px;
+    background-color: var(--cor-primaria);
+    color: white;
+    margin-right: 4px;
+    border-radius: 7px;
+    font-size: 11px;
+    min-width: fit-content;
+    display: flexbox;
+    margin-top: 4px;
+}
+
+.aluno{
+    border: 1px dashed var(--cor-primaria);
+    border-radius: 6px;
+    margin: auto;
+    margin-bottom: 5px;
+    background-color: white;
+    padding: 7px;
+    height: fit-content !important;
+    position: relative;
+    width: 90%;
+    
+}
+
+.alunoJaCadastrado{
+    border: 1px solid green;
+}
+
+.alunoJaAdicionado{
+    border: 1px solid red;
+}
+
+.msg-sem-aluno{
+    padding: 80px;
+}
+
+.btn-adicionar{
+    background-color: var(--cor-primaria);
+    color: white;
+    margin: auto;
+    display: block;
+    margin-top: 10px;
+}
+.btn-adicionar:hover{
+    background-color: var(--cor-secundaria);
+}
+
+.message-area{
+    text-align: center;
+}

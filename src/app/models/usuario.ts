@@ -17,4 +17,6 @@ export interface Usuario {
     valorTotal?: number;
     dtStatus?: Array<string>;
     img?: Arquivo;
+    idExterno?: string,
+    tagIdExterno?: string,
 }

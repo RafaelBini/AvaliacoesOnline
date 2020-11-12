@@ -23,9 +23,7 @@ export class AvaliacaoListaComponent implements OnInit {
     private avaliacaoService: AvaliacaoService) { }
 
   ngOnInit(): void {
-    if (this.tipoAcesso != 'professor') {
-      this.mostrarArquivadas = true;
-    }
+
     this.atualizarAvaliacoesFiltradas();
 
   }

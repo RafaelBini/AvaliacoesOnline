@@ -4,6 +4,7 @@ import { Usuario } from './../models/usuario';
 import { ComumService } from 'src/app/services/comum.service';
 import { Injectable } from '@angular/core';
 import { Md5 } from 'ts-md5/dist/md5';
+import { rejects } from 'assert';
 
 @Injectable({
   providedIn: 'root'
@@ -93,14 +94,8 @@ export class CredencialService {
 
   isNovoUsuarioValido(usuario: Usuario, confirmacaoSenha) {
     return new Promise(async (resolve, reject) => {
-      if (usuario.nome == '' || usuario.email == '' || usuario.senha == '') {
-        reject('Preencha todos os campos.');
-      }
-      else if (!usuario.email.includes('@')) {
-        reject("Email inválido.");
-      }
-      else if (usuario.senha != confirmacaoSenha) {
-        reject("Senha diferente da confirmação.");
+      if (this.getProblemaFromNovoUsuario(usuario, confirmacaoSenha) != null) {
+        reject(this.getProblemaFromNovoUsuario(usuario, confirmacaoSenha));
       }
       else if (this.loggedUser.email != usuario.email) {
         if (await this.usuarioService.exists(usuario)) {
@@ -111,6 +106,19 @@ export class CredencialService {
       resolve();
     });
 
+  }
+
+  getProblemaFromNovoUsuario(usuario, confirmacaoSenha): string {
+    if (usuario.nome == '' || usuario.email == '' || usuario.senha == '') {
+      return 'Preencha todos os campos.';
+    }
+    else if (!usuario.email.includes('@')) {
+      return ("Email inválido.");
+    }
+    else if (usuario.senha != confirmacaoSenha) {
+      return ("Senha diferente da confirmação.");
+    }
+    return null;
   }
 
   isLoginValido(usuario: Usuario) {
