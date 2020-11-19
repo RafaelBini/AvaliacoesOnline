@@ -1,0 +1,18 @@
+.titulo{
+    display: block;
+    text-align: center;
+    font-size: 22px;
+    height: fit-content;
+    padding-bottom: 20px;
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.btn{
+    display: flex;
+    margin: auto;
+}

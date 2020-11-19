@@ -2,3 +2,15 @@
     margin: auto;
     display: block;
 }
+
+
+h1{
+    text-align: center;
+}
+
+.input-container{
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 7px;
+    line-height: 3;
+}

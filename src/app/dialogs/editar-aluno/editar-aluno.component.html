@@ -1,15 +1,67 @@
-<mat-form-field style="width: 90%; padding: 15px; margin: auto;">
-    <mat-chip-list #chipList>
-        <mat-chip *ngFor="let tag of aluno.tags" [selectable]="true" [removable]="true" (removed)="removeTag(tag)">
-            {{tag}}
-            <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
-        </mat-chip>
-        <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)" />
+<div class="container">
+    <h1 *ngIf="editando">Editar Aluno</h1>
+    <h1 *ngIf="!editando">Adicionar Tags</h1>
 
-    </mat-chip-list>
-    <mat-placeholder class="placeholder">Digite aqui algumas tags para te ajudarem a encontrar esse
-        aluno</mat-placeholder>
-</mat-form-field>
+    <div class='input-container'>
 
-<button [mat-dialog-close]="aluno" mat-button class="btn">PRONTO</button>
+        <table style="width: 100%;">
+            <tr *ngIf="editando">
+                <td>
+                    Nome:
+                </td>
+                <td>
+                    {{aluno.nome}}
+                </td>
+            </tr>
+            <tr *ngIf="editando">
+                <td>
+                    E-mail:
+                </td>
+                <td>
+                    {{aluno.email}}
+                </td>
+            </tr>
+            <tr *ngIf="editando">
+                <td style="width: 20%;">
+                    Tag ID:
+                </td>
+                <td>
+                    <input type="text" class="input-clean" style="width: 90%;" [(ngModel)]="aluno.tagIdExterno"
+                        placeholder="Ex.: Matricula; GRR; ID..." />
+                </td>
+            </tr>
+            <tr *ngIf="editando">
+                <td>
+                    ID:
+                </td>
+                <td>
+                    <input type="text" class="input-clean" style="width: 90%;" [(ngModel)]="aluno.idExterno"
+                        placeholder="Ex.: 12344, 20184585..." />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Tags:
+                </td>
+                <td>
+                    <mat-form-field style="width: 90%;">
+                        <mat-chip-list #chipList>
+                            <mat-chip *ngFor="let tag of aluno.tags" [selectable]="true" [removable]="true"
+                                (removed)="removeTag(tag)">
+                                {{tag}}
+                                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+                            </mat-chip>
+                            <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addTag($event)" />
+
+                        </mat-chip-list>
+                        <mat-placeholder class="placeholder">Ex.: noite, matemática, sábado</mat-placeholder>
+                    </mat-form-field>
+                </td>
+            </tr>
+
+
+        </table>
+        <button [mat-dialog-close]="aluno" mat-raised-button class="btn">PRONTO</button>
+    </div>
+</div>

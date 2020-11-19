@@ -446,6 +446,8 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       nome: this.credencialService.loggedUser.nome,
       email: this.credencialService.loggedUser.email,
       img: this.credencialService.loggedUser.img || null,
+      tagIdExterno: this.credencialService.loggedUser.tagIdExterno || null,
+      idExterno: this.credencialService.loggedUser.idExterno || null,
       online: true,
       statusId: 0,
       dtStatus: ['', '', '', '', '', ''],

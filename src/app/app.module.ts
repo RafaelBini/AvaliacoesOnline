@@ -71,6 +71,7 @@ import { ArquivoImagemComponent } from './components/arquivo-imagem/arquivo-imag
 import { CronometroComponent } from './components/cronometro/cronometro.component';
 import { AjudaComponent } from './dialogs/ajuda/ajuda.component';
 import { ImportarAlunosComponent } from './dialogs/importar-alunos/importar-alunos.component';
+import { ExportarComponent } from './dialogs/exportar/exportar.component';
 
 export function initializeApp(timeService: TimeService) {
   return (): Promise<number> => {
@@ -119,6 +120,7 @@ export function initializeApp(timeService: TimeService) {
     CronometroComponent,
     AjudaComponent,
     ImportarAlunosComponent,
+    ExportarComponent,
   ],
   imports: [
     BrowserModule,

@@ -207,7 +207,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
     if (this.alunosSelecionados.length <= 1)
       return;
     var diagRef = this.dialog.open(EditarAlunoComponent, {
-      width: '80%',
+      width: '50%',
     });
     diagRef.afterClosed().subscribe(aluno => {
       if (aluno) {
@@ -233,7 +233,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
       return;
     var diagRef = this.dialog.open(EditarAlunoComponent, {
       data: this.alunos.filter(a => a.email == this.alunosSelecionados[0])[0],
-      width: '80%',
+      width: '50%',
     });
     diagRef.afterClosed().subscribe(() => {
       this.credencialService.loggedUser.alunos = this.alunos;

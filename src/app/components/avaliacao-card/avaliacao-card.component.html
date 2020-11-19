@@ -50,6 +50,8 @@
         ARQUIVADA
     </span>
 
+    <!-- MENU DE OPÇÕES -->
+
     <button mat-icon-button style="position: absolute; top: 3px; right: 3px;" [matMenuTriggerFor]="aboveMenu">
         <mat-icon>more_vert</mat-icon>
     </button>
@@ -70,6 +72,9 @@
         </button>
         <button *ngIf="tipoAcesso=='professor'" mat-menu-item (click)="deletar(avaliacao)">
             <mat-icon>cancel</mat-icon>Excluir
+        </button>
+        <button *ngIf="tipoAcesso=='professor'" mat-menu-item (click)="abirExport(avaliacao)">
+            <mat-icon>get_app</mat-icon>Exportar
         </button>
     </mat-menu>
 

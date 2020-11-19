@@ -1,3 +1,4 @@
+import { ExportarComponent } from './../../dialogs/exportar/exportar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProvaService } from './../../services/prova.service';
 import { AvaliacaoService } from 'src/app/services/avaliacao.service';
@@ -93,6 +94,13 @@ export class AvaliacaoCardComponent implements OnInit {
   }
   notificarCopy() {
     this.snack.open("Link copiado!", null, { duration: 3500 })
+  }
+
+  abirExport(avaliacao: Avaliacao) {
+    this.dialog.open(ExportarComponent, {
+      width: '80%',
+      data: avaliacao,
+    });
   }
 
 }
