@@ -3,7 +3,6 @@
 
 ---------------------------------
 
-- Iniciar esquma de importar alunos
 
 - Iniciar esquma de exportar avaliação
 

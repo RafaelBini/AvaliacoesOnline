@@ -14,17 +14,18 @@ export class TimeService {
 
     return new Promise<number>((resolve, reject) => {
 
-      var intervalRef = setInterval(() => {
-        this.http.get<any>('http://worldtimeapi.org/api/timezone/America/Sao_Paulo').toPromise().then(data => {
-          const DATETIME_SERVIDOR = new Date((data.datetime as string).substr(0, 19));
-          const DATETIME_AGORA = new Date();
 
-          this.delta = DATETIME_SERVIDOR.getTime() - DATETIME_AGORA.getTime();
-          clearInterval(intervalRef);
-          resolve(this.delta);
+      this.http.get<any>('https://avaliacoes-online.herokuapp.com/now').toPromise().then(data => {
+        const DATETIME_SERVIDOR = new Date((data.datetime as string).substr(0, 19));
+        const DATETIME_AGORA = new Date();
 
-        }).catch(() => reject("erro ao tentar receber delta"));
-      });
+        this.delta = DATETIME_SERVIDOR.getTime() - DATETIME_AGORA.getTime();
+
+        console.log(this.getCurrentDateTime());
+        resolve(this.delta);
+
+      }).catch(() => reject("erro ao tentar receber delta"));
+
 
 
 
