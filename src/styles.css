@@ -215,3 +215,7 @@ textarea {
   outline: none;
   border: 1px dashed var(--cor-primaria);
 }
+
+mat-tooltip-component > .mat-tooltip {
+white-space: pre;
+}

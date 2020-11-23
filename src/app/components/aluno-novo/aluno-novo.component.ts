@@ -1,3 +1,4 @@
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComumService } from './../../services/comum.service';
 import { CredencialService } from './../../services/credencial.service';
@@ -6,6 +7,7 @@ import { Usuario } from './../../models/usuario';
 import { Component, OnInit } from '@angular/core';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { AjudaComponent } from 'src/app/dialogs/ajuda/ajuda.component';
 
 @Component({
   selector: 'app-aluno-novo',
@@ -32,7 +34,9 @@ export class AlunoNovoComponent implements OnInit {
     private usuarioService: UsuarioService,
     private credencialService: CredencialService,
     private comumService: ComumService,
-    private snack: MatSnackBar) { }
+    private snack: MatSnackBar,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.usuarioService.getAll().then(usuarios => {
@@ -54,6 +58,7 @@ export class AlunoNovoComponent implements OnInit {
       this.aluno.tags = [];
     }
   }
+
 
   addTag(event: MatChipInputEvent): void {
     const input = event.input;
@@ -85,12 +90,18 @@ export class AlunoNovoComponent implements OnInit {
   }
 
   adicionar(aluno: Usuario) {
+    if (aluno.email == this.credencialService.loggedUser.email) {
+      this.snack.open("Você não pode se adicionar como aluno", null, { duration: 3500 });
+      return;
+    }
     this.credencialService.loggedUser.alunos.push({
       id: aluno.id,
       nome: aluno.nome,
       email: aluno.email,
       tags: aluno.tags,
       img: aluno.img,
+      tagIdExterno: aluno.tagIdExterno,
+      idExterno: aluno.idExterno,
     });
     this.usuarioService.update(this.credencialService.loggedUser).then(() => {
       this.aluno = {
@@ -99,12 +110,25 @@ export class AlunoNovoComponent implements OnInit {
         senha: "",
         tipo: "",
         tags: [],
+        idExterno: "",
         img: null,
       };
       this.snack.open("Aluno adicionado!", null, { duration: 3500 });
     })
       .catch(reason => this.comumService.notificarErro("Falha ao adicionar aluno ao Professor", reason));
 
+  }
+
+  abrirAjudaSenha() {
+    this.dialog.open(AjudaComponent, {
+      data: {
+        titulo: "Senha do Aluno",
+        mensagem:
+          `
+        Essa senha servirá para o aluno acessar a conta que você criou para o email dele.
+        `
+      }
+    })
   }
 
 }

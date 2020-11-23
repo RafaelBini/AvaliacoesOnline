@@ -55,6 +55,29 @@ export class ComumService {
     }
   ];
 
+  public statusUsuarioProva = [
+    {
+      id: 0,
+      descricao: "O Aluno não participou da Avaliação",
+      descricaoCurta: "AUSENTE",
+    },
+    {
+      id: 1,
+      descricao: "O Aluno foi bloqueado pelo Professor",
+      descricaoCurta: "BLOQUEADO",
+    },
+    {
+      id: 2,
+      descricao: "O Participou da Avaliação",
+      descricaoCurta: "PRESENTE",
+    },
+    {
+      id: 3,
+      descricao: "O Aluno sinalizou finalização na Avaliação",
+      descricaoCurta: "PRESENTE",
+    },
+  ]
+
   public disposicoes = [
     {
       codigo: 0,

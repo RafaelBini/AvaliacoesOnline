@@ -16,3 +16,18 @@
     display: flex;
     margin: auto;
 }
+
+.layout-maker-conatiner{
+    width: 80%;
+    margin: auto;
+    height: 40%;
+    overflow: auto;
+    border: 1px dashed gray;
+    border-radius: 3px;
+    padding: 7px;
+}
+
+.checkbox-container{
+    padding: 6px;
+    margin-left: 10%;
+}

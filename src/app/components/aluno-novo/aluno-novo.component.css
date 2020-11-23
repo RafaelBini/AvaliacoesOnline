@@ -1,3 +1,7 @@
+.tabela-aluno{
+  margin: auto;
+  width: 320px;
+}
 .tabela-aluno td{
     padding-bottom: 12px;
     width: 100%;

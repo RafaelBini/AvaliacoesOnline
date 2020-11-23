@@ -15,7 +15,7 @@
   }
   
   .status-online {
-      background-color: var(--cor-tranquila);
+      background-color: var(--cor-secundaria);
     }
     
     .status-offline {

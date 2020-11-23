@@ -12,6 +12,14 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./importar-alunos.component.css']
 })
 export class ImportarAlunosComponent implements OnInit {
+
+
+  public colunasOpcoes = ['Email', 'Senha', 'Nome', 'Tag ID Externo', 'ID Externo', 'Tags']
+  public layout = {
+    temCabecalho: true,
+    colunas: []
+  }
+
   public novosAlunos: Array<Usuario> = [];
   public novosAlunosSelecionados: Array<Usuario> = [];
   private todosUsuarios: Array<Usuario> = [];
@@ -32,12 +40,23 @@ export class ImportarAlunosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    var cookiePreferencias = this.getCookiePreferencias();
+    if (cookiePreferencias != null) {
+      this.layout = cookiePreferencias.layout;
+      this.colunasOpcoes = cookiePreferencias.colunasOpcoes;
+    }
+    else {
+      this.layout.colunas = this.colunasOpcoes;
+    }
+
     this.usuarioService.getAll().then(usuarios => {
       this.todosUsuarios = usuarios;
     });
   }
 
   receberArquivo(event, tipo: 'clicked' | 'dropped') {
+
+    this.setCookiePreferencias();
 
     var arquivos: File[] = null;
 
@@ -61,28 +80,68 @@ export class ImportarAlunosComponent implements OnInit {
         const TEXTO: string = fileReader.result.toString();
         const LINHAS = TEXTO.split('\r\n');
 
-        var tagIdExterno = "idExterno";
+        if (LINHAS.length <= 1 && this.layout.temCabecalho) {
+          this.snack.open(`O arquivo ${arquivo.name} tem apenas cabeçalho para importar`, null, {
+            duration: 2500
+          });
+          return;
+        }
+        else if (LINHAS.length <= 0 && !this.layout.temCabecalho) {
+          this.snack.open(`O arquivo ${arquivo.name} não tem dados para importar`, null, {
+            duration: 2500
+          });
+          return;
+        }
 
-        for (let [index, linha] of LINHAS.entries()) {
+        for (let [linhaIndex, linha] of LINHAS.entries()) {
           const colunas = linha.split(';');
 
-          if (colunas.length <= 0)
+          if (colunas.length <= 0) {
+            this.snack.open("A linha " + linhaIndex + 1 + " está vazia!", null, {
+              duration: 2500
+            });
             continue;
-
-          if (colunas[0] == "")
-            continue;
-
-          var idExterno = colunas[0];
-          var nome = this.credencialService.getProperCase(colunas[1]);
-          var email = colunas[2].toLowerCase();
-          var senha = idExterno;
-
-          if (index == 0) {
-            tagIdExterno = idExterno;
+          }
+          else if (colunas.length != this.layout.colunas.length) {
+            this.snack.open(`A linha ${linhaIndex + 1} está está fora do layout. Colunas esperadas: ${this.layout.colunas.length}. Colunas obtidas: ${colunas.length}`, null, {
+              duration: 4500
+            });
             continue;
           }
 
+          var tagIdExterno = "";
+          var idExterno = "";
+          var nome = "";
+          var email = "";
+          var senha = "";
+          var tags = [];
 
+          for (let [colunaIndex, coluna] of colunas.entries()) {
+            switch (this.layout.colunas[colunaIndex].toLowerCase()) {
+              case 'email':
+                email = coluna.toLowerCase();
+                break;
+              case 'senha':
+                senha = coluna;
+                break;
+              case 'nome':
+                nome = this.credencialService.getProperCase(coluna);
+                break;
+              case 'id externo':
+                idExterno = coluna;
+                break;
+              case 'tag id externo':
+                tagIdExterno = coluna;
+                break;
+              case 'tags':
+                tags = coluna.split(',');
+            }
+          }
+
+          if (linhaIndex == 0 && this.layout.temCabecalho) {
+            tagIdExterno = idExterno;
+            continue;
+          }
 
           var novoAluno: Usuario;
           const USUARIO_CADASTRADO = this.usuarioJaCadastrado(email);
@@ -94,7 +153,7 @@ export class ImportarAlunosComponent implements OnInit {
               email: email,
               senha: senha,
               img: null,
-              tags: [],
+              tags: tags,
             };
           }
           else {
@@ -118,10 +177,31 @@ export class ImportarAlunosComponent implements OnInit {
       fileReader.readAsText(arquivo);
     }
 
-
+    console.log(event.target);
+    event.target.value = null;
 
   }
 
+  getInfoStringAluno(aluno: Usuario){
+    return `Email: ${aluno.email}\nNome: ${aluno.nome}\n${aluno.tagIdExterno}: ${aluno.idExterno}\nTags: ${aluno.tags.join(', ')}`;
+  }
+
+  onColunasAlteradas(layout) {
+    this.layout.colunas = layout.colunas;
+  }
+
+  setCookiePreferencias() {
+    var preferencias = {
+      layout: this.layout,
+      colunasOpcoes: this.colunasOpcoes,
+    }
+
+    localStorage.setItem('preferencias_importar_alunos', JSON.stringify(preferencias));
+  }
+
+  getCookiePreferencias() {
+    return JSON.parse(localStorage.getItem('preferencias_importar_alunos'));
+  }
 
   usuarioJaCadastrado(email: string) {
     for (let usuario of this.todosUsuarios)

@@ -1,4 +1,6 @@
-
+.aluno-container{
+  position: relative;
+}
 
 .tag{
   padding: 5px;
@@ -38,4 +40,21 @@
 
   .container{
     position: relative;
+  }
+
+  .menu-opcoes-aluno{
+    position: absolute;
+    right: -10px;
+    top: -10px;
+  }
+
+  .status-container{
+    position: absolute; bottom: 3px; right: 0px; display: flex; align-items: center;
+  }
+
+  .descricao-status{
+    margin-right: 6px;
+    font-size: 12px;
+    color: gray;
+    padding: 3px;
   }

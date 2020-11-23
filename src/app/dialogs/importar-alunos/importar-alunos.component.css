@@ -87,3 +87,18 @@
 .message-area{
     text-align: center;
 }
+
+.layout-maker-conatiner{
+    width: 80%;
+    margin: auto;
+    height: 170px;
+    overflow: auto;
+    border: 1px dashed gray;
+    border-radius: 3px;
+    padding: 7px;
+}
+
+.checkbox-container{
+    padding: 6px;
+    margin-left: 10%;
+}

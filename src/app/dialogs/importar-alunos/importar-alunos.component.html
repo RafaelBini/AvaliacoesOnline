@@ -1,5 +1,20 @@
 <div>
     <div style="text-align: center;">
+        <h1>Definir layout do arquivo</h1>
+    </div>
+
+    <div class="layout-maker-conatiner">
+        <app-layout-maker [colunasOpcoes]="colunasOpcoes" [colunasSelecionadas]="layout.colunas"
+            (colunasAlteradas)="onColunasAlteradas($event)"></app-layout-maker>
+    </div>
+
+    <div class="checkbox-container">
+        <mat-checkbox [(ngModel)]="layout.temCabecalho">
+            Incluir cabeçalho
+        </mat-checkbox>
+    </div>
+
+    <div style="text-align: center;">
         <h1>Importar Alunos</h1>
     </div>
     <div class="drop-here" (fileDropped)="receberArquivo($event, 'dropped')" (click)="anexoSelectInput.click()"
@@ -15,8 +30,8 @@
         <br />
     </div>
 
-    <div style="overflow: auto; height: 200px;">
-        <div class="aluno" [class.alunoJaCadastrado]="isAlunoJaPersistido(ai)"
+    <div style="overflow: auto; max-height: 200px;">
+        <div class="aluno" [matTooltip]="getInfoStringAluno(aluno)" matTooltipShowDelay="2000" [class.alunoJaCadastrado]="isAlunoJaPersistido(ai)"
             [class.alunoJaAdicionado]="isAlunoJaAdicionado(ai)" *ngFor="let aluno of novosAlunos; index as ai">
             <table style="width: 100%;">
                 <tr class="aluno-line">
@@ -27,10 +42,10 @@
                             style="height: 5vh; width: 5vh; border-radius: 5px; object-fit: cover;" />
                     </td>
                     <td width="25%">
-                        {{aluno.nome}}
+                        <span>{{aluno.nome}}</span>
                     </td>
                     <td width="25%">
-                        {{aluno.email}}
+                        <span>{{aluno.email}}</span>
                     </td>
                     <td width="40%">
                         <div style="display: flex; flex-wrap: wrap;">

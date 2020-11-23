@@ -1,0 +1,39 @@
+<div>
+    <mat-selection-list [(ngModel)]="colunasSelecionadas" (ngModelChange)="onChange($event)">
+
+        <div class="coluna-option" *ngFor="let coluna of colunasOpcoes; index as ci">
+
+
+            <table>
+                <tr>
+                    <td width="80%">
+                        <mat-list-option checkboxPosition="before" [value]="coluna">
+                            {{coluna}}
+                        </mat-list-option>
+                    </td>
+                    <td width="10%">
+                        <button *ngIf="ci > 0" (click)="changeColumnPosition(ci, -1)" mat-button
+                            class="arrow-btn arrow-up">
+                            <mat-icon>
+                                arrow_drop_up
+                            </mat-icon>
+                        </button>
+                    </td>
+                    <td width="10%">
+                        <button *ngIf="ci < colunasOpcoes.length -1" (click)="changeColumnPosition(ci, 1)" mat-button
+                            class="arrow-btn arrow-down">
+                            <mat-icon>
+                                arrow_drop_down
+                            </mat-icon>
+                        </button>
+                    </td>
+
+                </tr>
+            </table>
+
+        </div>
+
+
+
+    </mat-selection-list>
+</div>

@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { GroupedObservable } from 'rxjs';
 import { TimeService } from './time.service';
 import * as firebase from 'firebase/app';
+import { Grupo } from '../models/grupo';
 
 @Injectable({
   providedIn: 'root'
@@ -215,6 +216,13 @@ export class AvaliacaoService {
       provaGabarito: "",
 
     }
+  }
+
+  getGruposOuAlunosFromAvaliacao(avaliacao: Avaliacao): Array<Usuario> | Array<Grupo> {
+    if (avaliacao.tipoDisposicao == 0)
+      return avaliacao.grupos[0].alunos;
+    else
+      return avaliacao.grupos;
   }
 
 

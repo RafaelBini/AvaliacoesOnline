@@ -109,8 +109,14 @@ export class CredencialService {
   }
 
   getProblemaFromNovoUsuario(usuario, confirmacaoSenha): string {
-    if (usuario.nome == '' || usuario.email == '' || usuario.senha == '') {
-      return 'Preencha todos os campos.';
+    if (usuario.nome == '') {
+      return 'Preencha o campo nome.';
+    }
+    else if (usuario.email == '') {
+      return 'Preencha o campo email.';
+    }
+    else if (usuario.senha == '') {
+      return 'Preencha o campo senha.';
     }
     else if (!usuario.email.includes('@')) {
       return ("Email inválido.");

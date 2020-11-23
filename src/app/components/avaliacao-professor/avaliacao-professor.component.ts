@@ -142,7 +142,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
             this.cronometro.pararCronometro();
 
-            this.corrigirProvas();
+            this.provaService.corrigirProvas(this.avaliacao);
 
 
           }
@@ -162,44 +162,6 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.avaliacaoSubscription)
       this.avaliacaoSubscription.unsubscribe();
-  }
-
-  corrigirProvas() {
-    var corrigiPeloMenosUmaProva = false;
-
-    this.provaService.getProvaFromId(this.avaliacao.provaGabarito).then(gabarito => {
-
-      var indexAlterados: Array<number> = [];
-
-
-      for (let [i, grupoOuAluno] of this.getGruposOuAlunos().entries()) {
-        if (!grupoOuAluno.provaCorrigida) {
-          this.provaService.getProvaFromId(grupoOuAluno.provaId).then(prova => {
-            grupoOuAluno.notaTotal = this.provaService.getMinhaNota(prova, gabarito);
-            grupoOuAluno.valorTotal = this.provaService.getPontuacaoMaxima(prova);
-            grupoOuAluno.provaCorrigida = true;
-          });
-          corrigiPeloMenosUmaProva = true;
-          indexAlterados.push(i);
-        }
-      }
-
-
-      if (corrigiPeloMenosUmaProva) {
-        this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaAlterar => {
-          for (let indexAlterado of indexAlterados) {
-            if (this.avaliacao.tipoDisposicao == 0) {
-              this.getGruposOuAlunosFromAvaliacao(avaliacaoParaAlterar)[indexAlterado].notaTotal = this.getGruposOuAlunos()[indexAlterado].notaTotal;
-              this.getGruposOuAlunosFromAvaliacao(avaliacaoParaAlterar)[indexAlterado].valorTotal = this.getGruposOuAlunos()[indexAlterado].valorTotal;
-              this.getGruposOuAlunosFromAvaliacao(avaliacaoParaAlterar)[indexAlterado].provaCorrigida = this.getGruposOuAlunos()[indexAlterado].provaCorrigida;
-            }
-          }
-          return avaliacaoParaAlterar;
-        }, this.avaliacao.id);
-        console.log("Corrigi provas automaticamente -> TRANSACAO")
-      }
-
-    });
   }
 
   getGruposOuAlunos(): Array<Usuario> | Array<Grupo> {
@@ -502,32 +464,6 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
   // DURANTE AVALIAÇÃO
 
-  voltarStatusProva(grupoIndex, alunoIndex) {
-    this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 2;
 
-    this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
-      avaliacaoParaModificar.grupos[grupoIndex].alunos[alunoIndex].statusId = this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId;
-      return avaliacaoParaModificar;
-    }, this.avaliacao.id);
-
-    console.log("Professor retornou status de um aluno TRANSACAO");
-  }
-  bloquearProva(grupoIndex, alunoIndex) {
-    this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId = 1;
-    this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus = this.comumService.insertInArray(this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus, 1, this.timeService.getCurrentDateTime().toISOString());
-
-    this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
-      avaliacaoParaModificar.grupos[grupoIndex].alunos[alunoIndex].statusId = this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].statusId;
-      avaliacaoParaModificar.grupos[grupoIndex].alunos[alunoIndex].dtStatus = this.avaliacao.grupos[grupoIndex].alunos[alunoIndex].dtStatus;
-      return avaliacaoParaModificar;
-    }, this.avaliacao.id);
-
-    console.log("Professor bloqueou a prova de um aluno TRANSACAO");
-  }
-  abrirDetalhes(aluno: Usuario) {
-    this.dialog.open(DetalhesProvaComponent, {
-      data: aluno
-    });
-  }
 
 }

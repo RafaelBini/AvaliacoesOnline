@@ -72,6 +72,7 @@ import { CronometroComponent } from './components/cronometro/cronometro.componen
 import { AjudaComponent } from './dialogs/ajuda/ajuda.component';
 import { ImportarAlunosComponent } from './dialogs/importar-alunos/importar-alunos.component';
 import { ExportarComponent } from './dialogs/exportar/exportar.component';
+import { LayoutMakerComponent } from './components/layout-maker/layout-maker.component';
 
 export function initializeApp(timeService: TimeService) {
   return (): Promise<number> => {
@@ -121,6 +122,7 @@ export function initializeApp(timeService: TimeService) {
     AjudaComponent,
     ImportarAlunosComponent,
     ExportarComponent,
+    LayoutMakerComponent,
   ],
   imports: [
     BrowserModule,

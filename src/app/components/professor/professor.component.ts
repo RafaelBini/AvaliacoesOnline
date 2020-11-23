@@ -137,7 +137,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
   // Alunos
   addAluno() {
     this.dialog.open(AlunoNovoComponent, {
-      width: '40%',
+
     });
   }
   onBuscaAlunoKeyUp(texto: string) {

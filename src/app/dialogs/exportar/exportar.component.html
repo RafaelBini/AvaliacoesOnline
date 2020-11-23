@@ -1,4 +1,20 @@
 <div class="titulo">
+    Selecione as colunas para exportar:
+</div>
+
+<div class="layout-maker-conatiner">
+    <app-layout-maker [colunasOpcoes]="colunasOpcoes" [colunasSelecionadas]="layout.colunas"
+        (colunasAlteradas)="onColunasAlteradas($event)">
+    </app-layout-maker>
+</div>
+
+<div class="checkbox-container">
+    <mat-checkbox [(ngModel)]="layout.temCabecalho">
+        Incluir cabeçalho
+    </mat-checkbox>
+</div>
+
+<div class="titulo">
     Escolha uma opção para exportar:
 </div>
 

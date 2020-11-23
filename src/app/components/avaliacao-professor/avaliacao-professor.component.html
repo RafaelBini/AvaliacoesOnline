@@ -16,15 +16,16 @@
                             <div #gruposContainerDiv
                                 style="padding-top: 40px; overflow: auto; height: 100%; width: 100%; display: flex; flex-wrap: wrap;">
 
-                                <div cdkDropList *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo"
-                                    [cdkDropListData]="grupo.alunos" (cdkDropListDropped)="drop($event, 'grupo')">
+                                <div cdkDropList *ngFor="let grupo of avaliacao.grupos;  index as grupoIndex;"
+                                    class="grupo" [cdkDropListData]="grupo.alunos"
+                                    (cdkDropListDropped)="drop($event, 'grupo')">
 
                                     <div *ngIf="avaliacao.tipoDisposicao != 0" class="grupo-title">
                                         GRUPO {{grupo.numero}}
                                     </div>
-                                    <div class="aluno" cdkDrag *ngFor="let aluno of grupo.alunos"
+                                    <div class="aluno" cdkDrag *ngFor="let aluno of grupo.alunos; index as alunoIndex"
                                         [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
-                                        <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                                        <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                                         </app-aluno-card-avaliacao-professor>
                                     </div>
 
@@ -76,7 +77,7 @@
 
                                 <div class="aluno" cdkDrag *ngFor="let aluno of alunosFiltrados"
                                     [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
-                                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                                    <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                                     </app-aluno-card-avaliacao-professor>
                                 </div>
 
@@ -111,74 +112,10 @@
             <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
                 <div class="aluno" *ngFor="let aluno of avaliacao.grupos[0].alunos; index as ai"
                     style="border-color: var(--cor-secundaria); cursor: default">
-                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                    <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno" [grupoIndex]="0"
+                        [alunoIndex]="ai">
                     </app-aluno-card-avaliacao-professor>
 
-                    <!-- IDENTIFICAÇÕES -->
-
-                    <div style="position: absolute; top: 30%; right: 6%; display: flex; align-items: center;">
-
-                        <!-- FINALIZADO -->
-
-                        <span *ngIf=" aluno.statusId> 2" style="margin-right: 6px;">
-                            Finalizou {{comumService.getDataAmigavel(aluno.dtStatus[3])}}
-                        </span>
-                        <mat-icon *ngIf=" aluno.statusId> 2" matTooltip="O aluno sinalizou que finalizou a avaliação">
-                            check_circle
-                        </mat-icon>
-
-                        <!-- FAZENDO A PROVA -->
-
-                        <span *ngIf="aluno.statusId == 2" style="margin-right: 6px;">
-                            Iniciou {{comumService.getDataAmigavel(aluno.dtStatus[2])}}
-                        </span>
-                        <mat-icon *ngIf="aluno.statusId == 2" matTooltip="O aluno está relizando as questões">
-                            create
-                        </mat-icon>
-
-                        <!-- NÃO ENTROU -->
-
-                        <span *ngIf="aluno.statusId == null || aluno.statusId == 0" style="margin-right: 6px;">
-                            Não acessou
-                        </span>
-                        <mat-icon *ngIf="aluno.statusId == null || aluno.statusId == 0"
-                            matTooltip="O aluno não iniciou a avaliação">
-                            not_interested
-                        </mat-icon>
-
-                        <!-- BLOQUEADO -->
-
-                        <span *ngIf="aluno.statusId == 1" style="margin-right: 6px;">
-                            Bloqueado
-                        </span>
-                        <mat-icon *ngIf="aluno.statusId == 1" matTooltip="O aluno foi bloqueado pelo professor">
-                            lock
-                        </mat-icon>
-
-                    </div>
-
-                    <!-- AÇÕES -->
-
-                    <button class="menu-opcoes-aluno" mat-icon-button [matMenuTriggerFor]="userMenu"
-                        matTooltip="Opções">
-                        <mat-icon>
-                            more_vert
-                        </mat-icon>
-                    </button>
-                    <mat-menu #userMenu="matMenu">
-                        <button mat-menu-item (click)="abrirDetalhes(aluno)">
-                            Ver detalhes
-                        </button>
-                        <button mat-menu-item *ngIf="aluno.statusId == 3 || aluno.statusId == 1"
-                            (click)="voltarStatusProva(0, ai)"
-                            matTooltip="Clique aqui para liberar a prova novamente para o aluno">
-                            Devolver prova
-                        </button>
-                        <button mat-menu-item *ngIf="aluno.statusId == 2" (click)="bloquearProva(0, ai)"
-                            matTooltip="Clique aqui para bloquear a prova do aluno">
-                            Bloquear Prova
-                        </button>
-                    </mat-menu>
                 </div>
             </div>
 
@@ -192,75 +129,11 @@
                     <div class="aluno" *ngFor="let aluno of grupo.alunos; index as ai"
                         [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'"
                         style="cursor: default">
-                        <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                        <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [grupoIndex]="gi" [alunoIndex]="ai"
+                            [aluno]="aluno">
                         </app-aluno-card-avaliacao-professor>
 
-                        <!-- IDENTIFICAÇÕES -->
 
-                        <div style="position: absolute; top: 30%; right: 6%; display: flex; align-items: center;">
-
-                            <!-- FINALIZADO -->
-
-                            <span *ngIf=" aluno.statusId> 2" style="margin-right: 6px;">
-                                Finalizou {{comumService.getDataAmigavel(aluno.dtStatus[3])}}
-                            </span>
-                            <mat-icon *ngIf=" aluno.statusId> 2"
-                                matTooltip="O aluno sinalizou que finalizou a avaliação">
-                                check_circle
-                            </mat-icon>
-
-                            <!-- FAZENDO A PROVA -->
-
-                            <span *ngIf="aluno.statusId == 2" style="margin-right: 6px;">
-                                Iniciou {{comumService.getDataAmigavel(aluno.dtStatus[2])}}
-                            </span>
-                            <mat-icon *ngIf="aluno.statusId == 2" matTooltip="O aluno está relizando as questões">
-                                create
-                            </mat-icon>
-
-                            <!-- NÃO ENTROU -->
-
-                            <span *ngIf="aluno.statusId == null || aluno.statusId == 0" style="margin-right: 6px;">
-                                Não acessou
-                            </span>
-                            <mat-icon *ngIf="aluno.statusId == null || aluno.statusId == 0"
-                                matTooltip="O aluno não iniciou a avaliação">
-                                not_interested
-                            </mat-icon>
-
-                            <!-- BLOQUEADO -->
-
-                            <span *ngIf="aluno.statusId == 1" style="margin-right: 6px;">
-                                Bloqueado
-                            </span>
-                            <mat-icon *ngIf="aluno.statusId == 1" matTooltip="O aluno foi bloqueado pelo professor">
-                                lock
-                            </mat-icon>
-
-                        </div>
-
-                        <!-- AÇÕES -->
-
-                        <button class="menu-opcoes-aluno" mat-icon-button [matMenuTriggerFor]="userMenu"
-                            matTooltip="Opções">
-                            <mat-icon>
-                                more_vert
-                            </mat-icon>
-                        </button>
-                        <mat-menu #userMenu="matMenu">
-                            <button mat-menu-item (click)="abrirDetalhes(aluno)">
-                                Ver detalhes
-                            </button>
-                            <button mat-menu-item *ngIf="aluno.statusId == 3 || aluno.statusId == 1"
-                                (click)="voltarStatusProva(0, ai)"
-                                matTooltip="Clique aqui para liberar a prova para o aluno">
-                                Devolver prova
-                            </button>
-                            <button mat-menu-item *ngIf="aluno.statusId == 2" (click)="bloquearProva(0, ai)"
-                                matTooltip="Clique aqui para bloquear a prova do aluno">
-                                Bloquear Prova
-                            </button>
-                        </mat-menu>
                     </div>
                 </div>
 
@@ -298,7 +171,7 @@
                     <div *ngIf="aluno.provaId" class="grupo-title">
                         {{aluno.provaCorrigida ? "CORRIGIDA (NOTA: " + aluno.notaTotal + "/" + aluno.valorTotal + ")": "PRECISA SER CORRIGIDA"}}
                     </div>
-                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                    <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
 
                     <a *ngIf="aluno.provaId" mat-button class="btn-corrigir"
@@ -327,7 +200,7 @@
                     <div class="aluno" *ngFor="let aluno of grupo.alunos"
                         [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'"
                         style="cursor: default">
-                        <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                        <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                         </app-aluno-card-avaliacao-professor>
                     </div>
                     <div *ngIf="grupo.provaId" class="btn-corrigir">
@@ -364,7 +237,7 @@
             <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
                 <div class="aluno" *ngFor="let aluno of avaliacao.grupos[0].alunos"
                     style="border-color: var(--cor-secundaria); cursor: default">
-                    <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                    <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
 
                     <a *ngIf="aluno.provaId" mat-button class=" btn-corrigir"
@@ -411,7 +284,7 @@
                     <div class="aluno" *ngFor="let aluno of grupo.alunos"
                         [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'"
                         style="cursor: default">
-                        <app-aluno-card-avaliacao-professor [aluno]="aluno">
+                        <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                         </app-aluno-card-avaliacao-professor>
                     </div>
 

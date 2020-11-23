@@ -1,3 +1,4 @@
+import { AvaliacaoService } from 'src/app/services/avaliacao.service';
 import { CredencialService } from 'src/app/services/credencial.service';
 import { FileService } from './file.service';
 import { Correcao } from './../models/correcao';
@@ -19,6 +20,7 @@ export class ProvaService {
     private db: AngularFirestore,
     private comumService: ComumService,
     private credencialService: CredencialService,
+    private avaliacaoService: AvaliacaoService,
     private fileService: FileService,
   ) { }
 
@@ -115,6 +117,51 @@ export class ProvaService {
         reject(reason);
         return;
       });
+    });
+  }
+
+  corrigirProvas(avaliacao: Avaliacao) {
+    var corrigiPeloMenosUmaProva = false;
+
+    this.getProvaFromId(avaliacao.provaGabarito).then(gabarito => {
+
+      var indexAlterados: Array<number> = [];
+
+
+      for (let [i, grupoOuAluno] of this.avaliacaoService.getGruposOuAlunosFromAvaliacao(avaliacao).entries()) {
+        if (!grupoOuAluno.provaCorrigida) {
+          if (grupoOuAluno.provaId != undefined) {
+            this.getProvaFromId(grupoOuAluno.provaId).then(prova => {
+              grupoOuAluno.notaTotal = this.getMinhaNota(prova, gabarito);
+            }).catch(reason => {
+              console.log("erro ao tentar corrigir prova");
+            });
+          }
+          else {
+            grupoOuAluno.notaTotal = 0;
+          }
+          grupoOuAluno.valorTotal = this.getPontuacaoMaxima(gabarito);
+          grupoOuAluno.provaCorrigida = true;
+          corrigiPeloMenosUmaProva = true;
+          indexAlterados.push(i);
+        }
+      }
+
+
+      if (corrigiPeloMenosUmaProva) {
+        this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaAlterar => {
+          for (let indexAlterado of indexAlterados) {
+            if (avaliacao.tipoDisposicao == 0) {
+              this.avaliacaoService.getGruposOuAlunosFromAvaliacao(avaliacaoParaAlterar)[indexAlterado].notaTotal = this.avaliacaoService.getGruposOuAlunosFromAvaliacao(avaliacao)[indexAlterado].notaTotal;
+              this.avaliacaoService.getGruposOuAlunosFromAvaliacao(avaliacaoParaAlterar)[indexAlterado].valorTotal = this.avaliacaoService.getGruposOuAlunosFromAvaliacao(avaliacao)[indexAlterado].valorTotal;
+              this.avaliacaoService.getGruposOuAlunosFromAvaliacao(avaliacaoParaAlterar)[indexAlterado].provaCorrigida = this.avaliacaoService.getGruposOuAlunosFromAvaliacao(avaliacao)[indexAlterado].provaCorrigida;
+            }
+          }
+          return avaliacaoParaAlterar;
+        }, avaliacao.id);
+        console.log("Corrigi provas automaticamente -> TRANSACAO")
+      }
+
     });
   }
 

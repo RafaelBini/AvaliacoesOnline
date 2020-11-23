@@ -12,8 +12,8 @@
         <div class="aluno" *ngFor="let aluno of getGrupoNaAvaliacao().alunos"
             [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'"
             style="cursor: default">
-            <app-aluno-card-avaliacao-professor [aluno]="aluno">
-            </app-aluno-card-avaliacao-professor>
+            <app-aluno-card-avaliacao-aluno [aluno]="aluno">
+            </app-aluno-card-avaliacao-aluno>
         </div>
     </div>
 
@@ -22,8 +22,8 @@
         <div class="aluno"
             [style.borderColor]="prova.alunos[0].online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'"
             style="cursor: default">
-            <app-aluno-card-avaliacao-professor [aluno]="prova.alunos[0]">
-            </app-aluno-card-avaliacao-professor>
+            <app-aluno-card-avaliacao-aluno [aluno]="prova.alunos[0]">
+            </app-aluno-card-avaliacao-aluno>
         </div>
     </div>
 

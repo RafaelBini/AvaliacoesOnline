@@ -82,8 +82,10 @@
 .btn-corrigir{
   position: absolute;
   top: 5px;
-  right: 5px;
+  right: 30px;
   z-index: 1000;
+  line-height: 1.25 !important;
+  padding: 5px;
 
   color: var(--cor-primaria);
   border: 1px dashed var(--cor-primaria);
@@ -97,7 +99,7 @@
 .info-grupo{
   position: absolute;
   top: 5px;
-  right: 5px;
+  right: 30px;
   z-index: 1000;
 
   padding-left: 20px;
@@ -112,18 +114,12 @@
   border-radius: 7px;
 }
 
-.menu-opcoes-aluno{
-  position: absolute;
-  right: 0px;
-  top: 0px;
-}
-
 .grupo-title{
   padding: 5px;
 }
 
 .countdown{
-  position: fixed; 
+  position: absolute; 
   top: 9.5%; 
   right: 28%; 
   margin: auto; 

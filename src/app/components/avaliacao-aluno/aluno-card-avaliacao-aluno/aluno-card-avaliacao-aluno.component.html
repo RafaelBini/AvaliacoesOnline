@@ -7,8 +7,8 @@
                         style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
                     <img *ngIf="!aluno.img" src="assets/avatares/padrao.jpg"
                         style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
-                    <span *ngIf="aluno.online" class="etiqueta status-online">online</span>
-                    <span *ngIf="!aluno.online" class="etiqueta status-offline">offline</span>
+                    <span *ngIf="aluno.online" class="etiqueta status-online">presente</span>
+                    <span *ngIf="!aluno.online" class="etiqueta status-offline">ausente</span>
                 </div>
             </td>
         </tr>

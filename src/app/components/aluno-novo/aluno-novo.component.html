@@ -14,9 +14,15 @@
                     [(ngModel)]="aluno.email" (ngModelChange)="verificarEmail()">
             </td>
         </tr>
-        <tr>
-            <td>
-                <label for="senha">Senha:</label>
+        <tr *ngIf="novoUsuario">
+            <td style="position: relative;">
+                <span>
+                    <label for="senha">Senha:</label>
+                    <mat-icon class="btn-help" style="position: absolute; top: 1px; right: 1px;"
+                        matTooltip="Clique para receber ajuda" (click)="abrirAjudaSenha()">
+                        help
+                    </mat-icon>
+                </span>
             </td>
             <td>
                 <input class="input-simple" type="text" [disabled]="!novoUsuario" [(ngModel)]="aluno.senha"
@@ -30,6 +36,24 @@
             <td>
                 <input class="input-simple" required type="text" [disabled]="!novoUsuario" name="nome"
                     value="{{aluno.nome}}" [(ngModel)]="aluno.nome">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="tagIdExterno">Tag ID Externo:</label>
+            </td>
+            <td>
+                <input name='tagIdExterno' class="input-simple" placeholder="Ex.: Matricula" type="text"
+                    value="{{aluno.tagIdExterno}}" [(ngModel)]="aluno.tagIdExterno">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="idExterno">ID Externo:</label>
+            </td>
+            <td>
+                <input name='idExterno' class="input-simple" placeholder="Ex.: 20184586" type="text"
+                    value="{{aluno.idExterno}}" [(ngModel)]="aluno.idExterno">
             </td>
         </tr>
         <tr *ngIf="!usuarioJaAdicionado">

@@ -1,4 +1,7 @@
-<div>
+<div class="aluno-container">
+
+    <!-- IDENTIFICAÇÃO BASICA -->
+
     <table>
         <tr>
             <td rowspan="3">
@@ -7,8 +10,8 @@
                         style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
                     <img *ngIf="!aluno.img" src="assets/avatares/padrao.jpg"
                         style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
-                    <span *ngIf="aluno.online" class="etiqueta status-online">online</span>
-                    <span *ngIf="!aluno.online" class="etiqueta status-offline">offline</span>
+                    <span *ngIf="aluno.online" class="etiqueta status-online">presente</span>
+                    <span *ngIf="!aluno.online" class="etiqueta status-offline">ausente</span>
                 </div>
             </td>
         </tr>
@@ -29,4 +32,70 @@
             </td>
         </tr>
     </table>
+
+    <!-- STATUS NA AVALIAÇÃO -->
+
+    <div class="status-container">
+
+        <!-- FINALIZADO -->
+
+        <span *ngIf=" aluno.statusId> 2" class="descricao-status">
+            Finalizou {{comumService.getDataAmigavel(aluno.dtStatus[3])}}
+        </span>
+        <mat-icon *ngIf=" aluno.statusId> 2" matTooltip="O aluno sinalizou que finalizou a avaliação">
+            check_circle
+        </mat-icon>
+
+        <!-- FAZENDO A PROVA -->
+
+        <span *ngIf="aluno.statusId == 2" class="descricao-status">
+            Iniciou {{comumService.getDataAmigavel(aluno.dtStatus[2])}}
+        </span>
+        <mat-icon *ngIf="aluno.statusId == 2" matTooltip="O aluno está relizando as questões">
+            create
+        </mat-icon>
+
+        <!-- NÃO ENTROU -->
+
+        <span *ngIf="aluno.statusId == null || aluno.statusId == 0" class="descricao-status">
+            Não acessou
+        </span>
+        <mat-icon *ngIf="aluno.statusId == null || aluno.statusId == 0" matTooltip="O aluno não iniciou a avaliação">
+            not_interested
+        </mat-icon>
+
+        <!-- BLOQUEADO -->
+
+        <span *ngIf="aluno.statusId == 1" class="descricao-status">
+            Bloqueado
+        </span>
+        <mat-icon *ngIf="aluno.statusId == 1" matTooltip="O aluno foi bloqueado pelo professor">
+            lock
+        </mat-icon>
+
+    </div>
+
+    <!-- MAIS OPÇÕES -->
+
+    <button class="menu-opcoes-aluno" mat-icon-button [matMenuTriggerFor]="userMenu" matTooltip="Opções">
+        <mat-icon>
+            more_vert
+        </mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="abrirDetalhes(aluno)">
+            Ver detalhes
+        </button>
+        <button mat-menu-item *ngIf="avaliacao.status == 1 && (aluno.statusId == 3 || aluno.statusId == 1)"
+            (click)="voltarStatusProva(grupoIndex, alunoIndex)"
+            matTooltip="Clique aqui para liberar a prova novamente para o aluno">
+            Devolver prova
+        </button>
+        <button mat-menu-item *ngIf="avaliacao.status == 1 && aluno.statusId == 2"
+            (click)="bloquearProva(grupoIndex, alunoIndex)" matTooltip="Clique aqui para bloquear a prova do aluno">
+            Bloquear Prova
+        </button>
+    </mat-menu>
+
+
 </div>
