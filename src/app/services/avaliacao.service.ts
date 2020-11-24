@@ -183,6 +183,7 @@ export class AvaliacaoService {
       status: 0,
       titulo: "",
       descricao: "",
+      professorId: this.credencialService.getLoggedUserIdFromCookie(),
       limitarNumIntegrantes: true,
       maxIntegrantes: 3,
       dtInicio: this.comumService.getStringFromDate(this.timeService.getCurrentDateTime()),
@@ -204,6 +205,7 @@ export class AvaliacaoService {
       isDuracaoIndividualIndeterminada: true,
       tags: [],
       usuariosIdQueArquivaram: [],
+      alunosIds: [],
       grupos: [
         {
           numero: 1,

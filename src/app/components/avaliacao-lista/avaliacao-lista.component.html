@@ -55,7 +55,7 @@
 </div>
 
 <button mat-fab [matMenuTriggerFor]="menu" matTooltip="Opções de Filtro" class="btn" style="right: 50px;"
-    [style.bottom]="tipoAcesso == 'aluno' ? '50px' : '120px'">
+    [style.bottom]="tipoAcesso == 'aluno' ? '50px' : '50px'">
     <mat-icon>more_vert</mat-icon>
 </button>
 <mat-menu #menu="matMenu" yPosition="above" xPosition="before">
@@ -68,6 +68,6 @@
 </mat-menu>
 
 <a *ngIf="tipoAcesso == 'professor'" routerLink="/professor/avaliacao/nova" matTooltip="Nova Avaliação" class="btn"
-    style="right: 50px; bottom: 50px;" mat-fab>
+    style="right: 50px; bottom: 120px;" mat-fab>
     <mat-icon>add</mat-icon>
 </a>

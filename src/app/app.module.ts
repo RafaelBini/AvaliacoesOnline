@@ -1,3 +1,4 @@
+import { CredencialService } from 'src/app/services/credencial.service';
 import { TimeService } from './services/time.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, APP_INITIALIZER } from '@angular/core';
@@ -73,10 +74,16 @@ import { AjudaComponent } from './dialogs/ajuda/ajuda.component';
 import { ImportarAlunosComponent } from './dialogs/importar-alunos/importar-alunos.component';
 import { ExportarComponent } from './dialogs/exportar/exportar.component';
 import { LayoutMakerComponent } from './components/layout-maker/layout-maker.component';
+import { ProvaImprimirComponent } from './components/prova-imprimir/prova-imprimir.component';
 
-export function initializeApp(timeService: TimeService) {
+export function initializeApp(timeService: TimeService, credencialService: CredencialService) {
+
   return (): Promise<number> => {
-    return timeService.updateDelta();
+    return new Promise((resolve, reject) => {
+      timeService.updateDelta().then(() => {
+        resolve();
+      }).catch(reason => reject(reason));
+    });
   }
 }
 
@@ -123,6 +130,7 @@ export function initializeApp(timeService: TimeService) {
     ImportarAlunosComponent,
     ExportarComponent,
     LayoutMakerComponent,
+    ProvaImprimirComponent,
   ],
   imports: [
     BrowserModule,

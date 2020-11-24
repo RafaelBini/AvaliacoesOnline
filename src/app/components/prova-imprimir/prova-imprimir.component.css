@@ -1,0 +1,139 @@
+
+.questao {
+    position: relative; 
+    border-radius: 10px; 
+    padding: 12px; 
+    width: 100%;
+    margin-top: 7px;
+    margin-bottom: 7px;
+  }
+  
+  .lista-alunos-container{  
+    border-radius: 5px;  
+    padding: 5px;  
+    background-color: var(--cor-primaria);
+  }
+  
+  .titulo-lista-alunos{
+    text-decoration: underline solid white;
+    text-align: center;
+    margin: auto; display: block;
+    padding-bottom: 8px;
+  }
+  
+  .aluno-listado{  
+    color: white;
+    padding: 6px;
+    text-align: left;    
+  }
+  
+  .input-basico{
+    border: 1px dotted rgba(0, 0, 0, 0.20);
+    border-radius: 7px;
+    background-color: white;  
+    overflow: hidden;
+  }
+  .input-basico:focus {
+    outline: none;
+    border: 1px dashed var(--cor-primaria);
+    border-radius: 7px;
+  }
+  .input-basico:disabled {
+    background-color: rgb(250, 250, 250);  
+    color: rgb(97, 97, 97);
+  }
+  
+  .select-basico {
+    cursor: pointer;
+    border: 1px dotted rgba(0, 0, 0, 0.20);
+    border-radius: 7px;
+    padding: 5px;
+    background-color: white;
+  }
+  .select-basico:focus {
+    outline: none;
+    border: 1px dashed var(--cor-primaria);
+    border-radius: 7px;
+  }
+  
+  .contador-caracteres{
+    font-size: 10px;
+    color: gray;
+    user-select: none;
+    position: absolute;
+    top: 0px;
+    right: 7px;
+  }
+  
+  /* QUESTÕES DISSERTATIVAS */
+  
+  .dica-resposta-dissertativa{
+    padding: 7px;
+    width: 95%;  
+    color: white;
+    border: 1px dashed white;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* QUESTÕES MULTIPLA ESCOLHA */
+  
+  .invisible-input{
+    background-color: transparent;
+    border: none;
+    white-space: normal;
+    word-wrap: break-all !important;
+  }
+  
+  .invisible-input:focus {
+    outline: none;
+  }
+  
+  .alternativa {
+    background-color: rgba(255, 255, 255, 0.452); 
+    position: relative; 
+    height: 40px; 
+    padding: 10px;
+    max-width: 95%;
+    word-wrap: break-all !important;
+    position: relative;
+  }
+  
+  /* ENVIO DE ARQUIVOS */
+  
+  .upload-area{
+    background-color: white; color: gray; 
+    cursor: pointer; user-select: none; 
+    line-height: 200px; height: 200px; 
+    width: 90%; margin: auto;  border: 1px dashed gray; border-radius: 10px; 
+    text-align: center; font-size: 19px;
+  }
+  
+  .upload-area:hover {
+    color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+  
+  }
+
+  .cabecalho {
+    padding: 20px; 
+    color: black; 
+    border-radius: 10px;
+    margin: auto;
+}
+
+.container{
+    width: 80%;
+    margin: auto;
+    background-color: white;
+}
+
+.body{
+ background-color: rgb(102, 102, 102); 
+ padding-bottom: 100px;  
+ padding-top: 30px;  
+ box-sizing: content-box;
+}
+  
+  /* --------------------- */

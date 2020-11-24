@@ -63,14 +63,14 @@ export class BuscarQuestaoComponent implements OnInit {
       var count = 0;
       var hash1 = this.provaService.getQuestaoHash(questao.q);
 
-      for (let questao2 of this.questoes) {
+      for (let [index, questao2] of this.questoes.entries()) {
         var hash2 = this.provaService.getQuestaoHash(questao2.q);
         if (hash1 == hash2) {
           count++;
         }
         if (count >= 2) {
-          const INDEX = this.questoes.indexOf(questao.q);
-          this.questoes.splice(INDEX, 1);
+          this.questoes.splice(index, 1);
+          count = 1;
         }
       }
 

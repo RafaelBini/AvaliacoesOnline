@@ -210,6 +210,8 @@ export class AvaliacaoNovaComponent implements OnInit {
       if (!this.isEditando) {
         var avaliacaoRascunho = { ...this.avaliacao };
         avaliacaoRascunho.id = this.credencialService.getLoggedUserIdFromCookie();
+        avaliacaoRascunho.professorId = "";
+        avaliacaoRascunho.provaGabarito = this.credencialService.getLoggedUserIdFromCookie();
         this.avaliacaoService.updateAvaliacao(avaliacaoRascunho);
         console.log("FIREBASE UPDATE: avaliacao rascunho atualizado");
       }

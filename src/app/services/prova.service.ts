@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { AvaliacaoService } from 'src/app/services/avaliacao.service';
 import { CredencialService } from 'src/app/services/credencial.service';
 import { FileService } from './file.service';
@@ -31,7 +32,12 @@ export class ProvaService {
         this.db.collection('avaliacoes').doc(prova.avaliacaoId).update({
           provaGabarito: docRef.id,
         }).then(() => {
-          resolve();
+          this.db.collection('provas').doc(docRef.id).update({
+            id: docRef.id,
+          }).then(() => {
+            resolve();
+          })
+
         }).catch(reason => reject(reason));
       }).catch(reason => reject(reason));
 

@@ -73,6 +73,10 @@
         <button *ngIf="tipoAcesso=='professor'" mat-menu-item (click)="deletar(avaliacao)">
             <mat-icon>cancel</mat-icon>Excluir
         </button>
+        <a *ngIf="tipoAcesso=='professor'" mat-menu-item target="_blank" [routerLink]="'/imprimir/'+ avaliacao.id">
+            <mat-icon>print</mat-icon>
+            Imprimir
+        </a>
         <button *ngIf="tipoAcesso=='professor'" mat-menu-item (click)="abirExport(avaliacao)">
             <mat-icon>get_app</mat-icon>Exportar
         </button>

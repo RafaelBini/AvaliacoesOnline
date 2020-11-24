@@ -20,12 +20,6 @@ export class HomeComponent implements OnInit {
     private snack: MatSnackBar) { }
 
   ngOnInit(): void {
-    if (this.credencialService.estouLogado()) {
-      if (this.credencialService.loggedUser.acesso.toLowerCase() == "professor")
-        this.router.navigate(['professor']);
-      else
-        this.router.navigate(['aluno']);
-    }
 
   }
 

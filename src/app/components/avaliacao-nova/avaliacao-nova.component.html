@@ -334,10 +334,10 @@
         </div>
 
         <button mat-fab matTooltip="Adiconar Questão" (click)="addQuestao()"
-            style="position: fixed; bottom: 30px; right: 30px; background-color: var(--cor-primaria);">
+            style="position: fixed; bottom: 100px; right: 30px; background-color: var(--cor-primaria);">
             <mat-icon style="color: white;">add</mat-icon>
         </button>
-
+        <!-- 
         <button mat-fab matTooltip="Buscar Questão" (click)="buscarQuestao()"
             style="position: fixed; bottom: 100px; right: 30px; background-color: var(--cor-primaria);">
             <mat-icon style="color: white;">folder_open</mat-icon>
@@ -346,7 +346,35 @@
         <button mat-fab (click)="mudarVisao('aluno')" matTooltip="Ver como aluno"
             style="position: fixed; bottom: 175px; right: 30px; color: white; background-color: var(--cor-primaria);">
             <mat-icon>visibility</mat-icon>
+        </button> -->
+
+        <button mat-fab style="position: fixed; bottom: 30px; right: 30px; background-color: var(--cor-primaria);"
+            [matMenuTriggerFor]="userMenu" matTooltip="Mais Opções">
+            <mat-icon style="color: white;">
+                more_vert
+            </mat-icon>
         </button>
+        <mat-menu #userMenu="matMenu">
+            <!-- <button mat-menu-item matTooltip="Adiconar Questão" (click)="addQuestao()">
+                <mat-icon>add</mat-icon>
+                Adiconar Questão
+            </button> -->
+
+            <button mat-menu-item (click)="buscarQuestao()">
+                <mat-icon>folder_open</mat-icon>
+                Buscar Questões
+            </button>
+
+            <button mat-menu-item (click)="mudarVisao('aluno')">
+                <mat-icon>visibility</mat-icon>
+                Ver como aluno
+            </button>
+
+            <a mat-menu-item target="_blank" [routerLink]="'/imprimir/'+ credencialService.getLoggedUserIdFromCookie()">
+                <mat-icon>print</mat-icon>
+                Imprimir
+            </a>
+        </mat-menu>
 
         <button *ngIf="!isEditando" class="btn-descartar-rascunho" mat-fab matTooltip="Descartar Rascunho"
             (click)="descartarRascunho()" style="position: fixed; bottom: 30px; left: 30px; background-color: red;">

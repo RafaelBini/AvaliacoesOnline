@@ -1,0 +1,185 @@
+<div class="body">
+
+    <div *ngIf="prova" class="container" id="imprimivel">
+
+        <div class="cabecalho">
+            <app-avaliacao-aluno-cabecalho [avaliacao]="avaliacao"></app-avaliacao-aluno-cabecalho>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
+
+            <div class="questao" *ngFor="let questao of prova.questoes; index as qi;">
+
+                <table style="width: 100%;">
+
+                    <!-- Imagens -->
+                    <tr *ngIf="questao.imagens.length > 0">
+                        <td>
+
+                            <app-arquivo-imagem [editando]="false" [file]="file" [questao]="questao"
+                                [imagemIndex]="imagemIndex" *ngFor="let file of questao.imagens; index as imagemIndex">
+
+                            </app-arquivo-imagem>
+
+                        </td>
+                    </tr>
+
+                    <!-- PERGUNTA -->
+                    <tr>
+                        <td style="padding-bottom: 20px; font-size: 15px; white-space: pre-line;">
+                            <b>Questão {{qi + 1}}</b>/{{prova.questoes.length}}. {{questao.pergunta}}
+                        </td>
+                    </tr>
+
+                    <!-- Anexos -->
+                    <tr *ngIf="questao.anexos.length > 0">
+                        <td>
+
+                            <app-arquivo-anexo [editando]="false" [file]="file" [questao]="questao"
+                                [anexoIndex]="anexoIndex" *ngFor="let file of questao.anexos; index as anexoIndex">
+
+                            </app-arquivo-anexo>
+
+                        </td>
+                    </tr>
+
+                    <!-- RESPOSTA ASSOCIATIVA -->
+                    <tr *ngIf="questao.tipo == 0">
+                        <td>
+                            <table width="100%">
+                                <tr *ngFor="let associacao of questao.associacoes; index as ai">
+                                    <td width="20%" style="cursor:default;">
+
+                                    </td>
+                                    <td width="80%" class="alternativa" style="cursor:default;">
+                                        <span style="white-space: pre-line;">{{associacao.texto}}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    </tr>
+
+                    <!-- RESPOSTA DISSERTATIVA -->
+                    <tr *ngIf="questao.tipo == 1">
+                        <td align="right">
+                            <div style="position: relative;">
+                                <textarea #respostaAlunoTextarea maxlength="2500" rows="4" class="input-basico"
+                                    placeholder="Escreva aqui a resposta"
+                                    style="width: 98%; margin: auto; padding: 5px; padding-top: 14px; "></textarea>
+
+                            </div>
+
+                            <div>
+
+                                <app-arquivo-anexo [editando]="false" tipo="arquivosEntregues" [file]="file"
+                                    [questao]="questao" [anexoIndex]="anexoIndex"
+                                    *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
+
+                                </app-arquivo-anexo>
+
+                                <app-arquivo-imagem [editando]="false" tipo="imagensEntregues" [file]="file"
+                                    [questao]="questao" [imagemIndex]="imagemIndex"
+                                    *ngFor="let file of questao.imagensEntregues; index as imagemIndex">
+
+                                </app-arquivo-imagem>
+
+                            </div>
+
+
+                            <br />
+                        </td>
+                    </tr>
+
+                    <!-- RESPOSTA ENVIO DE ARQUIVO -->
+                    <tr *ngIf="questao.tipo == 2">
+                        <td>
+                            <div style="width: 90%; margin: auto; color: gray;">
+                                <br />
+                                Extensões permitidas: {{questao.extensoes.join('; ')}}
+                                <br />
+                                Tamanho total máximo: 60 MB
+                            </div>
+                            <app-arquivo-anexo [editando]="false" [file]="file" [questao]="questao"
+                                [anexoIndex]="anexoIndex"
+                                *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
+
+                            </app-arquivo-anexo>
+                        </td>
+                    </tr>
+
+                    <!-- RESPOSTA MULTIPLA ESCOLHA - MULTIPLA OU ÚNICA RESPOSTA -->
+                    <tr *ngIf="questao.tipo == 3 || questao.tipo == 4">
+                        <td>
+                            <table width="100%">
+                                <tr *ngFor="let alternativa of questao.alternativas; index as ai">
+                                    <td valign="middle" class="alternativa">
+                                        <mat-checkbox class="checkbox-full">
+                                            <span style="white-space: pre-line;">{{alternativa.texto}}</span>
+                                        </mat-checkbox>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- RESPOSTA PREENCHIMENTO -->
+                    <tr *ngIf="questao.tipo == 5">
+                        <td align="justfy">
+                            <span style="white-space: pre-line;" *ngFor="let parte of questao.partesPreencher">
+                                <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
+                                <select *ngIf="parte.tipo == 'select'" class="select-basico">
+
+                                </select>
+                            </span>
+                        </td>
+                    </tr>
+
+                    <!-- RESPOSTA VERDADEIRO OU FALSO - COM OU SEM JUSTIFICATIVA -->
+                    <tr *ngIf="questao.tipo == 6 || questao.tipo == 7">
+                        <td>
+                            <table width="100%">
+                                <tr *ngFor="let alternativa of questao.alternativas; index as ai">
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td width="5%" class="alternativa">
+                                                    <mat-button-toggle-group>
+                                                        <mat-button-toggle matTooltip="Marcar como verdadeiro"
+                                                            [value]="true">V
+                                                        </mat-button-toggle>
+                                                        <mat-button-toggle matTooltip="Marcar como falso"
+                                                            [value]="false">F
+                                                        </mat-button-toggle>
+                                                    </mat-button-toggle-group>
+                                                </td>
+                                                <td valign="middle" class="alternativa"
+                                                    style="cursor: default; white-space: pre-line;"
+                                                    [style.color]="alternativa.selecionada == null ? 'black' : (alternativa.selecionada == true ? 'green' : 'red')">
+                                                    {{alternativa.texto}}
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="alternativa.selecionada == false && questao.tipo == 7">
+                                                <td colspan="2">
+                                                    <div style="display: inline-flex; width: 100%;">
+                                                        <textarea placeholder="Digite aqui uma justificativa"
+                                                            class="input-basico"
+                                                            style="width: 100%; height: 100%; padding: 10px;"
+                                                            rows="2"></textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

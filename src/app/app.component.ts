@@ -27,35 +27,9 @@ export class AppComponent implements OnInit {
     private timeService: TimeService,
     private router: Router, private route: ActivatedRoute) {
 
-    this.router.events.subscribe((e) => {
-      if (e instanceof NavigationEnd || e instanceof RouterEvent) {
-        this.url = e.url;
-        if (e.url.includes('professor')) {
-          this.credencialService.loggedUser.acesso = "professor";
-        }
-        else if (e.url.includes('aluno')) {
-          this.credencialService.loggedUser.acesso = "aluno";
-        }
-      }
-    });
-
-
-
   }
 
   ngOnInit() {
-
-    // Recebe os dados do usuario no banco
-    if (this.credencialService.estouLogado()) {
-      this.usuarioService.get(localStorage.getItem(this.credencialService.KEY_LOGGED_USER_ID))
-        .then(usuario => {
-          usuario.acesso = this.credencialService.loggedUser.acesso;
-          this.credencialService.loggedUser = usuario;
-        }).catch(() => {
-          this.credencialService.fazerLogout();
-          return false;
-        });
-    }
 
   }
 

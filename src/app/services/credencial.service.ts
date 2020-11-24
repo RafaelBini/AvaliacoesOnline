@@ -127,6 +127,24 @@ export class CredencialService {
     return null;
   }
 
+  receberLoggedUser() {
+    return new Promise((resolve, reject) => {
+      if (this.estouLogado()) {
+        this.usuarioService.get(localStorage.getItem(this.KEY_LOGGED_USER_ID))
+          .then(usuario => {
+            usuario.acesso = this.loggedUser.acesso;
+            this.loggedUser = usuario;
+            resolve();
+          }).catch(error => {
+            this.fazerLogout();
+            reject(error);
+            return false;
+          });
+      }
+    })
+
+  }
+
   isLoginValido(usuario: Usuario) {
     return new Promise((resolve, reject) => {
       if (usuario.email == '' || usuario.senha == '') {
