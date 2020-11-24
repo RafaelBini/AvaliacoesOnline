@@ -36,6 +36,7 @@
     margin-top: 6px;
     border: 1px dashed var(--cor-primaria);
     position: relative;
+    
 }
 .grupo:hover .btn-excluir-grupo{
   opacity: 1;
@@ -84,8 +85,6 @@
   top: 5px;
   right: 30px;
   z-index: 1000;
-  line-height: 1.25 !important;
-  padding: 5px;
 
   color: var(--cor-primaria);
   border: 1px dashed var(--cor-primaria);
@@ -116,6 +115,7 @@
 
 .grupo-title{
   padding: 5px;
+  line-height: 2.5;
 }
 
 .countdown{

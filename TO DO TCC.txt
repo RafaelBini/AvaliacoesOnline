@@ -1,10 +1,5 @@
 
-
-
 ---------------------------------
-
-
-- Criar o criador de layouts
 
 - Exportar notas para PDF
 

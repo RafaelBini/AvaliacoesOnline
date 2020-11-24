@@ -35,11 +35,11 @@
 
     <!-- STATUS NA AVALIAÇÃO -->
 
-    <div class="status-container">
+    <div *ngIf="avaliacao.status > 0 && avaliacao.status < 3" class="status-container">
 
         <!-- FINALIZADO -->
 
-        <span *ngIf=" aluno.statusId> 2" class="descricao-status">
+        <span *ngIf=" aluno.statusId > 2" class="descricao-status">
             Finalizou {{comumService.getDataAmigavel(aluno.dtStatus[3])}}
         </span>
         <mat-icon *ngIf=" aluno.statusId> 2" matTooltip="O aluno sinalizou que finalizou a avaliação">
