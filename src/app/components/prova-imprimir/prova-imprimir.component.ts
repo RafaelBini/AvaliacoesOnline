@@ -1,3 +1,6 @@
+import { Questao } from 'src/app/models/questao';
+import { ComumService } from 'src/app/services/comum.service';
+import { Associacao } from './../../models/associacao';
 import { ProvaService } from './../../services/prova.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Avaliacao } from './../../models/avaliacao';
@@ -24,6 +27,7 @@ export class ProvaImprimirComponent implements OnInit {
     private credencialService: CredencialService,
     private avaliacaoService: AvaliacaoService,
     private provaService: ProvaService,
+    public comumService: ComumService,
   ) { }
 
   ngOnInit(): void {
@@ -41,7 +45,8 @@ export class ProvaImprimirComponent implements OnInit {
         console.log(avaliacao.provaGabarito);
         this.provaService.getProvaFromId(avaliacao.provaGabarito).then(prova => {
 
-          this.prova = this.provaService.getProvaFromGabarito(prova);
+          this.prova = prova;
+          // this.prova = this.provaService.getProvaFromGabarito(prova);
         });
 
 
@@ -59,6 +64,39 @@ export class ProvaImprimirComponent implements OnInit {
       || this.credencialService.getLoggedUserIdFromCookie() == avaliacao.professorId
       || this.credencialService.getLoggedUserIdFromCookie() == avaliacao.id;
 
+  }
+
+  associacoesOrdenadas(associacoes: Associacao[]) {
+    return associacoes.sort((a, b) => a.opcaoSelecionada > b.opcaoSelecionada ? 1 : -1)
+  }
+
+  getMaiorAssociacaoLength(associacoes: Associacao[]): number {
+    var maiorLength = 0;
+    for (let associacao of associacoes) {
+      if (associacao.opcaoSelecionada.length > maiorLength)
+        maiorLength = associacao.opcaoSelecionada.length;
+    }
+    return maiorLength;
+  }
+
+  opcoesPreencherOrdenadas(questao: Questao) {
+    return questao.opcoesParaPreencher.sort((a, b) => a.opcaoSelecionada > b.opcaoSelecionada ? 1 : -1)
+  }
+
+  getMaiorOpcaoPreencherLength(questao: Questao): number {
+    var maiorLength = 0;
+    for (let opcaoPreencher of questao.opcoesParaPreencher) {
+      if (opcaoPreencher.opcaoSelecionada.length > maiorLength)
+        maiorLength = opcaoPreencher.opcaoSelecionada.length;
+    }
+    return maiorLength;
+  }
+
+  getArrayFromLength(length: number): number[] {
+    var vetor = [];
+    for (var i = 1; i <= length; i++)
+      vetor.push(i);
+    return vetor;
   }
 
 }

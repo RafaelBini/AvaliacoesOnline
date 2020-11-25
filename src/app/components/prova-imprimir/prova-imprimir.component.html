@@ -3,7 +3,28 @@
     <div *ngIf="prova" class="container" id="imprimivel">
 
         <div class="cabecalho">
-            <app-avaliacao-aluno-cabecalho [avaliacao]="avaliacao"></app-avaliacao-aluno-cabecalho>
+            <span class="titulo">{{avaliacao.titulo}}</span>
+            <br />
+            <div style="text-align: justify;">
+                {{avaliacao.descricao}}
+            </div>
+            <br />
+            <table style="width: 100%;">
+                <tr>
+                    <td align="left"><b>Nome</b>: _________________________________________________________________
+                    </td>
+                    <td align="right"><b>Data</b>: ____ / ____ / _________</td>
+                </tr>
+                <tr>
+
+                    <td colspan=2>
+                        <br />
+                        <b>Professor</b>: {{avaliacao.professorNome}}
+                    </td>
+                </tr>
+            </table>
+
+
         </div>
 
         <div style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
@@ -46,12 +67,28 @@
                     <!-- RESPOSTA ASSOCIATIVA -->
                     <tr *ngIf="questao.tipo == 0">
                         <td>
-                            <table width="100%">
-                                <tr *ngFor="let associacao of questao.associacoes; index as ai">
-                                    <td width="20%" style="cursor:default;">
+                            <table>
+                                <tr>
+                                    <td colspan="2">
+                                        Opções:
+                                        <span
+                                            *ngFor="let associacao of associacoesOrdenadas(questao.associacoes); index as associacaoIndex">
+                                            {{associacao.opcaoSelecionada}}
+                                            <span *ngIf="associacaoIndex < (questao.associacoes.length -1)"> - </span>
+                                        </span>
 
                                     </td>
-                                    <td width="80%" class="alternativa" style="cursor:default;">
+                                </tr>
+                                <tr *ngFor="let associacao of questao.associacoes; index as ai">
+                                    <td style="cursor:default; width: fit-content">
+                                        <u>
+                                            <span
+                                                *ngFor="let caractere of getArrayFromLength(getMaiorAssociacaoLength(questao.associacoes))">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                            </span>
+                                        </u>
+                                    </td>
+                                    <td class="alternativa" style="cursor:default;">
                                         <span style="white-space: pre-line;">{{associacao.texto}}</span>
                                     </td>
                                 </tr>
@@ -63,12 +100,13 @@
                     <!-- RESPOSTA DISSERTATIVA -->
                     <tr *ngIf="questao.tipo == 1">
                         <td align="right">
-                            <div style="position: relative;">
-                                <textarea #respostaAlunoTextarea maxlength="2500" rows="4" class="input-basico"
-                                    placeholder="Escreva aqui a resposta"
-                                    style="width: 98%; margin: auto; padding: 5px; padding-top: 14px; "></textarea>
 
-                            </div>
+                            <span class="linha-dissertativa"></span>
+                            <span class="linha-dissertativa"></span>
+                            <span class="linha-dissertativa"></span>
+                            <span class="linha-dissertativa"></span>
+                            <span class="linha-dissertativa"></span>
+                            <span class="linha-dissertativa"></span>
 
                             <div>
 
@@ -94,6 +132,11 @@
                     <!-- RESPOSTA ENVIO DE ARQUIVO -->
                     <tr *ngIf="questao.tipo == 2">
                         <td>
+                            <div>
+                                Faça a entrega do(s) arquivo(s) acessando:
+                                <u>http://{{comumService.getHostName() + '/' + avaliacao.id}}</u>
+
+                            </div>
                             <div style="width: 90%; margin: auto; color: gray;">
                                 <br />
                                 Extensões permitidas: {{questao.extensoes.join('; ')}}
@@ -111,12 +154,17 @@
                     <!-- RESPOSTA MULTIPLA ESCOLHA - MULTIPLA OU ÚNICA RESPOSTA -->
                     <tr *ngIf="questao.tipo == 3 || questao.tipo == 4">
                         <td>
-                            <table width="100%">
+                            <table>
                                 <tr *ngFor="let alternativa of questao.alternativas; index as ai">
                                     <td valign="middle" class="alternativa">
-                                        <mat-checkbox class="checkbox-full">
-                                            <span style="white-space: pre-line;">{{alternativa.texto}}</span>
-                                        </mat-checkbox>
+
+                                        [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
+
+
+                                    </td>
+                                    <td>
+                                        <span style="white-space: pre-line;">{{alternativa.texto}}</span>
+
                                     </td>
                                 </tr>
                             </table>
@@ -125,12 +173,24 @@
 
                     <!-- RESPOSTA PREENCHIMENTO -->
                     <tr *ngIf="questao.tipo == 5">
+
                         <td align="justfy">
+                            Opções:
+                            <span
+                                *ngFor="let opcaoPreencher of opcoesPreencherOrdenadas(questao); index as opcaoPreencherIndex">
+                                {{opcaoPreencher.opcaoSelecionada}}
+                                <span *ngIf="opcaoPreencherIndex < (questao.opcoesParaPreencher.length -1)"> - </span>
+                            </span>
+                            <br /><br />
                             <span style="white-space: pre-line;" *ngFor="let parte of questao.partesPreencher">
                                 <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
-                                <select *ngIf="parte.tipo == 'select'" class="select-basico">
-
-                                </select>
+                                <u *ngIf="parte.tipo == 'select'">
+                                    <span
+                                        *ngFor="let caractere of getArrayFromLength(getMaiorOpcaoPreencherLength(questao))">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </span>
+                                </u>
+                                &nbsp;
                             </span>
                         </td>
                     </tr>
@@ -144,29 +204,20 @@
                                         <table>
                                             <tr>
                                                 <td width="5%" class="alternativa">
-                                                    <mat-button-toggle-group>
-                                                        <mat-button-toggle matTooltip="Marcar como verdadeiro"
-                                                            [value]="true">V
-                                                        </mat-button-toggle>
-                                                        <mat-button-toggle matTooltip="Marcar como falso"
-                                                            [value]="false">F
-                                                        </mat-button-toggle>
-                                                    </mat-button-toggle-group>
+                                                    [&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>&nbsp;]
                                                 </td>
                                                 <td valign="middle" class="alternativa"
-                                                    style="cursor: default; white-space: pre-line;"
-                                                    [style.color]="alternativa.selecionada == null ? 'black' : (alternativa.selecionada == true ? 'green' : 'red')">
-                                                    {{alternativa.texto}}
-                                                </td>
+                                                    style="cursor: default; white-space: pre-line;">
+                                                    {{alternativa.texto}}</td>
                                             </tr>
-                                            <tr *ngIf="alternativa.selecionada == false && questao.tipo == 7">
+                                            <tr *ngIf="questao.tipo == 7">
                                                 <td colspan="2">
-                                                    <div style="display: inline-flex; width: 100%;">
-                                                        <textarea placeholder="Digite aqui uma justificativa"
-                                                            class="input-basico"
-                                                            style="width: 100%; height: 100%; padding: 10px;"
-                                                            rows="2"></textarea>
-                                                    </div>
+
+                                                    <span class="linha-dissertativa">Justificativa:</span>
+                                                    <span class="linha-dissertativa"></span>
+                                                    <span class="linha-dissertativa"></span>
+                                                    <span class="linha-dissertativa"></span>
+
                                                 </td>
                                             </tr>
                                         </table>

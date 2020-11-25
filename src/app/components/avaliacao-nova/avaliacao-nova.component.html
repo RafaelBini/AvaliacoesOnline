@@ -370,7 +370,8 @@
                 Ver como aluno
             </button>
 
-            <a mat-menu-item target="_blank" [routerLink]="'/imprimir/'+ credencialService.getLoggedUserIdFromCookie()">
+            <a mat-menu-item target="_blank"
+                [routerLink]="'/imprimir/'+ (isEditando ? avaliacao.id : credencialService.getLoggedUserIdFromCookie())">
                 <mat-icon>print</mat-icon>
                 Imprimir
             </a>
