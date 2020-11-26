@@ -1,3 +1,4 @@
+import { FileService } from 'src/app/services/file.service';
 import { Avaliacao } from './../../models/avaliacao';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ComumService } from 'src/app/services/comum.service';
@@ -12,7 +13,7 @@ import { ProvaService } from 'src/app/services/prova.service';
 export class ExportarComponent implements OnInit {
 
   public colunasOpcoes = ["Email", "Nome", "Tag ID", "ID Externo", "Nota", "Valor", "Presença"];
-
+  public dados: string[][] = [];
   public layout: Layout = {
     colunas: [],
     temCabecalho: true,
@@ -22,6 +23,7 @@ export class ExportarComponent implements OnInit {
   constructor(
     private comumService: ComumService,
     private provaService: ProvaService,
+    private fileService: FileService,
     @Inject(MAT_DIALOG_DATA) public avaliacao: Avaliacao,
   ) { }
 
@@ -38,10 +40,13 @@ export class ExportarComponent implements OnInit {
       this.layout.colunas = this.colunasOpcoes;
     }
 
+    this.receberDados();
+
   }
 
   onColunasAlteradas(layout: Layout) {
     this.layout.colunas = layout.colunas;
+    this.receberDados();
   }
 
   setCookiePreferencias() {
@@ -61,10 +66,20 @@ export class ExportarComponent implements OnInit {
 
     this.setCookiePreferencias();
 
-    var notas = []
+    this.receberDados();
+
+    this.comumService.downloadCSV(this.dados, this.avaliacao.titulo);
+  }
+
+  baixarPDF() {
+    this.fileService.makePDF('page', this.avaliacao.titulo, 'download');
+  }
+
+  receberDados() {
+    this.dados = [];
 
     if (this.layout.temCabecalho) {
-      notas.push(this.layout.colunas);
+      this.dados.push(this.layout.colunas);
     }
 
 
@@ -105,16 +120,14 @@ export class ExportarComponent implements OnInit {
               break;
           }
         }
-
-        notas.push(alunoInfo);
+        this.dados.push(alunoInfo);
 
       }
-
-
     }
 
-    this.comumService.downloadCSV(notas, this.avaliacao.titulo);
+    console.log(this.dados);
   }
+
 
 }
 

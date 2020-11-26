@@ -1,3 +1,4 @@
+import { FileService } from 'src/app/services/file.service';
 import { Questao } from 'src/app/models/questao';
 import { ComumService } from 'src/app/services/comum.service';
 import { Associacao } from './../../models/associacao';
@@ -9,8 +10,7 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/co
 import { ActivatedRoute, Router } from '@angular/router';
 import { CredencialService } from 'src/app/services/credencial.service';
 import { Prova } from 'src/app/models/prova';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+
 
 @Component({
   selector: 'app-prova-imprimir',
@@ -29,6 +29,7 @@ export class ProvaImprimirComponent implements OnInit {
     private credencialService: CredencialService,
     private avaliacaoService: AvaliacaoService,
     private provaService: ProvaService,
+    public fileService: FileService,
     public comumService: ComumService,
     private renderer: Renderer2,
   ) { }
@@ -146,47 +147,6 @@ export class ProvaImprimirComponent implements OnInit {
     return vetor;
   }
 
-  async makePDF(action: 'download' | 'print') {
-    let pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
 
-    for (var i = 0; i < document.getElementsByClassName('page').length; i++) {
-
-
-      var data = document.getElementsByClassName('page')[i] as HTMLElement;
-      var canvas = await html2canvas(data);
-      // Few necessary setting options  
-      var imgWidth = 208;
-      var pageHeight = 295;
-      var imgHeight = canvas.height * imgWidth / canvas.width;
-      var heightLeft = imgHeight;
-
-      const contentDataURL = canvas.toDataURL('image/png')
-
-      var position = 0;
-
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-
-
-
-      if (pdf.getNumberOfPages() >= document.getElementsByClassName('page').length) {
-
-        pdf.autoPrint();
-        if (action == 'download')
-          pdf.save(`${this.avaliacao.titulo}.pdf`); // Generated PDF  
-        else if (action == 'print')
-          window.open(pdf.output('bloburl').toString(), '_blank')
-
-      }
-      else
-        pdf.addPage('a4', 'p');
-
-
-
-
-
-    }
-
-
-  }
 
 }

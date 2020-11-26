@@ -3,8 +3,6 @@
 
 - Exportar notas para PDF
 
-- Exportar avaliacao para PDF: https://www.c-sharpcorner.com/article/convert-html-to-pdf-using-angular-6/
-
 - Fazer o máximo da documentação possivel 
 
 - Fazer tutoriais (por funcionalidades)

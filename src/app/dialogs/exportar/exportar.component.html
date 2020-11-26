@@ -1,26 +1,76 @@
-<div class="titulo">
-    Selecione as colunas para exportar:
-</div>
+<div style="position: relative;">
 
-<div class="layout-maker-conatiner">
-    <app-layout-maker [colunasOpcoes]="colunasOpcoes" [colunasSelecionadas]="layout.colunas"
-        (colunasAlteradas)="onColunasAlteradas($event)">
-    </app-layout-maker>
-</div>
+    <div class="titulo">
+        Exportar Avaliação
+    </div>
 
-<div class="checkbox-container">
-    <mat-checkbox [(ngModel)]="layout.temCabecalho">
-        Incluir cabeçalho
-    </mat-checkbox>
-</div>
+    <mat-horizontal-stepper>
+        <mat-step [editable]="true">
+            <ng-template matStepLabel>Selecionar Colunas</ng-template>
+            <div class="subtitulo">
+                Selecione as colunas para exportar:
+            </div>
 
-<div class="titulo">
-    Escolha uma opção para exportar:
-</div>
+            <div class="layout-maker-conatiner">
+                <app-layout-maker [colunasOpcoes]="colunasOpcoes" [colunasSelecionadas]="layout.colunas"
+                    (colunasAlteradas)="onColunasAlteradas($event)">
+                </app-layout-maker>
+            </div>
 
-<div class="container">
-    <button mat-raised-button class="btn" (click)="baixarCSV()">
-        <mat-icon>get_app</mat-icon>
-        CSV
-    </button>
+            <div class="checkbox-container">
+                <mat-checkbox [(ngModel)]="layout.temCabecalho">
+                    Incluir cabeçalho
+                </mat-checkbox>
+            </div>
+
+            <div class="btn-container">
+
+                <button class="btn-next" mat-dialog-close style="background-color: gray;" mat-button matStepperNext>
+                    Cancelar
+                </button>
+                <button class="btn-next" mat-button matStepperNext>
+                    Continuar
+                </button>
+            </div>
+        </mat-step>
+        <mat-step editable="true">
+            <ng-template matStepLabel>Baixar</ng-template>
+
+
+            <div class="dados-table-container page">
+
+                <table class="dados-table">
+                    <tr *ngFor="let linha of dados; index as linhaIndex">
+                        <td [class.cabecalho]="linhaIndex == 0 && layout.temCabecalho" *ngFor="let coluna of linha">
+                            {{coluna}}
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="subtitulo">
+                Escolha uma opção para exportar:
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-next" mat-dialog-close style="background-color: gray;" mat-button matStepperNext>
+                    Cancelar
+                </button>
+                <button mat-raised-button class="btn-next" matStepperNext (click)="baixarPDF()"
+                    matTooltip="Baixar arquivo PDF">
+                    <mat-icon>get_app</mat-icon>
+                    PDF
+                </button>
+                <button mat-raised-button class="btn-next" matStepperNext (click)="baixarCSV()"
+                    matTooltip="Baixar arquivo CSV">
+                    <mat-icon>get_app</mat-icon>
+                    CSV
+                </button>
+            </div>
+
+        </mat-step>
+
+    </mat-horizontal-stepper>
+
 </div>

@@ -6,6 +6,14 @@
     padding-bottom: 20px;
 }
 
+.subtitulo{
+    display: block;
+    text-align: center;
+    font-size: 15px;
+    height: fit-content;
+    padding-bottom: 20px;
+}
+
 .container{
     display: flex;
     align-items: center;
@@ -20,14 +28,64 @@
 .layout-maker-conatiner{
     width: 80%;
     margin: auto;
-    height: 40%;
+    margin-bottom: 30px;
+    height: 210px;
     overflow: auto;
     border: 1px dashed gray;
     border-radius: 3px;
     padding: 7px;
 }
 
+
+
 .checkbox-container{
     padding: 6px;
     margin-left: 10%;
 }
+
+.btn-next{
+    background-color: var(--cor-primaria);
+    color: white;
+    padding: 3px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+
+
+.btn-container{
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 50%;
+    padding-top: 20px;
+}
+
+.dados-table-container{
+    width: 80%;
+    margin: auto;
+    margin-bottom: 30px;
+    height: 210px;
+    overflow: auto;
+    padding: 30px;
+}
+
+.dados-table{
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.dados-table td{
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.dados-table .cabecalho{
+    background-color: var(--cor-secundaria);
+    color: white;
+    font-weight: bold;
+}
+

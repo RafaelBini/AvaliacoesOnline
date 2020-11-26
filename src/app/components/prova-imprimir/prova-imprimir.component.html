@@ -227,10 +227,12 @@
     </div>
 </div>
 
-<button class="btn-imprimir" mat-fab matTooltip="Baixar PDF" (click)="makePDF('download')">
+<button class="btn-imprimir" mat-fab matTooltip="Baixar PDF"
+    (click)="fileService.makePDF('page',avaliacao.titulo,'download')">
     <mat-icon>get_app</mat-icon>
 </button>
 
-<button class="btn-imprimir" style="top: 150px" mat-fab matTooltip="Imprimir" (click)="makePDF('print')">
+<button class="btn-imprimir" style="top: 150px" mat-fab matTooltip="Imprimir"
+    (click)="fileService.makePDF('page',avaliacao.titulo,'print')">
     <mat-icon>print</mat-icon>
 </button>
