@@ -123,13 +123,15 @@
     margin: auto;
 }
 
-.container{
-    width: 80%;
+.page{
+    width: 786px;
+    height: 1114px;
     margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
     background-color: white;
-    padding: 15;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 50px;
+    box-sizing: border-box;
 }
 
 .body{
@@ -154,5 +156,13 @@
     font-weight: bold; 
     margin: auto;
     display: block;
+}
+
+.btn-imprimir{
+  position: fixed; 
+  top: 80px; 
+  right: 40px; 
+  background-color: white;
+  color: var(--cor-primaria);
 }
   /* --------------------- */

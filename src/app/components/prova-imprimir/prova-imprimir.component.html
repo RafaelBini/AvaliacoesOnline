@@ -1,6 +1,6 @@
-<div class="body">
+<div #body class="body">
 
-    <div *ngIf="prova" class="container" id="imprimivel">
+    <div *ngIf="prova" class="page" id="imprimivel">
 
         <div class="cabecalho">
             <span class="titulo">{{avaliacao.titulo}}</span>
@@ -27,210 +27,210 @@
 
         </div>
 
-        <div style="display: flex; flex-wrap: wrap; width: 100%; margin: auto;">
-
-            <div class="questao" *ngFor="let questao of prova.questoes; index as qi;">
-
-                <table style="width: 100%;">
-
-                    <!-- Imagens -->
-                    <tr *ngIf="questao.imagens.length > 0">
-                        <td>
-
-                            <app-arquivo-imagem [editando]="false" [file]="file" [questao]="questao"
-                                [imagemIndex]="imagemIndex" *ngFor="let file of questao.imagens; index as imagemIndex">
-
-                            </app-arquivo-imagem>
-
-                        </td>
-                    </tr>
-
-                    <!-- PERGUNTA -->
-                    <tr>
-                        <td style="padding-bottom: 20px; font-size: 15px; white-space: pre-line;">
-                            <b>Questão {{qi + 1}}</b>/{{prova.questoes.length}}. {{questao.pergunta}}
-                        </td>
-                    </tr>
-
-                    <!-- Anexos -->
-                    <tr *ngIf="questao.anexos.length > 0">
-                        <td>
-
-                            <app-arquivo-anexo [editando]="false" [file]="file" [questao]="questao"
-                                [anexoIndex]="anexoIndex" *ngFor="let file of questao.anexos; index as anexoIndex">
-
-                            </app-arquivo-anexo>
-
-                        </td>
-                    </tr>
-
-                    <!-- RESPOSTA ASSOCIATIVA -->
-                    <tr *ngIf="questao.tipo == 0">
-                        <td>
-                            <table>
-                                <tr>
-                                    <td colspan="2">
-                                        Opções:
-                                        <span
-                                            *ngFor="let associacao of associacoesOrdenadas(questao.associacoes); index as associacaoIndex">
-                                            {{associacao.opcaoSelecionada}}
-                                            <span *ngIf="associacaoIndex < (questao.associacoes.length -1)"> - </span>
-                                        </span>
-
-                                    </td>
-                                </tr>
-                                <tr *ngFor="let associacao of questao.associacoes; index as ai">
-                                    <td style="cursor:default; width: fit-content">
-                                        <u>
-                                            <span
-                                                *ngFor="let caractere of getArrayFromLength(getMaiorAssociacaoLength(questao.associacoes))">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                            </span>
-                                        </u>
-                                    </td>
-                                    <td class="alternativa" style="cursor:default;">
-                                        <span style="white-space: pre-line;">{{associacao.texto}}</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-
-                    </tr>
-
-                    <!-- RESPOSTA DISSERTATIVA -->
-                    <tr *ngIf="questao.tipo == 1">
-                        <td align="right">
-
-                            <span class="linha-dissertativa"></span>
-                            <span class="linha-dissertativa"></span>
-                            <span class="linha-dissertativa"></span>
-                            <span class="linha-dissertativa"></span>
-                            <span class="linha-dissertativa"></span>
-                            <span class="linha-dissertativa"></span>
-
-                            <div>
-
-                                <app-arquivo-anexo [editando]="false" tipo="arquivosEntregues" [file]="file"
-                                    [questao]="questao" [anexoIndex]="anexoIndex"
-                                    *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
-
-                                </app-arquivo-anexo>
-
-                                <app-arquivo-imagem [editando]="false" tipo="imagensEntregues" [file]="file"
-                                    [questao]="questao" [imagemIndex]="imagemIndex"
-                                    *ngFor="let file of questao.imagensEntregues; index as imagemIndex">
-
-                                </app-arquivo-imagem>
-
-                            </div>
 
 
-                            <br />
-                        </td>
-                    </tr>
+        <div class="questao" *ngFor="let questao of prova.questoes; index as qi;">
 
-                    <!-- RESPOSTA ENVIO DE ARQUIVO -->
-                    <tr *ngIf="questao.tipo == 2">
-                        <td>
-                            <div>
-                                Faça a entrega do(s) arquivo(s) acessando:
-                                <u>http://{{comumService.getHostName() + '/' + avaliacao.id}}</u>
+            <table style="width: 100%;">
 
-                            </div>
-                            <div style="width: 90%; margin: auto; color: gray;">
-                                <br />
-                                Extensões permitidas: {{questao.extensoes.join('; ')}}
-                                <br />
-                                Tamanho total máximo: 60 MB
-                            </div>
-                            <app-arquivo-anexo [editando]="false" [file]="file" [questao]="questao"
-                                [anexoIndex]="anexoIndex"
+                <!-- Imagens -->
+                <tr *ngIf="questao.imagens.length > 0">
+                    <td>
+
+                        <app-arquivo-imagem [editando]="false" [file]="file" [questao]="questao"
+                            [imagemIndex]="imagemIndex" *ngFor="let file of questao.imagens; index as imagemIndex">
+
+                        </app-arquivo-imagem>
+
+                    </td>
+                </tr>
+
+                <!-- PERGUNTA -->
+                <tr>
+                    <td style="padding-bottom: 20px; font-size: 15px; white-space: pre-line;">
+                        <b>Questão {{qi + 1}}</b>/{{prova.questoes.length}}. {{questao.pergunta}}
+                    </td>
+                </tr>
+
+                <!-- Anexos -->
+                <tr *ngIf="questao.anexos.length > 0">
+                    <td>
+
+                        <app-arquivo-anexo [editando]="false" [file]="file" [questao]="questao"
+                            [anexoIndex]="anexoIndex" *ngFor="let file of questao.anexos; index as anexoIndex">
+
+                        </app-arquivo-anexo>
+
+                    </td>
+                </tr>
+
+                <!-- RESPOSTA ASSOCIATIVA -->
+                <tr *ngIf="questao.tipo == 0">
+                    <td>
+                        <table>
+                            <tr>
+                                <td colspan="2">
+                                    Opções:
+                                    <span
+                                        *ngFor="let associacao of associacoesOrdenadas(questao.associacoes); index as associacaoIndex">
+                                        {{associacao.opcaoSelecionada}}
+                                        <span *ngIf="associacaoIndex < (questao.associacoes.length -1)"> - </span>
+                                    </span>
+
+                                </td>
+                            </tr>
+                            <tr *ngFor="let associacao of questao.associacoes; index as ai">
+                                <td style="cursor:default; width: fit-content">
+
+                                    <span
+                                        *ngFor="let caractere of getArrayFromLength(getMaiorAssociacaoLength(questao.associacoes))">__</span>
+
+                                </td>
+                                <td class="alternativa" style="cursor:default;">
+                                    <span style="white-space: pre-line;">{{associacao.texto}}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
+                </tr>
+
+                <!-- RESPOSTA DISSERTATIVA -->
+                <tr *ngIf="questao.tipo == 1">
+                    <td align="right">
+
+                        <span class="linha-dissertativa"></span>
+                        <span class="linha-dissertativa"></span>
+                        <span class="linha-dissertativa"></span>
+
+                        <div>
+
+                            <app-arquivo-anexo [editando]="false" tipo="arquivosEntregues" [file]="file"
+                                [questao]="questao" [anexoIndex]="anexoIndex"
                                 *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
 
                             </app-arquivo-anexo>
-                        </td>
-                    </tr>
 
-                    <!-- RESPOSTA MULTIPLA ESCOLHA - MULTIPLA OU ÚNICA RESPOSTA -->
-                    <tr *ngIf="questao.tipo == 3 || questao.tipo == 4">
-                        <td>
-                            <table>
-                                <tr *ngFor="let alternativa of questao.alternativas; index as ai">
-                                    <td valign="middle" class="alternativa">
+                            <app-arquivo-imagem [editando]="false" tipo="imagensEntregues" [file]="file"
+                                [questao]="questao" [imagemIndex]="imagemIndex"
+                                *ngFor="let file of questao.imagensEntregues; index as imagemIndex">
 
-                                        [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
+                            </app-arquivo-imagem>
+
+                        </div>
 
 
-                                    </td>
-                                    <td>
-                                        <span style="white-space: pre-line;">{{alternativa.texto}}</span>
+                        <br />
+                    </td>
+                </tr>
 
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+                <!-- RESPOSTA ENVIO DE ARQUIVO -->
+                <tr *ngIf="questao.tipo == 2">
+                    <td>
+                        <div>
+                            Faça a entrega do(s) arquivo(s) acessando:
+                            <u>http://{{comumService.getHostName() + '/' + avaliacao.id}}</u>
 
-                    <!-- RESPOSTA PREENCHIMENTO -->
-                    <tr *ngIf="questao.tipo == 5">
+                        </div>
+                        <div style="width: 90%; margin: auto; color: gray;">
+                            <br />
+                            Extensões permitidas: {{questao.extensoes.join('; ')}}
+                            <br />
+                            Tamanho total máximo: 60 MB
+                        </div>
+                        <app-arquivo-anexo [editando]="false" [file]="file" [questao]="questao"
+                            [anexoIndex]="anexoIndex"
+                            *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
 
-                        <td align="justfy">
-                            Opções:
-                            <span
-                                *ngFor="let opcaoPreencher of opcoesPreencherOrdenadas(questao); index as opcaoPreencherIndex">
-                                {{opcaoPreencher.opcaoSelecionada}}
-                                <span *ngIf="opcaoPreencherIndex < (questao.opcoesParaPreencher.length -1)"> - </span>
+                        </app-arquivo-anexo>
+                    </td>
+                </tr>
+
+                <!-- RESPOSTA MULTIPLA ESCOLHA - MULTIPLA OU ÚNICA RESPOSTA -->
+                <tr *ngIf="questao.tipo == 3 || questao.tipo == 4">
+                    <td>
+                        <table>
+                            <tr *ngFor="let alternativa of questao.alternativas; index as ai">
+                                <td valign="middle" class="alternativa">
+
+                                    [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
+
+
+                                </td>
+                                <td>
+                                    <span style="white-space: pre-line;">{{alternativa.texto}}</span>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- RESPOSTA PREENCHIMENTO -->
+                <tr *ngIf="questao.tipo == 5">
+
+                    <td align="justfy">
+                        Opções:
+                        <span
+                            *ngFor="let opcaoPreencher of opcoesPreencherOrdenadas(questao); index as opcaoPreencherIndex">
+                            {{opcaoPreencher.opcaoSelecionada}}
+                            <span *ngIf="opcaoPreencherIndex < (questao.opcoesParaPreencher.length -1)"> - </span>
+                        </span>
+                        <br /><br />
+                        <span style="white-space: pre-line;" *ngFor="let parte of questao.partesPreencher">
+                            <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
+                            <span *ngIf="parte.tipo == 'select'">
+                                <span
+                                    *ngFor="let caractere of getArrayFromLength(getMaiorOpcaoPreencherLength(questao))">___</span>
                             </span>
-                            <br /><br />
-                            <span style="white-space: pre-line;" *ngFor="let parte of questao.partesPreencher">
-                                <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
-                                <u *ngIf="parte.tipo == 'select'">
-                                    <span
-                                        *ngFor="let caractere of getArrayFromLength(getMaiorOpcaoPreencherLength(questao))">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
-                                    </span>
-                                </u>
-                                &nbsp;
-                            </span>
-                        </td>
-                    </tr>
+                            &nbsp;
+                        </span>
+                    </td>
+                </tr>
 
-                    <!-- RESPOSTA VERDADEIRO OU FALSO - COM OU SEM JUSTIFICATIVA -->
-                    <tr *ngIf="questao.tipo == 6 || questao.tipo == 7">
-                        <td>
-                            <table width="100%">
-                                <tr *ngFor="let alternativa of questao.alternativas; index as ai">
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <td width="5%" class="alternativa">
-                                                    [&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>&nbsp;]
-                                                </td>
-                                                <td valign="middle" class="alternativa"
-                                                    style="cursor: default; white-space: pre-line;">
-                                                    {{alternativa.texto}}</td>
-                                            </tr>
-                                            <tr *ngIf="questao.tipo == 7">
-                                                <td colspan="2">
+                <!-- RESPOSTA VERDADEIRO OU FALSO - COM OU SEM JUSTIFICATIVA -->
+                <tr *ngIf="questao.tipo == 6 || questao.tipo == 7">
+                    <td>
+                        <table width="100%">
+                            <tr *ngFor="let alternativa of questao.alternativas; index as ai">
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td width="5%" class="alternativa">
+                                                [&nbsp;____&nbsp;]
+                                            </td>
+                                            <td valign="middle" class="alternativa"
+                                                style="cursor: default; white-space: pre-line;">
+                                                {{alternativa.texto}}</td>
+                                        </tr>
+                                        <tr *ngIf="questao.tipo == 7">
+                                            <td colspan="2">
 
-                                                    <span class="linha-dissertativa">Justificativa:</span>
-                                                    <span class="linha-dissertativa"></span>
-                                                    <span class="linha-dissertativa"></span>
-                                                    <span class="linha-dissertativa"></span>
+                                                <span class="linha-dissertativa">Justificativa:</span>
+                                                <span class="linha-dissertativa"></span>
+                                                <span class="linha-dissertativa"></span>
 
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
 
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-                </table>
-            </div>
+            </table>
         </div>
+
 
     </div>
 </div>
+
+<button class="btn-imprimir" mat-fab matTooltip="Baixar PDF" (click)="makePDF('download')">
+    <mat-icon>get_app</mat-icon>
+</button>
+
+<button class="btn-imprimir" style="top: 150px" mat-fab matTooltip="Imprimir" (click)="makePDF('print')">
+    <mat-icon>print</mat-icon>
+</button>

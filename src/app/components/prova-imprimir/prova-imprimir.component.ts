@@ -5,10 +5,12 @@ import { ProvaService } from './../../services/prova.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Avaliacao } from './../../models/avaliacao';
 import { AvaliacaoService } from './../../services/avaliacao.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CredencialService } from 'src/app/services/credencial.service';
 import { Prova } from 'src/app/models/prova';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-prova-imprimir',
@@ -19,7 +21,7 @@ export class ProvaImprimirComponent implements OnInit {
 
   public prova: Prova;
   public avaliacao: Avaliacao;
-
+  @ViewChild('body') body: ElementRef;
   constructor(
     public route: ActivatedRoute,
     private router: Router,
@@ -28,6 +30,7 @@ export class ProvaImprimirComponent implements OnInit {
     private avaliacaoService: AvaliacaoService,
     private provaService: ProvaService,
     public comumService: ComumService,
+    private renderer: Renderer2,
   ) { }
 
   ngOnInit(): void {
@@ -46,7 +49,11 @@ export class ProvaImprimirComponent implements OnInit {
         this.provaService.getProvaFromId(avaliacao.provaGabarito).then(prova => {
 
           this.prova = prova;
-          // this.prova = this.provaService.getProvaFromGabarito(prova);
+
+          setTimeout(() => {
+            this.alocarPages();
+          });
+
         });
 
 
@@ -63,6 +70,46 @@ export class ProvaImprimirComponent implements OnInit {
     return avaliacao.alunosIds.includes(this.credencialService.getLoggedUserIdFromCookie())
       || this.credencialService.getLoggedUserIdFromCookie() == avaliacao.professorId
       || this.credencialService.getLoggedUserIdFromCookie() == avaliacao.id;
+
+  }
+
+  alocarPages() {
+    const TAMANHO_MAXIMO_PAGE = 1014; //1114;
+
+
+    // novoBody.innerHTML = "";
+
+    var pages: Array<HTMLElement> = [];
+    pages.push(this.renderer.createElement('div'));
+    pages[0].setAttribute('class', 'page');
+
+
+    var tamanhoAcumulado = 0;
+
+    while (this.body.nativeElement.children[0].children.length > 0) {
+      try {
+        var child = this.body.nativeElement.children[0].children[0];
+        tamanhoAcumulado += child.getBoundingClientRect().height;
+
+        if (tamanhoAcumulado < TAMANHO_MAXIMO_PAGE) {
+          this.renderer.appendChild(pages[pages.length - 1], child);
+        }
+        else {
+          this.renderer.appendChild(this.body.nativeElement, pages[pages.length - 1]);
+          pages.push(this.renderer.createElement('div'));
+          pages[pages.length - 1].setAttribute('class', 'page');
+
+          tamanhoAcumulado = 0;
+        }
+      }
+
+      catch (reason) { }
+      console.log(tamanhoAcumulado)
+    };
+    console.log(this.body.nativeElement.children);
+    this.renderer.appendChild(this.body.nativeElement, pages[pages.length - 1]);
+    this.renderer.removeChild(this.body.nativeElement, this.body.nativeElement.children[0]);
+
 
   }
 
@@ -97,6 +144,49 @@ export class ProvaImprimirComponent implements OnInit {
     for (var i = 1; i <= length; i++)
       vetor.push(i);
     return vetor;
+  }
+
+  async makePDF(action: 'download' | 'print') {
+    let pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
+
+    for (var i = 0; i < document.getElementsByClassName('page').length; i++) {
+
+
+      var data = document.getElementsByClassName('page')[i] as HTMLElement;
+      var canvas = await html2canvas(data);
+      // Few necessary setting options  
+      var imgWidth = 208;
+      var pageHeight = 295;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      var heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL('image/png')
+
+      var position = 0;
+
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
+
+
+
+      if (pdf.getNumberOfPages() >= document.getElementsByClassName('page').length) {
+
+        pdf.autoPrint();
+        if (action == 'download')
+          pdf.save(`${this.avaliacao.titulo}.pdf`); // Generated PDF  
+        else if (action == 'print')
+          window.open(pdf.output('bloburl').toString(), '_blank')
+
+      }
+      else
+        pdf.addPage('a4', 'p');
+
+
+
+
+
+    }
+
+
   }
 
 }
