@@ -1,3 +1,4 @@
+import { EstatisticasAvaliacaoComponent } from './../../dialogs/estatisticas-avaliacao/estatisticas-avaliacao.component';
 import { CronometroComponent } from './../cronometro/cronometro.component';
 import { DetalhesProvaComponent } from './../../dialogs/detalhes-prova/detalhes-prova.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -463,7 +464,13 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   }
 
   // DURANTE AVALIAÇÃO
-
+  abrirEstatisticas() {
+    this.dialog.open(EstatisticasAvaliacaoComponent, {
+      data: this.avaliacao,
+      width: '80%',
+      height: '80%',
+    })
+  }
 
 
 }

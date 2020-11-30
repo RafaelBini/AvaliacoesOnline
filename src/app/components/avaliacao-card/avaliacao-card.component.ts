@@ -1,3 +1,4 @@
+import { EstatisticasAvaliacaoComponent } from './../../dialogs/estatisticas-avaliacao/estatisticas-avaliacao.component';
 import { ExportarComponent } from './../../dialogs/exportar/exportar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProvaService } from './../../services/prova.service';
@@ -99,6 +100,14 @@ export class AvaliacaoCardComponent implements OnInit {
   abirExport(avaliacao: Avaliacao) {
     this.dialog.open(ExportarComponent, {
       width: '80%',
+      data: avaliacao,
+    });
+  }
+
+  abrirEstatisticas(avaliacao: Avaliacao) {
+    this.dialog.open(EstatisticasAvaliacaoComponent, {
+      width: '85%',
+      height: '90%',
       data: avaliacao,
     });
   }

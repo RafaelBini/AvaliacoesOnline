@@ -1,0 +1,49 @@
+.container{
+    height: 100%;
+    overflow: auto;
+    
+}
+
+.questao-container{
+    padding: 12px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    position: relative;
+
+    border-radius: 6px;
+}
+
+.questao-enunciado{
+    font-weight: bold;
+}
+
+.questao-tipo{
+    font-size: 14px;
+    color: gray;
+}
+
+.questao-numero-respostas{
+    font-size: 12px;
+    color: rgb(105, 105, 105);
+}
+
+.questao-resposta-dissertativa{
+    padding: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 88%;    
+    border: 1px solid var(--cor-secundaria);
+    border-left: 5px solid var(--cor-secundaria);
+    background-color: white;
+}
+
+.btn-gabarito{
+    position: absolute;
+    top: 6px;
+    background-color: white;
+    right: 20px;
+    display: none;
+}
+.questao-container:hover .btn-gabarito{
+    display: block;
+}

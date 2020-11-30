@@ -108,6 +108,9 @@
                 <h2>Avaliações em Andamento</h2>
             </div>
 
+            <button class="btn-acompanhar-respostas" (click)="abrirEstatisticas()" mat-button>Acompanhar
+                Respostas</button>
+
             <!-- INDIVIDUAL -->
             <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
                 <div class="aluno" *ngFor="let aluno of avaliacao.grupos[0].alunos; index as ai"

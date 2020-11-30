@@ -1,11 +1,14 @@
 
 ---------------------------------
 
-- Exportar notas para PDF
-
 - Fazer o máximo da documentação possivel 
 
 - Fazer tutoriais (por funcionalidades)
+	- https://www.npmjs.com/package/guidechimp
+	- https://www.youtube.com/watch?v=LEEbe9Kp3xs&t=631s
+
+- Deixar as coisas mais claras para o professor:
+	- Na parte de correções, explicar o que deve ser feito e quando todas as correções estiverem ok, sinalizar!!
 
 -----------------------------------------------------------------------
 

@@ -236,6 +236,11 @@ export class ProvaService {
     return prova;
   }
 
+  onProvasFromAvaliacaoChange(avaliacaoId: string) {
+
+    return this.db.collection<Prova>('provas', ref => ref.where('avaliacaoId', '==', avaliacaoId)).valueChanges();
+  }
+
   getProvasFromAvaliacao(avaliacaoId: string): Promise<Array<Prova>> {
     return new Promise((resolve, reject) => {
       this.db.collection('provas', ref => ref.where('avaliacaoId', '==', avaliacaoId)).get().toPromise().then(ref => {

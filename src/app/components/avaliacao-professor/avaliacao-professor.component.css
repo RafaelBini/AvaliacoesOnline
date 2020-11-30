@@ -160,3 +160,8 @@
     border-left: 12px solid black;    
   }
 
+  .btn-acompanhar-respostas{
+    margin: auto;
+    display: block;
+    color: gray;
+  }

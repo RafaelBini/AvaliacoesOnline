@@ -75,6 +75,8 @@ import { ImportarAlunosComponent } from './dialogs/importar-alunos/importar-alun
 import { ExportarComponent } from './dialogs/exportar/exportar.component';
 import { LayoutMakerComponent } from './components/layout-maker/layout-maker.component';
 import { ProvaImprimirComponent } from './components/prova-imprimir/prova-imprimir.component';
+import { EstatisticasAvaliacaoComponent } from './dialogs/estatisticas-avaliacao/estatisticas-avaliacao.component';
+import { ChartModule } from 'angular-highcharts';
 
 export function initializeApp(timeService: TimeService, credencialService: CredencialService) {
 
@@ -131,6 +133,7 @@ export function initializeApp(timeService: TimeService, credencialService: Crede
     ExportarComponent,
     LayoutMakerComponent,
     ProvaImprimirComponent,
+    EstatisticasAvaliacaoComponent,
   ],
   imports: [
     BrowserModule,
@@ -161,7 +164,8 @@ export function initializeApp(timeService: TimeService, credencialService: Crede
     AngularFirestoreModule,
     AngularFireStorageModule,
     ClipboardModule,
-    HttpClientModule
+    HttpClientModule,
+    ChartModule,
   ],
   providers: [
     TimeService,
