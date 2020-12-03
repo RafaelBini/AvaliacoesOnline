@@ -330,7 +330,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
       for (let aluno of grupo.alunos) {
         if (aluno.id == this.credencialService.getLoggedUserIdFromCookie()) {
 
-          if (aluno.online == false) {
+          if (aluno.online == false || aluno.online == undefined) {
 
             // VALIDAR ATRASADOS
             if (this.avaliacao.status > 1) {
@@ -349,7 +349,12 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
           }
 
           // SE ESTOU REALIZANDO A AVALIAÇÃO MAS MEU STATUS ESTÁ DESATUALIZADO,
-          if (this.avaliacao.status == 1 && (aluno.statusId == 0 || aluno.statusId == null)) {
+          if (this.avaliacao.status == 0 && aluno.statusId != 0) {
+            aluno.statusId = 0;
+            aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 0, this.timeService.getCurrentDateTime().toISOString());
+            mudeiAlgo = true;
+          }
+          else if (this.avaliacao.status == 1 && aluno.statusId != 2) {
             aluno.statusId = 2;
             aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 2, this.timeService.getCurrentDateTime().toISOString());
             mudeiAlgo = true;

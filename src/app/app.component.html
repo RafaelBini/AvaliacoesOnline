@@ -56,9 +56,7 @@
           <a routerLink="/professor/perfil" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'professor'">
             <mat-icon>account_circle</mat-icon>Meu Perfil
           </a>
-          <a routerLink="/professor/dashboard" mat-menu-item *ngIf="credencialService.loggedUser.acesso == 'professor'">
-            <mat-icon>dashboard</mat-icon>Dashboard
-          </a>
+
 
           <!-- GERAL -->
           <a routerLink="/" (click)="fazerLogout()" mat-menu-item style="color: var(--cor-perigosa);">
