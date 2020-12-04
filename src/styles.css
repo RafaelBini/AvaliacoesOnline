@@ -1,3 +1,4 @@
+/* @import '../node_modules/ngx-guided-tour/scss/guided-tour-base-theme.scss'; */
 
 :root {
   --em-preparacao: rgb(35, 149, 255);
@@ -219,3 +220,4 @@ textarea {
 mat-tooltip-component > .mat-tooltip {
 white-space: pre;
 }
+

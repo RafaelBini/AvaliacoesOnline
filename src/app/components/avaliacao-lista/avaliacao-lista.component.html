@@ -11,7 +11,7 @@
             <tr>
                 <td width="95%">
                     <input type="text" [(ngModel)]="textoBusca" class="input-clean" style="width: 100%;" #inputBusca
-                        maxlength="85" (keyup)="onBuscaKeyUp(inputBusca.value)"
+                        maxlength="85" id="inputBusca" (keyup)="onBuscaKeyUp(inputBusca.value)"
                         placeholder="Digite aqui uma parte do titulo, descrição ou tag da avaliação que procura" />
                 </td>
                 <td width="5%" style="padding: 5px;">
@@ -29,7 +29,8 @@
 
         <mat-tab *ngFor="let status of comumService.statusAvaliacao">
             <ng-template mat-tab-label>
-                {{status.nome}} ({{getAvaliacoesNoStatus(status.id).length}})
+                <span [class]="'status-class-'+status.id">{{status.nome}}
+                    ({{getAvaliacoesNoStatus(status.id).length}})</span>
             </ng-template>
 
             <table style="width: 100%;  margin-top: 20px;">
@@ -67,7 +68,9 @@
     </button>
 </mat-menu>
 
-<a *ngIf="tipoAcesso == 'professor'" routerLink="/professor/avaliacao/nova" matTooltip="Nova Avaliação" class="btn"
-    style="right: 50px; bottom: 120px;" mat-fab>
+<a *ngIf="tipoAcesso == 'professor'" routerLink="/professor/avaliacao/nova" matTooltip="Nova Avaliação"
+    class="btn btn-add-avaliacao" style="right: 50px; bottom: 120px;" mat-fab>
+
     <mat-icon>add</mat-icon>
+
 </a>

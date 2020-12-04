@@ -14,7 +14,7 @@ import { UrlNode } from 'src/app/models/url-node';
 import { CredencialService } from 'src/app/services/credencial.service';
 import { Usuario } from 'src/app/models/usuario';
 import { EditarAlunoComponent } from 'src/app/dialogs/editar-aluno/editar-aluno.component';
-
+import { GuidedTour, GuidedTourService, Orientation } from 'ngx-guided-tour';
 
 @Component({
   selector: 'app-professor',
@@ -49,6 +49,122 @@ export class ProfessorComponent implements OnInit, OnDestroy {
 
   @ViewChild(AvaliacaoListaComponent) avaliacaoLista: AvaliacaoListaComponent;
 
+  public TelaProfessorTour: GuidedTour = {
+    tourId: 'professor-tour',
+    useOrb: false,
+    steps: [
+      {
+        title: 'Seja Bem Vindo!',
+        content: `
+        Esta é a sua página de Professor. Aqui você pode:
+        <br/><br/>
+        <li>Criar uma nova avaliação</li>
+        <li>Buscar suas avaliações</li>
+        <li>Editar suas avaliações</li>
+        <br/>
+        Vou te mostrar como fazer isso. Clique em <i>Próximo</i>.
+        `,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Criar uma avaliação',
+        selector: '.btn-add-avaliacao',
+        content: 'Ao clicar aqui, você poderá dar início a uma nova avaliação!',
+        orientation: Orientation.TopRight,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Buscar uma avaliação',
+        selector: '#inputBusca',
+        content: 'Use esta barra de pesquisa para encontrar uma avaliação.<br/><br/><i>Dica: Use tags em suas avaliações para encontrá-las mais facilmente</i>',
+        orientation: Orientation.Bottom,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Em Preparação',
+        selector: '.status-class-0',
+        content: 'As avaliações desta aba ainda não foram iniciadas. Neste estado ainda é possível editar as questões da avaliação.<br/>Além disso, você pode aproveitar este estado para organizar os grupos.',
+        orientation: Orientation.Top,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Durante Avaliação',
+        selector: '.status-class-1',
+        content: 'As avaliações desta aba já estão disponíveis para os alunos responderem as questões.',
+        orientation: Orientation.Top,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Em Correção',
+        selector: '.status-class-2',
+        content: 'Nesta aba estão as avaliações que ainda precisam ser corrigidas.',
+        orientation: Orientation.Top,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Encerrada',
+        selector: '.status-class-3',
+        content: 'As avaliações desta aba já foram encerradas e contém as notas dos alunos',
+        orientation: Orientation.Top,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Gerenciar Alunos',
+        selector: '#alunosTabLabel',
+        content: 'Nesta aba você pode buscar, cadastrar e adicionar os seus alunos.',
+        orientation: Orientation.Bottom,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Meu Perfil',
+        selector: '#meuPerfilTabLabel',
+        content: 'Use esta aba para alterar suas informações pessoais (como e-mail, foto e senha por exemplo).',
+        orientation: Orientation.Bottom,
+        useHighlightPadding: true,
+      },
+
+    ]
+  };
+
+
+  public AvaliacaoCriadaTour: GuidedTour = {
+    tourId: 'avaliacao-criada-tour',
+    useOrb: false,
+    steps: [
+      {
+        title: 'Parabéns!',
+        selector: '.avalicao-card',
+        content: 'Aqui está a sua primeira avaliação! Vou te mostrar algumas dicas.',
+        orientation: Orientation.Top,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Entrar na avaliação',
+        selector: '.info-box',
+        content: 'Este quadro indica o status atual da avaliação. Ao clicar aqui, você irá "entrar" na avaliação. <br/><br/> As opções mais importantes como <b>iniciar avaliação</b> ou <b>corrigir avaliação</b> poderão ser feitas a por aqui.',
+        orientation: Orientation.Top,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Mais opções',
+        selector: '.avaliacao-options-btn',
+        content: `Clicando aqui, você poderá ter acesso a uma série de opções como:
+        <br /><br/>
+        <li>Ver estatísticas da avaliação</li>
+        <li>Editar a avaliação</li>
+        <li>Exluir a avaliação</li>
+        <li>Arquivar a avaliação</li>
+        <li>Imprimir a avaliação</li>
+        <li>Exportar a avaliação</li>
+        `,
+        orientation: Orientation.TopRight,
+        useHighlightPadding: true,
+      },
+
+    ]
+  };
+
+
   constructor(private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
     public credencialService: CredencialService,
@@ -57,6 +173,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
     private usuarioService: UsuarioService,
     private route: ActivatedRoute,
     private router: Router,
+    private guidedTourService: GuidedTourService,
   ) { }
 
   ngOnInit(): void {
@@ -116,6 +233,35 @@ export class ProfessorComponent implements OnInit, OnDestroy {
         }
       }, 5500);
     }
+
+    // Tutoriais
+    setTimeout(() => {
+      var altereiStatus = false;
+
+
+      if (!this.credencialService.loggedUser.tutorialMostradoTelaProfessor) {
+        this.guidedTourService.startTour(this.TelaProfessorTour);
+        this.credencialService.loggedUser.tutorialMostradoTelaProfessor = true;
+        altereiStatus = true;
+      }
+      else if (this.avaliacaoLista.avaliacoes.length > 0 && !this.credencialService.loggedUser.tutorialMostradoAvaliacaoCriada) {
+
+        var interv = setInterval(() => {
+          if (document.querySelectorAll('.mat-dialog-container').length <= 0 && this.avaliacaoLista.avaliacoes.length > 0) {
+            this.guidedTourService.startTour(this.AvaliacaoCriadaTour);
+            clearInterval(interv);
+          }
+        });
+
+        this.credencialService.loggedUser.tutorialMostradoAvaliacaoCriada = true;
+        altereiStatus = true;
+      }
+
+      if (altereiStatus) {
+        this.usuarioService.update(this.credencialService.loggedUser);
+      }
+
+    }, 1500);
 
 
   }

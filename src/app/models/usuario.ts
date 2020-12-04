@@ -19,4 +19,8 @@ export interface Usuario {
     img?: Arquivo;
     idExterno?: string,
     tagIdExterno?: string,
+    tutorialMostradoTelaProfessor?: boolean,
+    tutorialMostradoTelaAvaliacaoNova?: boolean,
+    tutorialMostradoAvaliacaoCriada?: boolean,
+    tutorialMostradoTelaAlunos?: boolean,
 }

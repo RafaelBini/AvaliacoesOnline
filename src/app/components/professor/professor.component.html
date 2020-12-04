@@ -13,8 +13,10 @@
     </mat-tab>
     <mat-tab>
         <ng-template mat-tab-label>
-            <mat-icon style="margin-right: 8px;">recent_actors</mat-icon>
-            Alunos
+            <span id="alunosTabLabel" class="span-label">
+                <mat-icon style="margin-right: 8px;">recent_actors</mat-icon>
+                Alunos
+            </span>
         </ng-template>
 
         <div
@@ -122,8 +124,10 @@
     </mat-tab>
     <mat-tab>
         <ng-template mat-tab-label>
-            <mat-icon style="margin-right: 8px;">account_circle</mat-icon>
-            Meu Perfil
+            <span id="meuPerfilTabLabel" class='span-label'>
+                <mat-icon style="margin-right: 8px;">account_circle</mat-icon>
+                Meu Perfil
+            </span>
         </ng-template>
 
         <app-usuario-perfil-editar></app-usuario-perfil-editar>

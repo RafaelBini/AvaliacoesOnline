@@ -52,7 +52,8 @@
 
     <!-- MENU DE OPÇÕES -->
 
-    <button mat-icon-button style="position: absolute; top: 3px; right: 3px;" [matMenuTriggerFor]="aboveMenu">
+    <button mat-icon-button class="avaliacao-options-btn" style="position: absolute; top: 3px; right: 3px;"
+        [matMenuTriggerFor]="aboveMenu">
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #aboveMenu="matMenu">
@@ -70,7 +71,8 @@
             <mat-icon>dashboard</mat-icon>
             Estatísticas
         </button>
-        <a *ngIf="tipoAcesso=='professor'" mat-menu-item target="_blank" [routerLink]="'/imprimir/'+ avaliacao.id">
+        <a *ngIf="tipoAcesso=='professor'" mat-menu-item target="_blank"
+            [routerLink]="'/professor/avaliacao/imprimir/'+ avaliacao.id">
             <mat-icon>print</mat-icon>
             Imprimir
         </a>

@@ -1,7 +1,6 @@
 
 ---------------------------------
 
-- Fazer o máximo da documentação possivel 
 
 - Fazer tutoriais (por funcionalidades)
 	- https://www.npmjs.com/package/guidechimp

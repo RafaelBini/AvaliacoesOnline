@@ -1,0 +1,31 @@
+@import '../node_modules/ngx-guided-tour/scss/guided-tour-base-theme.scss';
+
+
+ngx-guided-tour .tour-step .tour-block{
+    font-family: Helvetica, sans-serif;
+    border-radius: 15px;
+}
+
+ngx-guided-tour .tour-step .tour-buttons .next-button{
+    border-radius: 5px !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: var(--cor-secundaria);
+}
+ngx-guided-tour .tour-step .tour-buttons .next-button:hover{
+    background-color: var(--cor-primaria);
+}
+
+ngx-guided-tour .tour-step .tour-buttons .back-button{
+    color: var(--cor-primaria)
+}
+
+ngx-guided-tour .tour-step h2.tour-title{
+    text-align: center;
+}
+
+ngx-guided-tour .guided-tour-spotlight-overlay{
+    border-radius: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+}

@@ -69,6 +69,10 @@ export class CredencialService {
     usuarioInserir.email = usuario.email.toLowerCase();
     usuarioInserir.nome = this.getProperCase(usuario.nome);
     usuarioInserir.senha = Md5.hashStr(usuario.senha).toString();
+    usuarioInserir.tutorialMostradoTelaProfessor = false;
+    usuarioInserir.tutorialMostradoTelaAvaliacaoNova = false;
+    usuarioInserir.tutorialMostradoAvaliacaoCriada = false;
+    usuarioInserir.tutorialMostradoTelaAlunos = false;
     return this.usuarioService.insert(usuarioInserir);
 
   }

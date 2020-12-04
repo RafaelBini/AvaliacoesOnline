@@ -3,6 +3,8 @@ import { ComumService } from './../../services/comum.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 
+
+
 @Component({
   selector: 'app-avaliacao-lista',
   templateUrl: './avaliacao-lista.component.html',
@@ -19,12 +21,21 @@ export class AvaliacaoListaComponent implements OnInit {
   @Input() avaliacoes: Array<Avaliacao>;
   @Input() tipoAcesso;
 
-  constructor(public comumService: ComumService,
-    private avaliacaoService: AvaliacaoService) { }
+
+
+
+  constructor(
+    public comumService: ComumService,
+    private avaliacaoService: AvaliacaoService,
+
+  ) { }
 
   ngOnInit(): void {
 
     this.atualizarAvaliacoesFiltradas();
+
+
+
 
   }
 

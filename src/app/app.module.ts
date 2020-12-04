@@ -77,6 +77,7 @@ import { LayoutMakerComponent } from './components/layout-maker/layout-maker.com
 import { ProvaImprimirComponent } from './components/prova-imprimir/prova-imprimir.component';
 import { EstatisticasAvaliacaoComponent } from './dialogs/estatisticas-avaliacao/estatisticas-avaliacao.component';
 import { ChartModule } from 'angular-highcharts';
+import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
 
 export function initializeApp(timeService: TimeService, credencialService: CredencialService) {
 
@@ -166,10 +167,12 @@ export function initializeApp(timeService: TimeService, credencialService: Crede
     ClipboardModule,
     HttpClientModule,
     ChartModule,
+    GuidedTourModule,
   ],
   providers: [
     TimeService,
-    { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [TimeService], multi: true }
+    GuidedTourService,
+    { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [TimeService], multi: true },
   ],
   bootstrap: [AppComponent],
   exports: [],

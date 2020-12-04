@@ -46,4 +46,7 @@
     padding: 80px;
 }
 
-
+.span-label{
+    display: flex;
+    align-items: center;
+}
