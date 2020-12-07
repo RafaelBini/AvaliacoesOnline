@@ -57,7 +57,7 @@
 
             <!-- TAGS  -->
 
-            <div style="position: relative;">
+            <div class="tags-div" style="position: relative;">
                 <mat-form-field style="width: 95%; padding: 15px; margin: auto;">
                     <mat-chip-list #chipList>
                         <mat-chip *ngFor="let tag of avaliacao.tags" [selectable]="true" [removable]="true"
@@ -172,10 +172,10 @@
 
                 <!-- DURAÇÃO INDIVIDUAL -->
 
-                <tr>
+                <tr *ngIf="avaliacao.tipoDisposicao == 0">
                     <td colspan="2">
                         <table width="100%">
-                            <tr *ngIf="avaliacao.tipoDisposicao == 0">
+                            <tr>
                                 <td style="text-align: left;">
                                     Duração individual
                                     <mat-icon class="btn-help" matTooltip="Clique para receber ajuda"
@@ -257,7 +257,7 @@
             </table>
         </div>
         <br />
-        <table style="width: 100%">
+        <table class="configuracoes-basicas-table">
             <tr>
                 <td width="33%">
                     <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
@@ -304,7 +304,7 @@
         </table>
         <br />
 
-        <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
+        <div class="selecionar-alunos-div">
             SELECIONAR ALUNOS ESPERADOS (OPCIONAL)<br />
             <button mat-button class="botao-tipo" matTooltip="Clique para selecionar alunos"
                 (click)="abirSelecionarAunos()">
@@ -327,29 +327,16 @@
 
         <div style="width: 100%; text-align: center;">
 
-            <button mat-raised-button (click)="finalizar()"
-                style="margin: auto; margin-top: 40px; margin-left: 20px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: inline-block; background-color: var(--cor-primaria); color: white;">
+            <button mat-raised-button (click)="finalizar()" class="btn-finalizar">
                 Tudo pronto, Finalizar!
             </button>
         </div>
 
-        <button mat-fab matTooltip="Adiconar Questão" (click)="addQuestao()"
-            style="position: fixed; bottom: 100px; right: 30px; background-color: var(--cor-primaria);">
+        <button mat-fab matTooltip="Adiconar Questão" (click)="addQuestao()" class="btn-add-questao">
             <mat-icon style="color: white;">add</mat-icon>
         </button>
-        <!-- 
-        <button mat-fab matTooltip="Buscar Questão" (click)="buscarQuestao()"
-            style="position: fixed; bottom: 100px; right: 30px; background-color: var(--cor-primaria);">
-            <mat-icon style="color: white;">folder_open</mat-icon>
-        </button>
 
-        <button mat-fab (click)="mudarVisao('aluno')" matTooltip="Ver como aluno"
-            style="position: fixed; bottom: 175px; right: 30px; color: white; background-color: var(--cor-primaria);">
-            <mat-icon>visibility</mat-icon>
-        </button> -->
-
-        <button mat-fab style="position: fixed; bottom: 30px; right: 30px; background-color: var(--cor-primaria);"
-            [matMenuTriggerFor]="userMenu" matTooltip="Mais Opções">
+        <button mat-fab class="btn-mais-opcoes" [matMenuTriggerFor]="userMenu" matTooltip="Mais Opções">
             <mat-icon style="color: white;">
                 more_vert
             </mat-icon>

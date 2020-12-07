@@ -16,7 +16,7 @@
                 <tr class="ferramenta-edicao" [class.is-editando]="questao.isEditando">
                     <td align="left" style="padding-bottom: 18px; position: relative;">
 
-                        <select class="select-basico" style="padding: 8px;" #tipo
+                        <select class="select-basico questao-tipo-select" style="padding: 8px;" #tipo
                             (change)="tipoQuestaoChanged(questao, tipo.value)" (ngModelChange)="sinalizarAlteracao()"
                             [(ngModel)]="questao.tipo">
                             <option *ngFor="let questaoTipo of getQuestaoTiposAdequados()" [value]="questaoTipo.codigo">
@@ -24,7 +24,7 @@
                             </option>
                         </select>
                         <select (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.nivelDificuldade"
-                            matTooltip="Nível de Dificuldade" class="select-basico"
+                            matTooltip="Nível de Dificuldade" class="select-basico nivel-dificuldade-select"
                             style="padding: 8px; position: absolute; right: 0px;" #tipo
                             (change)="questao.tipo = tipo.value">
                             <option *ngFor="let nivelDificuldade of comumService.niveisDificuldade; index as ni"
@@ -375,7 +375,7 @@
                 <!-- Opções da questão -->
                 <tr>
                     <td align="right" style="position: relative; padding-top: 20px;">
-                        <div *ngIf="avaliacao.tipoPontuacao != 3" style="position: absolute; z-index:1000; left: 0px;">
+                        <div *ngIf="avaliacao.tipoPontuacao != 3" class="valor-questao">
                             Valor: <input style="padding: 7px;" type="number" max="100" min="1"
                                 (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.valor" />
                             <span

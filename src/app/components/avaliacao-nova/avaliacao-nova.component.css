@@ -200,3 +200,23 @@
     border: 1px dashed var(--cor-primaria);
     border-radius: 7px;
   }
+
+  .selecionar-alunos-div{
+    text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;
+  }
+
+  .configuracoes-basicas-table{
+    width: 100%;
+  }
+
+  .btn-add-questao{
+    position: fixed; bottom: 100px; right: 30px; background-color: var(--cor-primaria);
+  }
+
+  .btn-mais-opcoes{
+    position: fixed; bottom: 30px; right: 30px; background-color: var(--cor-primaria);
+  }
+
+  .btn-finalizar{
+    margin: auto; margin-top: 40px; margin-left: 20px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: inline-block; background-color: var(--cor-primaria); color: white;
+  }

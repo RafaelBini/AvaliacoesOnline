@@ -127,3 +127,7 @@
 }
 
 /* --------------------- */
+
+.valor-questao{
+  position: absolute; z-index:1000; left: 0px;
+}

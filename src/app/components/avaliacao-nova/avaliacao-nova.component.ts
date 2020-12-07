@@ -1,3 +1,4 @@
+import { UsuarioService } from './../../services/usuario.service';
 import { TimeService } from './../../services/time.service';
 import { AjudaComponent } from './../../dialogs/ajuda/ajuda.component';
 import { ConfirmarComponent } from './../../dialogs/confirmar/confirmar.component';
@@ -21,6 +22,7 @@ import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { Prova } from 'src/app/models/prova';
 import { Usuario } from 'src/app/models/usuario';
 import { Location } from '@angular/common';
+import { GuidedTour, GuidedTourService, Orientation } from 'ngx-guided-tour';
 
 @Component({
   selector: 'app-avaliacao-nova',
@@ -30,7 +32,6 @@ import { Location } from '@angular/common';
 export class AvaliacaoNovaComponent implements OnInit {
 
   constructor(
-    private location: Location,
     public router: Router,
     public route: ActivatedRoute,
     public dialog: MatDialog,
@@ -38,9 +39,11 @@ export class AvaliacaoNovaComponent implements OnInit {
     public comumService: ComumService,
     public credencialService: CredencialService,
     public avaliacaoService: AvaliacaoService,
+    private usuarioService: UsuarioService,
     public provaService: ProvaService,
     private timeService: TimeService,
     private fileService: FileService,
+    private guidedTourService: GuidedTourService,
   ) { }
 
 
@@ -59,6 +62,147 @@ export class AvaliacaoNovaComponent implements OnInit {
     { nome: `Avaliações`, url: `/professor` },
     { nome: `Nova Avaliação`, url: `/professor` },
   ];
+
+
+  public PrimeiraAvaliacaoTour: GuidedTour = {
+    tourId: 'primeira-avaliacao-tour',
+    useOrb: false,
+    steps: [
+      {
+        title: 'A primeira avaliação!',
+        content: 'Vamos criar a sua primeira avaliação! Vou te mostrar algumas dicas.',
+      },
+      {
+        title: 'O link para compartilhar',
+        selector: '.link-div',
+        content: 'Este link servirá para você convidar seus alunos para participarem da avaliação.<br />Inicialmente um link aleatório já foi gerado automáticamente. Mas, caso ache interessante, você pode personalizá-lo.',
+        orientation: Orientation.Bottom,
+        highlightPadding: 5,
+      },
+      {
+        title: 'O Título',
+        selector: '.titulo-input',
+        content: `Este título servirá para você e os alunos identificarem esta avaliação. Procure ser direto e simples na escolha de um título.`,
+        orientation: Orientation.Bottom,
+        highlightPadding: 5,
+      },
+      {
+        title: 'A Descrição',
+        selector: '.descricao-textarea',
+        content: `Neste campo você pode descrever a atividade em mais detalhes. Instruções importantes para os alunos podem colocadas nesta parte.`,
+        orientation: Orientation.Bottom,
+        highlightPadding: 5,
+      },
+      {
+        title: 'As Tags',
+        selector: '.tags-div',
+        content: `Insira tags (separadas por vírugla) para encontrar essa avaliação mais facilmente.`,
+        orientation: Orientation.Left,
+        highlightPadding: 5,
+      },
+      {
+        title: 'Mais Opções',
+        selector: '.atributos-table',
+        content: `Você também pode definir outras opções como o momento de início e término da avaliação.`,
+        orientation: Orientation.Right,
+        highlightPadding: 5,
+        scrollAdjustment: 25,
+      },
+      {
+        title: 'Configurações Básicas',
+        selector: '.configuracoes-basicas-table',
+        content: `Clicando em um destes quadros você pode configurar se a prova será <b>Individual</b> ou <b>Em Grupo</b>, se os <b>alunos participarão corrigindo</b> ou se a <b>pontuação será por tentantivas</b> por exemplo.`,
+        orientation: Orientation.Top,
+        highlightPadding: 5,
+        scrollAdjustment: 150,
+      },
+      {
+        title: 'Selecionar Alunos',
+        selector: '.selecionar-alunos-div',
+        content: `Se você já tem alunos cadastrados em sua conta, você pode selecionar quais deseja que participem da avaliação.<br/><br/><b>Mas se você não cadastrou seus alunos, não se preocupe!</b><br /><br />Os alunos serão adicionados automáticamente à sua conta quando entrar no link da avaliação.`,
+        orientation: Orientation.Top,
+        highlightPadding: 5,
+        scrollAdjustment: 50,
+      },
+      {
+        title: 'Questão de Exemplo',
+        selector: '.questao',
+        content: `Esse é o exemplo de uma questão. Conforme você for editando a questão, ela será salva em seu banco de questões.`,
+        orientation: Orientation.Right,
+        highlightPadding: 5,
+        scrollAdjustment: 25,
+      },
+      {
+        title: 'Tipo de Questão',
+        selector: '.questao-tipo-select',
+        content: `Aqui você pode escolher qual tipo de questão deseja criar (dissertativa, multipla escolha, associativa ou de preenchimento por exemplo)`,
+        orientation: Orientation.TopRight,
+        scrollAdjustment: 150,
+      },
+      {
+        title: 'Nível da Questão',
+        selector: '.nivel-dificuldade-select',
+        content: `Classifique a questão entre (fácil, médio ou difícil) para te ajudar a localizar no banco de questões.`,
+        orientation: Orientation.TopLeft,
+        scrollAdjustment: 150,
+      },
+      {
+        title: 'Valor da Questão',
+        selector: '.valor-questao',
+        content: `Aqui você pode definir um valor para essa questão.`,
+        orientation: Orientation.TopRight,
+        highlightPadding: 20,
+        scrollAdjustment: 150,
+      },
+      {
+        title: 'Mais Opções',
+        selector: '.opcoes-questao',
+        content: `Você também pode enriquecer a sua questão adicionando imagens, anexos e tags.`,
+        orientation: Orientation.Top,
+        highlightPadding: 20,
+        scrollAdjustment: 150,
+      },
+      {
+        title: 'Adicionar uma nova questão',
+        selector: '.btn-add-questao',
+        content: `Clique aqui para adicionar uma nova questão em branco`,
+        orientation: Orientation.TopRight,
+        scrollAdjustment: 50,
+      },
+      {
+        title: 'Mais Opções',
+        selector: '.btn-mais-opcoes',
+        content: `Por aqui você pode <b>adicionar uma questão que você já criou anteriormente</b>. Você também pode <b>ver a avaliação como aluno</b> e até <b>imprimir a avaliação para ser feita em um papel</b>.`,
+        orientation: Orientation.TopRight,
+        scrollAdjustment: 50,
+      },
+      {
+        title: 'Descartar Rascunho',
+        selector: '.btn-descartar-rascunho',
+        content: `Cuidado! Ao clicar aqui você irá apagar tudo o que fez nesta avaliação e começar do zero.`,
+        orientation: Orientation.TopLeft,
+        scrollAdjustment: 50,
+      },
+      {
+        title: 'Finalizar!',
+        selector: '.btn-finalizar',
+        content: `Quando estiver tudo pronto, clique aqui e envie o link da avaliação para os seus alunos!`,
+        orientation: Orientation.TopLeft,
+        highlightPadding: 20,
+        scrollAdjustment: 50,
+      },
+      {
+        title: 'Obter Ajuda',
+        selector: '.btn-help',
+        content: `Você pode obter mais detalhes sobre qualquer funcionalidade ao clicar nestes botões.`,
+        orientation: Orientation.Right,
+        useHighlightPadding: true,
+      },
+
+
+    ]
+  };
+
 
   idJaExiste = false;
   isEditando = false;
@@ -146,6 +290,13 @@ export class AvaliacaoNovaComponent implements OnInit {
         this.carregarRascunho();
 
       }
+
+      if (!this.credencialService.loggedUser.tutorialMostradoTelaAvaliacaoNova) {
+        this.guidedTourService.startTour(this.PrimeiraAvaliacaoTour);
+        this.credencialService.loggedUser.tutorialMostradoTelaAvaliacaoNova = true;
+        this.usuarioService.update(this.credencialService.loggedUser);
+      }
+
     });
   }
 
