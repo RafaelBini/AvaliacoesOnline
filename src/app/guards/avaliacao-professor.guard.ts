@@ -29,7 +29,7 @@ export class AvaliacaoProfessorGuard implements CanActivate {
 
           this.avaliacaoService.getAvaliacaoFromId(route.params.id).then(avaliacao => {
 
-            if (avaliacao.professorId == this.credencialService.getLoggedUserIdFromCookie()) {
+            if (avaliacao.professorId == this.credencialService.getLoggedUserIdFromCookie() || avaliacao.id == this.credencialService.getLoggedUserIdFromCookie()) {
               this.credencialService.loggedUser.acesso = "professor";
               subscriber.next(true);
             }

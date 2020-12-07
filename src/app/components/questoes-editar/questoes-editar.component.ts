@@ -189,6 +189,7 @@ export class QuestoesEditarComponent implements OnInit {
       questao.textoParaPreencher.substring(editorElement.selectionEnd, questao.textoParaPreencher.length);
 
     questao.partesPreencher = this.getPreenchimentoPartes(questao);
+    this.algoAlterado.emit();
   }
   removerOpcaoPreencher(questao: Questao, opcaoPreencherIndesejadaIndex) {
     questao.opcoesParaPreencher[opcaoPreencherIndesejadaIndex].ativa = false;

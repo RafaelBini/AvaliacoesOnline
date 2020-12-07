@@ -34,7 +34,7 @@
 
             <div style="position: relative;">
                 <input required placeholder="Título da Avaliação" class="titulo-input"
-                    (ngModelChange)="atualizarRascunhoAvaliacao()" [(ngModel)]="avaliacao.titulo" />
+                    (ngModelChange)="atualizarRascunhoAvaliacao()" maxlength="27" [(ngModel)]="avaliacao.titulo" />
                 <mat-icon class="btn-help" style="position: absolute; top: 1px; right: 1px;"
                     matTooltip="Clique para receber ajuda" (click)="abrirAjudaTitulo()">
                     help

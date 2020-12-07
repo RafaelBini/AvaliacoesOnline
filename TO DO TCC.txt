@@ -1,11 +1,7 @@
-alunos recem adicionados não aparecem ao criar nova aval
 
 ao imprimir questao de preenchimento fica bugado com duas opções
 
 ---------------------------------
-
-
-- Fazer tutoriais (por telas)
 
 
 - Deixar as coisas mais claras para o professor:
@@ -18,8 +14,6 @@ ao imprimir questao de preenchimento fica bugado com duas opções
 	- Biblioteca: https://openbase.io/js/ngx-editor
 	- Exemplo: https://stackblitz.com/edit/ngx-editor-8htfq5?file=src%2Fapp%2Fapp.component.ts
 
-
-- Cadastrar alunos por CSV no bd
 
 
 
