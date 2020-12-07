@@ -27,7 +27,7 @@
                         <h2>Meus Alunos</h2>
                     </td>
                 </tr>
-                <tr>
+                <tr class="barra-pesquisa">
                     <td width="95%">
                         <input type="text" class="input-clean" style="width: 100%;" #inputBuscaAluno maxlength="85"
                             (keyup)="onBuscaAlunoKeyUp(inputBuscaAluno.value)"
@@ -92,14 +92,10 @@
         </div>
 
 
-        <button (click)="addAluno()" matTooltip="Novo Aluno"
-            style="position: fixed; right: 30px; bottom: 50px; background-color: var(--cor-primaria); color: white"
-            mat-fab>
+        <button (click)="addAluno()" matTooltip="Novo Aluno" class="btn-add-aluno" mat-fab>
             <mat-icon>add</mat-icon>
         </button>
-        <a (click)="abrirImportarAlunos()" matTooltip="Importar alunos via CSV"
-            style="position: fixed; right: 30px; bottom: 120px; background-color: var(--cor-primaria); color: white"
-            mat-fab>
+        <a (click)="abrirImportarAlunos()" matTooltip="Importar alunos via CSV" class="btn-importar-alunos" mat-fab>
             <mat-icon>arrow_upward</mat-icon>
         </a>
         <button *ngIf="alunosSelecionados.length > 0" (click)="removerAlunosSelecionados()"

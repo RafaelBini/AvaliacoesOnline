@@ -164,6 +164,37 @@ export class ProfessorComponent implements OnInit, OnDestroy {
     ]
   };
 
+  public TelaAlunosTour: GuidedTour = {
+    tourId: 'tela-alunos-tour',
+    useOrb: false,
+    steps: [
+      {
+        title: 'Meus Alunos',
+        content: 'Nesta aba você pode gerenciar os seus alunos!<br /><br /><b>Lembre-se:</b> Você <b>não</b> precisa adicionar os alunos para que eles participem das avaliações. Eles são adiconados automáticamente quando acessam o link da avaliação.',
+      },
+      {
+        title: 'Adicionar um aluno',
+        selector: '.btn-add-aluno',
+        content: 'Por aqui você pode adicionar um aluno (tanto criar uma conta nova para ele como encontrá-lo no sistema).',
+        orientation: Orientation.TopRight,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Importar Vários Alunos',
+        selector: '.btn-importar-alunos',
+        content: 'Clicando aqui você pode importar vários alunos de uma só vez! Basta seleiconar o layout do arquivo CSV.',
+        orientation: Orientation.TopRight,
+        useHighlightPadding: true,
+      },
+      {
+        title: 'Buscar Alunos',
+        selector: '.barra-pesquisa',
+        content: 'Use esta barra de pesquisa para encontrar seus alunos.',
+        orientation: Orientation.Bottom,
+        highlightPadding: 5,
+      },
+    ]
+  };
 
   constructor(private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
@@ -196,6 +227,14 @@ export class ProfessorComponent implements OnInit, OnDestroy {
               this.alunosFiltrados = this.alunos;
               clearInterval(intervalRef);
             }
+
+            if (!this.credencialService.loggedUser.tutorialMostradoTelaAlunos) {
+              this.guidedTourService.startTour(this.TelaAlunosTour);
+              this.credencialService.loggedUser.tutorialMostradoTelaAlunos = true;
+              this.usuarioService.update(this.credencialService.loggedUser);
+            }
+
+
           });
         }
 

@@ -50,3 +50,11 @@
     display: flex;
     align-items: center;
 }
+
+.btn-importar-alunos{
+    position: fixed; right: 30px; bottom: 120px; background-color: var(--cor-primaria); color: white
+}
+
+.btn-add-aluno{
+    position: fixed; right: 30px; bottom: 50px; background-color: var(--cor-primaria); color: white
+}
