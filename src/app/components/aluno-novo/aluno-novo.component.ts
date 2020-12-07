@@ -45,7 +45,8 @@ export class AlunoNovoComponent implements OnInit {
   }
 
   verificarEmail() {
-    const USUARIOS_ENCONTRADOS = this.todosUsuarios.concat().filter(u => u.email == this.aluno.email);
+
+    const USUARIOS_ENCONTRADOS = this.todosUsuarios.concat().filter(u => u.email == this.aluno.email.toLowerCase());
     if (USUARIOS_ENCONTRADOS.length <= 0) {
       this.novoUsuario = true;
       this.usuarioJaAdicionado = false;
@@ -98,11 +99,12 @@ export class AlunoNovoComponent implements OnInit {
       id: aluno.id,
       nome: aluno.nome,
       email: aluno.email,
-      tags: aluno.tags,
-      img: aluno.img,
-      tagIdExterno: aluno.tagIdExterno,
-      idExterno: aluno.idExterno,
+      tags: aluno.tags || null,
+      img: aluno.img || null,
+      tagIdExterno: aluno.tagIdExterno || null,
+      idExterno: aluno.idExterno || null,
     });
+
     this.usuarioService.update(this.credencialService.loggedUser).then(() => {
       this.aluno = {
         nome: "",

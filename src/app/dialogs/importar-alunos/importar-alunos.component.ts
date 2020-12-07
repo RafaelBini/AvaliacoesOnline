@@ -177,12 +177,12 @@ export class ImportarAlunosComponent implements OnInit {
       fileReader.readAsText(arquivo);
     }
 
-    console.log(event.target);
+
     event.target.value = null;
 
   }
 
-  getInfoStringAluno(aluno: Usuario){
+  getInfoStringAluno(aluno: Usuario) {
     return `Email: ${aluno.email}\nNome: ${aluno.nome}\n${aluno.tagIdExterno}: ${aluno.idExterno}\nTags: ${aluno.tags.join(', ')}`;
   }
 

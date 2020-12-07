@@ -261,8 +261,8 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
       if (this.userTipo == 'aluno') {
         var MINHA_PROVA_ID = null;
 
-        MINHA_PROVA_ID = this.getGrupoOuAlunoNaAvaliacao().provaId;
-
+        MINHA_PROVA_ID = this.getMeuGrupoOuEuNaAvaliacao().provaId;
+        console.log(MINHA_PROVA_ID);
         this.provaService.getProvaFromId(MINHA_PROVA_ID).then(minhaProva => {
           var acheiProva = false;
           for (let provaParaCorrigir of minhaProva.provasParaCorrigir) {
@@ -277,6 +277,9 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
           if (acheiProva) {
             console.log("FIREBASE UPDATE: Atualizei a minha prova com a correção feita");
             this.provaService.updateProva(minhaProva);
+          }
+          else {
+            console.log("Não achei a prova para corrigir entre as minhas provas");
           }
         });
       }
@@ -431,6 +434,18 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
     }
   }
 
+  getSomatoria() {
+    var somatoria = 0;
+    for (let questao of this.prova.questoes) {
+      for (let correcao of questao.correcoes) {
+        if (correcao.avaliadorProvaId == this.getMeuGrupoOuEuNaAvaliacao().provaId) {
+          somatoria += correcao.nota;
+        }
+      }
+    }
+    return somatoria;
+  }
+
   getGrupoNaAvaliacao() {
     if (this.avaliacao.id != '1')
       return this.avaliacao.grupos[this.avaliacao.grupos.indexOf(this.avaliacao.grupos.filter(g => g.provaId == this.prova.id)[0])];
@@ -440,6 +455,8 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
       }
 
   }
+
+
 
   getAlunoNaAvaliacao() {
     var count = 0;
@@ -485,6 +502,13 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
       return this.getAlunoFromAvaliacao(avaliacao);
     else
       return this.getGrupoFromAvaliacao(avaliacao);
+  }
+
+  getMeuGrupoOuEuNaAvaliacao(): Grupo | Usuario {
+    if (this.avaliacao.tipoDisposicao == 0)
+      return this.getEuNaAvaliacao();
+    else
+      return this.getMeuGrupoNaAvaliacao();
   }
 
   getMeuGrupoNaAvaliacao(): Grupo {

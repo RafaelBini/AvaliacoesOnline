@@ -1,10 +1,12 @@
+alunos recem adicionados não aparecem ao criar nova aval
+
+ao imprimir questao de preenchimento fica bugado com duas opções
 
 ---------------------------------
 
 
-- Fazer tutoriais (por funcionalidades)
-	- https://www.npmjs.com/package/guidechimp
-	- https://www.youtube.com/watch?v=LEEbe9Kp3xs&t=631s
+- Fazer tutoriais (por telas)
+
 
 - Deixar as coisas mais claras para o professor:
 	- Na parte de correções, explicar o que deve ser feito e quando todas as correções estiverem ok, sinalizar!!

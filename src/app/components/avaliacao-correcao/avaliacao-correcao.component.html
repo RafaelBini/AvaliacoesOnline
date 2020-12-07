@@ -36,22 +36,25 @@
 
     <div class="nota-total" *ngIf="gabarito.id != '1' && avaliacao.tipoPontuacao != 3">
         Nota total:
-        {{provaService.getMinhaNota(prova,gabarito)}}/{{provaService.getPontuacaoMaxima(prova)}}
+        {{ userTipo == 'professor' || visaoTipo == 'consulta' ? provaService.getMinhaNota(prova,gabarito) : getSomatoria()}}/{{provaService.getPontuacaoMaxima(prova)}}
     </div>
     <br /><br />
 
-    <div *ngIf="visaoTipo == 'correcao'"
-        style="margin: auto; text-align: center; font-size: 40px; margin-bottom: 40px;">
-        <button (click)="finalizarCorrecao()" mat-button style="background-color: var(--cor-primaria); color: white">
-            Finalizar Correção
-        </button>
+    <div class='btn-container'>
+        <div class='btn'>
+            <a [routerLink]="'/' + avaliacao.id" mat-button style="background-color: var(--cor-primaria); color: white">
+                Voltar
+            </a>
+        </div>
+
+        <div *ngIf="visaoTipo == 'correcao'" class='btn'>
+            <button (click)="finalizarCorrecao()" mat-button
+                style="background-color: var(--cor-primaria); color: white">
+                Finalizar Correção
+            </button>
+        </div>
     </div>
-    <div *ngIf="visaoTipo == 'consulta'"
-        style="margin: auto; text-align: center; font-size: 40px; margin-bottom: 40px;">
-        <a [routerLink]="'/aluno/avaliacao/' + avaliacao.id" mat-button
-            style="background-color: var(--cor-primaria); color: white">
-            Voltar
-        </a>
-    </div>
+
+
 
 </div>

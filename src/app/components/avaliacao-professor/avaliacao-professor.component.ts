@@ -239,11 +239,14 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
       const vindoDeOutroGrupo = event.previousContainer.id != "cdk-drop-list-0";
       const vaiDeixarVazio = event.previousContainer.data.length <= 1;
+      // console.log("vindoDeOutroGrupo", vindoDeOutroGrupo)
+      // console.log("vaiDeixarVazio", vaiDeixarVazio)
 
       if (paraOnde == 'grupo' && !vindoDeOutroGrupo) {
+        const previousIndex = this.professor.alunos.indexOf(this.professor.alunos.filter(aluno => aluno.email == this.alunosFiltrados[event.previousIndex].email)[0]);
         transferArrayItem(event.previousContainer.data,
           event.container.data,
-          this.professor.alunos.indexOf(this.professor.alunos.filter(aluno => aluno.email == this.alunosFiltrados[event.previousIndex].email)[0]),
+          previousIndex,
           event.currentIndex);
       }
       else if (paraOnde == 'novo-grupo') {

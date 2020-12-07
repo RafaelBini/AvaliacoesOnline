@@ -75,6 +75,7 @@ export class SelecionarAlunosComponent implements OnInit {
     this.avaliacao.grupos.push({ numero: this.avaliacao.grupos.length + 1, provaId: null, alunos: [] });
   }
   getAlunosSemGrupo() {
+
     var alunosSemDuplicados: Array<Usuario> = [];
     var alunosEmGrupos = this.getAlunosFromTodosGrupos();
     this.alunos = this.credencialService.loggedUser.alunos;

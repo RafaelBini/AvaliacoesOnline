@@ -1,3 +1,5 @@
+import { AvaliacaoAlunoGuard } from './guards/avaliacao-aluno.guard';
+import { AvaliacaoProfessorGuard } from './guards/avaliacao-professor.guard';
 import { HomeGuard } from './guards/home.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { ProvaImprimirComponent } from './components/prova-imprimir/prova-imprimir.component';
@@ -12,6 +14,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AlunoNovoComponent } from './components/aluno-novo/aluno-novo.component';
 import { AlunoComponent } from './components/aluno/aluno.component';
+import { AvaliacaoGuard } from './guards/avaliacao.guard';
 
 
 const routes: Routes = [
@@ -21,17 +24,17 @@ const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "aluno", component: AlunoComponent, canActivate: [AuthGuard] },
   { path: "aluno/:tab", component: AlunoComponent, canActivate: [AuthGuard] },
-  { path: "professor/avaliacao/imprimir/:id", component: ProvaImprimirComponent, canActivate: [AuthGuard] },
+  { path: "professor/avaliacao/imprimir/:id", component: ProvaImprimirComponent, canActivate: [AvaliacaoProfessorGuard] },
   { path: "professor/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent, canActivate: [AuthGuard] },
   { path: "professor/avaliacao/nova", component: AvaliacaoNovaComponent, canActivate: [AuthGuard] },
-  { path: "professor/avaliacao/editar/:id", component: AvaliacaoNovaComponent, canActivate: [AuthGuard] },
-  { path: "professor/avaliacao/:tipo/:id", component: AvaliacaoNovaComponent, canActivate: [AuthGuard] },
-  { path: "professor/avaliacao/:id", component: AvaliacaoProfessorComponent, canActivate: [AuthGuard] },
+  { path: "professor/avaliacao/editar/:id", component: AvaliacaoNovaComponent, canActivate: [AvaliacaoProfessorGuard] },
+  { path: "professor/avaliacao/:tipo/:id", component: AvaliacaoNovaComponent, canActivate: [AvaliacaoProfessorGuard] },
+  { path: "professor/avaliacao/:id", component: AvaliacaoProfessorComponent, canActivate: [AvaliacaoProfessorGuard] },
 
-  { path: "aluno/avaliacao/:id", component: AvaliacaoAlunoComponent, canActivate: [AuthGuard] },
+  { path: "aluno/avaliacao/:id", component: AvaliacaoAlunoComponent, canActivate: [AvaliacaoAlunoGuard] },
   { path: "aluno/avaliacao/correcao/:id", component: AvaliacaoCorrecaoComponent, canActivate: [AuthGuard] },
   { path: "aluno/avaliacao/consulta/:id", component: AvaliacaoCorrecaoComponent, canActivate: [AuthGuard] },
-  { path: ":id", component: LoginComponent },
+  { path: ":id", component: LoginComponent, canActivate: [AvaliacaoGuard] },
   { path: "", component: HomeComponent, canActivate: [HomeGuard] },
 ];
 

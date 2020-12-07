@@ -349,12 +349,14 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
           }
 
           // SE ESTOU REALIZANDO A AVALIAÇÃO MAS MEU STATUS ESTÁ DESATUALIZADO,
+          console.log("Avaliacao", this.avaliacao)
+          console.log("Aluno", aluno)
           if (this.avaliacao.status == 0 && aluno.statusId != 0) {
             aluno.statusId = 0;
             aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 0, this.timeService.getCurrentDateTime().toISOString());
             mudeiAlgo = true;
           }
-          else if (this.avaliacao.status == 1 && aluno.statusId != 2) {
+          else if (this.avaliacao.status == 1 && (aluno.statusId < 2 || aluno.statusId == undefined)) {
             aluno.statusId = 2;
             aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 2, this.timeService.getCurrentDateTime().toISOString());
             mudeiAlgo = true;
@@ -370,6 +372,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
           this.getEuFromAvaliacao(avaliacaoParaModificar).statusId = this.getEuNaAvaliacao().statusId;
           this.getEuFromAvaliacao(avaliacaoParaModificar).dtStatus = this.getEuNaAvaliacao().dtStatus;
           this.getEuFromAvaliacao(avaliacaoParaModificar).online = true;
+          // console.log(avaliacaoParaModificar)
           return avaliacaoParaModificar;
         }, this.avaliacao.id)
           .then(() => {
@@ -537,6 +540,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
       avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].statusId = this.getEuNaAvaliacao().statusId;
       avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].dtStatus = this.getEuNaAvaliacao().dtStatus;
+      console.log(avaliacaoParaModificar);
       return avaliacaoParaModificar;
     }, this.avaliacao.id);
 
