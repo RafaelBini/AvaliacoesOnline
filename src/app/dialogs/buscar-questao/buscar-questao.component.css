@@ -2,34 +2,83 @@
     font-size: 17px;
 }
 
-.questao {
-    width: 90%;
-    background-color: whitesmoke;
-    border-radius: 5px;
-    text-align: justify;
-    padding: 7px;
-    margin: auto;
-    margin-bottom: 20px;
-    font-size: 13px;
-    display: flexbox;
+.big-container{
     position: relative;
-    border: 1px dashed transparent;
-    margin-top: 0px;
-    height: fit-content;
+    display: flex;
+    flex-direction: column;
 }
 
-.questao:hover{
+.cabecalho{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.questoes-container{
+    text-align: center; width: 100%; 
+    display: flex; 
+    flex-wrap: wrap; 
+    overflow: auto;
+    align-content: flex-start;
+    flex: 5;
+}
+
+.questao-container{
+    width: 90%;
+    margin: auto;
+    border: 1px dashed transparent;
+    height: fit-content;
+    margin-bottom: 20px;
+    border-radius: 5px;
+
+}
+.questao-container:hover{
     border: 1px dashed var(--cor-primaria);
+}
+
+
+.add-btn{
+    background-color: var(--cor-secundaria);
+    color: white;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding: 7px;
+}
+.add-btn:hover{
+    background-color: var(--cor-primaria);
     cursor: pointer;
 }
 
-.tag{
-    padding: 3px;
-    background-color: var(--cor-primaria);
-    color: white;
-    margin-right: 4px;
-    border-radius: 5px;
-    font-size: 11px;
-    width: fit-content;
-    display: flexbox;
-}
+
+
+
+
+.input-basico{
+    border: 1px dotted rgba(0, 0, 0, 0.20);
+    border-radius: 7px;
+    background-color: white;  
+    overflow: hidden;
+  }
+  .input-basico:focus {
+    outline: none;
+    border: 1px dashed var(--cor-primaria);
+    border-radius: 7px;
+  }
+  .input-basico:disabled {
+    background-color: rgb(250, 250, 250);  
+    color: rgb(97, 97, 97);
+  }
+  
+  
+  .select-basico {
+    cursor: pointer;
+    border: 1px dotted rgba(0, 0, 0, 0.20);
+    border-radius: 7px;
+    padding: 5px;
+    background-color: white;
+  }
+  .select-basico:focus {
+    outline: none;
+    border: 1px dashed var(--cor-primaria);
+    border-radius: 7px;
+  }

@@ -1,0 +1,77 @@
+* {
+    font-size: 17px;
+}
+
+.questao {
+    background-color: whitesmoke;
+    font-size: 13px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    border: 1px solid  whitesmoke;
+    border-radius: 6px;
+}
+
+
+.header-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background-color: white;
+    padding: 3px;
+}
+
+.titulo-avaliacao{
+    font-size: 12px;
+    color: var(--cor-primaria);
+    text-align: left;
+    display: flex;
+    flex: 3;
+}
+
+.questao-nivel{
+    font-size: 12px;
+    color: var(--cor-primaria);
+    text-align: center;
+    padding: 3px;
+    flex: 1;
+}
+
+.questao-tipo{
+    font-size: 12px;
+    color: var(--cor-primaria);
+    text-align: left;
+    padding: 3px;
+    flex: 3;
+}
+
+.menu-opcoes{
+    display: flex;
+    flex: 1,
+}
+
+.questao-pergunta{
+    text-align: justify;
+    padding: 10px;
+}
+
+.questao-resposta{
+    padding: 5px;
+    font-size: 10px;
+    text-align: justify;
+    display: block;
+}
+
+.tag{
+    padding: 3px;
+    background-color: var(--cor-primaria);
+    color: white;
+    margin-right: 4px;
+    border-radius: 5px;
+    font-size: 11px;
+    width: fit-content;
+    display: flexbox;
+}

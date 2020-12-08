@@ -1,0 +1,41 @@
+<div class="questao">
+    <div class="header-container">
+        <div class="titulo-avaliacao">
+            Avaliação: {{avaliacaoDaQuestao.titulo}}
+        </div>
+        <div class="questao-tipo">
+            {{comumService.questaoTipos[questao.tipo].nome}}
+        </div>
+        <div class="questao-nivel">
+            Nível {{comumService.niveisDificuldade[questao.nivelDificuldade]}}
+        </div>
+        <div class="menu-opcoes">
+            <button [matMenuTriggerFor]="menu" style="color: var(--cor-secundaria)" mat-icon-button>
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                    <mat-icon>delete</mat-icon>
+                    Remover Questão
+                </button>
+            </mat-menu>
+        </div>
+    </div>
+
+
+    <div class="questao-pergunta">{{questao.pergunta}}</div>
+
+
+    <div class="tags-container">
+        <div *ngFor="let tag of questao.tags" class="tag">
+            {{tag}}
+        </div>
+    </div>
+
+    <div class="questao-resposta">
+        <app-questao-resposta-consulta [questao]="questao"></app-questao-resposta-consulta>
+    </div>
+
+
+
+</div>

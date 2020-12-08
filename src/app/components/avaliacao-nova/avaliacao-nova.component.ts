@@ -769,7 +769,8 @@ export class AvaliacaoNovaComponent implements OnInit {
         minhasAvaliacoes: this.minhasAvaliacoes,
         avaliacao: this.avaliacao,
       },
-      width: '75%'
+      width: '75%',
+      height: '95%',
     });
 
     diagRef.afterClosed().subscribe(() => {
