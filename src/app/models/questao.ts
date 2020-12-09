@@ -1,3 +1,4 @@
+import { Avaliacao } from 'src/app/models/avaliacao';
 import { OpcaoPreencher } from './opcao-preencher';
 import { Alternativa } from './alternativa';
 import { Associacao } from './associacao';
@@ -32,4 +33,6 @@ export interface Questao {
     anexos?: Array<Arquivo>;
     imagens?: Array<Arquivo>;
     isEditando?: boolean;
+    isPublica?: boolean;
+    avaliacao?: Avaliacao;
 }

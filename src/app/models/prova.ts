@@ -17,4 +17,5 @@ export interface Prova {
     corrigida?: boolean;
     notaTotal?: number,
     valorTotal?: number,
+    avaliacaoExcluida?: Avaliacao,
 }

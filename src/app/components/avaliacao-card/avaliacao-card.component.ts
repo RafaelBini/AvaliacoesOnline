@@ -60,6 +60,7 @@ export class AvaliacaoCardComponent implements OnInit {
                 }
 
                 this.snack.open("Questões excluidas com sucesso.", null, { duration: 3500 });
+
               });
 
             }
@@ -69,6 +70,10 @@ export class AvaliacaoCardComponent implements OnInit {
                 for (let prova of provas) {
                   if (prova.isGabarito == false)
                     this.provaService.deletarProva(prova);
+                  else {
+                    prova.avaliacaoExcluida = this.avaliacao;
+                    this.provaService.updateProva(prova);
+                  }
                 }
 
 

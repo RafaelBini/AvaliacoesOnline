@@ -7,32 +7,46 @@
             style="width: 80%; padding: 10px; margin: auto; display: block;"
             placeholder="Digite aqui um tema ou uma parte da questão (ex.: céu)" />
         <br />
-        <select class="select-basico" style="padding: 5px; margin: auto; display: block;" (change)="filtrarQuestoes()"
-            [(ngModel)]="filtroNivelDificuldade">
-            <option value="-1">Qualquer Nível de Dificuldade</option>
-            <option *ngFor="let nivelDificuldade of comumService.niveisDificuldade; index as i" [value]="i">
-                {{nivelDificuldade}}</option>
-        </select>
+        <div class="filtros-container">
+            <select class="select-basico" (change)="filtrarQuestoes()" [(ngModel)]="filtroNivelDificuldade">
+                <option value="-1">Qualquer Nível de Dificuldade</option>
+                <option *ngFor="let nivelDificuldade of comumService.niveisDificuldade; index as i" [value]="i">
+                    {{nivelDificuldade}}</option>
+            </select>
+            <mat-checkbox (change)="filtrarQuestoes()" [(ngModel)]="filtroMostrarPublicas">
+                Mostrar questões públicas
+            </mat-checkbox>
+            <mat-checkbox (change)="filtrarQuestoes()" [(ngModel)]="filtroMostrarArquivadas">
+                Mostrar questões arquivadas
+            </mat-checkbox>
+        </div>
+
         <br />
     </div>
 
-    <div class="questoes-container">
+    <div *ngIf="isQuestoesCarregadas" class="questoes-container">
 
-        <div *ngIf="questoesFiltradas.length <= 0" class="questao" style="text-align: center;">
+        <div *ngIf="questoesFiltradas.length <= 0" style="text-align: center;">
             Você não tem questões para adicionar
         </div>
 
         <div *ngFor="let questao of questoesFiltradas; index as i" class="questao-container">
 
-            <app-questao-card [questao]="questao.q" [avaliacaoDaQuestao]="questao.avaliacao">
+            <app-questao-card [questao]="questao" (houveAlteracoes)="filtrarQuestoes()">
             </app-questao-card>
 
-            <div (click)="add(i)" class="add-btn">
+            <div (click)="add(i)"
+                [matTooltip]="isQuestaoPermitida(questao) ? 'Adicona na avaliação' : 'A questão deve ser de correção automática para ser adicionada'"
+                class="add-btn" [class.btn-disabled]="!isQuestaoPermitida(questao)">
                 Adicionar
             </div>
 
         </div>
 
+    </div>
+
+    <div *ngIf="!isQuestoesCarregadas" class="spinner-container">
+        <mat-spinner [strokeWidth]="3"></mat-spinner>
     </div>
 
     <button mat-icon-button mat-dialog-close

@@ -1,3 +1,4 @@
+- Corrigir problema onde qualquer usuario que colocar o id nos cookies já acessa a conta de outro nego
 
 - Adaptar para mobile
 

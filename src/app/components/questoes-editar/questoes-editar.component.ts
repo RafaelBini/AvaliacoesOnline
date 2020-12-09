@@ -75,7 +75,7 @@ export class QuestoesEditarComponent implements OnInit {
   getPontuacaoMaxima() {
     var pontuacaoMaxima = 0;
     this.prova.questoes.forEach(questao => {
-      pontuacaoMaxima += questao.valor;
+      pontuacaoMaxima += (questao.valor || 0);
     });
     return pontuacaoMaxima;
   }

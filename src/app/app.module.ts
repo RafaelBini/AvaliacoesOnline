@@ -80,6 +80,7 @@ import { ChartModule } from 'angular-highcharts';
 import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
 import { QuestaoCardComponent } from './components/questao-card/questao-card.component';
 import { QuestaoRespostaConsultaComponent } from './components/questao-resposta-consulta/questao-resposta-consulta.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 export function initializeApp(timeService: TimeService, credencialService: CredencialService) {
 
@@ -172,6 +173,7 @@ export function initializeApp(timeService: TimeService, credencialService: Crede
     HttpClientModule,
     ChartModule,
     GuidedTourModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     TimeService,

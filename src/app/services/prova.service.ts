@@ -278,6 +278,72 @@ export class ProvaService {
 
   }
 
+  getAllProvasGabarito() {
+    return new Promise<Array<Prova>>((resolve, reject) => {
+      this.db.collection('provas', ref => ref.where('isGabarito', '==', true)).get().toPromise().then(ref => {
+        var provas: Array<Prova> = [];
+        for (let doc of ref.docs) {
+          var prova = doc.data();
+          prova.id = doc.id;
+          provas.push(prova);
+        }
+        resolve(provas);
+      }).catch(reason => reject(reason));
+    });
+  }
+
+  getQuestoesFromProfessor(professorId: string) {
+
+
+    return new Promise<Questao[]>((resolve, reject) => {
+
+      var questoes: Questao[] = [];
+
+      // Recebe TODAS as avaliações
+      this.avaliacaoService.getAllAvaliacoes().then(avaliacoes => {
+
+
+        // Recebe TODAS as provas gabaritos
+        this.getAllProvasGabarito().then(provas => {
+
+          for (let prova of provas) {
+
+            var avaliacao = prova.avaliacaoExcluida || avaliacoes.filter(a => a.id == prova.avaliacaoId)[0] || { titulo: 'Avaliação Excluída', professorId: 'Desconhecido', professorNome: 'Desconhecido' };
+
+            for (let questao of prova.questoes) {
+
+              // Se (a questão é pública ou eu sou o dono da questão) e não foi adicionada nenhuma questão semelhante,
+              if (
+                (questao.isPublica
+                  ||
+                  avaliacao.professorId == this.credencialService.getLoggedUserIdFromCookie()
+                )
+                && questoes.filter(q => this.getQuestaoHash(q) == this.getQuestaoHash(questao)).length <= 0
+              ) {
+
+                questoes.push({
+                  ...questao,
+                  avaliacao
+                });
+
+              }
+
+            }
+
+          }
+
+          resolve(questoes);
+
+        })
+
+      });
+
+
+    });
+
+
+  }
+
   deletarProva(prova: Prova) {
 
     // Deleta todos os arquivos da prova

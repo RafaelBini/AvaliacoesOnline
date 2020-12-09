@@ -24,12 +24,28 @@
     padding: 3px;
 }
 
+.is-publica{
+    display: flex;
+    font-size: 12px;
+    flex: 3;
+    color: darkgreen;
+    text-align: left;
+    position: relative;
+}
+
 .titulo-avaliacao{
     font-size: 12px;
     color: var(--cor-primaria);
     text-align: left;
     display: flex;
     flex: 3;
+}
+
+.questao-publicada{
+    color: darkgreen; 
+    font-size: 12px;
+    display: flex;
+    flex-direction: row;
 }
 
 .questao-nivel{
@@ -75,3 +91,4 @@
     width: fit-content;
     display: flexbox;
 }
+

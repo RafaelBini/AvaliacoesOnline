@@ -1,7 +1,20 @@
 <div class="questao">
     <div class="header-container">
-        <div class="titulo-avaliacao">
-            Avaliação: {{avaliacaoDaQuestao.titulo}}
+        <div *ngIf="questao.isPublica && !isMinha()" class="is-publica">
+            Questão Pública &nbsp;
+            <mat-icon class="btn-help" matTooltip="Clique para receber ajuda" (click)="abrirAjudaQuestaoPublica()">
+                help
+            </mat-icon>
+        </div>
+        <div *ngIf="isMinha()" class="titulo-avaliacao">
+            Avaliação: {{questao.avaliacao.titulo}}
+            <span *ngIf="questao.isPublica" class="questao-publicada">
+                &nbsp;&nbsp;[Publicada]&nbsp;&nbsp;
+                <mat-icon class="btn-help" matTooltip="Clique para receber ajuda" (click)="abrirAjudaQuestaoPublica()">
+                    help
+                </mat-icon>
+            </span>
+
         </div>
         <div class="questao-tipo">
             {{comumService.questaoTipos[questao.tipo].nome}}
@@ -14,9 +27,21 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item>
-                    <mat-icon>delete</mat-icon>
-                    Remover Questão
+                <button *ngIf="!isArquivada()" (click)="arquivar()" mat-menu-item>
+                    <mat-icon>remove</mat-icon>
+                    Arquivar Questão
+                </button>
+                <button *ngIf="isArquivada()" (click)="desarquivar()" mat-menu-item>
+                    <mat-icon>add</mat-icon>
+                    Desarquivar Questão
+                </button>
+                <button *ngIf="!questao.isPublica" (click)="publicar()" mat-menu-item>
+                    <mat-icon>publish</mat-icon>
+                    Publicar Questão
+                </button>
+                <button *ngIf="questao.isPublica && isMinha()" (click)="despublicar()" mat-menu-item>
+                    <mat-icon>undo</mat-icon>
+                    Despublicar Questão
                 </button>
             </mat-menu>
         </div>

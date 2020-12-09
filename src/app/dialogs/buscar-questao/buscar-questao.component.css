@@ -49,36 +49,60 @@
     cursor: pointer;
 }
 
-
-
+.btn-disabled{
+  background-color: lightgray;
+  color: black;
+}
+.btn-disabled:hover{
+  background-color: lightgray;
+  color: black;
+}
 
 
 .input-basico{
-    border: 1px dotted rgba(0, 0, 0, 0.20);
-    border-radius: 7px;
-    background-color: white;  
-    overflow: hidden;
-  }
-  .input-basico:focus {
-    outline: none;
-    border: 1px dashed var(--cor-primaria);
-    border-radius: 7px;
-  }
-  .input-basico:disabled {
-    background-color: rgb(250, 250, 250);  
-    color: rgb(97, 97, 97);
-  }
-  
-  
-  .select-basico {
-    cursor: pointer;
-    border: 1px dotted rgba(0, 0, 0, 0.20);
-    border-radius: 7px;
-    padding: 5px;
-    background-color: white;
-  }
-  .select-basico:focus {
-    outline: none;
-    border: 1px dashed var(--cor-primaria);
-    border-radius: 7px;
-  }
+  border: 1px dotted rgba(0, 0, 0, 0.20);
+  border-radius: 7px;
+  background-color: white;  
+  overflow: hidden;
+}
+.input-basico:focus {
+  outline: none;
+  border: 1px dashed var(--cor-primaria);
+  border-radius: 7px;
+}
+.input-basico:disabled {
+  background-color: rgb(250, 250, 250);  
+  color: rgb(97, 97, 97);
+}
+
+
+.select-basico {
+  cursor: pointer;
+  border: 1px dotted rgba(0, 0, 0, 0.20);
+  border-radius: 7px;
+  padding: 5px;
+  background-color: white;
+  display: flex;
+}
+.select-basico:focus {
+  outline: none;
+  border: 1px dashed var(--cor-primaria);
+  border-radius: 7px;
+}
+
+
+.spinner-container{
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  align-content: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.filtros-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
