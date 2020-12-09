@@ -1,8 +1,4 @@
 
-- Criar opção para remover questão do banco de questões
-- Criar opção para deixar a questão como "pública"
-- Resolver bug de questão duplicada (qual é a cor da grama)
-- Testar adicionar questões de avaliações excluidas
 
 ---------------------------------
 

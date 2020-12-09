@@ -416,7 +416,7 @@ export class ComumService {
   }
 
   insertInArray(vetor: Array<string>, index: number, valor: string) {
-    console.log(vetor)
+
     if (vetor == null)
       vetor = [];
 

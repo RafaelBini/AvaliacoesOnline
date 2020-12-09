@@ -323,8 +323,8 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
   adicionarAlunosVisitantes() {
 
     var adicioneiAluno = false;
-    for (let alunoOnline of this.getAlunosFromTodosGrupos()) {
-
+    for (let alunoObj of this.getAlunosFromTodosGrupos()) {
+      var alunoOnline = { ...alunoObj }
       var tenhoAluno = false;
       for (let aluno of this.credencialService.loggedUser.alunos) {
         if (alunoOnline.id == aluno.id) {
@@ -335,7 +335,17 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
         alunoOnline.online = false;
         alunoOnline.statusId = 0;
         alunoOnline.dtStatus = this.comumService.insertInArray(alunoOnline.dtStatus, 0, this.timeService.getCurrentDateTime().toISOString());
-        this.credencialService.loggedUser.alunos.push(alunoOnline);
+        this.credencialService.loggedUser.alunos.push({
+          email: alunoOnline.email,
+          id: alunoOnline.id,
+          idExterno: null,
+          tagIdExterno: null,
+          img: alunoOnline.img,
+          nome: alunoOnline.nome,
+          online: alunoOnline.online,
+          statusId: alunoOnline.statusId,
+          dtStatus: alunoOnline.dtStatus,
+        });
         adicioneiAluno = true;
       }
     }

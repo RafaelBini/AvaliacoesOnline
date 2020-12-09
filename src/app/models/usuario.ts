@@ -24,4 +24,5 @@ export interface Usuario {
     tutorialMostradoAvaliacaoCriada?: boolean,
     tutorialMostradoTelaAlunos?: boolean,
     questoesHashArquivadas?: string[],
+    dtCriacao?: string,
 }

@@ -1,3 +1,4 @@
+import { TimeService } from 'src/app/services/time.service';
 import { Usuario } from './../models/usuario';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -8,10 +9,14 @@ import { Md5 } from 'ts-md5/dist/md5';
 })
 export class UsuarioService {
 
-  constructor(private db: AngularFirestore) { }
+  constructor(
+    private db: AngularFirestore,
+    private timeService: TimeService,
+  ) { }
 
   insert(usuario: Usuario): Promise<Usuario> {
     usuario.alunos = [];
+    usuario.dtCriacao = this.timeService.getCurrentDateTime().toISOString();
     return new Promise<Usuario>((resolve, reject) => {
       this.db.collection('usuarios').add(usuario).then(docRef => {
         usuario.id = docRef.id;
@@ -23,8 +28,6 @@ export class UsuarioService {
     });
 
   }
-
-
 
   getAll(): Promise<Array<Usuario>> {
     return new Promise((resolve, reject) => {

@@ -30,14 +30,9 @@ export interface Avaliacao {
     usuariosIdQueArquivaram?: Array<string>;
     provas?: Array<string>;
     provaGabarito?: string;
-
     duracaoIndividualMs?: number;
     duracaoIndividual?: number;
     duracaoIndividualUnidade?: 'segundos' | 'minutos' | 'horas' | 'dias';
     isDuracaoIndividualIndeterminada?: boolean;
-    /*
-    questoes?: Array<Questao>,
-    avaliacoesParaCorrigir?: Array<Avaliacao>;
-     */
-
+    dtCriacao?: string,
 }

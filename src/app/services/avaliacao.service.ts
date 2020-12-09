@@ -110,6 +110,7 @@ export class AvaliacaoService {
   }
 
   insertNovaAvaliacao(avaliacao: Avaliacao) {
+    avaliacao.dtCriacao = this.timeService.getCurrentDateTime().toISOString();
     return this.db.collection('avaliacoes').doc(avaliacao.id).set(avaliacao);
   }
 
