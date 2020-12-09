@@ -47,15 +47,13 @@
         </div>
     </div>
 
-
-    <div class="questao-pergunta">{{questao.pergunta}}</div>
-
-
     <div class="tags-container">
         <div *ngFor="let tag of questao.tags" class="tag">
             {{tag}}
         </div>
     </div>
+
+    <div class="questao-pergunta">{{questao.pergunta}}</div>
 
     <div class="questao-resposta">
         <app-questao-resposta-consulta [questao]="questao"></app-questao-resposta-consulta>

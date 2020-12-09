@@ -81,14 +81,25 @@
     display: block;
 }
 
+.tags-container{
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+}
+
 .tag{
     padding: 3px;
     background-color: var(--cor-primaria);
     color: white;
-    margin-right: 4px;
     border-radius: 5px;
     font-size: 11px;
     width: fit-content;
-    display: flexbox;
+    display: flex;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin: 5px;
 }
 

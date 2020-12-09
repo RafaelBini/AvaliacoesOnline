@@ -27,7 +27,7 @@ export class QuestaoCardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.questao);
+
   }
 
   notificarAlteracoes() {
