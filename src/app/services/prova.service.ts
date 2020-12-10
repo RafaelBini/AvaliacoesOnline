@@ -194,7 +194,7 @@ export class ProvaService {
     });
   }
 
-  getProvaFromGabarito(gabarito: Prova): Prova {
+  getProvaFromGabarito(gabarito: Prova, randomizarOrdemQuestoes: boolean): Prova {
 
     var prova: Prova = JSON.parse(JSON.stringify(gabarito)) as Prova;
 
@@ -232,6 +232,16 @@ export class ProvaService {
     prova.isGabarito = false;
     prova.alunos = [];
     prova.provasParaCorrigir = [];
+
+    const NUM_QUESTOES = prova.questoes.length;
+    if (randomizarOrdemQuestoes) {
+      for (var t = 0; t < NUM_QUESTOES - 1; t++) {
+        const RANDOM_INDEX_A = Math.floor((Math.random() * 10) % NUM_QUESTOES);
+        const RANDOM_INDEX_B = Math.floor((Math.random() * 10) % NUM_QUESTOES);
+        // Troca as posições na array
+        [prova.questoes[RANDOM_INDEX_A], prova.questoes[RANDOM_INDEX_B]] = [prova.questoes[RANDOM_INDEX_B], prova.questoes[RANDOM_INDEX_A]];
+      }
+    }
 
     return prova;
   }
@@ -433,7 +443,7 @@ export class ProvaService {
         nota += Math.round(media);
       }
       else if (questaoTipo.temCorrecaoAutomatica) {
-        nota += questaoTipo.getNota(questao, gabarito.questoes[i]);
+        nota += questaoTipo.getNota(questao, gabarito.questoes[questao.index]);
       }
 
     }

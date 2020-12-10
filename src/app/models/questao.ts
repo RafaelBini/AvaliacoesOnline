@@ -35,4 +35,5 @@ export interface Questao {
     isEditando?: boolean;
     isPublica?: boolean;
     avaliacao?: Avaliacao;
+    index?: number;
 }

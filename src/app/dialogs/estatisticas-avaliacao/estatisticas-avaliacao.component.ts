@@ -33,7 +33,6 @@ export class EstatisticasAvaliacaoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.comecarOuvirQuestoes();
-
   }
 
   ngOnDestroy(): void {
@@ -52,14 +51,14 @@ export class EstatisticasAvaliacaoComponent implements OnInit, OnDestroy {
 
           if (prova.isGabarito)
             for (let questao of prova.questoes)
-              this.questoesGabarito.push(questao);
+              this.questoesGabarito[questao.index] = questao;
 
           else {
             for (let [questaoIndex, questao] of prova.questoes.entries()) {
 
-              if (this.gruposQuestoes[questaoIndex] == undefined) {
+              if (this.gruposQuestoes[questao.index] == undefined) {
 
-                this.gruposQuestoes[questaoIndex] = {
+                this.gruposQuestoes[questao.index] = {
                   questoes: [],
                   charts: [],
                   tipo: questao.tipo,
@@ -67,12 +66,14 @@ export class EstatisticasAvaliacaoComponent implements OnInit, OnDestroy {
                 };
               }
 
-              this.gruposQuestoes[questaoIndex].questoes.push(questao);
+              this.gruposQuestoes[questao.index].questoes.push(questao);
 
             }
           }
 
         }
+        console.log(this.gruposQuestoes);
+        console.log(this.questoesGabarito);
         this.receberCharts();
 
       });

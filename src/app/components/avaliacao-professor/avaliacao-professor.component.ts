@@ -344,7 +344,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
           nome: alunoOnline.nome,
           online: alunoOnline.online,
           statusId: alunoOnline.statusId,
-          dtStatus: alunoOnline.dtStatus,
+          dtStatus: [],
         });
         adicioneiAluno = true;
       }

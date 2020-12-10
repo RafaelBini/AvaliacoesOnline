@@ -177,7 +177,7 @@ export class QuestoesResponderComponent implements OnInit {
 
 
   // ALTERNATIVAS
-  onMultiplaEscolhaChange(questao: Questao, alternativaIndex: number, isEditavel: boolean, questaoIndex: number) {
+  onMultiplaEscolhaChange(questao: Questao, alternativaIndex: number, isEditavel: boolean) {
     this.desmarcarTudoMenosUma(questao, alternativaIndex, isEditavel);
     this.sinalizarRespostaAlterada(questao);
     //console.log(this.comumService.questaoTipos[questao.tipo].getNota(questao));

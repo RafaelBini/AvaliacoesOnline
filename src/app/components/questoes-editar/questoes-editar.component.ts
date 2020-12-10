@@ -52,6 +52,7 @@ export class QuestoesEditarComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      this.setQuestoesIndex();
     } else {
       transferArrayItem(event.previousContainer.data,
         event.container.data,
@@ -59,6 +60,11 @@ export class QuestoesEditarComponent implements OnInit {
         event.currentIndex);
     }
 
+  }
+  setQuestoesIndex() {
+    for (let [questaoIndex, questao] of this.prova.questoes.entries()) {
+      questao.index = questaoIndex;
+    }
   }
   tipoQuestaoChanged(questao, novoTipo) {
     questao.tipo = novoTipo;
@@ -89,6 +95,7 @@ export class QuestoesEditarComponent implements OnInit {
   deletarQuestao(questaoIndex: number) {
     if (this.prova.questoes.length > 1)
       this.prova.questoes.splice(questaoIndex, 1);
+    this.setQuestoesIndex();
   }
   marcarEdicao(questaoIndex: number) {
     for (var i = 0; i < this.prova.questoes.length; i++) {

@@ -490,6 +490,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     });
     this.marcarEdicao(this.provaGabarito.questoes.length - 1);
     this.comumService.scrollToBottom();
+    this.setQuestoesIndex();
     this.atualizarRascunhoProva();
   }
   marcarEdicao(questaoIndex: number) {
@@ -686,6 +687,7 @@ export class AvaliacaoNovaComponent implements OnInit {
 
       this.avaliacaoService.insertNovaAvaliacao(this.avaliacao).then(() => {
         this.provaGabarito.avaliacaoId = this.avaliacao.id;
+        this.setQuestoesIndex();
         this.provaService.insertProvaGabarito(this.provaGabarito).then(() => {
           this.provaService.deletarProvaSemExcuirArquivos(this.credencialService.getLoggedUserIdFromCookie());
           this.avaliacaoService.deletarAvaliacao(this.credencialService.getLoggedUserIdFromCookie());
@@ -803,7 +805,7 @@ export class AvaliacaoNovaComponent implements OnInit {
         }
       }
     }
-    this.provaExemplo = this.provaService.getProvaFromGabarito(this.provaGabarito);
+    this.provaExemplo = this.provaService.getProvaFromGabarito(this.provaGabarito, this.avaliacao.isOrdemAleatoria);
     this.visao = tipoVisao;
     this.atualizarAvaliacao();
   }
@@ -877,6 +879,12 @@ export class AvaliacaoNovaComponent implements OnInit {
   }
   getNowStr() {
     return this.comumService.getStringFromDate(this.timeService.getCurrentDateTime());
+  }
+
+  setQuestoesIndex() {
+    for (let [questaoIndex, questao] of this.provaGabarito.questoes.entries()) {
+      questao.index = questaoIndex;
+    }
   }
 
   // ID DA AVALIAÇÃO

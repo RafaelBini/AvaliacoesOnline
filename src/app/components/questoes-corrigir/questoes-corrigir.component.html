@@ -44,7 +44,7 @@
                                     <mat-select disabled="true" class="select-basico" style="width: 82%;"
                                         [(ngModel)]="associacao.opcaoSelecionada">
                                         <mat-option [value]="_associacao.opcaoSelecionada"
-                                            *ngFor="let _associacao of getAssociacoesOrdenadas(qi)">
+                                            *ngFor="let _associacao of getAssociacoesOrdenadas(questao.index)">
                                             {{_associacao.opcaoSelecionada}}
                                         </mat-option>
                                     </mat-select>
@@ -133,7 +133,7 @@
                             <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
                             <select disabled="true" *ngIf="parte.tipo == 'select'" class="select-basico"
                                 [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada">
-                                <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao, qi)"
+                                <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao, questao.index)"
                                     [value]="opcaoPreencher.opcaoSelecionada">
                                     {{opcaoPreencher.opcaoSelecionada}}
                                 </option>
@@ -161,8 +161,7 @@
                                                 </mat-button-toggle-group>
                                             </td>
                                             <td valign="middle" class="alternativa"
-                                                style="cursor: default; white-space: pre-line;"
-                                                [style.color]="alternativa.selecionada == null ? 'black' : (alternativa.selecionada == true ? 'green' : 'red')">
+                                                style="cursor: default; white-space: pre-line;">
                                                 {{alternativa.texto}}
                                             </td>
                                         </tr>
@@ -269,7 +268,7 @@
                                     </button>
                                     <div *ngIf="questao.tipo == 1 && userTipo == 'professor'"
                                         class="dica-resposta-dissertativa">
-                                        {{gabarito.questoes[qi].resposta}}
+                                        {{gabarito.questoes[questao.index].resposta}}
                                     </div>
                                     <br />
                                     Observação (opcional):
@@ -295,7 +294,7 @@
                         </table>
 
                         <button mat-button *ngIf="visaoTipo == 'consulta' || userTipo == 'professor'"
-                            (click)="abrirGabarito(qi)" style="position: absolute; top: 8px; right: 8px;">
+                            (click)="abrirGabarito(questao.index)" style="position: absolute; top: 8px; right: 8px;">
                             Ver Gabarito
                         </button>
 
@@ -309,15 +308,16 @@
                         <table style="width: 100%; height: 100%;">
                             <tr>
                                 <td>
-                                    Nota: <input type="number" [(ngModel)]="getMinhaCorrecao(questao,qi).nota"
+                                    Nota: <input type="number"
+                                        [(ngModel)]="getMinhaCorrecao(questao,questao.index).nota"
                                         (ngModelChange)="sinalizarCorrecaoAlterada(questao)"
                                         [disabled]="visaoTipo != 'correcao'" min="0" [max]="questao.valor" #nota
                                         value="0" style="width: 40px;" /> de
                                     {{questao.valor}}
 
                                     <button *ngIf="visaoTipo == 'correcao'"
-                                        (click)="inserirNotaMaximaAluno(questao, qi)" matTooltip="Dar nota máxima"
-                                        mat-icon-button>
+                                        (click)="inserirNotaMaximaAluno(questao, questao.index)"
+                                        matTooltip="Dar nota máxima" mat-icon-button>
                                         <mat-icon>done</mat-icon>
                                     </button>
 
@@ -335,7 +335,7 @@
                                             (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
                                             class="input-basico" [disabled]="visaoTipo != 'correcao'"
                                             [disabled]="isLocked(questao)"
-                                            [(ngModel)]="getMinhaCorrecao(questao, qi).observacao"
+                                            [(ngModel)]="getMinhaCorrecao(questao, questao.index).observacao"
                                             (ngModelChange)="sinalizarCorrecaoAlterada(questao)"
                                             (blur)="onDissertativaBlur(questao)" (focus)="onDissertativaFocus(questao)"
                                             style="width: 98%; padding: 6px;  padding-top: 14px;"></textarea>
@@ -351,7 +351,7 @@
                             </tr>
                         </table>
 
-                        <button mat-button *ngIf="avaliacao.tipoCorrecao == 3" (click)="abrirGabarito(qi)"
+                        <button mat-button *ngIf="avaliacao.tipoCorrecao == 3" (click)="abrirGabarito(questao.index)"
                             style="position: absolute; top: 8px; right: 8px;">
                             Ver Gabarito
                         </button>

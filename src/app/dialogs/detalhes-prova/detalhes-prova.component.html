@@ -3,16 +3,40 @@
 
 </div>
 
-<div>
-    <b>Adicionado na avaliação</b>: {{comumService.getDataAmigavel(aluno.dtStatus[0])}}
-    <br />
-    <b>Iniciou a prova</b>: {{comumService.getDataAmigavel(aluno.dtStatus[2])}}
-    <br />
-    <b>Bloqueado pelo professor</b>: {{comumService.getDataAmigavel(aluno.dtStatus[1])}}
-    <br />
-    <b>Finalizou a prova</b>: {{comumService.getDataAmigavel(aluno.dtStatus[3])}}
-
-</div>
+<table style="width: 100%;">
+    <tr>
+        <td>
+            <b>Adicionado na avaliação</b>:
+        </td>
+        <td>
+            {{comumService.getDataAmigavel(aluno.dtStatus[0])}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Iniciou a prova</b>:
+        </td>
+        <td>
+            {{comumService.getDataAmigavel(aluno.dtStatus[2])}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Bloqueado pelo professor</b>:
+        </td>
+        <td>
+            {{comumService.getDataAmigavel(aluno.dtStatus[1])}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Finalizou a prova</b>:
+        </td>
+        <td>
+            {{comumService.getDataAmigavel(aluno.dtStatus[3])}}
+        </td>
+    </tr>
+</table>
 <br />
 <div style="text-align: center;">
     <button mat-dialog-close mat-button>Ok</button>

@@ -267,7 +267,7 @@ export class ComumService {
       getNota(questao: Questao, questaoGabarito: Questao): number {
         var nota = questao.valor;
         for (let [i, opcao] of questao.opcoesParaPreencher.entries()) {
-          if (opcao.opcaoSelecionada != questaoGabarito.opcoesParaPreencher[i].opcaoSelecionada && opcao.opcaoSelecionada != null && opcao.opcaoSelecionada != '') {
+          if (opcao.opcaoSelecionada != questaoGabarito.opcoesParaPreencher[i].opcaoSelecionada || opcao.opcaoSelecionada == null || opcao.opcaoSelecionada == '') {
             nota -= (questao.valor / questao.partesPreencher.filter(p => p.tipo == 'select').length);
           }
         }
@@ -307,15 +307,15 @@ export class ComumService {
     {
       codigo: 7,
       nome: "Veradadeiro ou Falso - Justificativa",
-      temCorrecaoAutomatica: false,
-      getNota(questao: Questao, questaoGabarito): number {
+      temCorrecaoAutomatica: true,
+      getNota(questao, questaoGabarito): number {
         var nota = questao.valor;
         for (let [i, alternativa] of questao.alternativas.entries()) {
           if (questaoGabarito.alternativas[i].selecionada != alternativa.selecionada) {
             nota -= (questao.valor / questao.alternativas.length);
           }
         }
-        return nota;
+        return nota - ComumService.getDescontoTentativas(questao);
       },
       isRespondida(questao: Questao) {
         for (let alternativa of questao.alternativas) {

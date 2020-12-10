@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="gruposQuestoes.length > 0" class="container">
     <!-- <div [chart]="testChart">
 
     </div> -->
@@ -22,7 +22,7 @@
         </div>
         <div *ngIf="grupoQuestoes.tipo == 5">
             <span style="white-space: pre-line; font-size: 18px;"
-                *ngFor="let parte of questoesGabarito[grupoQuestoesIndex].partesPreencher">
+                *ngFor="let parte of questoesGabarito[grupoQuestoes.questoes[0].index].partesPreencher">
                 <span *ngIf="parte.tipo == 'texto'">{{parte.conteudo}}</span>
                 <span *ngIf="parte.tipo == 'select'">
                     &nbsp;&nbsp;<b>({{parte.conteudo + 1}})</b>&nbsp;&nbsp;
@@ -33,7 +33,7 @@
         <div [chart]="chart" *ngFor='let chart of grupoQuestoes.charts'></div>
 
 
-        <button (click)="verGabarito(grupoQuestoesIndex)" class="btn-gabarito" mat-button>
+        <button (click)="verGabarito(grupoQuestoes.questoes[0].index)" class="btn-gabarito" mat-button>
             Ver Gabarito
         </button>
     </div>

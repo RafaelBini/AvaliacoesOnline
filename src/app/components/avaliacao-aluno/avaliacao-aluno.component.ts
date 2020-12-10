@@ -194,7 +194,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
                 const NOTA_MAXIMA = this.provaService.getPontuacaoMaxima(this.prova);
 
 
-                if (this.getGrupoOuEuNaAvaliacao().notaTotal != MINHA_NOTA || this.getGrupoOuEuNaAvaliacao().valorTotal != NOTA_MAXIMA) {
+                if ((this.getGrupoOuEuNaAvaliacao().notaTotal != MINHA_NOTA || this.getGrupoOuEuNaAvaliacao().valorTotal != NOTA_MAXIMA) && !this.getGrupoOuEuNaAvaliacao().provaCorrigida) {
 
                   this.getGrupoOuEuNaAvaliacao().notaTotal = MINHA_NOTA;
                   this.getGrupoOuEuNaAvaliacao().valorTotal = NOTA_MAXIMA;
@@ -655,7 +655,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     this.estouIndoInserirProva = true;
     console.log("AVISO: estou indo inserir prova!!");
 
-    const PROVA_EM_BRANCO = this.provaService.getProvaFromGabarito(this.gabarito);
+    const PROVA_EM_BRANCO = this.provaService.getProvaFromGabarito(this.gabarito, this.avaliacao.isOrdemAleatoria);
     PROVA_EM_BRANCO.alunos.push(this.getEuNaAvaliacao());
 
     // Insere uma nova prova
@@ -709,7 +709,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
 
         if (this.gabarito.questoes.length > 0) {
 
-          const PROVA_EM_BRANCO = this.provaService.getProvaFromGabarito(this.gabarito);
+          const PROVA_EM_BRANCO = this.provaService.getProvaFromGabarito(this.gabarito, this.avaliacao.isOrdemAleatoria);
           PROVA_EM_BRANCO.alunos = [];
           PROVA_EM_BRANCO.provasParaCorrigir = [];
           PROVA_EM_BRANCO.alunos.push(this.getEuNaAvaliacao());

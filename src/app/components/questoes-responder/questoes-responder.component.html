@@ -44,7 +44,7 @@
                                         [(ngModel)]="associacao.opcaoSelecionada"
                                         (ngModelChange)="sinalizarRespostaAlterada(questao)">
                                         <mat-option [value]="_associacao.opcaoSelecionada"
-                                            *ngFor="let _associacao of getAssociacoesOrdenadas(qi)">
+                                            *ngFor="let _associacao of getAssociacoesOrdenadas(questao.index)">
                                             {{_associacao.opcaoSelecionada}}
                                         </mat-option>
                                     </mat-select>
@@ -94,8 +94,10 @@
                             </app-arquivo-anexo>
 
                             <!-- ANEXO CARREGANDO -->
-                            <app-arquivo-anexo [style.display]="file.percentual >= 100 ? 'none' : ''" [editando]="true"
-                                tipo="arquivosEntregues" [file]="file" [questao]="questao" [anexoIndex]="anexoIndex"
+                            <app-arquivo-anexo
+                                [style.display]="provaCache.questoes[qi].arquivosEntregues.length <= questao.arquivosEntregues.length ? 'none' : ''"
+                                [editando]="true" tipo="arquivosEntregues" [file]="file" [questao]="questao"
+                                [anexoIndex]="anexoIndex"
                                 *ngFor="let file of provaCache.questoes[qi].arquivosEntregues; index as anexoIndex">
 
                             </app-arquivo-anexo>
@@ -110,9 +112,10 @@
                             </app-arquivo-imagem>
 
                             <!-- IMAGEM CARREGANDO (CACHE) -->
-                            <app-arquivo-imagem [style.display]="file.percentual >= 100 ? 'none' : ''" [editando]="true"
-                                tipo="imagensEntregues" [file]="file" [questao]="questao" [imagemIndex]="imagemIndex"
-                                (imagemRemovida)="imagemRemovida()"
+                            <app-arquivo-imagem
+                                [style.display]="provaCache.questoes[qi].imagensEntregues.length <= questao.imagensEntregues.length ? 'none' : ''"
+                                [editando]="true" tipo="imagensEntregues" [file]="file" [questao]="questao"
+                                [imagemIndex]="imagemIndex" (imagemRemovida)="imagemRemovida()"
                                 *ngFor="let file of provaCache.questoes[qi].imagensEntregues; index as imagemIndex">
 
                             </app-arquivo-imagem>
@@ -142,7 +145,7 @@
                             <br />
                             Tamanho máximo de cada arquivo: 50 MB
                         </div>
-                        <div>
+                        <div *ngIf="provaCache.questoes.length > 0">
 
                             <app-arquivo-anexo [editando]="true" tipo="arquivosEntregues" [file]="file"
                                 [questao]="questao" [anexoIndex]="anexoIndex" (anexoRemovido)="anexoRemovido()"
@@ -150,9 +153,10 @@
 
                             </app-arquivo-anexo>
 
-                            <app-arquivo-anexo [style.display]="file.percentual >= 100 ? 'none': ''" [editando]="true"
-                                tipo="arquivosEntregues" [file]="file" [questao]="questao" [anexoIndex]="anexoIndex"
-                                (anexoRemovido)="anexoRemovido()"
+                            <app-arquivo-anexo
+                                [style.display]="provaCache.questoes[qi].arquivosEntregues.length <= questao.arquivosEntregues.length ? 'none': ''"
+                                [editando]="true" tipo="arquivosEntregues" [file]="file" [questao]="questao"
+                                [anexoIndex]="anexoIndex" (anexoRemovido)="anexoRemovido()"
                                 *ngFor="let file of provaCache.questoes[qi].arquivosEntregues; index as anexoIndex">
 
                             </app-arquivo-anexo>
@@ -170,7 +174,7 @@
                             <tr *ngFor="let alternativa of questao.alternativas; index as ai">
                                 <td valign="middle" class="alternativa">
                                     <mat-checkbox class="checkbox-full" [(ngModel)]="alternativa.selecionada"
-                                        (ngModelChange)="onMultiplaEscolhaChange(questao, ai, false, qi)">
+                                        (ngModelChange)="onMultiplaEscolhaChange(questao, ai, false)">
                                         <span style="white-space: pre-line;">{{alternativa.texto}}</span>
                                     </mat-checkbox>
                                 </td>
@@ -187,7 +191,7 @@
                             <select *ngIf="parte.tipo == 'select'" class="select-basico"
                                 [(ngModel)]="questao.opcoesParaPreencher[parte.conteudo].opcaoSelecionada"
                                 (ngModelChange)="sinalizarRespostaAlterada(questao)">
-                                <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao, qi)"
+                                <option *ngFor="let opcaoPreencher of getOpcoesPreencherAtivas(questao, questao.index)"
                                     [value]="opcaoPreencher.opcaoSelecionada">
                                     {{opcaoPreencher.opcaoSelecionada}}
                                 </option>
@@ -264,7 +268,8 @@
 
                         </div>
 
-                        <button mat-button *ngIf="avaliacao.tipoPontuacao == 2" (click)="validar(questao, qi)"
+                        <button mat-button *ngIf="avaliacao.tipoPontuacao == 2"
+                            (click)="validar(questao, questao.index)"
                             [matTooltip]="'Atenção: Se a resposta estiver errada, você irá perder ' + comumService.getRounded(questao.valor/3) + ' pontos'">
                             Validar
                         </button>

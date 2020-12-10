@@ -421,7 +421,7 @@ export class AvaliacaoCorrecaoComponent implements OnInit, OnDestroy {
 
       // VERIFICA CORREÇÃO AUTOMÁTICA      
       else if (soma <= 0 && questaoTipo.temCorrecaoAutomatica) {
-        soma = questaoTipo.getNota(questao, this.gabarito.questoes[this.prova.questoes.indexOf(questao)]);
+        soma = questaoTipo.getNota(questao, this.gabarito.questoes[questao.index]);
         questao.correcaoProfessor.nota = Math.round(soma);
       }
 

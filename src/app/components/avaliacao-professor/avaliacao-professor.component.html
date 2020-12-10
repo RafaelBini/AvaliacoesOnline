@@ -73,7 +73,7 @@
 
                             <div cdkDropList [cdkDropListData]="professor.alunos"
                                 (cdkDropListDropped)="drop($event, 'alunos')"
-                                style="overflow: auto; display: flex; flex-wrap: wrap; width: 100%;  height: 80%;">
+                                style="overflow: auto; display: flex; flex-direction: column; align-items: flex-start; flex-wrap: wrap; width: 100%;  height: 80%;">
 
                                 <div class="aluno" cdkDrag *ngFor="let aluno of alunosFiltrados"
                                     [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
