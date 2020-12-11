@@ -3,9 +3,6 @@
 ---------------------------------
 
 
-
-- Implementar "Ordenar questões de forma aleatória"
-
 - Deixar as coisas mais claras para o professor:
 	- Na parte de correções, explicar o que deve ser feito e quando todas as correções estiverem ok, sinalizar!!
 
@@ -13,6 +10,8 @@
 - Colocar editor de texto
 	- Biblioteca: https://openbase.io/js/ngx-editor
 	- Exemplo: https://stackblitz.com/edit/ngx-editor-8htfq5?file=src%2Fapp%2Fapp.component.ts
+
+- Criar um registro de log de tudo que acontece no sistema (API com MongoDB)
 
 
 

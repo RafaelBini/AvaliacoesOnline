@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ComumService } from './../../services/comum.service';
 import { Questao } from './../../models/questao';
-import { Component, OnInit, Input, ElementRef, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, EventEmitter, Output, OnDestroy, ViewChild } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { Usuario } from 'src/app/models/usuario';
 import { Arquivo } from 'src/app/models/arquivo';
@@ -29,6 +29,7 @@ export class QuestoesResponderComponent implements OnInit {
       { arquivosEntregues: [] }
     ]
   };
+  @ViewChild('anexoSelectInput') anexoSelectInput: ElementRef;
 
   @Output() respostaAlterada = new EventEmitter<void>();
 
@@ -316,6 +317,7 @@ export class QuestoesResponderComponent implements OnInit {
         uploadTaskSnap.ref.getDownloadURL().then(url => {
           this.provaCache.questoes[questaoIndex].arquivosEntregues[newFileIndex].url = url;
           this.prova.questoes[questaoIndex].arquivosEntregues.push(this.provaCache.questoes[questaoIndex].arquivosEntregues[newFileIndex]);
+          this.anexoSelectInput.nativeElement.value = "";
           this.respostaAlterada.emit();
         })
           .catch(reason => {
@@ -328,8 +330,9 @@ export class QuestoesResponderComponent implements OnInit {
 
     }
   }
-  anexoRemovido() {
-
+  anexoRemovido(questaoIndex: number, anexoIndex: number) {
+    if (this.provaCache.questoes[questaoIndex].arquivosEntregues[anexoIndex])
+      this.provaCache.questoes[questaoIndex].arquivosEntregues.splice(anexoIndex, 1);
     this.respostaAlterada.emit();
   }
 

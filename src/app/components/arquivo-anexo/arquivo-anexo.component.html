@@ -33,7 +33,7 @@
 
         <span style="margin-left: 10px;">{{file.nomeArquivo}}</span>
         <button *ngIf="editando" mat-icon-button matTooltip="Remover anexo" (click)="removerAnexo(questao, anexoIndex)"
-            style="position: absolute; right: 3px; top: 1px; color: var(--cor-perigosa)">
+            style="position: absolute; z-index: 1001; right: 3px; top: 1px; color: var(--cor-perigosa)">
             <mat-icon>
                 cancel
             </mat-icon>

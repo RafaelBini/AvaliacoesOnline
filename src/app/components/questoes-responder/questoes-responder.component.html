@@ -84,20 +84,19 @@
                             matTooltip="Adicionar Anexo">
                             <mat-icon>attach_file</mat-icon>
                         </button>
-                        <div>
+                        <div *ngIf="provaCache.questoes[qi]">
 
                             <!-- ANEXO CARREGADO -->
                             <app-arquivo-anexo [editando]="true" tipo="arquivosEntregues" [file]="file"
-                                [questao]="questao" [anexoIndex]="anexoIndex" (anexoRemovido)="anexoRemovido()"
+                                [questao]="questao" [anexoIndex]="anexoIndex"
+                                (anexoRemovido)="anexoRemovido(qi, anexoIndex)"
                                 *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
 
                             </app-arquivo-anexo>
 
                             <!-- ANEXO CARREGANDO -->
-                            <app-arquivo-anexo
-                                [style.display]="provaCache.questoes[qi].arquivosEntregues.length <= questao.arquivosEntregues.length ? 'none' : ''"
-                                [editando]="true" tipo="arquivosEntregues" [file]="file" [questao]="questao"
-                                [anexoIndex]="anexoIndex"
+                            <app-arquivo-anexo [style.display]="file.url ? 'none' : ''" [editando]="true"
+                                tipo="arquivosEntregues" [file]="file" [questao]="questao" [anexoIndex]="anexoIndex"
                                 *ngFor="let file of provaCache.questoes[qi].arquivosEntregues; index as anexoIndex">
 
                             </app-arquivo-anexo>
@@ -112,20 +111,20 @@
                             </app-arquivo-imagem>
 
                             <!-- IMAGEM CARREGANDO (CACHE) -->
-                            <app-arquivo-imagem
-                                [style.display]="provaCache.questoes[qi].imagensEntregues.length <= questao.imagensEntregues.length ? 'none' : ''"
-                                [editando]="true" tipo="imagensEntregues" [file]="file" [questao]="questao"
-                                [imagemIndex]="imagemIndex" (imagemRemovida)="imagemRemovida()"
+                            <app-arquivo-imagem [style.display]="file.url ? 'none' : ''" [editando]="true"
+                                tipo="imagensEntregues" [file]="file" [questao]="questao" [imagemIndex]="imagemIndex"
+                                (imagemRemovida)="imagemRemovida()"
                                 *ngFor="let file of provaCache.questoes[qi].imagensEntregues; index as imagemIndex">
 
                             </app-arquivo-imagem>
-
-                            <input #anexoSelectInput (change)="onAnexoSelected($event, questao)" type="file"
-                                class="input-invisivel" value="Selecione os arquivos" multiple />
-
-                            <input #imagemSelectInput (change)="onImagemSelected($event, questao)" type="file"
-                                class="input-invisivel" accept="image/*" value="Selecione os arquivos" multiple />
                         </div>
+
+                        <input #anexoSelectInput (change)="onAnexoSelected($event, questao)" type="file"
+                            class="input-invisivel" value="Selecione os arquivos" multiple />
+
+                        <input #imagemSelectInput (change)="onImagemSelected($event, questao)" type="file"
+                            class="input-invisivel" accept="image/*" value="Selecione os arquivos" multiple />
+
 
                     </td>
                 </tr>
@@ -145,18 +144,18 @@
                             <br />
                             Tamanho máximo de cada arquivo: 50 MB
                         </div>
-                        <div *ngIf="provaCache.questoes.length > 0">
+                        <div *ngIf="provaCache.questoes[qi]">
 
                             <app-arquivo-anexo [editando]="true" tipo="arquivosEntregues" [file]="file"
-                                [questao]="questao" [anexoIndex]="anexoIndex" (anexoRemovido)="anexoRemovido()"
+                                [questao]="questao" [anexoIndex]="anexoIndex"
+                                (anexoRemovido)="anexoRemovido(qi, anexoIndex)"
                                 *ngFor="let file of questao.arquivosEntregues; index as anexoIndex">
 
                             </app-arquivo-anexo>
 
-                            <app-arquivo-anexo
-                                [style.display]="provaCache.questoes[qi].arquivosEntregues.length <= questao.arquivosEntregues.length ? 'none': ''"
-                                [editando]="true" tipo="arquivosEntregues" [file]="file" [questao]="questao"
-                                [anexoIndex]="anexoIndex" (anexoRemovido)="anexoRemovido()"
+                            <app-arquivo-anexo [style.display]="file.url ? 'none': ''" [editando]="true"
+                                tipo="arquivosEntregues" [file]="file" [questao]="questao" [anexoIndex]="anexoIndex"
+                                (anexoRemovido)="anexoRemovido(qi, anexoIndex)"
                                 *ngFor="let file of provaCache.questoes[qi].arquivosEntregues; index as anexoIndex">
 
                             </app-arquivo-anexo>
