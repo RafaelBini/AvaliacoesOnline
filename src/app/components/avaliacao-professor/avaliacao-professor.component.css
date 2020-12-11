@@ -36,7 +36,7 @@
     margin-top: 6px;
     border: 1px dashed var(--cor-primaria);
     position: relative;
-    
+    box-sizing: border-box;
 }
 .grupo:hover .btn-excluir-grupo{
   opacity: 1;
@@ -165,3 +165,13 @@
     display: block;
     color: gray;
   }
+
+.mensagem{
+  text-align: center;
+  background-color: whitesmoke;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--cor-secundaria);
+  font-size: 12px;
+}

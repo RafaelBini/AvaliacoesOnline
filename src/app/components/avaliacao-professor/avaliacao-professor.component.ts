@@ -1,3 +1,4 @@
+import { ConfirmarComponent } from './../../dialogs/confirmar/confirmar.component';
 import { EstatisticasAvaliacaoComponent } from './../../dialogs/estatisticas-avaliacao/estatisticas-avaliacao.component';
 import { CronometroComponent } from './../cronometro/cronometro.component';
 import { DetalhesProvaComponent } from './../../dialogs/detalhes-prova/detalhes-prova.component';
@@ -130,13 +131,8 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
           }
 
           if (this.avaliacao.status == 2) {
-            if (this.avaliacao.tipoPontuacao == 3) {
-              this.avaliacao.status = 3;
-              this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
-                avaliacaoParaModificar.status = this.avaliacao.status;
-                return avaliacaoParaModificar;
-              }, this.avaliacao.id);
-              console.log("Pulei o status 2 porque é por participação TRANSACAO");
+            if (this.avaliacao.tipoPontuacao == 3 || this.avaliacao.tipoCorrecao == 1) {
+              this.encerrarCorrecoesAutomaticas();
             }
           }
           else if (this.avaliacao.status == 3) {
@@ -447,30 +443,120 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     console.log("Alterei o status da avaliacao para DURANTE AVALIACAO -> TRANSACAO");
 
   }
-  inicarCorrecoes() {
-    this.avaliacao.status = 2;
-    this.avaliacao.dtInicioCorrecao = this.timeService.getCurrentDateTime().toISOString();
 
-    this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
-      avaliacaoParaModificar.status = this.avaliacao.status;
-      avaliacaoParaModificar.dtInicio = this.avaliacao.dtInicio;
-      return avaliacaoParaModificar;
-    }, this.avaliacao.id);
-    console.log("Alterei o status da avaliação para EM CORRECAO -> TRANSACAO");
+  getAlunosNaoFinalizados() {
+    var count = 0;
+    for (let grupo of this.avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        if (aluno.statusId < 3)
+          count++;
+      }
+    }
+    return count;
+  }
+
+  inicarCorrecoes() {
+    new Promise(resolve => {
+      const ALUNOS_NAO_FINALIZADOS = this.getAlunosNaoFinalizados();
+      if (ALUNOS_NAO_FINALIZADOS > 0) {
+        var diagRef = this.dialog.open(ConfirmarComponent, {
+          data: {
+            titulo: (ALUNOS_NAO_FINALIZADOS != 1 ? `Alunos ainda não finalizaram a prova` : `Aluno não finalizou a prova`),
+            mensagem: `Iniciar as correções mesmo assim?`,
+            mensagem2: 'Atenção: ' + (ALUNOS_NAO_FINALIZADOS != 1 ? `${ALUNOS_NAO_FINALIZADOS} alunos ainda não finalizaram a prova` : `Um aluno ainda não finalizou a prova`)
+          }
+        });
+        diagRef.afterClosed().subscribe(result => {
+          if (!result) {
+            resolve(false);
+            return;
+          }
+          resolve(true);
+        })
+      }
+      else {
+        resolve(true);
+      }
+    }).then(result => {
+      if (!result)
+        return;
+
+      this.avaliacao.status = 2;
+      this.avaliacao.dtInicioCorrecao = this.timeService.getCurrentDateTime().toISOString();
+
+      this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+        avaliacaoParaModificar.status = this.avaliacao.status;
+        avaliacaoParaModificar.dtInicio = this.avaliacao.dtInicio;
+        return avaliacaoParaModificar;
+      }, this.avaliacao.id);
+      console.log("Alterei o status da avaliação para EM CORRECAO -> TRANSACAO");
+    });
+
 
   }
+
+  isTodasProvasCorrigidas() {
+    for (let alunoOuGrupo of this.getGruposOuAlunos()) {
+      if (!alunoOuGrupo.provaCorrigida)
+        return false;
+    }
+    return true;
+  }
+
   encerrarCorrecoes() {
+
+    new Promise(resolve => {
+      if (!this.isTodasProvasCorrigidas()) {
+        var diagRef = this.dialog.open(ConfirmarComponent, {
+          data: {
+            titulo: `Provas não corrigidas`,
+            mensagem: `Corrigir de forma automática?`,
+            mensagem2: `Ainda existem provas não corrigidas.`
+          }
+        });
+        diagRef.afterClosed().subscribe(result => {
+          if (!result) {
+            resolve(false);
+            return;
+          }
+          resolve(true);
+        })
+      }
+      else {
+        resolve(true);
+      }
+    }).then(result => {
+
+      if (!result)
+        return;
+
+      this.avaliacao.status = 3;
+      this.avaliacao.dtTermino = this.timeService.getCurrentDateTime().toISOString();
+
+      this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+        avaliacaoParaModificar.status = this.avaliacao.status;
+        avaliacaoParaModificar.dtInicio = this.avaliacao.dtInicio;
+        return avaliacaoParaModificar;
+      }, this.avaliacao.id);
+
+      console.log("Alterei o status da avaliação para ENCERRADA -> TRANSACAO");
+
+    })
+
+  }
+
+  encerrarCorrecoesAutomaticas() {
     this.avaliacao.status = 3;
     this.avaliacao.dtTermino = this.timeService.getCurrentDateTime().toISOString();
 
     this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
       avaliacaoParaModificar.status = this.avaliacao.status;
-      avaliacaoParaModificar.dtInicio = this.avaliacao.dtInicio;
       return avaliacaoParaModificar;
     }, this.avaliacao.id);
-    console.log("Alterei o status da avaliação para ENCERRADA -> TRANSACAO");
 
+    console.log("Alterei o status da avaliação para ENCERRADA -> TRANSACAO");
   }
+
   updateAvaliacao(motivo: string) {
     console.log(`FIREBASE UPDATE: ${motivo}`);
     this.avaliacaoService.updateAvaliacao(this.avaliacao);

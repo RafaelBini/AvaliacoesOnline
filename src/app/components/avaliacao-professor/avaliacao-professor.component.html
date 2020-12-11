@@ -151,7 +151,7 @@
 
             <button *ngIf="comumService.pontuacoes[avaliacao.tipoPontuacao].correcaoAutomatica || 
                 comumService.correcoes[avaliacao.tipoCorrecao].correcaoAutomatica || 
-                avaliacao.tipoPontuacao == 3" class="main-btn" mat-button (click)=" encerrarCorrecoes()"
+                avaliacao.tipoPontuacao == 3" class="main-btn" mat-button (click)="encerrarCorrecoesAutomaticas()"
                 style="background-color: var(--cor-secundaria); color: white;">
                 Encerrar Avaliação
             </button>
@@ -166,20 +166,32 @@
                 <h2>Correções em Andamento</h2>
             </div>
 
+            <div *ngIf="avaliacao.tipoCorrecao == 2" class="container mensagem">
+                Os Alunos estão aptos para corrigir as provas uns dos outros.
+                <br />
+                Mas, se você desejar corrigir alguma
+                prova, ainda pode fazê-lo.
+            </div>
+
             <!-- INDIVIDUAL -->
             <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
 
                 <div class="aluno" *ngFor="let aluno of avaliacao.grupos[0].alunos"
                     style="border-color: var(--cor-secundaria); cursor: default">
                     <div *ngIf="aluno.provaId" class="grupo-title">
-                        {{aluno.provaCorrigida ? "CORRIGIDA (NOTA: " + aluno.notaTotal + "/" + aluno.valorTotal + ")": "PRECISA SER CORRIGIDA"}}
+                        {{aluno.provaCorrigida ? "CORRIGIDA": "PRECISA SER CORRIGIDA"}}
                     </div>
                     <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
 
                     <a *ngIf="aluno.provaId" mat-button class="btn-corrigir"
                         [routerLink]="'/professor/avaliacao/correcao/' + aluno.provaId">
+
+                        <span *ngIf="aluno.provaCorrigida">
+                            NOTA: {{aluno.notaTotal || 0}}/{{aluno.valorTotal || 0}} -
+                        </span>
                         {{aluno.provaCorrigida ? 'REVISAR' : 'CORRIGIR'}}
+
                     </a>
                     <div *ngIf="aluno.provaId == null" class="info-grupo" matTooltip="O aluno não iniciou a avaliação">
                         <mat-icon>
@@ -196,7 +208,7 @@
                         GRUPO {{grupo.numero}}
                         <span *ngIf="grupo.provaId">
                             -
-                            {{grupo.provaCorrigida ? "CORRIGIDA (NOTA: " + grupo.notaTotal + "/" + grupo.valorTotal + ")": "PRECISA SER CORRIGIDA"}}
+                            {{grupo.provaCorrigida ? "CORRIGIDA": "PRECISA SER CORRIGIDA"}}
                         </span>
                     </div>
 
@@ -208,6 +220,11 @@
                     </div>
                     <div *ngIf="grupo.provaId" class="btn-corrigir">
                         <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId">
+                            <span
+                                *ngIf="grupo.provaCorrigida && avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
+                                NOTA:
+                                {{grupo.notaTotal || 0}}/{{grupo.valorTotal || 0}} -
+                            </span>
                             {{grupo.provaCorrigida ? "REVISAR" : "CORRIGIR"}}
                         </a>
                     </div>

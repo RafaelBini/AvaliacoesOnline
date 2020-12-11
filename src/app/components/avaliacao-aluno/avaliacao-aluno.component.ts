@@ -173,7 +173,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
                 else if (this.avaliacao.tipoCorrecao == 2 && this.avaliacao.tipoDisposicao == 0) {
                   this.receberProvasCorrigirIndividual();
                 }
-                else if (this.avaliacao.tipoPontuacao == 3) {
+                else if (this.avaliacao.tipoPontuacao == 3 || this.avaliacao.tipoCorrecao == 1) {
 
                   this.avaliacao.status = 3;
                   this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
@@ -419,12 +419,20 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (statusAntes != this.avaliacao.status || altereiStatusIndividual) {
+      if (statusAntes != this.avaliacao.status) {
         this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
           avaliacaoParaModificar.status = this.avaliacao.status;
           return avaliacaoParaModificar;
         }, this.avaliacao.id);
         console.log("Atualizei o status da avaliacao conforme o tempo!! TRANSACAO");
+      }
+      else if (altereiStatusIndividual) {
+        this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+          avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].statusId = 3;
+          avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].dtStatus[3] = this.timeService.getCurrentDateTime().toISOString();
+          return avaliacaoParaModificar;
+        }, this.avaliacao.id);
+        console.log("Atualizei o meu status na avaliacao conforme o tempo!! TRANSACAO");
       }
 
       this.countDown.iniciarTimer();
