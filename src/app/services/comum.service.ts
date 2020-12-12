@@ -29,7 +29,7 @@ export class ComumService {
     },
     {
       id: 1,
-      nome: "Durante Avaliação",
+      nome: "Em Avaliação",
       acaoProfessor: "Acompanhar os alunos",
       acaoAluno: "Responder Questões",
       cor: "var(--em-avaliacao)",

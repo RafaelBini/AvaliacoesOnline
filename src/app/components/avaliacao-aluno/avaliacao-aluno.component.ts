@@ -540,7 +540,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     }
   }
 
-  // DURANTE AVALIAÇÃO
+  // Em AVALIAÇÃO
   sinalizarFinalizacao() {
     this.getEuNaAvaliacao().statusId = 3;
     this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 3, this.timeService.getCurrentDateTime().toISOString());

@@ -1,10 +1,24 @@
+Colocar uma opção para refazer os tutoriais
+Colocar opção de convidar pelo Whatsapp
+Colocar os main buttons no centro
+
+-----------------------------------------
 
 
----------------------------------
+Quando todos terminarem a avaliação, já iniciar as correções automaticamente
 
-- Deixar as coisas mais claras para o professor:
-	- Na parte de correções, explicar o que deve ser feito e quando todas as correções estiverem ok, sinalizar!!
+Colocar um X no gabarito
 
+
+Mudar de Iniciar Correções para --> Finalizar e Inciar Correções
+
+
+Mudar de Em Avalição para --> Em Avaliação
+
+
+Fazer uma documentação para cada Interface
+
+Fazer uma opção para o professor acompanhar a prova do aluno
 
 - Colocar editor de texto
 	- Biblioteca: https://openbase.io/js/ngx-editor

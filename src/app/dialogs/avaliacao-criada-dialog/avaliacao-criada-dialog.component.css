@@ -1,11 +1,35 @@
+
+
+.btn-copiar-link{
+    background-color: var(--cor-secundaria);
+    color: white;
+}
+
+.linkCompartilhavel a, .linkCompartilhavel {
+    color: white;
+    background-color:var(--cor-secundaria);
+}
+
 .linkCompartilhavel {
-    padding: 6px; 
+    padding: 9.4px;
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 5px;
-    background-color: rgb(70, 83, 206);
+    background-color: var(--cor-secundaria);
 }
 
-.linkCompartilhavel a {
-    color: white
+
+.btn-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+
+.whatsapp-share{
+    background-color: #25d366;
+    color: white;
+    text-decoration: none;
 }

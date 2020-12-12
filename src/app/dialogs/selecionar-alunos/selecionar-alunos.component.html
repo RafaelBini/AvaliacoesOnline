@@ -26,7 +26,8 @@
                             <td align="center" colspan="2">
                                 <button *ngIf="alunosAvaliacaoFiltrados.length > 0" mat-button
                                     (click)="selecionarTodosAlunosAvaliacao()">
-                                    {{alunosFiltrados.length == alunosAvaliacaoSelecionados.length ? 'Deselecionar' : 'Selecionar'}}
+                                    {{alunosFiltrados.length == alunosAvaliacaoSelecionados.length ? 'Deselecionar' :
+                                    'Selecionar'}}
                                     Todos
                                 </button>
                                 <button *ngIf="alunosAvaliacaoSelecionados.length > 0" mat-raised-button
@@ -112,7 +113,8 @@
                                     <mat-icon>keyboard_arrow_left</mat-icon>
                                 </button>
                                 <button *ngIf="alunosFiltrados.length > 0" mat-button (click)="selecionarTodos()">
-                                    {{alunosFiltrados.length == alunosSelecionados.length ? 'Deselecionar' : 'Selecionar'}}
+                                    {{alunosFiltrados.length == alunosSelecionados.length ? 'Deselecionar' :
+                                    'Selecionar'}}
                                     Todos
                                 </button>
                                 <div *ngIf="alunos.length <= 0" class="msg-sem-aluno">
@@ -167,8 +169,9 @@
 
     </tr>
 
-    <button mat-icon-button mat-dialog-close style="position: absolute; top: -8px; right: -7px;">
-        <mat-icon>cancel</mat-icon>
-    </button>
 
 </table>
+
+<div class='btn-close' mat-icon-button mat-dialog-close>
+    <mat-icon>cancel</mat-icon>
+</div>

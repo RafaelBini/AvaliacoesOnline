@@ -1,14 +1,30 @@
 <div style="text-align: center; position: relative; ">
-    <h1>Avalição criada com sucesso!</h1>
-    <h4>Compartilhe o link abaixo com seus alunos:</h4>
-    <span class="linkCompartilhavel" style="background-color: rgb(94, 184, 101);"><a
-            [href]="getLink()">{{getLink()}}</a></span>
-    <button [cdkCopyToClipboard]="getLink()" (click)="notificarCopy()" matTooltip="Copiar link" mat-icon-button>
-        <mat-icon style="font-size: 17px;">content_copy</mat-icon>
+
+    <h2>Pronto! Agora envie este link para seus alunos:</h2>
+
+    <span class="linkCompartilhavel"><a [href]="getLink()">{{getLink()}}</a></span>
+    &nbsp;
+    <button class='btn-copiar-link' [cdkCopyToClipboard]="getLink()" (click)="notificarCopy()"
+        matTooltip="Clique aqui para copiar o link" mat-button>
+        Copiar link
     </button>
 
     <br /><br />
-    <button mat-raised-button mat-dialog-close style="margin: auto; display: block;">
-        Ok!
-    </button>
+    <div class='btn-container'>
+        <a mat-button [href]="getShareWhatsapp()" target="_blank" class='whatsapp-share'
+            matTooltip='Compartilhar com WhatsApp'>
+            <img src="assets/imgs/WhatsAppLogo.svg" style="height: 30px;" />&nbsp;Enviar por whatsapp
+        </a>
+    </div>
+
+    <br /><br />
+    <div class='btn-container'>
+        <button mat-button mat-dialog-close>
+            Ver Minhas Avaliações
+        </button>
+        <a mat-button [href]="getLink()">
+            Entrar na Avaliação
+        </a>
+    </div>
+
 </div>

@@ -4,6 +4,7 @@
     font-size: 22px;
     height: fit-content;
     padding-bottom: 20px;
+    color: var(--cor-primaria);
 }
 
 .subtitulo{

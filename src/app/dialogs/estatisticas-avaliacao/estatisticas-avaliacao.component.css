@@ -1,16 +1,20 @@
 .container{
     height: 100%;
     overflow: auto;
-    
+    position: relative;
 }
 
 .questao-container{
     padding: 12px;
     margin-top: 4px;
     margin-bottom: 4px;
+    margin-right: 15px;
     position: relative;
-
     border-radius: 6px;
+    border: 1px dotted transparent;
+}
+.questao-container:hover{
+    border: 1px dotted var(--cor-primaria);
 }
 
 .questao-enunciado{

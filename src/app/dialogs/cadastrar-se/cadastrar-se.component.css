@@ -1,4 +1,6 @@
-
+*{
+    color: var(--cor-primaria);
+}
 .login{
     background-color: white;
     margin: auto;    

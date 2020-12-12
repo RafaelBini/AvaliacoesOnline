@@ -1,3 +1,4 @@
+import { Avaliacao } from './../../models/avaliacao';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComumService } from 'src/app/services/comum.service';
 import { Component, Inject, OnInit } from '@angular/core';
@@ -10,7 +11,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class AvaliacaoCriadaDialogComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public avaliacaoId: string,
+  constructor(@Inject(MAT_DIALOG_DATA) public avaliacao: Avaliacao,
     public comumService: ComumService, private snack: MatSnackBar) { }
 
   ngOnInit(): void {
@@ -18,7 +19,12 @@ export class AvaliacaoCriadaDialogComponent implements OnInit {
   }
 
   getLink() {
-    return `http://${this.comumService.getHostName()}/${this.avaliacaoId}`;
+    return `http://${this.comumService.getHostName()}/${this.avaliacao.id}`;
+  }
+
+  getShareWhatsapp() {
+    return `https://wa.me/?text=${encodeURI(`${this.avaliacao.professorNome} está convidando você para participar da avaliação *${this.avaliacao.titulo}* online.\n\nEntrar na avaliação:\n${this.getLink()}`)
+      }`;
   }
 
   notificarCopy() {

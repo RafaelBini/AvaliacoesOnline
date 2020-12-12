@@ -1,5 +1,5 @@
 <div>
-    <div style="text-align: center;">
+    <div style="text-align: center; color: var(--cor-primaria);">
         <h1>Definir layout do arquivo</h1>
     </div>
 
@@ -14,7 +14,7 @@
         </mat-checkbox>
     </div>
 
-    <div style="text-align: center;">
+    <div style="text-align: center; color: var(--cor-primaria)">
         <h1>Importar Alunos</h1>
     </div>
     <div class="drop-here" (fileDropped)="receberArquivo($event, 'dropped')" (click)="anexoSelectInput.click()"
@@ -31,8 +31,9 @@
     </div>
 
     <div style="overflow: auto; max-height: 200px;">
-        <div class="aluno" [matTooltip]="getInfoStringAluno(aluno)" matTooltipShowDelay="2000" [class.alunoJaCadastrado]="isAlunoJaPersistido(ai)"
-            [class.alunoJaAdicionado]="isAlunoJaAdicionado(ai)" *ngFor="let aluno of novosAlunos; index as ai">
+        <div class="aluno" [matTooltip]="getInfoStringAluno(aluno)" matTooltipShowDelay="2000"
+            [class.alunoJaCadastrado]="isAlunoJaPersistido(ai)" [class.alunoJaAdicionado]="isAlunoJaAdicionado(ai)"
+            *ngFor="let aluno of novosAlunos; index as ai">
             <table style="width: 100%;">
                 <tr class="aluno-line">
                     <td width="10">
@@ -102,4 +103,7 @@
             Finalizar Importação
         </button>
     </div>
+</div>
+<div class='btn-close' mat-icon-button mat-dialog-close>
+    <mat-icon>cancel</mat-icon>
 </div>

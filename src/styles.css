@@ -220,3 +220,23 @@ textarea {
 mat-tooltip-component > .mat-tooltip {
 white-space: pre;
 }
+
+.btn-refazer-tutorial{
+  position: absolute;
+  top: 55px;
+  right: 20px;
+  font-size: 24px;
+}
+
+.btn-close{
+  color: var(--cor-primaria);
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.mat-dialog-container{
+  position: relative !important;
+}

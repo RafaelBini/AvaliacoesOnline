@@ -66,10 +66,10 @@
             </div>
         </mat-step>
 
-        <!-- DURANTE AVALIAÇÃO -->
+        <!-- Em AVALIAÇÃO -->
         <mat-step [editable]="false" [completed]="false">
 
-            <ng-template matStepLabel>Durante Avaliação</ng-template>
+            <ng-template matStepLabel>Em Avaliação</ng-template>
 
 
             <div style="width: 60%; margin: auto; position: relative;">
@@ -341,7 +341,8 @@
 
                         <span *ngIf="getMeuGrupoNaAvaliacao().provaCorrigida && avaliacao.tipoDisposicao != 0">
                             {{
-                            comumService.getRounded((getMeuGrupoNaAvaliacao().notaTotal/provaService.getMaiorNota(avaliacao)) *
+                            comumService.getRounded((getMeuGrupoNaAvaliacao().notaTotal/provaService.getMaiorNota(avaliacao))
+                            *
                             100) || 0}}/100
                         </span>
 
@@ -349,7 +350,8 @@
 
                         <span *ngIf="getEuNaAvaliacao().provaCorrigida && avaliacao.tipoDisposicao == 0">
                             {{
-                            comumService.getRounded((getEuNaAvaliacao().notaTotal/provaService.getMaiorNota(avaliacao)) *
+                            comumService.getRounded((getEuNaAvaliacao().notaTotal/provaService.getMaiorNota(avaliacao))
+                            *
                             100) || 0}}/100
                         </span>
 

@@ -88,7 +88,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
         useHighlightPadding: true,
       },
       {
-        title: 'Durante Avaliação',
+        title: 'Em Avaliação',
         selector: '.status-class-1',
         content: 'As avaliações desta aba já estão disponíveis para os alunos responderem as questões.',
         orientation: Orientation.Top,
@@ -312,6 +312,15 @@ export class ProfessorComponent implements OnInit, OnDestroy {
   }
 
   // Geral
+  refazerTutorial() {
+    if (this.selectedTab == 1) {
+      this.guidedTourService.startTour(this.TelaAlunosTour);
+    }
+    else {
+      this.guidedTourService.startTour(this.TelaProfessorTour);
+    }
+  }
+
   tabAlterada(index) {
     this.router.navigate([`/professor/${this.tabs[index].id}`]);
     this.caminho[1] = { nome: this.tabs[index].nome, url: `#` };

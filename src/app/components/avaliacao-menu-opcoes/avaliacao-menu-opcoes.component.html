@@ -1,0 +1,36 @@
+<button mat-icon-button class="avaliacao-options-btn"
+    style="position: absolute; top: 3px; right: 3px; color: var(--cor-primaria)" [matMenuTriggerFor]="aboveMenu">
+    <mat-icon>{{icone || 'more_vert'}}</mat-icon>
+</button>
+<mat-menu #aboveMenu="matMenu">
+    <button *ngIf="tipoAcesso=='professor'" mat-menu-item (click)="deletar(avaliacao)">
+        <mat-icon>cancel</mat-icon>Excluir
+    </button>
+    <button *ngIf="avaliacaoService.isArquivada(avaliacao) != true" mat-menu-item (click)="arquivar(avaliacao)">
+        <mat-icon>remove</mat-icon>Arquivar
+    </button>
+    <button *ngIf="avaliacaoService.isArquivada(avaliacao) == true" mat-menu-item (click)="desarquivar(avaliacao)">
+        <mat-icon>add</mat-icon>Desarquivar
+    </button>
+    <button *ngIf="tipoAcesso=='professor' && avaliacao.status > 0" (click)="abrirEstatisticas(avaliacao)"
+        mat-menu-item>
+        <mat-icon>dashboard</mat-icon>
+        Estatísticas
+    </button>
+    <a *ngIf="tipoAcesso=='professor'" mat-menu-item target="_blank"
+        [routerLink]="'/professor/avaliacao/imprimir/'+ avaliacao.id">
+        <mat-icon>print</mat-icon>
+        Imprimir
+    </a>
+    <button *ngIf="tipoAcesso=='professor'" mat-menu-item (click)="abirExport(avaliacao)">
+        <mat-icon>get_app</mat-icon>Exportar
+    </button>
+    <button *ngIf="tipoAcesso=='professor'" [routerLink]="'/professor/avaliacao/duplicar/' + avaliacao.id"
+        mat-menu-item>
+        <mat-icon>content_copy</mat-icon>Duplicar
+    </button>
+    <a *ngIf="tipoAcesso=='professor' && avaliacao.status == 0"
+        [routerLink]="'/professor/avaliacao/editar/' + avaliacao.id" mat-menu-item>
+        <mat-icon>create</mat-icon>Editar
+    </a>
+</mat-menu>

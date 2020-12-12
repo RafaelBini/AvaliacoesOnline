@@ -50,8 +50,10 @@ export class AppComponent implements OnInit {
     });
     ref.afterClosed().subscribe((usuarioCadastrado: Usuario) => {
 
-      if (usuarioCadastrado == undefined)
+      if (usuarioCadastrado == undefined || usuarioCadastrado == null || usuarioCadastrado == '')
         return;
+
+      console.log(usuarioCadastrado)
 
       this.credencialService.fazerLogin(usuarioCadastrado).then((usuarioLogado: Usuario) => {
 

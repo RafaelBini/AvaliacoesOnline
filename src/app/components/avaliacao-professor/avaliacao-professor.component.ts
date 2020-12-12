@@ -246,12 +246,13 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
           event.currentIndex);
       }
       else if (paraOnde == 'novo-grupo') {
+        const previousIndex = this.professor.alunos.indexOf(this.professor.alunos.filter(aluno => aluno.email == this.alunosFiltrados[event.previousIndex].email)[0]);
         if (vaiDeixarVazio && vindoDeOutroGrupo)
           return;
         this.addGrupo();
         transferArrayItem(event.previousContainer.data,
           this.avaliacao.grupos[this.avaliacao.grupos.length - 1].alunos as Array<String>,
-          event.previousIndex,
+          previousIndex,
           0);
       }
       else {
@@ -440,7 +441,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
       avaliacaoParaModificar.dtInicio = this.avaliacao.dtInicio;
       return avaliacaoParaModificar;
     }, this.avaliacao.id);
-    console.log("Alterei o status da avaliacao para DURANTE AVALIACAO -> TRANSACAO");
+    console.log("Alterei o status da avaliacao para Em AVALIACAO -> TRANSACAO");
 
   }
 
@@ -497,7 +498,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
 
   isTodasProvasCorrigidas() {
     for (let alunoOuGrupo of this.getGruposOuAlunos()) {
-      if (!alunoOuGrupo.provaCorrigida)
+      if (!alunoOuGrupo.provaCorrigida && alunoOuGrupo.provaId)
         return false;
     }
     return true;
@@ -562,7 +563,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     this.avaliacaoService.updateAvaliacao(this.avaliacao);
   }
 
-  // DURANTE AVALIAÇÃO
+  // Em AVALIAÇÃO
   abrirEstatisticas() {
     this.dialog.open(EstatisticasAvaliacaoComponent, {
       data: this.avaliacao,

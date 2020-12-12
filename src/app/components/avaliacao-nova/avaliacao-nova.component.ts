@@ -69,8 +69,8 @@ export class AvaliacaoNovaComponent implements OnInit {
     useOrb: false,
     steps: [
       {
-        title: 'A primeira avaliação!',
-        content: 'Vamos criar a sua primeira avaliação! Vou te mostrar algumas dicas.',
+        title: 'Criando uma Avaliação',
+        content: 'Use sua criatividade para criar uma avaliação! Vou te mostrar algumas dicas.',
       },
       {
         title: 'O link para compartilhar',
@@ -300,6 +300,10 @@ export class AvaliacaoNovaComponent implements OnInit {
     });
   }
 
+  refazerTutorial() {
+    this.guidedTourService.startTour(this.PrimeiraAvaliacaoTour);
+  }
+
   carregarRascunho() {
     this.avaliacaoService.getAvaliacaoFromId(this.credencialService.getLoggedUserIdFromCookie())
       .then(avaliacao => {
@@ -376,7 +380,7 @@ export class AvaliacaoNovaComponent implements OnInit {
   }
 
   puxarAvaliacaoParaEditar(avaliacaoId) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       this.avaliacaoService.getAvaliacaoFromId(avaliacaoId).then(avaliacao => {
         this.avaliacao = avaliacao;
         this.provaService.getProvaFromId(avaliacao.provaGabarito).then(prova => {
@@ -410,7 +414,7 @@ export class AvaliacaoNovaComponent implements OnInit {
 
 
   receberTodasAvaliacoes() {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       this.avaliacaoService.getAllAvaliacoes().then(avaliacoes => {
         for (let avaliacao of avaliacoes) {
           this.avaliacoesId.push(avaliacao.id);
@@ -694,7 +698,7 @@ export class AvaliacaoNovaComponent implements OnInit {
           this.router.navigate(['/professor']);
           if (!this.isEditando) {
             this.dialog.open(AvaliacaoCriadaDialogComponent, {
-              data: this.avaliacao.id
+              data: this.avaliacao
             });
           }
         }).catch(reason => {

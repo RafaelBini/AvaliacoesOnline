@@ -81,6 +81,7 @@ import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
 import { QuestaoCardComponent } from './components/questao-card/questao-card.component';
 import { QuestaoRespostaConsultaComponent } from './components/questao-resposta-consulta/questao-resposta-consulta.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AvaliacaoMenuOpcoesComponent } from './components/avaliacao-menu-opcoes/avaliacao-menu-opcoes.component';
 
 export function initializeApp(timeService: TimeService, credencialService: CredencialService) {
 
@@ -140,6 +141,7 @@ export function initializeApp(timeService: TimeService, credencialService: Crede
     EstatisticasAvaliacaoComponent,
     QuestaoCardComponent,
     QuestaoRespostaConsultaComponent,
+    AvaliacaoMenuOpcoesComponent,
   ],
   imports: [
     BrowserModule,

@@ -126,6 +126,8 @@ export class AvaliacaoService {
   }
 
   isArquivada(avaliacao: Avaliacao) {
+    if (!avaliacao.usuariosIdQueArquivaram)
+      return false;
     return avaliacao.usuariosIdQueArquivaram.includes(this.credencialService.getLoggedUserIdFromCookie());
   }
 

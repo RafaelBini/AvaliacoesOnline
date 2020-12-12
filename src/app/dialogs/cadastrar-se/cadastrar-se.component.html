@@ -1,4 +1,5 @@
 <div class="login">
+    <h2>Vamos lá!</h2>
     <span class="label">Nome</span>
     <input type="text" (keyup)="onKeyUp($event)" [(ngModel)]="novoUsuario.nome" />
     <span class="label">Email</span>
@@ -10,4 +11,7 @@
     <button mat-button (click)="cadastrar()" class="btn-cadastrar">
         CADASTRAR-SE
     </button>
+</div>
+<div class='btn-close' mat-dialog-close>
+    <mat-icon>cancel</mat-icon>
 </div>
