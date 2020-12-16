@@ -545,10 +545,26 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
     this.getEuNaAvaliacao().statusId = 3;
     this.getEuNaAvaliacao().dtStatus = this.comumService.insertInArray(this.getEuNaAvaliacao().dtStatus, 3, this.timeService.getCurrentDateTime().toISOString());
 
+
     this.avaliacaoService.updateAvaliacaoByTransacao(avaliacaoParaModificar => {
+
       avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].statusId = this.getEuNaAvaliacao().statusId;
       avaliacaoParaModificar.grupos[this.getIndexMeuGrupoNaAvaliacao()].alunos[this.getIndexEuNaAvaliacao()].dtStatus = this.getEuNaAvaliacao().dtStatus;
-      console.log(avaliacaoParaModificar);
+
+      var todosAlunosFInalizaram = true;
+      for (let grupo of avaliacaoParaModificar.grupos) {
+        for (let aluno of grupo.alunos) {
+          if (aluno.statusId < 3 || aluno.statusId == null) {
+            todosAlunosFInalizaram = false;
+            break;
+          }
+        }
+        if (!todosAlunosFInalizaram)
+          break;
+      }
+      if (todosAlunosFInalizaram)
+        avaliacaoParaModificar.status = 2
+
       return avaliacaoParaModificar;
     }, this.avaliacao.id);
 

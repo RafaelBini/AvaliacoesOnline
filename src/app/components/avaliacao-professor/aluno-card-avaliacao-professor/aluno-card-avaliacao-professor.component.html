@@ -86,6 +86,10 @@
         <button mat-menu-item (click)="abrirDetalhes(aluno)">
             Ver detalhes
         </button>
+        <a mat-menu-item *ngIf="avaliacao.status == 1 && (aluno.statusId >= 2)"
+            [routerLink]="'/professor/avaliacao/correcao/' + getProvaIdFromAluno(aluno)">
+            Acompanhar e corrigir
+        </a>
         <button mat-menu-item *ngIf="avaliacao.status == 1 && (aluno.statusId == 3 || aluno.statusId == 1)"
             (click)="voltarStatusProva(grupoIndex, alunoIndex)"
             matTooltip="Clique aqui para liberar a prova novamente para o aluno">

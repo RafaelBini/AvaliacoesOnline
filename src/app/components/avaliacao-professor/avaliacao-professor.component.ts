@@ -1,3 +1,4 @@
+import { CompartilharAvaliacaoDialogComponent } from './../../dialogs/compartilhar-avaliacao-dialog/compartilhar-avaliacao-dialog.component';
 import { ConfirmarComponent } from './../../dialogs/confirmar/confirmar.component';
 import { EstatisticasAvaliacaoComponent } from './../../dialogs/estatisticas-avaliacao/estatisticas-avaliacao.component';
 import { CronometroComponent } from './../cronometro/cronometro.component';
@@ -443,6 +444,11 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
     }, this.avaliacao.id);
     console.log("Alterei o status da avaliacao para Em AVALIACAO -> TRANSACAO");
 
+  }
+  abrirCompartilhar() {
+    this.dialog.open(CompartilharAvaliacaoDialogComponent, {
+      data: this.avaliacao,
+    })
   }
 
   getAlunosNaoFinalizados() {

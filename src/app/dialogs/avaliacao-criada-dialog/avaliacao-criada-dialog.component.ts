@@ -11,24 +11,20 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class AvaliacaoCriadaDialogComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public avaliacao: Avaliacao,
-    public comumService: ComumService, private snack: MatSnackBar) { }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public avaliacao: Avaliacao,
+    public comumService: ComumService,
+    private snack: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
 
   }
 
+
   getLink() {
     return `http://${this.comumService.getHostName()}/${this.avaliacao.id}`;
   }
 
-  getShareWhatsapp() {
-    return `https://wa.me/?text=${encodeURI(`${this.avaliacao.professorNome} está convidando você para participar da avaliação *${this.avaliacao.titulo}* online.\n\nEntrar na avaliação:\n${this.getLink()}`)
-      }`;
-  }
-
-  notificarCopy() {
-    this.snack.open("Link copiado!", null, { duration: 3500 })
-  }
 
 }

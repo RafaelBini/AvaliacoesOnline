@@ -1,0 +1,14 @@
+<span class="linkCompartilhavel"><a [href]="getLink()">{{getLink()}}</a></span>
+&nbsp;
+<button class='btn-copiar-link' [cdkCopyToClipboard]="getLink()" (click)="notificarCopy()"
+    matTooltip="Clique aqui para copiar o link" mat-button>
+    Copiar link
+</button>
+
+<br /><br />
+<div class='btn-container'>
+    <a mat-button [href]="getShareWhatsapp()" target="_blank" class='whatsapp-share'
+        matTooltip='Compartilhar com WhatsApp'>
+        <img src="assets/imgs/WhatsAppLogo.svg" style="height: 30px;" />&nbsp;Enviar por whatsapp
+    </a>
+</div>

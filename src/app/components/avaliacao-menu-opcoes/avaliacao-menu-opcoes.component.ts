@@ -1,3 +1,6 @@
+import { ExcluirAvaliacaoDialogComponent } from './../../dialogs/excluir-avaliacao-dialog/excluir-avaliacao-dialog.component';
+import { CompartilharAvaliacaoDialogComponent } from './../../dialogs/compartilhar-avaliacao-dialog/compartilhar-avaliacao-dialog.component';
+import { AvaliacaoCriadaDialogComponent } from './../../dialogs/avaliacao-criada-dialog/avaliacao-criada-dialog.component';
 import { Avaliacao } from './../../models/avaliacao';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -33,56 +36,43 @@ export class AvaliacaoMenuOpcoesComponent implements OnInit {
 
 
   deletar(avaliacao: Avaliacao) {
-    const dialgogRef = this.dialog.open(ConfirmarComponent, {
-      data: {
-        titulo: "Excluir avaliação",
-        mensagem: "Você tem certeza de que deseja excluir essa avaliação?",
-        mensagem2: "Não será possível recuperar a avaliação após exluir."
-      }
-    });
+    const dialgogRef = this.dialog.open(ExcluirAvaliacaoDialogComponent);
     dialgogRef.afterClosed().subscribe(result => {
-      if (result == true) {
+      if (result.excluirAvaliacao == true) {
         this.avaliacaoService.deletarAvaliacao(avaliacao.id).then(() => {
-          this.snack.open("Avaliação excluida com sucesso.", null, { duration: 3500 });
-          const dialgogRef2 = this.dialog.open(ConfirmarComponent, {
-            data: {
-              titulo: "Excluir questões",
-              mensagem: "Você deseja excluir as questões dessa avaliação?",
-              mensagem2: "Não será possível usar as questões dessa avaliação em outras avaliações após excluir."
-            }
-          });
-          dialgogRef2.afterClosed().subscribe(result => {
 
-            if (result == true) {
+          if (result.excluirQuestoes == true) {
 
-              this.provaService.getProvasFromAvaliacao(avaliacao.id).then(provas => {
+            this.provaService.getProvasFromAvaliacao(avaliacao.id).then(provas => {
 
-                for (let prova of provas) {
+              for (let prova of provas) {
+                this.provaService.deletarProva(prova);
+              }
+
+              this.snack.open("Avaliação e questões excluidas com sucesso.", null, { duration: 3500 });
+
+            });
+
+          }
+          else {
+            this.provaService.getProvasFromAvaliacao(avaliacao.id).then(provas => {
+
+              for (let prova of provas) {
+                if (prova.isGabarito == false)
                   this.provaService.deletarProva(prova);
+                else {
+                  prova.avaliacaoExcluida = this.avaliacao;
+                  this.provaService.updateProva(prova);
                 }
+              }
 
-                this.snack.open("Questões excluidas com sucesso.", null, { duration: 3500 });
-
-              });
-
-            }
-            else {
-              this.provaService.getProvasFromAvaliacao(avaliacao.id).then(provas => {
-
-                for (let prova of provas) {
-                  if (prova.isGabarito == false)
-                    this.provaService.deletarProva(prova);
-                  else {
-                    prova.avaliacaoExcluida = this.avaliacao;
-                    this.provaService.updateProva(prova);
-                  }
-                }
+              this.snack.open("Avaliação excluida com sucesso.", null, { duration: 3500 });
 
 
-              });
-            }
+            });
+          }
 
-          });
+
         });
       }
     });
@@ -110,6 +100,12 @@ export class AvaliacaoMenuOpcoesComponent implements OnInit {
       height: '90%',
       data: avaliacao,
     });
+  }
+
+  abrirConvidarAlunos() {
+    this.dialog.open(CompartilharAvaliacaoDialogComponent, {
+      data: this.avaliacao
+    })
   }
 
 }

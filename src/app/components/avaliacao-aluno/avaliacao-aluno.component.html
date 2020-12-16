@@ -161,7 +161,7 @@
             </div>
 
 
-            <div style="width: 100%;">
+            <div *ngIf="prova.questoes.length > 0" style="width: 100%;">
                 <button *ngIf="!getFinalizado() && !estouBloqueado()" (click)="sinalizarFinalizacao()" mat-raised-button
                     style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
                     Sinalizar Finalização
@@ -185,6 +185,10 @@
                     <br />
 
                 </div>
+            </div>
+
+            <div *ngIf="prova.questoes.length <= 0" class='spinner-container'>
+                <mat-spinner [strokeWidth]="3"></mat-spinner>
             </div>
 
         </mat-step>

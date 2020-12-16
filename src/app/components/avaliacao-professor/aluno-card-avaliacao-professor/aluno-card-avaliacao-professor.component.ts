@@ -59,4 +59,20 @@ export class AlunoCardAvaliacaoProfessorComponent implements OnInit {
     console.log("Professor bloqueou a prova de um aluno TRANSACAO");
   }
 
+  getProvaIdFromAluno(aluno: Usuario) {
+    if (this.avaliacao.tipoDisposicao == 0) {
+      return aluno.provaId;
+    }
+    else {
+      for (let grupo of this.avaliacao.grupos) {
+        for (let alunoDoGrupo of grupo.alunos) {
+          if (alunoDoGrupo.id == aluno.id) {
+            return grupo.provaId;
+          }
+        }
+      }
+    }
+
+  }
+
 }

@@ -1,0 +1,26 @@
+<div style="position: relative;">
+    <h2>Excluir avaliação</h2>
+
+    <h4>Você tem certeza de que deseja excluir essa avaliação?</h4>
+
+    <h3>Não será possível recuperar a avaliação após exluir.</h3>
+
+    <div class="btn" style="padding: 30px;">
+        <mat-checkbox class='checkbox' [(ngModel)]="excluirQuestoes">
+            Excluir também as questões da avaliação
+        </mat-checkbox>
+    </div>
+
+    <div class="btn">
+        <button mat-button [mat-dialog-close]="{excluirQuestoes: excluirQuestoes, excluirAvaliacao: false}"
+            cdkFocusInitial>
+            Não
+        </button>
+        <button mat-button [mat-dialog-close]="{excluirQuestoes: excluirQuestoes, excluirAvaliacao: true}">
+            Sim
+        </button>
+    </div>
+
+
+
+</div>

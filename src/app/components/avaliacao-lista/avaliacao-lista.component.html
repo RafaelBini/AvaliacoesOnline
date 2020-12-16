@@ -27,9 +27,9 @@
     <mat-tab-group mat-align-tabs="center" *ngIf="agruparAvaliacoes" [selectedIndex]="selectedStatusTab"
         class="sem-bottom-border">
 
-        <mat-tab *ngFor="let status of comumService.statusAvaliacao">
+        <mat-tab *ngFor="let status of comumService.statusAvaliacao; index as statusIndex">
             <ng-template mat-tab-label>
-                <span [class]="'status-class-'+status.id">{{status.nome}}
+                <span [class]="'status-class-'+status.id"><b>{{statusIndex+1}}</b> {{status.nome}}
                     ({{getAvaliacoesNoStatus(status.id).length}})</span>
             </ng-template>
 

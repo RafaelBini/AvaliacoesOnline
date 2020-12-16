@@ -1,0 +1,34 @@
+
+.btn-copiar-link{
+    background-color: var(--cor-secundaria);
+    color: white;
+}
+
+.linkCompartilhavel a, .linkCompartilhavel {
+    color: white;
+    background-color:var(--cor-secundaria);
+}
+
+.linkCompartilhavel {
+    padding: 9.4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    background-color: var(--cor-secundaria);
+}
+
+
+.btn-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+
+.whatsapp-share{
+    background-color: #25d366;
+    color: white;
+    text-decoration: none;
+}
