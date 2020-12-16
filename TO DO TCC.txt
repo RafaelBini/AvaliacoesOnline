@@ -1,17 +1,15 @@
 
-Quando todos terminarem a avaliação, já iniciar as correções automaticamente; Melhorar dialogo de exclusão de avaliação; Fazer uma opção para o professor acompanhar a prova do aluno
+
 
 -----------------------------------------
 
-
-
-
+- Criar um registro de log de tudo que acontece no sistema (API com MongoDB)
 
 - Colocar editor de texto
 	- Biblioteca: https://openbase.io/js/ngx-editor
 	- Exemplo: https://stackblitz.com/edit/ngx-editor-8htfq5?file=src%2Fapp%2Fapp.component.ts
 
-- Criar um registro de log de tudo que acontece no sistema (API com MongoDB)
+
 
 
 

@@ -1,3 +1,4 @@
+import { LogService } from './services/log.service';
 import { CredencialService } from 'src/app/services/credencial.service';
 import { TimeService } from './services/time.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -86,9 +87,9 @@ import { CompartilharAvaliacaoComponent } from './components/compartilhar-avalia
 import { CompartilharAvaliacaoDialogComponent } from './dialogs/compartilhar-avaliacao-dialog/compartilhar-avaliacao-dialog.component';
 import { ExcluirAvaliacaoDialogComponent } from './dialogs/excluir-avaliacao-dialog/excluir-avaliacao-dialog.component';
 
-export function initializeApp(timeService: TimeService, credencialService: CredencialService) {
-
-  return (): Promise<number> => {
+export function initializeApp(timeService: TimeService, logService: LogService) {
+  logService.getBasicInfo();
+  return (): Promise<void> => {
     return new Promise((resolve, reject) => {
       timeService.updateDelta().then(() => {
         resolve();
@@ -186,7 +187,7 @@ export function initializeApp(timeService: TimeService, credencialService: Crede
   providers: [
     TimeService,
     GuidedTourService,
-    { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [TimeService], multi: true },
+    { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [TimeService, LogService], multi: true },
   ],
   bootstrap: [AppComponent],
   exports: [],
