@@ -12,13 +12,11 @@ import { AvaliacaoNovaComponent } from './components/avaliacao-nova/avaliacao-no
 import { ProfessorComponent } from './components/professor/professor.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AlunoNovoComponent } from './components/aluno-novo/aluno-novo.component';
 import { AlunoComponent } from './components/aluno/aluno.component';
 import { AvaliacaoGuard } from './guards/avaliacao.guard';
 
 
 const routes: Routes = [
-  { path: "professor/aluno/novo", component: AlunoNovoComponent, canActivate: [AuthGuard] },
   { path: "professor", component: ProfessorComponent, canActivate: [AuthGuard] },
   { path: "professor/:tab", component: ProfessorComponent, canActivate: [AuthGuard] },
   { path: "login", component: LoginComponent },

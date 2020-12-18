@@ -1,7 +1,13 @@
+.container{
+    margin: auto; 
+    width: 60%; 
+    padding-top: 20px; 
+    padding-bottom: 70px;
+}
+
 .quadrinho{
     background-color: whitesmoke; border-radius: 10px; padding: 15px; margin-bottom: 10px;
 }
-
 
 .aluno{
     z-index: 900;
@@ -39,4 +45,11 @@
 
   .btn{
     text-align: center; font-size: 40px;
+  }
+
+  @media screen and (max-width: 650px){
+      .container{
+        width: 90%;
+        padding: 5px;
+      }
   }

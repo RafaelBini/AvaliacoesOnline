@@ -7,7 +7,7 @@ import { AvaliacaoService } from './../../services/avaliacao.service';
 import { Avaliacao } from './../../models/avaliacao';
 import { ComumService } from './../../services/comum.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlunoNovoComponent } from './../aluno-novo/aluno-novo.component';
+import { AlunoNovoComponent } from '../../dialogs/aluno-novo/aluno-novo.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeDetectorRef, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { UrlNode } from 'src/app/models/url-node';
@@ -331,7 +331,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
   // Alunos
   addAluno() {
     this.dialog.open(AlunoNovoComponent, {
-
+      maxWidth: '95vw'
     });
   }
   onBuscaAlunoKeyUp(texto: string) {
@@ -401,7 +401,8 @@ export class ProfessorComponent implements OnInit, OnDestroy {
     if (this.alunosSelecionados.length <= 1)
       return;
     var diagRef = this.dialog.open(EditarAlunoComponent, {
-      width: '50%',
+      minWidth: '50%',
+      maxWidth: '95vw',
     });
     diagRef.afterClosed().subscribe(aluno => {
       if (aluno) {
@@ -427,7 +428,8 @@ export class ProfessorComponent implements OnInit, OnDestroy {
       return;
     var diagRef = this.dialog.open(EditarAlunoComponent, {
       data: this.alunos.filter(a => a.email == this.alunosSelecionados[0])[0],
-      width: '50%',
+      minWidth: '50%',
+      maxWidth: '95vw',
     });
     diagRef.afterClosed().subscribe(() => {
       this.credencialService.loggedUser.alunos = this.alunos;
@@ -438,8 +440,9 @@ export class ProfessorComponent implements OnInit, OnDestroy {
   }
   abrirImportarAlunos() {
     var diagRef = this.dialog.open(ImportarAlunosComponent, {
-      width: '75%',
+      minWidth: '75%',
       height: '88%',
+      maxWidth: '95vw',
     });
     diagRef.afterClosed().subscribe(result => {
 

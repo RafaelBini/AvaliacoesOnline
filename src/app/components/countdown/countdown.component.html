@@ -1,5 +1,5 @@
 <div *ngIf="tempoRestante != 'indeterminado'">
-    <div *ngIf="tipoAcesso == 'aluno'" class="painel">
+    <div *ngIf="tipoAcesso == 'aluno' && !comumService.isMobile()" class="painel">
         <table style="width: 100%; height: 100%;">
             <tr>
                 <td>
@@ -12,6 +12,12 @@
                 </td>
             </tr>
         </table>
+    </div>
+    <div *ngIf="tipoAcesso == 'aluno' && comumService.isMobile()"
+        style="padding: 5px; border-radius: 7px; background-color: whitesmoke;">
+        <span style="font-size: 15px;">
+            {{mensagem}}: <b>{{tempoRestante}}</b>
+        </span>
     </div>
     <div *ngIf="tipoAcesso == 'professor'" style="padding: 5px; border-radius: 7px; background-color: whitesmoke;">
         <span style="font-size: 15px;">

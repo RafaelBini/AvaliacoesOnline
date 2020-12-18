@@ -18,7 +18,7 @@ export class CronometroComponent implements OnInit {
   private interval;
 
   constructor(
-    private comumService: ComumService,
+    public comumService: ComumService,
     private timeService: TimeService,
   ) { }
 

@@ -4,7 +4,7 @@
         <td>
             <table width="100%">
                 <tr *ngFor="let associacao of questao.associacoes; index as ai">
-                    <td width="20%" style="cursor:default;">
+                    <td width="35%" style="cursor:default;">
                         <mat-select disabled="true" class="select-basico" style="width: 82%;"
                             [(ngModel)]="associacao.opcaoSelecionada">
                             <mat-option [value]="_associacao.opcaoSelecionada"
@@ -13,7 +13,7 @@
                             </mat-option>
                         </mat-select>
                     </td>
-                    <td width="80%" class="alternativa" style="cursor:default;">
+                    <td width="65%" class="alternativa" style="cursor:default;">
                         <span style="white-space: pre-line;">{{associacao.texto}}</span>
                     </td>
                 </tr>

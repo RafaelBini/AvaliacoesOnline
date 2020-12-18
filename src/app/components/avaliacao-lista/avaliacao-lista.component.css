@@ -22,3 +22,36 @@
     right: 10px;
     cursor: pointer;
 }
+
+.bloco-container{
+    background-color: var(--cor-bloco); color: var(--cor-bloco-letra); 
+    padding: 15px; width: 60%; border-radius: 8px; margin: auto; 
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+.btn-add-avaliacao{
+    right: 50px; 
+    bottom: 120px;
+}
+
+.btn-more-options{
+    right: 50px;
+    bottom: 50px;
+}
+
+@media screen and (max-width:650px) {
+    .bloco-container{
+        width: 90%;
+    }
+    .btn-add-avaliacao{
+        right: 10px; 
+        bottom: 75px;
+    }
+    
+    .btn-more-options{
+        right: 10px;
+        bottom: 10px;
+    }
+    
+}

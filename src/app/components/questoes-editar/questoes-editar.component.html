@@ -15,21 +15,50 @@
                 <!-- Tipo Questão / Nivel Dificuldade -->
                 <tr class="ferramenta-edicao" [class.is-editando]="questao.isEditando">
                     <td align="left" style="padding-bottom: 18px; position: relative;">
+                        <div class="questao-options-container">
 
-                        <select class="select-basico questao-tipo-select" style="padding: 8px;" #tipo
-                            (change)="tipoQuestaoChanged(questao, tipo.value)" (ngModelChange)="sinalizarAlteracao()"
-                            [(ngModel)]="questao.tipo">
-                            <option *ngFor="let questaoTipo of getQuestaoTiposAdequados()" [value]="questaoTipo.codigo">
-                                {{questaoTipo.nome}}
-                            </option>
-                        </select>
-                        <select (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.nivelDificuldade"
-                            matTooltip="Nível de Dificuldade" class="select-basico nivel-dificuldade-select"
-                            style="padding: 8px; position: absolute; right: 0px;" #tipo
-                            (change)="questao.tipo = tipo.value">
-                            <option *ngFor="let nivelDificuldade of comumService.niveisDificuldade; index as ni"
-                                [value]='ni'>{{nivelDificuldade}}</option>
-                        </select>
+                            <select class="select-basico questao-tipo-select" style="padding: 8px;" #tipo
+                                (change)="tipoQuestaoChanged(questao, tipo.value)"
+                                (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.tipo">
+                                <option *ngFor="let questaoTipo of getQuestaoTiposAdequados()"
+                                    [value]="questaoTipo.codigo">
+                                    {{questaoTipo.nome}}
+                                </option>
+                            </select>
+
+                            <select *ngIf="!comumService.isMobile()" (ngModelChange)="sinalizarAlteracao()"
+                                [(ngModel)]="questao.nivelDificuldade" matTooltip="Nível de Dificuldade"
+                                class="select-basico nivel-dificuldade-select" style="padding: 8px;" #tipo>
+                                <option *ngFor="let nivelDificuldade of comumService.niveisDificuldade; index as ni"
+                                    [value]='ni'>{{nivelDificuldade}}</option>
+                            </select>
+
+                            <div>
+                                <button mat-icon-button [matMenuTriggerFor]="aboveMenu" class="more_vert">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #aboveMenu="matMenu">
+                                    <button (click)="imagemSelectInput.click()" mat-menu-item
+                                        matTooltip="Adicionar Imagem" class="questao-menu-btn">
+                                        <mat-icon class="questao-menu-btn">insert_photo</mat-icon>Adicionar Imagem
+                                    </button>
+                                    <button (click)="anexoSelectInput.click()" mat-menu-item
+                                        matTooltip="Adicionar Anexo" class="questao-menu-btn">
+                                        <mat-icon class="questao-menu-btn">attach_file</mat-icon>Adicionar Anexo
+                                    </button>
+                                    <button matTooltip="Alterar tags" mat-menu-item (click)="openInfoQuestao(questao)"
+                                        class="questao-menu-btn">
+                                        <mat-icon class="questao-menu-btn">local_offer</mat-icon>Alterar tags
+                                    </button>
+                                    <button *ngIf="prova.questoes.length > 1" mat-menu-item (click)="deletarQuestao(qi)"
+                                        matTooltip="Remover Questão" style="color: var(--cor-perigosa)">
+                                        <mat-icon style="color: var(--cor-perigosa)">delete</mat-icon>Remover Questão
+                                    </button>
+                                </mat-menu>
+                            </div>
+
+                        </div>
+
                     </td>
                 </tr>
 
@@ -378,23 +407,10 @@
                         <div *ngIf="avaliacao.tipoPontuacao != 3" class="valor-questao">
                             Valor: <input style="padding: 7px;" type="number" max="100" min="1"
                                 (ngModelChange)="sinalizarAlteracao()" [(ngModel)]="questao.valor" />
-                            <span
-                                style="padding: 9px; color: gray;">{{ ( (questao.valor/getPontuacaoMaxima())*100 ) |  number:'1.0-0' }}%</span>
+                            <span style="padding: 9px; color: gray;">{{ ( (questao.valor/getPontuacaoMaxima())*100 ) |
+                                number:'1.0-0' }}%</span>
                         </div>
-                        <div class="ferramenta-edicao opcoes-questao" [class.is-editando]="questao.isEditando">
-                            <button (click)="imagemSelectInput.click()" mat-icon-button matTooltip="Adicionar Imagem">
-                                <mat-icon>insert_photo</mat-icon>
-                            </button>
-                            <button (click)="anexoSelectInput.click()" mat-icon-button matTooltip="Adicionar Anexo">
-                                <mat-icon>attach_file</mat-icon>
-                            </button>
-                            <button matTooltip="Alterar tags" mat-icon-button (click)="openInfoQuestao(questao)">
-                                <mat-icon>local_offer</mat-icon>
-                            </button>
-                            <button mat-icon-button (click)="deletarQuestao(qi)" matTooltip="Remover Questão">
-                                <mat-icon style="color: rgb(143, 12, 12);">delete</mat-icon>
-                            </button>
-                        </div>
+
 
                     </td>
                 </tr>

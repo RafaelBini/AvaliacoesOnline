@@ -1,7 +1,6 @@
 <div style="position: relative;">
 
-    <div
-        style="background-color: var(--cor-bloco); color: var(--cor-bloco-letra); padding: 15px; width: 60%; border-radius: 8px; margin: auto; margin-top: 20px;">
+    <div class="bloco-container">
         <table style="width: 90%; margin: auto; display: block;">
             <tr>
                 <td colspan="2" align="center">
@@ -55,8 +54,7 @@
 
 </div>
 
-<button mat-fab [matMenuTriggerFor]="menu" matTooltip="Opções de Filtro" class="btn" style="right: 50px;"
-    [style.bottom]="tipoAcesso == 'aluno' ? '50px' : '50px'">
+<button mat-fab [matMenuTriggerFor]="menu" matTooltip="Opções de Filtro" class="btn btn-more-options">
     <mat-icon>more_vert</mat-icon>
 </button>
 <mat-menu #menu="matMenu" yPosition="above" xPosition="before">
@@ -69,7 +67,7 @@
 </mat-menu>
 
 <a *ngIf="tipoAcesso == 'professor'" routerLink="/professor/avaliacao/nova" matTooltip="Nova Avaliação"
-    class="btn btn-add-avaliacao" style="right: 50px; bottom: 120px;" mat-fab>
+    class="btn btn-add-avaliacao" mat-fab>
 
     <mat-icon>add</mat-icon>
 

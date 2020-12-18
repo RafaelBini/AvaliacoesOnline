@@ -141,7 +141,7 @@ export class QuestoesCorrigirComponent implements OnInit {
   }
   abrirGabarito(questaoIndex: number) {
     this.dialog.open(GabaritoQuestaoComponent, {
-      width: '70%',
+      minWidth: '70%',
       data: this.gabarito.questoes[questaoIndex]
     })
   }

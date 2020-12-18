@@ -3,9 +3,8 @@
     <div class="cabecalho">
         <h1>Buscar Questão</h1>
         <br />
-        <input class="input-basico" type="text" (keyup)="filtrarQuestoes()" [(ngModel)]="filtroTermoPesquisado"
-            style="width: 80%; padding: 10px; margin: auto; display: block;"
-            placeholder="Digite aqui um tema ou uma parte da questão (ex.: céu)" />
+        <input class="input-basico input-buscar" type="text" (keyup)="filtrarQuestoes()"
+            [(ngModel)]="filtroTermoPesquisado" placeholder="Digite aqui um tema ou uma parte da questão (ex.: céu)" />
         <br />
         <div class="filtros-container">
             <select class="select-basico" (change)="filtrarQuestoes()" [(ngModel)]="filtroNivelDificuldade">
@@ -26,7 +25,7 @@
 
     <div *ngIf="isQuestoesCarregadas" class="questoes-container">
 
-        <div *ngIf="questoesFiltradas.length <= 0" style="text-align: center;">
+        <div *ngIf="questoesFiltradas.length <= 0" class="mensagem">
             Você não tem questões para adicionar
         </div>
 
@@ -49,6 +48,7 @@
         <mat-spinner [strokeWidth]="3"></mat-spinner>
     </div>
 
+    <button *ngIf="isQuestoesCarregadas" mat-button mat-dialog-close>Voltar</button>
 
 </div>
 

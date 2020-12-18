@@ -1,5 +1,15 @@
 /* PERFIL */
 
+.container{
+    background-color: whitesmoke; 
+    width: 50%; 
+    border-radius: 10px; 
+    margin: auto; 
+    margin-top: 20px; 
+    padding: 20px;
+    box-sizing: border-box;
+}
+
 .tabela-editar-perfil {
     width: 90%; margin: auto; margin-top: 10px;
 
@@ -7,4 +17,34 @@
 
 .tabela-editar-perfil td {
     padding: 11px;
+}
+
+input{
+    width: 100%;
+}
+.btn-editar-senha{
+    color: var(--cor-primaria);
+    font-size: 10px;
+}
+.btn-editar-senha:hover{
+    color: var(--cor-secundaria);
+    cursor: pointer;
+}
+
+.img{
+    height: 20vh; 
+    width: 20vh; 
+    object-fit: cover; 
+    border-radius: 7px;
+}
+
+@media screen and (max-width: 650px){
+    .container{
+        width: 90%;
+        padding: 5px;
+    }
+    .img{
+        height: 16vh; 
+        width: 16vh; 
+    }
 }

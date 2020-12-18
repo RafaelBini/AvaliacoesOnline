@@ -1,5 +1,7 @@
 <div *ngIf="tempoDecorrido != 'indeterminado'">
-    <div *ngIf="tipoAcesso == 'aluno'" class="painel">
+
+
+    <div *ngIf="tipoAcesso == 'aluno' && !comumService.isMobile()" class="painel">
         <table style="width: 100%; height: 100%;">
             <tr>
                 <td>
@@ -15,9 +17,18 @@
             </tr>
         </table>
     </div>
+
+    <div *ngIf="tipoAcesso == 'aluno' && comumService.isMobile()"
+        style="padding: 5px; border-radius: 7px; background-color: whitesmoke;">
+        <span style="font-size: 15px;">
+            Tempo decorrido: <b>{{tempoDecorrido}}</b>
+        </span>
+    </div>
+
     <div *ngIf="tipoAcesso == 'professor'" style="padding: 5px; border-radius: 7px; background-color: whitesmoke;">
         <span style="font-size: 15px;">
             Tempo de avaliação: <b>{{tempoDecorrido}}</b>
         </span>
     </div>
+
 </div>

@@ -1,9 +1,9 @@
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ComumService } from './../../services/comum.service';
-import { CredencialService } from './../../services/credencial.service';
-import { UsuarioService } from './../../services/usuario.service';
-import { Usuario } from './../../models/usuario';
+import { ComumService } from '../../services/comum.service';
+import { CredencialService } from '../../services/credencial.service';
+import { UsuarioService } from '../../services/usuario.service';
+import { Usuario } from '../../models/usuario';
 import { Component, OnInit } from '@angular/core';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';

@@ -38,3 +38,9 @@
     line-height: 1.2;
     border-radius: 3px;
 }
+
+@media screen and (max-width: 650px){
+    .logo{
+        font-size: 13px;
+    }
+}

@@ -1,4 +1,6 @@
-import { ActivatedRoute } from '@angular/router';
+import { UrlNode } from './../../models/url-node';
+import { ComumService } from './../../services/comum.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
@@ -8,12 +10,16 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class BarraNavegacaoComponent implements OnInit {
 
-  @Input() caminho: Array<any>;
+  @Input() caminho: Array<UrlNode>;
 
-  constructor() { }
+  constructor(
+    public comumService: ComumService,
+    public router: Router,
+  ) { }
 
   ngOnInit(): void {
 
   }
+
 
 }

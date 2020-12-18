@@ -21,7 +21,7 @@ export class CountdownComponent implements OnInit {
   interval;
 
   constructor(
-    private comumService: ComumService,
+    public comumService: ComumService,
     private timeService: TimeService,
   ) { }
 

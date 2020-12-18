@@ -19,8 +19,7 @@
             </span>
         </ng-template>
 
-        <div
-            style="background-color: whitesmoke; padding: 15px; width: 60%; border-radius: 8px; margin: auto; margin-top: 20px;margin-bottom: 10px;">
+        <div class="header">
             <table style="width: 90%; margin: auto; display: block;">
                 <tr>
                     <td colspan="2" align="center">
@@ -53,9 +52,7 @@
             </table>
         </div>
 
-        <mat-selection-list
-            style="margin-top: 20px; margin-bottom: 40px; width: 60%; margin: auto; padding: 15px; background-color: whitesmoke;"
-            [(ngModel)]="alunosSelecionados">
+        <mat-selection-list class="alunos-container" [(ngModel)]="alunosSelecionados">
 
             <mat-list-option checkboxPosition="before" class="aluno" *ngFor="let aluno of alunosFiltrados"
                 [value]="aluno.email">
@@ -92,27 +89,22 @@
         </div>
 
 
-        <button (click)="addAluno()" matTooltip="Novo Aluno" class="btn-add-aluno" mat-fab>
+        <button (click)="addAluno()" matTooltip="Novo Aluno" class="btn btn-add-aluno" mat-fab>
             <mat-icon>add</mat-icon>
         </button>
-        <a (click)="abrirImportarAlunos()" matTooltip="Importar alunos via CSV" class="btn-importar-alunos" mat-fab>
+        <a (click)="abrirImportarAlunos()" matTooltip="Importar alunos via CSV" class="btn btn-importar-alunos" mat-fab>
             <mat-icon>arrow_upward</mat-icon>
         </a>
         <button *ngIf="alunosSelecionados.length > 0" (click)="removerAlunosSelecionados()"
-            matTooltip="Remover alunos selecionados"
-            style="position: fixed; left: 30px; bottom: 50px; background-color: var(--cor-perigosa); color: white"
-            mat-fab>
+            matTooltip="Remover alunos selecionados" class="btn btn-delete" mat-fab>
             <mat-icon>delete</mat-icon>
         </button>
         <button *ngIf="alunosSelecionados.length > 1" (click)="adicionarTagsAosSelecionados()"
-            matTooltip="Adicionar tags aos alunos selecionados"
-            style="position: fixed; left: 30px; bottom: 120px; background-color: var(--cor-primaria); color: white"
-            mat-fab>
+            matTooltip="Adicionar tags aos alunos selecionados" class="btn btn-tags" mat-fab>
             <mat-icon>style</mat-icon>
         </button>
         <button *ngIf="alunosSelecionados.length == 1" (click)="editarAluno()" matTooltip="Editar o aluno selecionado"
-            style="position: fixed; left: 30px; bottom: 120px; background-color: var(--cor-primaria); color: white"
-            mat-fab>
+            class="btn btn-edit" mat-fab>
             <mat-icon>create</mat-icon>
         </button>
 

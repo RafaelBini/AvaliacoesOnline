@@ -8,14 +8,17 @@
     position: relative;
     margin: auto;
     margin-bottom: 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
+
 .avalicao-card:hover .linkCompartilhavel{
     opacity: 1;
 }
 .avalicao-card:hover .btn-copiar{
     opacity: 1;
 }
-
 
 .linkCompartilhavel {
     padding: 6px; 
@@ -37,13 +40,19 @@
     opacity: 0;
 }
 
+.info-box-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 .info-box{
-    position: absolute;
+
     height: 80px;
     width: 40%;
     background-color: var(--cor-secundaria);
-    bottom: 20px;
-    right: 10px;
+
     border-radius: 5px;
     color: white;
     padding: 6px;
@@ -71,4 +80,16 @@
 .titulo{
     font-weight: bold;
     font-size: 17px;
+}
+
+@media screen and (max-width:650px) {
+
+    
+
+    .avalicao-card{
+        width: 90%;
+    }
+    .info-box{
+        width: 75%;
+    }
 }

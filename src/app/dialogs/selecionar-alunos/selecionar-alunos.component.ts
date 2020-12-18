@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Avaliacao } from 'src/app/models/avaliacao';
 import { Usuario } from 'src/app/models/usuario';
 import { ComumService } from 'src/app/services/comum.service';
-import { AlunoNovoComponent } from 'src/app/components/aluno-novo/aluno-novo.component';
 import { TimeService } from 'src/app/services/time.service';
 
 @Component({

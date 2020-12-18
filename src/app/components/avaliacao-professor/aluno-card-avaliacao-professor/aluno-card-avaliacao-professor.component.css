@@ -18,7 +18,7 @@
   position: absolute;
   bottom: 0px;
   left: 0px;
-  width: 7vh;
+  width: 8vh;
   font-size: 8px;
   color: white;
   text-align: center;
@@ -28,6 +28,7 @@
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   opacity: 0.95;
+  box-sizing: border-box;
 }
 
 .status-online {
@@ -44,12 +45,16 @@
 
   .menu-opcoes-aluno{
     position: absolute;
-    right: -10px;
-    top: -10px;
+    right: 0px;
+    top: 0px;
+    width: fit-content;
+    height: fit-content;
+    line-height: normal;
   }
 
   .status-container{
-    position: absolute; bottom: 3px; right: 0px; display: flex; align-items: center;
+    position: absolute; bottom: 3px; right: 0px; 
+    display: flex; align-items: center;
   }
 
   .descricao-status{
@@ -58,3 +63,22 @@
     color: gray;
     padding: 3px;
   }
+
+.avatar-img{
+  height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;
+}
+
+@media screen and (max-width:650px){
+  .allow-small .avatar-img{
+    height: 4vh;
+    width: 4vh;
+    border-radius: 3px;
+  }
+  .allow-small .etiqueta{
+    width: 4vh;
+    border-bottom-left-radius: 1px;
+    border-bottom-right-radius: 1px;
+    padding: 2px;
+  }
+
+}

@@ -3,9 +3,15 @@
 .drop-here{
     background-color: white; color: gray; 
     cursor: pointer; user-select: none; 
-    line-height: 100px; height: 100px; 
+    height: 100px; 
     width: 90%; margin: auto;  border: 1px dashed gray; border-radius: 10px; 
     text-align: center; font-size: 19px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    box-sizing: border-box;
   }
   .drop-here:hover {
       background-color: var(--cor-secundaria); color: white;
@@ -14,7 +20,7 @@
   }
   
   .drop-here-texto{   
-      font-size: 18px;
+      font-size: 16px;
       user-select: none;
   }
   

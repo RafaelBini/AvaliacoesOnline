@@ -25,3 +25,22 @@
 .box-especial {
     width: 90%; padding: 4px; border-radius: 4px; color: white; background-color: var(--cor-primaria);
 }
+
+.tipo-icon{
+    color: var(--cor-primaria); 
+    height: fit-content; width: fit-content; 
+    font-size: 20vh; margin: auto;
+}
+
+@media screen and (max-width: 650px){
+    input, select{
+        width: 80%;
+    }
+    .choose-btn{
+        font-size: 13px;
+        text-align: center;
+    }
+    .tipo-icon{
+        font-size: 12vh;
+    }
+}

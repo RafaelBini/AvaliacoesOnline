@@ -553,4 +553,19 @@ export class ComumService {
     link.click();
   }
 
+  getWidth() {
+    return window.innerWidth;
+  }
+
+  isMobile() {
+    return window.innerWidth < this.TAM_MOBILE;
+  }
+
+  public TAM_MOBILE = 650;
+  public TAM_TABLET = 850;
+
+  getScrollY() {
+    return window.scrollY;
+  }
+
 }

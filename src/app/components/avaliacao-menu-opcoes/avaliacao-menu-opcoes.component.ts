@@ -89,14 +89,16 @@ export class AvaliacaoMenuOpcoesComponent implements OnInit {
 
   abirExport(avaliacao: Avaliacao) {
     this.dialog.open(ExportarComponent, {
-      width: '80%',
+      minWidth: '80%',
+      maxWidth: '95vw',
       data: avaliacao,
     });
   }
 
   abrirEstatisticas(avaliacao: Avaliacao) {
     this.dialog.open(EstatisticasAvaliacaoComponent, {
-      width: '85%',
+      minWidth: '85%',
+      maxWidth: '95vw',
       height: '90%',
       data: avaliacao,
     });

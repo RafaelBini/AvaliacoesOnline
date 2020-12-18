@@ -27,3 +27,10 @@ a:hover {
     width: fit-content;
   }
   
+.btn{
+    color: var(--cor-secundaria);    
+}
+
+.spacer{
+    height: 35px;
+}

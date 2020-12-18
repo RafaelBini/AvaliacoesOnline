@@ -1,36 +1,40 @@
-<div class="painel-1">
+<div class="body">
 
-    <table class="header">
-        <tr>
-            <td width="50%">
-                <div>
-                    <div class="titulo">
-                        Criado para ensinar ao avaliar
-                    </div>
-                    <div class="subtitulo">
-                        Avaliações Online é um sistema que permite criar e compartilhar avaliações dinâmicas e criativas
-                        de
-                        forma simples e prática.
 
-                    </div>
+    <div class="painel-1">
+
+        <div class="painel-1-element">
+            <div>
+                <div class="titulo">
+                    Criado para ensinar ao avaliar
                 </div>
-            </td>
-            <td width="50%">
-                <div class="login">
-                    <span class="label">Nome</span>
-                    <input type="text" [(ngModel)]="novoUsuario.nome" />
-                    <span class="label">Email</span>
-                    <input type="text" [(ngModel)]="novoUsuario.email" />
-                    <span class="label">Senha</span>
-                    <input type="password" [(ngModel)]="novoUsuario.senha" />
-                    <span class="label">Confirmar Senha</span>
-                    <input type="password" [(ngModel)]="confirmarcaoSenha" />
-                    <button mat-button (click)="primeiraAvaliacao()" class="btn-cadastrar">
-                        CRIAR PRIMEIRA AVALIAÇÃO
-                    </button>
+                <div class="subtitulo">
+                    Avaliações Online é um sistema que permite criar e compartilhar avaliações dinâmicas e
+                    criativas
+                    de
+                    forma simples e prática.
+
                 </div>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+        <div class="painel-1-element">
+            <div class="login">
+                <span class="label">Nome</span>
+                <input type="text" [(ngModel)]="novoUsuario.nome" />
+                <span class="label">Email</span>
+                <input type="text" [(ngModel)]="novoUsuario.email" />
+                <span class="label">Senha</span>
+                <input type="password" [(ngModel)]="novoUsuario.senha" />
+                <span class="label">Confirmar Senha</span>
+                <input type="password" [(ngModel)]="confirmarcaoSenha" />
+                <button mat-button (click)="primeiraAvaliacao()" class="btn-cadastrar">
+                    CRIAR PRIMEIRA AVALIAÇÃO
+                </button>
+            </div>
+        </div>
+
+
+
+    </div>
 
 </div>

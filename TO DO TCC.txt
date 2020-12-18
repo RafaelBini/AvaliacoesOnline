@@ -3,6 +3,23 @@
 
 -----------------------------------------
 
+- Tornar todas as telas responsivas
+	- Login e cadastro
+	- Criação de Avaliação
+	- Gerenciamento de alunos
+	- Edição de perfil
+	- Autoavaliação
+	- Arrumar espaço nos FABs
+	
+
+- Colocar ordenação que faça sentido
+	- Nas avaliações
+	- Nos alunos no gerenciador de alunos
+	- Nos alunos/grupos dentro da avaliação
+	
+
+- Testar prova em grupo sincrona pelo celular
+
 - Criar um registro de log de tudo que acontece no sistema (API com MongoDB)
 
 - Colocar editor de texto

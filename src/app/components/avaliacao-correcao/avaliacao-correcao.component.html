@@ -1,6 +1,6 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
-<div *ngIf="gabarito.id != '1'" style="margin: auto; width: 60%; padding-top: 20px; padding-bottom: 70px;">
+<div *ngIf="gabarito.id != '1'" class="container">
 
     <div class="quadrinho" style="text-align: center;">
         <h2>Corrigir Avaliação</h2>
@@ -36,7 +36,8 @@
 
     <div class="nota-total" *ngIf="gabarito.id != '1' && avaliacao.tipoPontuacao != 3">
         Nota total:
-        {{ userTipo == 'professor' || visaoTipo == 'consulta' ? provaService.getMinhaNota(prova,gabarito) : getSomatoria()}}/{{provaService.getPontuacaoMaxima(prova)}}
+        {{ userTipo == 'professor' || visaoTipo == 'consulta' ? provaService.getMinhaNota(prova,gabarito) :
+        getSomatoria()}}/{{provaService.getPontuacaoMaxima(prova)}}
     </div>
     <br /><br />
 

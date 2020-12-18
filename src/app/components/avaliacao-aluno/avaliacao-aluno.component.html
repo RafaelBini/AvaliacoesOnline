@@ -7,7 +7,7 @@
 
             <ng-template matStepLabel>Em Preparação</ng-template>
 
-            <div style="width: 60%; margin: auto;">
+            <div class="body-container">
                 <div class="cabecalho">
 
                     <app-avaliacao-aluno-cabecalho [avaliacao]="avaliacao"></app-avaliacao-aluno-cabecalho>
@@ -72,7 +72,7 @@
             <ng-template matStepLabel>Em Avaliação</ng-template>
 
 
-            <div style="width: 60%; margin: auto; position: relative;">
+            <div class="body-container">
 
 
                 <div class="cabecalho">
@@ -92,7 +92,8 @@
                             </app-aluno-card-avaliacao-aluno>
                             <!-- IDENTIFICAÇÕES -->
 
-                            <div style="position: absolute; top: 30%; right: 6%; display: flex; align-items: center;">
+                            <div
+                                style="position: absolute; bottom: 3px; right: 0px; display: flex; align-items: center;">
 
                                 <!-- FINALIZADO -->
 
@@ -161,7 +162,7 @@
             </div>
 
 
-            <div *ngIf="prova.questoes.length > 0" style="width: 100%;">
+            <div *ngIf="prova.questoes.length > 0" style="width: 100%; margin-bottom: 50px;">
                 <button *ngIf="!getFinalizado() && !estouBloqueado()" (click)="sinalizarFinalizacao()" mat-raised-button
                     style="margin: auto; margin-top: 40px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: block;">
                     Sinalizar Finalização
@@ -197,8 +198,8 @@
         <mat-step [editable]="false" [completed]="false">
             <ng-template matStepLabel>Em Correção</ng-template>
 
-            <div align="center"
-                style="padding: 20px; margin: auto; background-color: whitesmoke;  color: black; width: 55%; border-radius: 10px;">
+            <div align="center" class="body-container"
+                style="padding: 20px; background-color: whitesmoke;  color: black; border-radius: 10px;">
 
                 <app-avaliacao-aluno-cabecalho [avaliacao]="avaliacao"></app-avaliacao-aluno-cabecalho>
                 <br />
@@ -209,19 +210,22 @@
                     Aguarde a correção do professor para saber sua nota
                 </div>
 
-                <!-- EM GRUPO - AUTOAVALIAÇÃO -->
+                <!-- AUTOAVALIAÇÃO -->
 
-                <div *ngIf="avaliacao.tipoCorrecao == 3 && avaliacao.tipoDisposicao != 0">
-                    <div *ngIf="getMeuGrupoNaAvaliacao().provaCorrigida == false" class="btn-corrigir"
+                <div *ngIf="avaliacao.tipoCorrecao == 3">
+
+                    <!-- AINDA NÃO CORRIGIDA -->
+
+                    <div *ngIf="!getGrupoOuEuNaAvaliacao().provaCorrigida" class="btn-corrigir"
                         style="position: relative;">
                         <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + prova.id">
                             CORRIGIR MINHA PRÓPRIA AVALIAÇÃO
                         </a>
                     </div>
-                </div>
 
-                <div *ngIf="avaliacao.tipoCorrecao == 3 && avaliacao.tipoDisposicao == 0">
-                    <div *ngIf="getEuNaAvaliacao().provaCorrigida == true">
+                    <!-- JÁ CORRIGIDA -->
+
+                    <div *ngIf="getGrupoOuEuNaAvaliacao().provaCorrigida">
                         Avaliação Corrigida!
                         <br />
                         Fique a vontade para revisar quando quiser
@@ -229,10 +233,16 @@
 
                         <a class="btn-corrigir" style="position: relative;" mat-button
                             [routerLink]="'/aluno/avaliacao/correcao/' + prova.id">
+                            NOTA: {{getGrupoOuEuNaAvaliacao().notaTotal}}/{{getGrupoOuEuNaAvaliacao().valorTotal}} -
                             REVISAR MINHA CORREÇÃO
                         </a>
 
                     </div>
+
+                </div>
+
+                <div *ngIf="avaliacao.tipoCorrecao == 3 && avaliacao.tipoDisposicao == 0">
+
                 </div>
 
                 <br />
@@ -261,12 +271,12 @@
                 <div style="margin: auto; text-align: center;">
                     <h2>Corrija as avaliações abaixo:</h2>
                 </div>
-                <div *ngFor="let provaCorrigir of prova.provasParaCorrigir;  index as i;" class="grupo"
-                    style="width: 100%">
+                <div *ngFor="let provaCorrigir of prova.provasParaCorrigir;  index as i;"
+                    class="grupo individuo-container" style="width: 100%">
                     <div class="grupo-title">
                         GRUPO {{i+1}} - {{provaCorrigir.corrigida ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
                     </div>
-                    <div class="btn-corrigir">
+                    <div class="btn-flex">
                         <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + provaCorrigir.id">
                             {{provaCorrigir.corrigida ? "REVISAR" : "CORRIGIR"}}
                         </a>
@@ -280,11 +290,12 @@
                 <div style="margin: auto; text-align: center;">
                     <h2>Corrija as avaliações abaixo:</h2>
                 </div>
-                <div *ngFor="let prova of prova.provasParaCorrigir;  index as i;" class="grupo" style="width: 100%">
+                <div *ngFor="let prova of prova.provasParaCorrigir;  index as i;" class="grupo individuo-container"
+                    style="width: 100%">
                     <div class="grupo-title">
                         ALUNO {{i+1}} - {{prova.corrigida ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
                     </div>
-                    <div class="btn-corrigir">
+                    <div class="btn-flex">
                         <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + prova.id">
                             {{prova.corrigida ? "REVISAR" : "CORRIGIR"}}
                         </a>
@@ -310,8 +321,8 @@
 
             <ng-template matStepLabel>Avaliação Encerrada</ng-template>
 
-            <div
-                style="text-align: center; margin: auto; width: 60%; background-color: whitesmoke; border-radius: 10px; padding: 30px; box-sizing: content-box; ">
+            <div class="body-container"
+                style="text-align: center; background-color: whitesmoke; border-radius: 10px; padding: 30px;">
                 <app-avaliacao-aluno-cabecalho [avaliacao]="avaliacao"></app-avaliacao-aluno-cabecalho>
                 <br />
                 <br />
@@ -409,7 +420,7 @@
 
 </div>
 
-<div style="position: fixed; top: 30%; right: 4%; width: 15%;">
+<div class="tempo-container" [class.tempo-container-fixo]="comumService.getScrollY() >= 76">
 
     <app-countdown [dataObjetivo]="getDataObjetivo()" (tempoEsgotado)="atualizarStatusConformeTempo()"
         [mensagem]="comumService.statusAvaliacao[avaliacao.status].mensagemCountdown"></app-countdown>

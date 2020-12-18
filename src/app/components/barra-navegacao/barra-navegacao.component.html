@@ -1,7 +1,22 @@
-<div class="container barra">
-    <div *ngFor="let urlNode of caminho; index as i" class="container">
-        <span *ngIf="i < (caminho.length -1)"><a [routerLink]="urlNode.url">{{urlNode.nome}}</a></span>
-        <mat-icon *ngIf="i < (caminho.length -1)">navigate_next</mat-icon>
-        <span *ngIf="i >= (caminho.length -1)">{{urlNode.nome}}</span>
+<div *ngIf="this.caminho">
+
+    <div *ngIf="!comumService.isMobile()" class="container barra">
+        <div *ngFor="let urlNode of caminho; index as i" class="container">
+            <span *ngIf="i < (caminho.length -1)"><a [routerLink]="urlNode.url">{{urlNode.nome}}</a></span>
+            <mat-icon *ngIf="i < (caminho.length -1)">navigate_next</mat-icon>
+            <span *ngIf="i >= (caminho.length -1)">{{urlNode.nome}}</span>
+        </div>
     </div>
+    <div *ngIf="comumService.isMobile() && this.caminho.length > 2">
+        <button mat-icon-button [routerLink]="caminho[this.caminho.length - 2].url">
+            <mat-icon class='btn'>
+                arrow_back
+            </mat-icon>
+        </button>
+
+    </div>
+    <div *ngIf="comumService.isMobile() && this.caminho.length <= 2" class="spacer">
+
+    </div>
+
 </div>

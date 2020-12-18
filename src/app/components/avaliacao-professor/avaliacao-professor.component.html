@@ -24,9 +24,8 @@
                 <table style="width: 100%; height: 60vh;">
                     <tr>
 
-                        <td width="68%" style="position: relative;">
-                            <div
-                                style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: 100%; width: 100%; border: 1px solid var(--cor-primaria); border-radius: 10px;">
+                        <td class="participantes-td" style="position: relative;">
+                            <div class="participantes-container">
 
                                 <div
                                     style="display: flex; flex-shrink: 0; align-items: center; justify-content: center;">
@@ -34,13 +33,12 @@
                                         GRUPOS ({{avaliacao.grupos.length}})
                                     </div>
                                     <div *ngIf="avaliacao.tipoDisposicao == 0" class="plaquinha">
-                                        ALUNOS PARTICIPANTES
+                                        PARTICIPANTES
                                     </div>
                                 </div>
 
 
-                                <div #gruposContainerDiv
-                                    style="overflow: auto; height: 53vh; width: 100%; display: flex; flex-wrap: wrap;">
+                                <div #gruposContainerDiv class="grupos-container">
 
                                     <div cdkDropList *ngFor="let grupo of avaliacao.grupos;  index as grupoIndex;"
                                         class="grupo" [cdkDropListData]="grupo.alunos"
@@ -49,7 +47,7 @@
                                         <div *ngIf="avaliacao.tipoDisposicao != 0" class="grupo-title">
                                             GRUPO {{grupo.numero}}
                                         </div>
-                                        <div class="aluno" cdkDrag
+                                        <div class="aluno" [class.aluno-small]="avaliacao.status == 0" cdkDrag
                                             *ngFor="let aluno of grupo.alunos; index as alunoIndex"
                                             [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                                             <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
@@ -82,13 +80,14 @@
                                 style="user-select: none; position: absolute; height: 30px; z-index: 1000; bottom: -5px; width: 100%;">
                             </div>
                         </td>
-                        <td width="2%">
+
+                        <td class="espaco-td">
 
                         </td>
-                        <td width="30%">
 
-                            <div
-                                style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex-wrap: nowrap; border: 1px solid var(--cor-primaria); border-radius: 10px; height: 100%; width: 100%;">
+                        <td class="meus-alunos-td">
+
+                            <div class="meus-alunos-container">
                                 <div class="plaquinha">
                                     MEUS ALUNOS
                                 </div>
@@ -100,10 +99,10 @@
                                 </div>
 
                                 <div cdkDropList [cdkDropListData]="professor.alunos"
-                                    (cdkDropListDropped)="drop($event, 'alunos')"
-                                    style="overflow: auto; display: flex; flex-direction: column; align-items: flex-start; flex-wrap: wrap; width: 100%;  height: 80%;">
+                                    (cdkDropListDropped)="drop($event, 'alunos')" class="alunos-container">
 
-                                    <div class="aluno" cdkDrag *ngFor="let aluno of alunosFiltrados"
+                                    <div class="aluno" [class.aluno-small]="avaliacao.status == 0" cdkDrag
+                                        *ngFor="let aluno of alunosFiltrados"
                                         [style.borderColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'">
                                         <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                                         </app-aluno-card-avaliacao-professor>
@@ -209,43 +208,78 @@
                 prova, ainda pode fazê-lo.
             </div>
 
+            <div *ngIf="avaliacao.tipoCorrecao == 3" class="container mensagem">
+                Os Alunos estão aptos para corrigirem suas próprias provas.
+                <br />
+                Mas, se você desejar corrigir alguma
+                prova, ainda pode fazê-lo.
+            </div>
+
             <!-- INDIVIDUAL -->
             <div *ngIf="avaliacao.tipoDisposicao == 0" class="container">
 
                 <div class="aluno" *ngFor="let aluno of avaliacao.grupos[0].alunos"
                     style="border-color: var(--cor-secundaria); cursor: default">
-                    <div *ngIf="aluno.provaId" class="grupo-title">
-                        {{aluno.provaCorrigida ? "CORRIGIDA": "PRECISA SER CORRIGIDA"}}
-                    </div>
+
                     <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
 
-                    <a *ngIf="aluno.provaId" mat-button class="btn-corrigir"
-                        [routerLink]="'/professor/avaliacao/correcao/' + aluno.provaId">
+                    <div *ngIf="aluno.provaId" class="actions-container">
+                        <div></div>
+                        <div>
+                            {{aluno.provaCorrigida ? "CORRIGIDA": "PRECISA SER CORRIGIDA"}}
+                        </div>
+                        <a *ngIf="aluno.provaId" mat-button class="btn-corrigir"
+                            [routerLink]="'/professor/avaliacao/correcao/' + aluno.provaId">
 
-                        <span *ngIf="aluno.provaCorrigida">
-                            NOTA: {{aluno.notaTotal || 0}}/{{aluno.valorTotal || 0}} -
-                        </span>
-                        {{aluno.provaCorrigida ? 'REVISAR' : 'CORRIGIR'}}
+                            <span *ngIf="aluno.provaCorrigida">
+                                NOTA: {{aluno.notaTotal || 0}}/{{aluno.valorTotal || 0}} -
+                            </span>
+                            {{aluno.provaCorrigida ? 'REVISAR' : 'CORRIGIR'}}
 
-                    </a>
-                    <div *ngIf="aluno.provaId == null" class="info-grupo" matTooltip="O aluno não iniciou a avaliação">
-                        <mat-icon>
-                            alarm_off
-                        </mat-icon>
+                        </a>
+                        <div *ngIf="aluno.provaId == null" class="info-grupo"
+                            matTooltip="O aluno não iniciou a avaliação">
+                            <mat-icon>
+                                alarm_off
+                            </mat-icon>
+                        </div>
                     </div>
+
+
                 </div>
             </div>
 
             <!-- EM GRUPO -->
             <div *ngIf="avaliacao.tipoDisposicao != 0" class="container">
                 <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 100%">
-                    <div class="grupo-title">
-                        GRUPO {{grupo.numero}}
-                        <span *ngIf="grupo.provaId">
-                            -
-                            {{grupo.provaCorrigida ? "CORRIGIDA": "PRECISA SER CORRIGIDA"}}
-                        </span>
+
+
+                    <div class="actions-container">
+                        <div class="grupo-title">
+                            GRUPO {{grupo.numero}}
+                            <span *ngIf="grupo.provaId">
+                                -
+                                {{grupo.provaCorrigida ? "CORRIGIDA": "PRECISA SER CORRIGIDA"}}
+                            </span>
+                        </div>
+
+                        <div *ngIf="grupo.provaId" class="btn-corrigir">
+                            <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId">
+                                <span
+                                    *ngIf="grupo.provaCorrigida && avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
+                                    NOTA:
+                                    {{grupo.notaTotal || 0}}/{{grupo.valorTotal || 0}} -
+                                </span>
+                                {{grupo.provaCorrigida ? "REVISAR" : "CORRIGIR"}}
+                            </a>
+                        </div>
+                        <div *ngIf="grupo.provaId == null" class="info-grupo"
+                            matTooltip="Nenhum aluno do grupo iniciou a avaliação">
+                            <mat-icon>
+                                alarm_off
+                            </mat-icon>
+                        </div>
                     </div>
 
                     <div class="aluno" *ngFor="let aluno of grupo.alunos"
@@ -254,22 +288,8 @@
                         <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                         </app-aluno-card-avaliacao-professor>
                     </div>
-                    <div *ngIf="grupo.provaId" class="btn-corrigir">
-                        <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId">
-                            <span
-                                *ngIf="grupo.provaCorrigida && avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
-                                NOTA:
-                                {{grupo.notaTotal || 0}}/{{grupo.valorTotal || 0}} -
-                            </span>
-                            {{grupo.provaCorrigida ? "REVISAR" : "CORRIGIR"}}
-                        </a>
-                    </div>
-                    <div *ngIf="grupo.provaId == null" class="info-grupo"
-                        matTooltip="Nenhum aluno do grupo iniciou a avaliação">
-                        <mat-icon>
-                            alarm_off
-                        </mat-icon>
-                    </div>
+
+
                 </div>
             </div>
 
@@ -294,45 +314,88 @@
                     <app-aluno-card-avaliacao-professor [avaliacao]="avaliacao" [aluno]="aluno">
                     </app-aluno-card-avaliacao-professor>
 
-                    <a *ngIf="aluno.provaId" mat-button class=" btn-corrigir"
-                        [routerLink]="'/professor/avaliacao/correcao/' + aluno.provaId">
-                        <!-- PONTUAÇÃO NORMAL -->
-                        <span
-                            *ngIf="aluno.provaCorrigida && avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
-                            NOTA: {{aluno.notaTotal || 0}}/{{aluno.valorTotal || 0}} -
-                        </span>
-                        <!-- PONTUAÇÃO COMPARATIVA -->
-                        <span *ngIf="aluno.provaCorrigida && avaliacao.tipoPontuacao == 1">
-                            NOTA COMPARATIVA:
-                            {{comumService.getRounded((aluno.notaTotal/provaService.getMaiorNota(avaliacao)) *
-                            100) || 0}}/100 -
-                        </span> REVISAR
-                    </a>
 
-                    <!-- PONTUAÇÃO POR PARTICIPAÇÃO -->
-                    <div *ngIf="aluno.provaId && avaliacao.tipoPontuacao == 3"
-                        [routerLink]="'/professor/avaliacao/correcao/' + aluno.provaId" class="info-grupo"
-                        style="cursor: pointer;" matTooltip="Clique para ver a prova">
-                        <mat-icon>
-                            star
-                        </mat-icon>
+                    <div class="actions-container">
+                        <div></div>
+                        <a *ngIf="aluno.provaId" mat-button class=" btn-corrigir"
+                            [routerLink]="'/professor/avaliacao/correcao/' + aluno.provaId">
+                            <!-- PONTUAÇÃO NORMAL -->
+                            <span
+                                *ngIf="aluno.provaCorrigida && avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
+                                NOTA: {{aluno.notaTotal || 0}}/{{aluno.valorTotal || 0}} -
+                            </span>
+                            <!-- PONTUAÇÃO COMPARATIVA -->
+                            <span *ngIf="aluno.provaCorrigida && avaliacao.tipoPontuacao == 1">
+                                NOTA COMPARATIVA:
+                                {{comumService.getRounded((aluno.notaTotal/provaService.getMaiorNota(avaliacao)) *
+                                100) || 0}}/100 -
+                            </span> REVISAR
+                        </a>
+
+                        <!-- PONTUAÇÃO POR PARTICIPAÇÃO -->
+                        <div *ngIf="aluno.provaId && avaliacao.tipoPontuacao == 3"
+                            [routerLink]="'/professor/avaliacao/correcao/' + aluno.provaId" class="info-grupo"
+                            style="cursor: pointer;" matTooltip="Clique para ver a prova">
+                            <mat-icon>
+                                star
+                            </mat-icon>
+                        </div>
+
+                        <!-- NÃO PARTICIPOU -->
+                        <div *ngIf="aluno.provaId == null" class="info-grupo"
+                            matTooltip="O aluno não iniciou a avaliação">
+                            <mat-icon>
+                                alarm_off
+                            </mat-icon>
+                        </div>
                     </div>
-
-                    <!-- NÃO PARTICIPOU -->
-                    <div *ngIf="aluno.provaId == null" class="info-grupo" matTooltip="O aluno não iniciou a avaliação">
-                        <mat-icon>
-                            alarm_off
-                        </mat-icon>
-                    </div>
-
                 </div>
             </div>
 
             <!-- EM GRUPO -->
             <div *ngIf="avaliacao.tipoDisposicao != 0" class="container">
                 <div *ngFor="let grupo of avaliacao.grupos;  index as i;" class="grupo" style="width: 100%">
-                    <div class="grupo-title">
-                        GRUPO {{grupo.numero}}
+
+
+
+                    <div class="actions-container">
+                        <div class="grupo-title">
+                            GRUPO {{grupo.numero}}
+                        </div>
+
+                        <div *ngIf="grupo.provaId && avaliacao.tipoPontuacao != 3" class="btn-corrigir">
+                            <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId">
+
+                                <!-- PONTUAÇÃO NORMAL -->
+                                <span
+                                    *ngIf="grupo.provaCorrigida && avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
+                                    NOTA:
+                                    {{grupo.notaTotal || 0}}/{{grupo.valorTotal || 0}} -
+                                </span>
+                                <!-- PONTUAÇÃO COMPARATIVA -->
+                                <span *ngIf="grupo.provaCorrigida && avaliacao.tipoPontuacao == 1">
+                                    NOTA COMPARATIVA:
+                                    {{comumService.getRounded((grupo.notaTotal/provaService.getMaiorNota(avaliacao)) *
+                                    100) || 0}}/100 -
+                                </span> REVISAR
+                            </a>
+                        </div>
+
+                        <div *ngIf="grupo.provaId && avaliacao.tipoPontuacao == 3"
+                            [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId" class="info-grupo"
+                            style="cursor: pointer;" matTooltip="Clique para ver a prova">
+                            <mat-icon>
+                                star
+                            </mat-icon>
+
+                        </div>
+
+                        <div *ngIf="grupo.provaId == null" class="info-grupo"
+                            matTooltip="Nenhum aluno do grupo iniciou a avaliação">
+                            <mat-icon>
+                                alarm_off
+                            </mat-icon>
+                        </div>
                     </div>
 
                     <div class="aluno" *ngFor="let aluno of grupo.alunos"
@@ -342,39 +405,7 @@
                         </app-aluno-card-avaliacao-professor>
                     </div>
 
-                    <div *ngIf="grupo.provaId && avaliacao.tipoPontuacao != 3" class="btn-corrigir">
-                        <a mat-button [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId">
 
-                            <!-- PONTUAÇÃO NORMAL -->
-                            <span
-                                *ngIf="grupo.provaCorrigida && avaliacao.tipoPontuacao != 3 && avaliacao.tipoPontuacao != 1">
-                                NOTA:
-                                {{grupo.notaTotal || 0}}/{{grupo.valorTotal || 0}} -
-                            </span>
-                            <!-- PONTUAÇÃO COMPARATIVA -->
-                            <span *ngIf="grupo.provaCorrigida && avaliacao.tipoPontuacao == 1">
-                                NOTA COMPARATIVA:
-                                {{comumService.getRounded((grupo.notaTotal/provaService.getMaiorNota(avaliacao)) *
-                                100) || 0}}/100 -
-                            </span> REVISAR
-                        </a>
-                    </div>
-
-                    <div *ngIf="grupo.provaId && avaliacao.tipoPontuacao == 3"
-                        [routerLink]="'/professor/avaliacao/correcao/' + grupo.provaId" class="info-grupo"
-                        style="cursor: pointer;" matTooltip="Clique para ver a prova">
-                        <mat-icon>
-                            star
-                        </mat-icon>
-
-                    </div>
-
-                    <div *ngIf="grupo.provaId == null" class="info-grupo"
-                        matTooltip="Nenhum aluno do grupo iniciou a avaliação">
-                        <mat-icon>
-                            alarm_off
-                        </mat-icon>
-                    </div>
                 </div>
 
             </div>

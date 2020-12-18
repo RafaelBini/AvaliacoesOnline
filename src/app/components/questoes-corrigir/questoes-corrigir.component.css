@@ -137,3 +137,9 @@
 }
 
 /* --------------------- */
+
+@media screen and (max-width: 650px){
+  .lista-alunos-container{
+    font-size: 12px;
+  }
+}

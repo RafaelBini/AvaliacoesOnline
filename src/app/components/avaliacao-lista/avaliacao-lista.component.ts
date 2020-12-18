@@ -1,6 +1,6 @@
 import { AvaliacaoService } from 'src/app/services/avaliacao.service';
 import { ComumService } from './../../services/comum.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Avaliacao } from 'src/app/models/avaliacao';
 
 
@@ -12,7 +12,7 @@ import { Avaliacao } from 'src/app/models/avaliacao';
 })
 export class AvaliacaoListaComponent implements OnInit {
 
-  public agruparAvaliacoes = true;
+  public agruparAvaliacoes = this.comumService.getWidth() > this.comumService.TAM_MOBILE;
   public mostrarArquivadas = false;
   public selectedStatusTab = 0;
   public avaliacoesFiltradas: Array<Avaliacao>;
@@ -31,12 +31,12 @@ export class AvaliacaoListaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.atualizarAvaliacoesFiltradas();
+  }
 
-
-
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.agruparAvaliacoes = this.comumService.getWidth() > this.comumService.TAM_MOBILE;
   }
 
   atualizarAvaliacoesFiltradas() {

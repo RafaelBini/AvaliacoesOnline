@@ -4,13 +4,13 @@
 
     <div>
         <span class="titulo">{{avaliacao.titulo}}</span>
-        <span class="linkCompartilhavel">
+        <span *ngIf="!comumService.isMobile()" class="linkCompartilhavel">
             <a [routerLink]="'/'+avaliacao.id">
                 {{getLink(avaliacao)}}
             </a>
         </span>
-        <button class="btn-copiar" matTooltip="Copiar link da avaliação" [cdkCopyToClipboard]="getLink(avaliacao)"
-            (click)="notificarCopy()" mat-icon-button>
+        <button *ngIf="!comumService.isMobile()" class="btn-copiar" matTooltip="Copiar link da avaliação"
+            [cdkCopyToClipboard]="getLink(avaliacao)" (click)="notificarCopy()" mat-icon-button>
             <mat-icon style="font-size: 18px; color: var(--cor-primaria)">content_copy</mat-icon>
         </button>
     </div>
@@ -27,15 +27,13 @@
     </div> -->
 
     <div *ngIf="!avaliacao.isInicioIndeterminado">
-        <span>Período de Avaliação</span>
-        <br />
         <span>
             {{avaliacao.isInicioCorrecaoIndeterminado ? comumService.getIntervaloAmigavel(avaliacao.dtInicio,
             'indeterminado') : comumService.getIntervaloAmigavel(avaliacao.dtInicio, avaliacao.dtInicioCorrecao)}}
         </span>
     </div>
     <br />
-
+    <!-- 
     <div *ngIf="!avaliacao.isInicioCorrecaoIndeterminado">
         <span>Período de Correção</span>
         <br />
@@ -44,7 +42,7 @@
             'indeterminado') : comumService.getIntervaloAmigavel(avaliacao.dtInicioCorrecao, avaliacao.dtTermino)}}
         </span>
     </div>
-
+ -->
 
     <span *ngIf="avaliacaoService.isArquivada(avaliacao)" (click)="desarquivar(avaliacao)"
         matTooltip="Clique para desarquivar"
@@ -56,13 +54,14 @@
     <app-avaliacao-menu-opcoes [tipoAcesso]="tipoAcesso" [avaliacao]="avaliacao" icone="more_vert">
     </app-avaliacao-menu-opcoes>
 
+    <div class='info-box-container'>
+        <a [routerLink]="'/'+tipoAcesso+'/avaliacao/'+ avaliacao.id" matTooltip="Entrar na Avaliação" class="info-box"
+            [style.backgroundColor]="status.cor">
+            Status: {{status.nome}}
+            <hr />
+            {{tipoAcesso=="professor" ? status.acaoProfessor : status.acaoAluno}}
+        </a>
+    </div>
 
-    <a [routerLink]="'/'+tipoAcesso+'/avaliacao/'+ avaliacao.id" matTooltip="Entrar na Avaliação" class="info-box"
-        [style.backgroundColor]="status.cor">
-        Status: {{status.nome}}
-        <hr />
-        {{tipoAcesso=="professor" ? status.acaoProfessor : status.acaoAluno}}
-    </a>
-    <br />
 
 </div>

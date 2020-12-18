@@ -38,7 +38,10 @@
         </button>
     </div>
 
-
+</div>
+<div *ngIf="gruposQuestoes.length <= 0" class="questao-container">
+    Não existem dados.<br />
+    Nenhum aluno participou desta avaliação.
 </div>
 <div class='btn-close' mat-icon-button mat-dialog-close>
     <mat-icon>cancel</mat-icon>

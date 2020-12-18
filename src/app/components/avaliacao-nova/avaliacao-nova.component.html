@@ -1,19 +1,17 @@
 <app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
 
-
-
 <div style="height: 20px;"></div>
 
 <div *ngIf="avaliacao.id != '1'">
 
     <!-- VISÃO DE PROFESSOR -->
-    <div *ngIf="visao == 'professor'" style="width: 60%; margin: auto;">
+    <div *ngIf="visao == 'professor'" class="container-avaliacao-professor">
 
         <!-- LINK DA AVALIAÇÃO -->
 
         <div class="link-div">
             Link da Avaliação:
-            <span class="link-span">
+            <div class="link-span">
                 http://{{comumService.getHostName()}}/<input type="text" (ngModelChange)="corrigirId()"
                     (change)="corrigirIdVazio()" [disabled]="isEditando" [(ngModel)]="avaliacao.id" class="link-input"
                     maxlength="20" />
@@ -22,7 +20,7 @@
                     matTooltip="Gerar aleatório">refresh
                 </mat-icon>
 
-            </span>
+            </div>
             <div *ngIf="idJaExiste" class="error-div">
                 Ops! Esse link já está sendo usado
             </div>
@@ -77,101 +75,111 @@
 
             </div>
 
-            <table class="atributos-table" style="margin: auto; width: 100%; font-size: 15px;">
+
+            <div class="datas-container">
 
 
                 <!-- DURAÇÃO DA AVALIAÇÃO -->
 
-                <tr>
-                    <td colspan="2">
-                        <hr />
-                        <h3>
-                            Período de Avaliação ({{getPeriodoAvaliacao()}})
-                            <mat-icon class="btn-help" matTooltip="Clique para receber ajuda"
-                                (click)="abrirAjudaPeriodoAvaliacao()">help</mat-icon>
-                        </h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <mat-checkbox class="checkbox-indeterminado" matTooltip="Data de Início"
-                            style="margin-left: 5px;" [(ngModel)]="avaliacao.isInicioIndeterminado"
-                            (ngModelChange)="limitarIndeterminados()">
-                            <span style="font-size: 12px; ">Iniciar manualmente</span>
-                        </mat-checkbox>
-                    </td>
-                    <td>
-                        <mat-checkbox class="checkbox-indeterminado" style="margin-left: 5px;"
-                            matTooltip="Data de Término" [(ngModel)]="avaliacao.isInicioCorrecaoIndeterminado"
-                            (ngModelChange)="limitarIndeterminados()" [disabled]="avaliacao.isInicioIndeterminado"
-                            (click)="avisarBloqueioTerminoAvaliacao()">
-                            <span style="font-size: 12px;">Encerrar manualmente</span>
-                        </mat-checkbox>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="datetime-local" [min]="getNowStr()" matTooltip="Data de Início"
-                            [(ngModel)]="avaliacao.dtInicio" (ngModelChange)="corrigirDatas('inicio')"
-                            [class.escondido]="avaliacao.isInicioIndeterminado" />
-                    </td>
-                    <td>
-                        <input type="datetime-local" [min]="avaliacao.dtInicio" matTooltip="Data de Término"
-                            [(ngModel)]="avaliacao.dtInicioCorrecao" (ngModelChange)="corrigirDatas('correcao')"
-                            [class.escondido]="avaliacao.isInicioCorrecaoIndeterminado" />
-                    </td>
-                </tr>
+                <div class="datas-title">
+
+                    <hr />
+                    <h3>
+                        Período de Avaliação ({{getPeriodoAvaliacao()}})
+                        <mat-icon class="btn-help" matTooltip="Clique para receber ajuda"
+                            (click)="abrirAjudaPeriodoAvaliacao()">help</mat-icon>
+                    </h3>
+
+                </div>
+                <div class="datas-box">
+                    <div class="datas-container">
+                        <div>
+
+
+                            <mat-checkbox class="checkbox-indeterminado" matTooltip="Data de Início"
+                                style="margin-left: 5px;" [(ngModel)]="avaliacao.isInicioIndeterminado"
+                                (ngModelChange)="limitarIndeterminados()">
+                                <span style="font-size: 12px; ">Iniciar manualmente</span>
+                            </mat-checkbox>
+                        </div>
+                        <div>
+                            <input type="datetime-local" [min]="getNowStr()" matTooltip="Data de Início"
+                                [(ngModel)]="avaliacao.dtInicio" (ngModelChange)="corrigirDatas('inicio')"
+                                [class.escondido]="avaliacao.isInicioIndeterminado" />
+                        </div>
+                    </div>
+                    <div class="datas-container">
+                        <div>
+                            <mat-checkbox class="checkbox-indeterminado" style="margin-left: 5px;"
+                                matTooltip="Data de Término" [(ngModel)]="avaliacao.isInicioCorrecaoIndeterminado"
+                                (ngModelChange)="limitarIndeterminados()" [disabled]="avaliacao.isInicioIndeterminado"
+                                (click)="avisarBloqueioTerminoAvaliacao()">
+                                <span style="font-size: 12px;">Encerrar manualmente</span>
+                            </mat-checkbox>
+                        </div>
+                        <div>
+                            <input type="datetime-local" [min]="avaliacao.dtInicio" matTooltip="Data de Término"
+                                [(ngModel)]="avaliacao.dtInicioCorrecao" (ngModelChange)="corrigirDatas('correcao')"
+                                [class.escondido]="avaliacao.isInicioCorrecaoIndeterminado" />
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- DURAÇÃO DA CORREÇÃO -->
 
-                <tr>
-                    <td colspan='2'>
-                        <hr />
-                        <h3>
-                            Período de Correção ({{getPeriodoCorrecao()}})
-                            <mat-icon class="btn-help" matTooltip="Clique para receber ajuda"
-                                (click)="abrirAjudaPeriodoCorrecao()">help</mat-icon>
-                        </h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <mat-checkbox class="checkbox-indeterminado" style="margin-left: 5px;"
-                            [(ngModel)]="avaliacao.isInicioCorrecaoIndeterminado"
-                            (ngModelChange)="limitarIndeterminados()" [disabled]="avaliacao.isInicioIndeterminado"
-                            (click)="avisarBloqueioInicioCorrecao()">
-                            <span style="font-size: 12px;">Iniciar manualmente</span>
-                        </mat-checkbox>
-                    </td>
-                    <td>
-                        <mat-checkbox class="checkbox-indeterminado" style="margin-left: 5px;"
-                            [(ngModel)]="avaliacao.isTerminoIndeterminado"
-                            [disabled]="avaliacao.isInicioCorrecaoIndeterminado"
-                            (click)="avisarBloqueioTerminoCorrecao()">
-                            <span style="font-size: 12px;">Encerrar manualmente</span>
-                        </mat-checkbox>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="datetime-local" [min]="avaliacao.dtInicio" [(ngModel)]="avaliacao.dtInicioCorrecao"
-                            (ngModelChange)="corrigirDatas('correcao')"
-                            [class.escondido]="avaliacao.isInicioCorrecaoIndeterminado" />
-                    </td>
-                    <td>
-                        <input type="datetime-local" [min]="avaliacao.dtInicioCorrecao"
-                            [(ngModel)]="avaliacao.dtTermino" (ngModelChange)="corrigirDatas('termino')"
-                            [class.escondido]="avaliacao.isTerminoIndeterminado" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <hr />
-                    </td>
-                </tr>
+                <div class="datas-title">
 
-                <!-- DURAÇÃO INDIVIDUAL -->
+                    <hr />
+                    <h3>
+                        Período de Correção ({{getPeriodoCorrecao()}})
+                        <mat-icon class="btn-help" matTooltip="Clique para receber ajuda"
+                            (click)="abrirAjudaPeriodoCorrecao()">help</mat-icon>
+                    </h3>
 
+                </div>
+                <div class="datas-box">
+                    <div class="datas-container">
+                        <div>
+                            <mat-checkbox class="checkbox-indeterminado" style="margin-left: 5px;"
+                                [(ngModel)]="avaliacao.isInicioCorrecaoIndeterminado"
+                                (ngModelChange)="limitarIndeterminados()" [disabled]="avaliacao.isInicioIndeterminado"
+                                (click)="avisarBloqueioInicioCorrecao()">
+                                <span style="font-size: 12px;">Iniciar manualmente</span>
+                            </mat-checkbox>
+                        </div>
+                        <div>
+                            <input type="datetime-local" [min]="avaliacao.dtInicio"
+                                [(ngModel)]="avaliacao.dtInicioCorrecao" (ngModelChange)="corrigirDatas('correcao')"
+                                [class.escondido]="avaliacao.isInicioCorrecaoIndeterminado" />
+                        </div>
+                    </div>
+                    <div class="datas-container">
+                        <div>
+                            <mat-checkbox class="checkbox-indeterminado" style="margin-left: 5px;"
+                                [(ngModel)]="avaliacao.isTerminoIndeterminado"
+                                [disabled]="avaliacao.isInicioCorrecaoIndeterminado"
+                                (click)="avisarBloqueioTerminoCorrecao()">
+                                <span style="font-size: 12px;">Encerrar manualmente</span>
+                            </mat-checkbox>
+                        </div>
+                        <div>
+                            <input type="datetime-local" [min]="avaliacao.dtInicioCorrecao"
+                                [(ngModel)]="avaliacao.dtTermino" (ngModelChange)="corrigirDatas('termino')"
+                                [class.escondido]="avaliacao.isTerminoIndeterminado" />
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+
+                    <hr />
+
+                </div>
+            </div>
+
+            <!-- DURAÇÃO INDIVIDUAL -->
+            <table class="atributos-table" style="margin: auto; width: 100%; font-size: 15px;">
                 <tr *ngIf="avaliacao.tipoDisposicao == 0">
                     <td colspan="2">
                         <table width="100%">
@@ -227,7 +235,7 @@
                                         [(ngModel)]="avaliacao.isOrdemAleatoria"
                                         (ngModelChange)="atualizarRascunhoAvaliacao()">
 
-                                        <span style="font-size: 15px;">Ordenar questões de forma aleatória</span>
+                                        <span class="checkbox-span">Ordenar questões de forma aleatória</span>
                                     </mat-checkbox>
                                     <mat-icon class="btn-help" matTooltip="Clique para receber ajuda"
                                         (click)="abrirAjudaOrdenarAleatorio()">help</mat-icon>
@@ -243,7 +251,7 @@
                                         [(ngModel)]="avaliacao.isBloqueadoAlunoAtrasado"
                                         (ngModelChange)="atualizarRascunhoAvaliacao()">
 
-                                        <span style="font-size: 15px;">Bloquear participação de alunos atrasados</span>
+                                        <span class="checkbox-span">Bloquear participação de alunos atrasados</span>
                                     </mat-checkbox>
                                     <mat-icon class="btn-help" matTooltip="Clique para receber ajuda"
                                         (click)="abrirAjudaBloquearAtrasados()">help</mat-icon>
@@ -257,51 +265,52 @@
             </table>
         </div>
         <br />
-        <table class="configuracoes-basicas-table">
-            <tr>
-                <td width="33%">
-                    <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
-                        DISPOSIÇÃO<br />
-                        <button mat-button class="botao-tipo" matTooltip="Alterar disposição dos alunos"
-                            matTooltipShowDelay="1000" (click)="abrirTipos('disposicao')">
-                            <mat-icon
-                                style="background-color: white; color: var(--cor-primaria); border-radius: 50%; padding: 4px;">
-                                {{comumService.disposicoes[avaliacao.tipoDisposicao].icone}}</mat-icon>
-                            <br />
-                            {{comumService.disposicoes[avaliacao.tipoDisposicao].nome}}
-                        </button>
-                    </div>
-                </td>
+        <div class="configuracoes-basicas-container">
 
-                <td width="33%">
-                    <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
-                        MÉTODO DE CORREÇÃO<br />
-                        <button mat-button class="botao-tipo" matTooltip="Alterar método de correção"
-                            matTooltipShowDelay="1000" (click)="abrirTipos('correcao')">
-                            <mat-icon
-                                style="background-color: white; color: var(--cor-primaria); border-radius: 50%; padding: 4px;">
-                                {{comumService.correcoes[avaliacao.tipoCorrecao].icone}}</mat-icon>
-                            <br />
-                            {{comumService.correcoes[avaliacao.tipoCorrecao].nome}}
-                        </button>
-                    </div>
-                </td>
+            <div class="configuracoes-basicas-element">
+                <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
+                    DISPOSIÇÃO<br />
+                    <button mat-button class="botao-tipo" matTooltip="Alterar disposição dos alunos"
+                        matTooltipShowDelay="1000" (click)="abrirTipos('disposicao')">
+                        <mat-icon
+                            style="background-color: white; color: var(--cor-primaria); border-radius: 50%; padding: 4px;">
+                            {{comumService.disposicoes[avaliacao.tipoDisposicao].icone}}</mat-icon>
+                        <br />
+                        {{comumService.disposicoes[avaliacao.tipoDisposicao].nome}}
+                    </button>
+                </div>
+            </div>
 
-                <td width="33%">
-                    <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
-                        PONTUAÇÃO<br />
-                        <button mat-button class="botao-tipo" matTooltip="Alterar forma de pontuação"
-                            matTooltipShowDelay="1000" (click)="abrirTipos('pontuacao')">
-                            <mat-icon
-                                style="background-color: white; color: var(--cor-primaria); border-radius: 50%; padding: 4px;">
-                                {{comumService.pontuacoes[avaliacao.tipoPontuacao].icone}}</mat-icon>
-                            <br />
-                            {{comumService.pontuacoes[avaliacao.tipoPontuacao].nome}}
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        </table>
+            <div class="configuracoes-basicas-element">
+                <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
+                    CORREÇÃO<br />
+                    <button mat-button class="botao-tipo" matTooltip="Alterar método de correção"
+                        matTooltipShowDelay="1000" (click)="abrirTipos('correcao')">
+                        <mat-icon
+                            style="background-color: white; color: var(--cor-primaria); border-radius: 50%; padding: 4px;">
+                            {{comumService.correcoes[avaliacao.tipoCorrecao].icone}}</mat-icon>
+                        <br />
+                        {{comumService.correcoes[avaliacao.tipoCorrecao].nome}}
+                    </button>
+                </div>
+            </div>
+
+            <div class="configuracoes-basicas-element">
+                <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
+                    PONTUAÇÃO<br />
+                    <button mat-button class="botao-tipo" matTooltip="Alterar forma de pontuação"
+                        matTooltipShowDelay="1000" (click)="abrirTipos('pontuacao')">
+                        <mat-icon
+                            style="background-color: white; color: var(--cor-primaria); border-radius: 50%; padding: 4px;">
+                            {{comumService.pontuacoes[avaliacao.tipoPontuacao].icone}}</mat-icon>
+                        <br />
+                        {{comumService.pontuacoes[avaliacao.tipoPontuacao].nome}}
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
         <br />
 
         <div class="selecionar-alunos-div">
@@ -365,7 +374,7 @@
         </mat-menu>
 
         <button *ngIf="!isEditando" class="btn-descartar-rascunho" mat-fab matTooltip="Descartar Rascunho"
-            (click)="descartarRascunho()" style="position: fixed; bottom: 30px; left: 30px; background-color: red;">
+            (click)="descartarRascunho()">
             <mat-icon style="color: white;">delete</mat-icon>
         </button>
 
@@ -373,7 +382,7 @@
 
     <!-- VISÃO DE ALUNO -->
 
-    <div *ngIf="visao == 'aluno'" style="display: flex; flex-wrap: wrap; width: 60%; margin: auto;">
+    <div *ngIf="visao == 'aluno'" class="container-avaliacao-aluno">
 
         <div class="cabecalho">
 

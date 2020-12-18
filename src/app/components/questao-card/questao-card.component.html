@@ -16,7 +16,7 @@
             </span>
 
         </div>
-        <div class="questao-tipo">
+        <div *ngIf="!comumService.isMobile()" class="questao-tipo">
             {{comumService.questaoTipos[questao.tipo].nome}}
         </div>
         <div class="questao-nivel">

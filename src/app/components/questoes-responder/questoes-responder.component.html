@@ -39,7 +39,7 @@
                     <td>
                         <table width="100%">
                             <tr *ngFor="let associacao of questao.associacoes; index as ai">
-                                <td width="20%" style="cursor:default;">
+                                <td width="35%" style="cursor:default;">
                                     <mat-select class="select-basico" style="width: 82%;"
                                         [(ngModel)]="associacao.opcaoSelecionada"
                                         (ngModelChange)="sinalizarRespostaAlterada(questao)">
@@ -49,7 +49,7 @@
                                         </mat-option>
                                     </mat-select>
                                 </td>
-                                <td width="80%" class="alternativa" style="cursor:default;">
+                                <td width="65%" class="alternativa" style="cursor:default;">
                                     <span style="white-space: pre-line;">{{associacao.texto}}</span>
                                 </td>
                             </tr>
@@ -135,7 +135,7 @@
                         <div class="drop-here" (fileDropped)="uploadAnexos($event, questao)"
                             (click)="anexoSelectInput.click()" appDropFile>
                             <span class="drop-here-texto">
-                                ARRASTE E SOLTE O(S) ARQUIVO(S) AQUI
+                                CLIQUE OU ARRASTE E SOLTE O(S) ARQUIVO(S) AQUI
                             </span>
                         </div>
                         <div style="width: 90%; margin: auto; color: gray;">
@@ -257,7 +257,8 @@
 
                         <div *ngIf="questao.tentativas > 0" style="display: inline">
                             Valor:
-                            {{comumService.getRounded(questao.valor - (questao.tentativas * (questao.valor/3)))}}/{{getPontuacaoMaxima()}}
+                            {{comumService.getRounded(questao.valor - (questao.tentativas *
+                            (questao.valor/3)))}}/{{getPontuacaoMaxima()}}
                             <span class="tenativa-incorreta" *ngIf="questao.tentativas==1">
                                 (1 tentativa incorreta)
                             </span>

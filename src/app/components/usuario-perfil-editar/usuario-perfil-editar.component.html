@@ -1,5 +1,4 @@
-<div
-    style="background-color: whitesmoke; width: 50%; border-radius: 10px; margin: auto; margin-top: 20px; padding: 20px;">
+<div class="container">
     <div style="margin: auto; text-align: center;">
         <h2>Alterar Meus Dados</h2>
     </div>
@@ -8,10 +7,8 @@
             <td align="center" rowspan="5">
 
                 <div style="position: relative;">
-                    <img *ngIf="usuario.img" [src]="usuario.img.url || 'assets/avatares/padrao.jpg'"
-                        style="height: 20vh; width: 20vh; object-fit: cover; border-radius: 7px;" />
-                    <img *ngIf="!usuario.img" [src]="'assets/avatares/padrao.jpg'"
-                        style="height: 20vh; width: 20vh; object-fit: cover; border-radius: 7px;" />
+                    <img *ngIf="usuario.img" [src]="usuario.img.url || 'assets/avatares/padrao.jpg'" class="img" />
+                    <img *ngIf="!usuario.img" [src]="'assets/avatares/padrao.jpg'" class="img" />
                     <button *ngIf="usuario.img" mat-icon-button matTooltip="Remover imagem"
                         style="color: var(--cor-perigosa); position: absolute; top: 0px; right: 1px;"
                         (click)="removerImagem()">
@@ -44,14 +41,12 @@
         </tr>
         <tr>
             <td align="left">
-                Senha<br />
+                Senha <span (click)="alterar = !alterar" class="btn-editar-senha">
+                    {{alterar ? '[CANCELAR]' : '[EDITAR]'}}
+                </span><br />
                 <input required [disabled]="!alterar" [(ngModel)]="usuario.senha" type="password">
 
-                <button (click)="alterar = !alterar" mat-button
-                    [matTooltip]="alterar ? 'Não alterar senha' : 'Alterar senha'">
-                    <mat-icon *ngIf="!alterar">create</mat-icon>
-                    <mat-icon *ngIf="alterar">close</mat-icon>
-                </button>
+
 
             </td>
         </tr>

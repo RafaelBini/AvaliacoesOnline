@@ -40,7 +40,7 @@
                     <td>
                         <table width="100%">
                             <tr *ngFor="let associacao of questao.associacoes; index as ai">
-                                <td width="20%" style="cursor:default;">
+                                <td width="35%" style="cursor:default;">
                                     <mat-select disabled="true" class="select-basico" style="width: 82%;"
                                         [(ngModel)]="associacao.opcaoSelecionada">
                                         <mat-option [value]="_associacao.opcaoSelecionada"
@@ -49,7 +49,7 @@
                                         </mat-option>
                                     </mat-select>
                                 </td>
-                                <td width="80%" class="alternativa" style="cursor:default;">
+                                <td width="65%" class="alternativa" style="cursor:default;">
                                     <span style="white-space: pre-line;">{{associacao.texto}}</span>
                                 </td>
                             </tr>
@@ -212,7 +212,8 @@
                                                     class="lista-alunos-container">
                                                     <span class="titulo-lista-alunos">
                                                         Correção do
-                                                        {{ 'Grupo ' + getGrupoFromProvaId(correcao.avaliadorProvaId).numero }}
+                                                        {{ 'Grupo ' +
+                                                        getGrupoFromProvaId(correcao.avaliadorProvaId).numero }}
                                                     </span>
                                                     <div class="aluno-listado"
                                                         *ngFor="let aluno of getGrupoFromProvaId(correcao.avaliadorProvaId).alunos">
@@ -266,19 +267,27 @@
                                         matTooltip="Dar nota máxima" mat-icon-button>
                                         <mat-icon>done</mat-icon>
                                     </button>
-                                    <div *ngIf="questao.tipo == 1 && userTipo == 'professor'"
-                                        class="dica-resposta-dissertativa">
-                                        {{gabarito.questoes[questao.index].resposta}}
-                                    </div>
-                                    <br />
-                                    Observação (opcional):
                                 </td>
-                                <td align='Left' valign='top' width='50%'>
+                                <td align='Left' valign='top' width='50%' style="font-size: 13px;">
                                     Correção do Professor
+
+                                    <button mat-button *ngIf="visaoTipo == 'consulta' || userTipo == 'professor'"
+                                        (click)="abrirGabarito(questao.index)">
+                                        Ver Gabarito
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
+                                    <div *ngIf="questao.tipo == 1 && userTipo == 'professor'"
+                                        class="dica-resposta-dissertativa">
+                                        {{gabarito.questoes[questao.index].resposta}}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Observação (opcional):<br />
                                     <div style="position: relative;">
                                         <textarea rows="3" #correcaoProfessorTextarea maxlength="2500"
                                             (input)="ajustarAltura($event)" (click)="ajustarAltura($event)"
@@ -293,10 +302,7 @@
                             </tr>
                         </table>
 
-                        <button mat-button *ngIf="visaoTipo == 'consulta' || userTipo == 'professor'"
-                            (click)="abrirGabarito(questao.index)" style="position: absolute; top: 8px; right: 8px;">
-                            Ver Gabarito
-                        </button>
+
 
                     </td>
                 </tr>

@@ -240,3 +240,13 @@ white-space: pre;
 .mat-dialog-container{
   position: relative !important;
 }
+
+.mat-checkbox-layout{
+  white-space: normal !important;
+}
+
+@media screen and (max-width: 650px){
+  .mat-horizontal-content-container{
+    padding: 0px !important;
+  }
+}

@@ -356,7 +356,7 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
             aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 0, this.timeService.getCurrentDateTime().toISOString());
             mudeiAlgo = true;
           }
-          else if (this.avaliacao.status == 1 && (aluno.statusId < 2 || aluno.statusId == undefined)) {
+          else if (this.avaliacao.status == 1 && (aluno.statusId < 2 || aluno.statusId == undefined) && aluno.statusId != 1) {
             aluno.statusId = 2;
             aluno.dtStatus = this.comumService.insertInArray(aluno.dtStatus, 2, this.timeService.getCurrentDateTime().toISOString());
             mudeiAlgo = true;

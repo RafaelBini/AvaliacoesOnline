@@ -33,7 +33,7 @@ import { LoginComponent } from './components/login/login.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AvaliacaoAlunoComponent } from './components/avaliacao-aluno/avaliacao-aluno.component';
 import { AlunoComponent } from './components/aluno/aluno.component';
-import { AlunoNovoComponent } from './components/aluno-novo/aluno-novo.component';
+import { AlunoNovoComponent } from './dialogs/aluno-novo/aluno-novo.component';
 import { InfoQuestaoComponent } from './dialogs/info-questao/info-questao.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';

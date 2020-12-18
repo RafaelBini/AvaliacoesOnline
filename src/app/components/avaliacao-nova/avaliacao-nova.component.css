@@ -1,3 +1,16 @@
+
+.container-avaliacao-professor{
+  width: 60%; 
+  margin: auto;
+}
+
+.container-avaliacao-aluno{
+  display: flex; 
+  flex-wrap: wrap; 
+  width: 60%; 
+  margin: auto;
+}
+
 .atributos-table td {
     padding-bottom: 7px;
     padding-top: 7px;
@@ -52,6 +65,10 @@
 
 .btn-descartar-rascunho{
   opacity: 0.55;
+  position: fixed; 
+  bottom: 30px; 
+  left: 30px; 
+  background-color: red;
 }
 .btn-descartar-rascunho:hover{
   opacity: 1;
@@ -141,6 +158,7 @@
     padding: 0px;
     font-family: Arial;
     font-weight: bold;
+    width: 50px !important;
   }
   .link-input:focus{
     outline: none;
@@ -205,8 +223,16 @@
     text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;
   }
 
-  .configuracoes-basicas-table{
-    width: 100%;
+  .configuracoes-basicas-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  .configuracoes-basicas-element{
+    flex: 1;
+    margin: 3px;
   }
 
   .btn-add-questao{
@@ -219,4 +245,59 @@
 
   .btn-finalizar{
     margin: auto; margin-top: 40px; margin-left: 20px; font-size: 18px; padding-left: 10px; padding-right: 10px; display: inline-block; background-color: var(--cor-primaria); color: white;
+  }
+
+  .datas-container{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+  }
+  .datas-box{
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 20px;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  .datas-title{
+    font-size: 17px;
+    text-align: center;
+  }
+  .checkbox-span{
+    font-size: 15px;
+    white-space: nowrap;
+  }
+
+  @media screen and (max-width: 850px){
+    .container-avaliacao-aluno{
+      width: 75%;
+    }
+    .container-avaliacao-professor{
+      width: 75%;
+    }
+  }
+
+  @media screen and (max-width: 650px){
+    .container-avaliacao-aluno{
+      width: 95%;
+    }
+    .container-avaliacao-professor{
+      width: 95%;
+    }
+    .checkbox-span{
+      font-size: 13px;
+    }
+    .btn-descartar-rascunho{
+      bottom: 10px;
+      left: 10px;
+    }
+    .btn-add-questao{
+      bottom: 75px;
+      right: 10px;
+    }
+    .btn-mais-opcoes{
+      bottom: 10px;
+      right: 10px;
+    }
   }

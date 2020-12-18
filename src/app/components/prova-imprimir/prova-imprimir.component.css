@@ -166,3 +166,9 @@
   color: var(--cor-primaria);
 }
   /* --------------------- */
+
+@media screen and (max-width: 650px){
+  .btn-imprimir{
+    left: 10px;
+  }
+}

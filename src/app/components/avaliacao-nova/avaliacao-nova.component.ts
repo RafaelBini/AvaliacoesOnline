@@ -97,24 +97,33 @@ export class AvaliacaoNovaComponent implements OnInit {
         title: 'As Tags',
         selector: '.tags-div',
         content: `Insira tags (separadas por vírugla) para encontrar essa avaliação mais facilmente.`,
-        orientation: Orientation.Left,
+        orientation: Orientation.Bottom,
         highlightPadding: 5,
+        scrollAdjustment: 25,
+      },
+      {
+        title: 'A Duração',
+        selector: '.datas-container',
+        content: `Você também pode definir o momento de início e término da avaliação.`,
+        orientation: Orientation.Bottom,
+        highlightPadding: 5,
+        scrollAdjustment: 25,
       },
       {
         title: 'Mais Opções',
         selector: '.atributos-table',
-        content: `Você também pode definir outras opções como o momento de início e término da avaliação.`,
-        orientation: Orientation.Right,
+        content: `É possivel determinar uma duração individual que começa a contar quando o aluno acessa a prova.<br />Além disso, você pode definir se as questões serão distribuidas de forma aleatória e se você deseja bloquear a entrada de alunos atrasados.`,
+        orientation: Orientation.Top,
         highlightPadding: 5,
         scrollAdjustment: 25,
       },
       {
         title: 'Configurações Básicas',
-        selector: '.configuracoes-basicas-table',
-        content: `Clicando em um destes quadros você pode configurar se a prova será <b>Individual</b> ou <b>Em Grupo</b>, se os <b>alunos participarão corrigindo</b> ou se a <b>pontuação será por tentantivas</b> por exemplo.`,
+        selector: '.configuracoes-basicas-container',
+        content: `Clicando em um destes quadros você pode configurar se a prova será <br>Individual</br> ou <b>Em Grupo</b>, se os <b>alunos participarão corrigindo</b> ou se a <b>pontuação será por tentantivas</b> por exemplo.`,
         orientation: Orientation.Top,
         highlightPadding: 5,
-        scrollAdjustment: 150,
+        scrollAdjustment: 25,
       },
       {
         title: 'Selecionar Alunos',
@@ -128,7 +137,7 @@ export class AvaliacaoNovaComponent implements OnInit {
         title: 'Questão de Exemplo',
         selector: '.questao',
         content: `Esse é o exemplo de uma questão. Conforme você for editando a questão, ela será salva em seu banco de questões.`,
-        orientation: Orientation.Right,
+        orientation: Orientation.Top,
         highlightPadding: 5,
         scrollAdjustment: 25,
       },
@@ -143,7 +152,7 @@ export class AvaliacaoNovaComponent implements OnInit {
         title: 'Nível da Questão',
         selector: '.nivel-dificuldade-select',
         content: `Classifique a questão entre (fácil, médio ou difícil) para te ajudar a localizar no banco de questões.`,
-        orientation: Orientation.TopLeft,
+        orientation: Orientation.TopRight,
         scrollAdjustment: 150,
       },
       {
@@ -156,10 +165,10 @@ export class AvaliacaoNovaComponent implements OnInit {
       },
       {
         title: 'Mais Opções',
-        selector: '.opcoes-questao',
+        selector: '.more_vert',
         content: `Você também pode enriquecer a sua questão adicionando imagens, anexos e tags.`,
         orientation: Orientation.Top,
-        highlightPadding: 20,
+        highlightPadding: 6,
         scrollAdjustment: 150,
       },
       {
@@ -195,7 +204,7 @@ export class AvaliacaoNovaComponent implements OnInit {
         title: 'Obter Ajuda',
         selector: '.btn-help',
         content: `Você pode obter mais detalhes sobre qualquer funcionalidade ao clicar nestes botões.`,
-        orientation: Orientation.Right,
+        orientation: Orientation.BottomRight,
         useHighlightPadding: true,
       },
 
@@ -775,8 +784,9 @@ export class AvaliacaoNovaComponent implements OnInit {
         minhasAvaliacoes: this.minhasAvaliacoes,
         avaliacao: this.avaliacao,
       },
-      width: '75%',
+      minWidth: '75%',
       height: '95%',
+      maxWidth: '95vw',
     });
 
     diagRef.afterClosed().subscribe(() => {
@@ -790,7 +800,8 @@ export class AvaliacaoNovaComponent implements OnInit {
         prova: this.provaGabarito,
         tipoEscolhido: tipoEscolhido
       },
-      width: '75%'
+      minWidth: '75%',
+      maxWidth: '95vw',
     });
     DIAG_REF.afterClosed().subscribe(() => {
       if (tipoEscolhido == 'disposicao')
@@ -816,7 +827,8 @@ export class AvaliacaoNovaComponent implements OnInit {
   abirSelecionarAunos() {
     var diagRef = this.dialog.open(SelecionarAlunosComponent, {
       data: this.avaliacao,
-      width: '85%',
+      minWidth: '85%',
+      maxWidth: '95vw',
       height: '95%',
     });
     diagRef.afterClosed().subscribe(() => {

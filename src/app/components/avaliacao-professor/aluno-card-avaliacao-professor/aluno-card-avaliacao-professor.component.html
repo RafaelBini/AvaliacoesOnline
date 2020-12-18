@@ -1,4 +1,5 @@
-<div class="aluno-container">
+<div class="aluno-container" [class.allow-small]="avaliacao.status == 0"
+    [class.aluno-container-prova-corrigida]="aluno.provaCorrigida">
 
     <!-- IDENTIFICAÇÃO BASICA -->
 
@@ -6,12 +7,14 @@
         <tr>
             <td rowspan="3">
                 <div style="position: relative;">
-                    <img *ngIf="aluno.img" [src]="aluno.img.url || 'assets/avatares/padrao.jpg'"
-                        style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
-                    <img *ngIf="!aluno.img" src="assets/avatares/padrao.jpg"
-                        style="height: 8vh; width: 8vh; object-fit: cover; border-radius: 6px;" />
-                    <span *ngIf="aluno.online" class="etiqueta status-online">presente</span>
-                    <span *ngIf="!aluno.online" class="etiqueta status-offline">ausente</span>
+                    <img *ngIf="aluno.img" [src]="aluno.img.url || 'assets/avatares/padrao.jpg'" class="avatar-img" />
+                    <img *ngIf="!aluno.img" src="assets/avatares/padrao.jpg" class="avatar-img" />
+                    <span *ngIf="aluno.online" class="etiqueta status-online">
+                        {{!comumService.isMobile() || avaliacao.status != 0 ? 'presente' : ''}}
+                    </span>
+                    <span *ngIf="!aluno.online" class="etiqueta status-offline">
+                        {{!comumService.isMobile() || avaliacao.status != 0 ? 'ausente' : ''}}
+                    </span>
                 </div>
             </td>
         </tr>
@@ -22,13 +25,18 @@
         </tr>
         <tr>
             <td>
-                <div style="display: flex; flex-wrap: wrap;">
+                <div *ngIf="!comumService.isMobile()" style="display: flex; flex-wrap: wrap;">
                     <div *ngFor="let tag of aluno.tags"
                         [style.backgroundColor]="aluno.online ? 'var(--cor-secundaria)' : 'var(--cor-primaria)'"
                         class="tag">
                         {{tag}}
                     </div>
                 </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+
             </td>
         </tr>
     </table>
