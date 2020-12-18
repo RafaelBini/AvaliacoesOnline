@@ -73,6 +73,7 @@ export class CredencialService {
     usuarioInserir.tutorialMostradoTelaAvaliacaoNova = false;
     usuarioInserir.tutorialMostradoAvaliacaoCriada = false;
     usuarioInserir.tutorialMostradoTelaAlunos = false;
+    usuarioInserir.dtStatus = [];
     return this.usuarioService.insert(usuarioInserir);
 
   }
@@ -97,7 +98,7 @@ export class CredencialService {
   }
 
   isNovoUsuarioValido(usuario: Usuario, confirmacaoSenha) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise<void>(async (resolve, reject) => {
       if (this.getProblemaFromNovoUsuario(usuario, confirmacaoSenha) != null) {
         reject(this.getProblemaFromNovoUsuario(usuario, confirmacaoSenha));
       }
@@ -132,7 +133,7 @@ export class CredencialService {
   }
 
   receberLoggedUser() {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (this.estouLogado()) {
         this.usuarioService.get(localStorage.getItem(this.KEY_LOGGED_USER_ID))
           .then(usuario => {
@@ -150,7 +151,7 @@ export class CredencialService {
   }
 
   isLoginValido(usuario: Usuario) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (usuario.email == '' || usuario.senha == '') {
         reject('Preencha todos os campos.');
       }

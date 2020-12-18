@@ -397,6 +397,7 @@ export class ProvaService {
   getQuestaoDefault(): Questao {
     return {
       pergunta: "",
+      index: 0,
       tipo: 4,
       resposta: "",
       alternativas: [

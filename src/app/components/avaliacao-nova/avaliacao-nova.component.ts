@@ -823,6 +823,7 @@ export class AvaliacaoNovaComponent implements OnInit {
     this.provaExemplo = this.provaService.getProvaFromGabarito(this.provaGabarito, this.avaliacao.isOrdemAleatoria);
     this.visao = tipoVisao;
     this.atualizarAvaliacao();
+    console.log(this.provaGabarito.questoes)
   }
   abirSelecionarAunos() {
     var diagRef = this.dialog.open(SelecionarAlunosComponent, {

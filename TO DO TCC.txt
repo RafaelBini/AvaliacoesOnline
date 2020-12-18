@@ -3,13 +3,7 @@
 
 -----------------------------------------
 
-- Tornar todas as telas responsivas
-	- Login e cadastro
-	- Criação de Avaliação
-	- Gerenciamento de alunos
-	- Edição de perfil
-	- Autoavaliação
-	- Arrumar espaço nos FABs
+- Melhorar responsividade da tela convidar alunos
 	
 
 - Colocar ordenação que faça sentido

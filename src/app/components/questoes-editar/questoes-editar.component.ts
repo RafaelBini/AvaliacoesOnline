@@ -218,6 +218,7 @@ export class QuestoesEditarComponent implements OnInit {
   }
   onEditorPreencherKeyUp(questao) {
     questao.partesPreencher = this.getPreenchimentoPartes(questao);
+    this.sinalizarAlteracao();
   }
   getOpcoesPreencherAtivas(questao: Questao, questaoIndex: number) {
     return questao.opcoesParaPreencher.concat().filter(opcao => opcao.ativa).sort((a, b) => a.opcaoSelecionada > b.opcaoSelecionada ? 1 : -1);

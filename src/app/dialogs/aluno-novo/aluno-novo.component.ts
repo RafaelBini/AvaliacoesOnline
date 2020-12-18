@@ -103,6 +103,8 @@ export class AlunoNovoComponent implements OnInit {
       img: aluno.img || null,
       tagIdExterno: aluno.tagIdExterno || null,
       idExterno: aluno.idExterno || null,
+      statusId: 0,
+      dtStatus: [],
     });
 
     this.usuarioService.update(this.credencialService.loggedUser).then(() => {

@@ -287,9 +287,8 @@
                         </button>
                         <div style="position: relative;">
                             <textarea #preenchimentoTextarea maxlength="500" rows="4" (input)="ajustarAltura($event)"
-                                (click)="ajustarAltura($event)" (ngModelChange)="sinalizarAlteracao()"
-                                [(ngModel)]="questao.textoParaPreencher" #editorPreencher
-                                (keyup)="onEditorPreencherKeyUp(questao)"
+                                (click)="ajustarAltura($event)" [(ngModel)]="questao.textoParaPreencher"
+                                #editorPreencher (keyup)="onEditorPreencherKeyUp(questao)"
                                 placeholder="Escreva aqui um texto para ser completado" class="input-basico"
                                 style="width: 98%; margin: auto; padding: 5px; padding-top: 14px;"></textarea>
                             <span *ngIf="estaEmFoco(preenchimentoTextarea)"
