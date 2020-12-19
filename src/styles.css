@@ -206,6 +206,21 @@ textarea {
 }
 
 
+.select-basico {
+  cursor: pointer;
+  border: 1px dotted rgba(0, 0, 0, 0.20);
+  border-radius: 7px;
+  padding: 5px;
+  background-color: white;
+}
+.select-basico:focus {
+  outline: none;
+  border: 1px dashed var(--cor-primaria);
+  border-radius: 7px;
+}
+
+
+
 .input-clean{
   border: 1px dashed transparent;
   padding: 7px;

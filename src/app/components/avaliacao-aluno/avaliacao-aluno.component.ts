@@ -940,6 +940,9 @@ export class AvaliacaoAlunoComponent implements OnInit, OnDestroy {
   getNumberFromString(texto: string): number {
     return texto.charCodeAt(0);
   }
+  isTodasProvasCorrigidas() {
+    return this.prova.provasParaCorrigir.filter(p => p.corrigida != true).length <= 0;
+  }
 
   // ENCERRADA
 

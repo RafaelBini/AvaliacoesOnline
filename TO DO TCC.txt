@@ -1,16 +1,9 @@
 
 
+Melhorei responsividade da tela convidar alunos; Corrigi bugs na responsividade do guided tour; Coloquei ordenação nas avaliações; Nos alunos no gerenciador de alunos; Nos alunos/grupos dentro da avaliação;
 
 -----------------------------------------
 
-- Melhorar responsividade da tela convidar alunos
-	
-
-- Colocar ordenação que faça sentido
-	- Nas avaliações
-	- Nos alunos no gerenciador de alunos
-	- Nos alunos/grupos dentro da avaliação
-	
 
 - Testar prova em grupo sincrona pelo celular
 

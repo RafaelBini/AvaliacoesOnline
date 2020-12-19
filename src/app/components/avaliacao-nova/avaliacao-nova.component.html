@@ -1,4 +1,4 @@
-<app-barra-navegacao [caminho]="caminho"></app-barra-navegacao>
+<app-barra-navegacao *ngIf="visao == 'professor'" [caminho]="caminho"></app-barra-navegacao>
 
 <div style="height: 20px;"></div>
 
@@ -14,7 +14,7 @@
             <div class="link-span">
                 http://{{comumService.getHostName()}}/<input type="text" (ngModelChange)="corrigirId()"
                     (change)="corrigirIdVazio()" [disabled]="isEditando" [(ngModel)]="avaliacao.id" class="link-input"
-                    maxlength="20" />
+                    maxlength="10" />
 
                 <mat-icon class="btn-aleatorio" *ngIf="!isEditando" (click)="setIdAleatorio()"
                     matTooltip="Gerar aleatório">refresh
@@ -83,7 +83,7 @@
 
                 <div class="datas-title">
 
-                    <hr />
+
                     <h3>
                         Período de Avaliação ({{getPeriodoAvaliacao()}})
                         <mat-icon class="btn-help" matTooltip="Clique para receber ajuda"
@@ -270,8 +270,7 @@
             <div class="configuracoes-basicas-element">
                 <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
                     DISPOSIÇÃO<br />
-                    <button mat-button class="botao-tipo" matTooltip="Alterar disposição dos alunos"
-                        matTooltipShowDelay="1000" (click)="abrirTipos('disposicao')">
+                    <button mat-button class="botao-tipo" matTooltipShowDelay="1000" (click)="abrirTipos('disposicao')">
                         <mat-icon
                             style="background-color: white; color: var(--cor-primaria); border-radius: 50%; padding: 4px;">
                             {{comumService.disposicoes[avaliacao.tipoDisposicao].icone}}</mat-icon>
@@ -284,8 +283,7 @@
             <div class="configuracoes-basicas-element">
                 <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
                     CORREÇÃO<br />
-                    <button mat-button class="botao-tipo" matTooltip="Alterar método de correção"
-                        matTooltipShowDelay="1000" (click)="abrirTipos('correcao')">
+                    <button mat-button class="botao-tipo" matTooltipShowDelay="1000" (click)="abrirTipos('correcao')">
                         <mat-icon
                             style="background-color: white; color: var(--cor-primaria); border-radius: 50%; padding: 4px;">
                             {{comumService.correcoes[avaliacao.tipoCorrecao].icone}}</mat-icon>
@@ -298,8 +296,7 @@
             <div class="configuracoes-basicas-element">
                 <div style="text-align: center; background-color: whitesmoke; border-radius: 5px; padding: 4px;">
                     PONTUAÇÃO<br />
-                    <button mat-button class="botao-tipo" matTooltip="Alterar forma de pontuação"
-                        matTooltipShowDelay="1000" (click)="abrirTipos('pontuacao')">
+                    <button mat-button class="botao-tipo" matTooltipShowDelay="1000" (click)="abrirTipos('pontuacao')">
                         <mat-icon
                             style="background-color: white; color: var(--cor-primaria); border-radius: 50%; padding: 4px;">
                             {{comumService.pontuacoes[avaliacao.tipoPontuacao].icone}}</mat-icon>
@@ -315,8 +312,7 @@
 
         <div class="selecionar-alunos-div">
             SELECIONAR ALUNOS ESPERADOS (OPCIONAL)<br />
-            <button mat-button class="botao-tipo" matTooltip="Clique para selecionar alunos"
-                (click)="abirSelecionarAunos()">
+            <button mat-button class="botao-tipo" (click)="abirSelecionarAunos()">
                 <mat-icon>person</mat-icon> {{getAlunosFromTodosGrupos().length}}
             </button>
         </div>
@@ -334,6 +330,17 @@
 
         </app-questoes-editar>
 
+        <div class="flex-btn-container">
+            <button mat-button (click)="buscarQuestao()" class="flex-btn">
+                <mat-icon>folder_open</mat-icon>
+                <span class="flex-btn-text">Buscar Questões</span>
+            </button>
+            <button mat-button (click)="addQuestao()" class="flex-btn">
+                <mat-icon>add</mat-icon>
+                <span class="flex-btn-text">Nova Questão</span>
+            </button>
+        </div>
+
         <div style="width: 100%; text-align: center;">
 
             <button mat-raised-button (click)="finalizar()" class="btn-finalizar">
@@ -341,9 +348,9 @@
             </button>
         </div>
 
-        <button mat-fab matTooltip="Adiconar Questão" (click)="addQuestao()" class="btn-add-questao">
+        <!-- <button mat-fab matTooltip="Adiconar Questão" (click)="addQuestao()" class="btn-add-questao">
             <mat-icon style="color: white;">add</mat-icon>
-        </button>
+        </button> -->
 
         <button mat-fab class="btn-mais-opcoes" [matMenuTriggerFor]="userMenu" matTooltip="Mais Opções">
             <mat-icon style="color: white;">
@@ -351,10 +358,10 @@
             </mat-icon>
         </button>
         <mat-menu #userMenu="matMenu">
-            <!-- <button mat-menu-item matTooltip="Adiconar Questão" (click)="addQuestao()">
+            <button mat-menu-item matTooltip="Adiconar Questão" (click)="addQuestao()">
                 <mat-icon>add</mat-icon>
-                Adiconar Questão
-            </button> -->
+                Adicionar Questão
+            </button>
 
             <button mat-menu-item (click)="buscarQuestao()">
                 <mat-icon>folder_open</mat-icon>
@@ -414,6 +421,7 @@
 
 <div style="height: 50px"></div>
 
-<mat-icon class="btn-help btn-refazer-tutorial" matTooltip="O que faço nesta página?" (click)="refazerTutorial()">
+<mat-icon *ngIf="visao == 'professor'" class="btn-help btn-refazer-tutorial" matTooltip="O que faço nesta página?"
+    (click)="refazerTutorial()">
     help
 </mat-icon>

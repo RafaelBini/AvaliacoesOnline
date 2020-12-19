@@ -32,6 +32,13 @@
     font-size: 20vh; margin: auto;
 }
 
+.flex-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
 @media screen and (max-width: 650px){
     input, select{
         width: 80%;

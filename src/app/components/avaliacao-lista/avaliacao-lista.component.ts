@@ -1,3 +1,5 @@
+import { OrdenarAvaliacoesDialogComponent } from './../../dialogs/ordenar-avaliacoes-dialog/ordenar-avaliacoes-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { AvaliacaoService } from 'src/app/services/avaliacao.service';
 import { ComumService } from './../../services/comum.service';
 import { Component, HostListener, Input, OnInit } from '@angular/core';
@@ -12,11 +14,12 @@ import { Avaliacao } from 'src/app/models/avaliacao';
 })
 export class AvaliacaoListaComponent implements OnInit {
 
-  public agruparAvaliacoes = this.comumService.getWidth() > this.comumService.TAM_MOBILE;
+  public agruparAvaliacoes = (this.comumService.getWidth() > this.comumService.TAM_MOBILE);
   public mostrarArquivadas = false;
   public selectedStatusTab = 0;
   public avaliacoesFiltradas: Array<Avaliacao>;
   public textoBusca: string = "";
+  public tipoOrdenacao: string = localStorage.getItem('avaliacoes-orderby') || 'status';
 
   @Input() avaliacoes: Array<Avaliacao>;
   @Input() tipoAcesso;
@@ -27,7 +30,7 @@ export class AvaliacaoListaComponent implements OnInit {
   constructor(
     public comumService: ComumService,
     private avaliacaoService: AvaliacaoService,
-
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -46,7 +49,7 @@ export class AvaliacaoListaComponent implements OnInit {
     return this.comumService.statusAvaliacao.concat().sort((a, b) => b.prioridade - a.prioridade);
   }
   getAvaliacoesNoStatus(status) {
-    return this.avaliacoesFiltradas.concat().filter(avaliacao => avaliacao.status == status && (!this.avaliacaoService.isArquivada(avaliacao) || this.mostrarArquivadas));
+    return this.avaliacoesFiltradas.concat().filter(avaliacao => avaliacao.status == status && (!this.avaliacaoService.isArquivada(avaliacao) || this.mostrarArquivadas)).sort((a, b) => this.ordenarAvaliacoes(a, b));
   }
   selecionarStatusTabAdequada() {
     for (let status of this.comumService.statusAvaliacao) {
@@ -104,11 +107,45 @@ export class AvaliacaoListaComponent implements OnInit {
     }
   }
   getTodasAvaliacoes() {
-    return this.avaliacoesFiltradas.concat().filter(avaliacao => (!this.avaliacaoService.isArquivada(avaliacao) || this.mostrarArquivadas));
+    return this.avaliacoesFiltradas.concat().filter(avaliacao => (!this.avaliacaoService.isArquivada(avaliacao) || this.mostrarArquivadas)).sort((a, b) => this.ordenarAvaliacoes(a, b));
   }
   toggleMostrarArquivadas() {
     this.mostrarArquivadas = !this.mostrarArquivadas;
     this.atualizarAvaliacoesFiltradas();
+  }
+  ordenarAvaliacoes(a: Avaliacao, b: Avaliacao): number {
+    if (this.tipoOrdenacao == 'titulo') {
+      if (a.titulo < b.titulo) return -1;
+      else return 1;
+    }
+    else if (this.tipoOrdenacao == 'titulo-desc') {
+      if (a.titulo < b.titulo) return 1;
+      else return -1;
+    }
+    else if (this.tipoOrdenacao == 'status') {
+      return a.status - b.status;
+    }
+    else if (this.tipoOrdenacao == 'status-desc') {
+      return b.status - a.status;
+    }
+    else if (this.tipoOrdenacao == 'criacao-desc') {
+      return new Date(a.dtCriacao).getTime() - new Date(b.dtCriacao).getTime();
+    }
+    else {
+      return new Date(b.dtCriacao).getTime() - new Date(a.dtCriacao).getTime();
+    }
+  }
+  abrirOrdenar() {
+    var diagRef = this.dialog.open(OrdenarAvaliacoesDialogComponent, {
+      data: this.tipoOrdenacao
+    });
+    diagRef.afterClosed().subscribe(tipo => {
+      if (tipo) {
+        this.tipoOrdenacao = tipo;
+        localStorage.setItem('avaliacoes-orderby', tipo);
+      }
+
+    });
   }
 
 

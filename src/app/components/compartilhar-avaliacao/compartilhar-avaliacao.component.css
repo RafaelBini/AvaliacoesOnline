@@ -1,7 +1,7 @@
 
 .btn-copiar-link{
-    background-color: var(--cor-secundaria);
-    color: white;
+    border: 1px solid var(--cor-secundaria);
+    color: var(--cor-primaria);
 }
 
 .linkCompartilhavel a, .linkCompartilhavel {
@@ -15,13 +15,18 @@
     padding-right: 10px;
     border-radius: 5px;
     background-color: var(--cor-secundaria);
+    margin-bottom: 12px;
+}
+
+.btn{
+    margin-bottom: 5px;
 }
 
 
 .btn-container{
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     justify-content: space-around;
 }
 

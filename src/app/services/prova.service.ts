@@ -26,7 +26,7 @@ export class ProvaService {
   ) { }
 
   insertProvaGabarito(prova: Prova) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
 
       this.db.collection('provas').add(prova).then(docRef => {
         this.db.collection('avaliacoes').doc(prova.avaliacaoId).update({
@@ -388,9 +388,7 @@ export class ProvaService {
       id: '1',
       isGabarito: true,
       professorId: '',
-      questoes: [
-        this.getQuestaoDefault(),
-      ],
+      questoes: [],
     };
   }
 

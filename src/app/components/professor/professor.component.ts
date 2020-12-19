@@ -56,15 +56,13 @@ export class ProfessorComponent implements OnInit, OnDestroy {
       {
         title: 'Seja Bem Vindo!',
         content: `
-        Esta é a sua página de Professor. Aqui você pode:
-        <br/><br/>
-        <li>Criar uma nova avaliação</li>
-        <li>Buscar suas avaliações</li>
-        <li>Editar suas avaliações</li>
-        <br/>
-        Vou te mostrar como fazer isso. Clique em <i>Próximo</i>.
+        Esta é a sua página de Professor.
+        <br /><br />
+        Vou te mostrar algumas coisas interessantes por aqui. 
+        <br /><br />
+        Clique em <i>Próximo</i>.
         `,
-        useHighlightPadding: true,
+        highlightPadding: 0,
       },
       {
         title: 'Criar uma avaliação',
@@ -119,7 +117,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
         title: 'Meu Perfil',
         selector: '#meuPerfilTabLabel',
         content: 'Use esta aba para alterar suas informações pessoais (como e-mail, foto e senha por exemplo).',
-        orientation: Orientation.Bottom,
+        orientation: Orientation.Left,
         useHighlightPadding: true,
       },
 
@@ -224,7 +222,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
           var intervalRef = setInterval(() => {
             if (this.credencialService.loggedUser.id != null) {
               this.alunos = this.credencialService.loggedUser.alunos;
-              this.alunosFiltrados = this.alunos;
+              this.onBuscaAlunoKeyUp('');
               clearInterval(intervalRef);
             }
 
@@ -359,6 +357,9 @@ export class ProfessorComponent implements OnInit, OnDestroy {
         }
       }
       return false;
+    }).sort((a, b) => {
+      if (a.nome < b.nome) return -1;
+      else return 1;
     });
 
   }
@@ -388,7 +389,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
           this.credencialService.loggedUser.alunos = this.credencialService.loggedUser.alunos.filter(u => u.email != alunoEmail);
         }
         this.alunos = this.credencialService.loggedUser.alunos;
-        this.alunosFiltrados = this.alunos;
+        this.onBuscaAlunoKeyUp('');
         this.usuarioService.update(this.credencialService.loggedUser);
       }
     });
@@ -417,7 +418,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
           }
         }
         this.alunos = this.credencialService.loggedUser.alunos;
-        this.alunosFiltrados = this.alunos;
+        this.onBuscaAlunoKeyUp('');
         this.usuarioService.update(this.credencialService.loggedUser);
 
       }
@@ -433,7 +434,7 @@ export class ProfessorComponent implements OnInit, OnDestroy {
     });
     diagRef.afterClosed().subscribe(() => {
       this.credencialService.loggedUser.alunos = this.alunos;
-      this.alunosFiltrados = this.alunos;
+      this.onBuscaAlunoKeyUp('');
       this.usuarioService.update(this.credencialService.loggedUser);
     });
 

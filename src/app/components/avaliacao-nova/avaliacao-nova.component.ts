@@ -105,9 +105,9 @@ export class AvaliacaoNovaComponent implements OnInit {
         title: 'A Duração',
         selector: '.datas-container',
         content: `Você também pode definir o momento de início e término da avaliação.`,
-        orientation: Orientation.Bottom,
+        orientation: Orientation.Top,
         highlightPadding: 5,
-        scrollAdjustment: 25,
+        scrollAdjustment: 5,
       },
       {
         title: 'Mais Opções',
@@ -692,6 +692,10 @@ export class AvaliacaoNovaComponent implements OnInit {
     }
     else if (this.getIndexQuestaoGabaritoNaoPreenchida() != -1) {
       this.snack.open(`Preencha a resposta gabarito da questão ${this.getIndexQuestaoGabaritoNaoPreenchida() + 1}`, null, { duration: 5500 });
+      return;
+    }
+    else if (this.provaGabarito.questoes.length <= 0) {
+      this.snack.open(`Deve haver ao menos uma questão na avaliação`, null, { duration: 5500 });
       return;
     }
     this.validarDatas().then(() => {

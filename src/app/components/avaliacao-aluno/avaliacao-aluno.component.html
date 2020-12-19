@@ -241,14 +241,10 @@
 
                 </div>
 
-                <div *ngIf="avaliacao.tipoCorrecao == 3 && avaliacao.tipoDisposicao == 0">
-
-                </div>
-
                 <br />
                 <br />
 
-                <!-- EM GRUPO -->
+                <!-- MEU GRUPO -->
                 <div *ngIf="avaliacao.tipoDisposicao != 0" style="text-align: justify; ">
 
                     <div style="text-align: center;">
@@ -265,35 +261,22 @@
             </div>
             <br />
 
-            <!-- EM GRUPO - ALUNOS CORRIGEM -->
-            <div *ngIf="avaliacao.tipoDisposicao != 0 && avaliacao.tipoCorrecao == 2 && prova.provasParaCorrigir.length > 0"
-                class="container">
-                <div style="margin: auto; text-align: center;">
+            <!-- ALUNOS CORRIGEM -->
+            <div *ngIf="avaliacao.tipoCorrecao == 2 && prova.provasParaCorrigir.length > 0" class="container">
+                <div *ngIf="!isTodasProvasCorrigidas()" style="margin: auto; text-align: center;">
                     <h2>Corrija as avaliações abaixo:</h2>
                 </div>
-                <div *ngFor="let provaCorrigir of prova.provasParaCorrigir;  index as i;"
-                    class="grupo individuo-container" style="width: 100%">
-                    <div class="grupo-title">
-                        GRUPO {{i+1}} - {{provaCorrigir.corrigida ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
-                    </div>
-                    <div class="btn-flex">
-                        <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + provaCorrigir.id">
-                            {{provaCorrigir.corrigida ? "REVISAR" : "CORRIGIR"}}
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- INDIVIDUAL - ALUNOS CORRIGEM -->
-            <div *ngIf="avaliacao.tipoDisposicao == 0 && avaliacao.tipoCorrecao == 2 && prova.provasParaCorrigir.length > 0"
-                class="container">
-                <div style="margin: auto; text-align: center;">
-                    <h2>Corrija as avaliações abaixo:</h2>
+                <div class="mensagem-whitesmoke" *ngIf="isTodasProvasCorrigidas()"
+                    style="margin: auto; text-align: center;">
+                    <h3>Parabéns! Você corrigiu todas as provas que precisava.</h3>
+                    <br />
+                    Aguarde o término do período de correções para saber sua nota.
                 </div>
                 <div *ngFor="let prova of prova.provasParaCorrigir;  index as i;" class="grupo individuo-container"
                     style="width: 100%">
                     <div class="grupo-title">
-                        ALUNO {{i+1}} - {{prova.corrigida ? "CORRIGIDA" : "PRECISA SER CORRIGIDA"}}
+                        {{avaliacao.tipoDisposicao == 0 ? 'ALUNO' : 'GRUPO'}} {{i+1}} - {{prova.corrigida ? "CORRIGIDA"
+                        : "PRECISA SER CORRIGIDA"}}
                     </div>
                     <div class="btn-flex">
                         <a mat-button [routerLink]="'/aluno/avaliacao/correcao/' + prova.id">
@@ -303,7 +286,7 @@
                 </div>
             </div>
 
-            <div style="margin: auto; text-align: center;"
+            <div class="mensagem-whitesmoke"
                 *ngIf="prova.provasParaCorrigir.length <= 0 && avaliacao.tipoCorrecao == 2">
                 Não existem provas para serem corrigidas por você.
                 <br />

@@ -58,6 +58,9 @@
     <mat-icon>more_vert</mat-icon>
 </button>
 <mat-menu #menu="matMenu" yPosition="above" xPosition="before">
+    <button mat-menu-item (click)="abrirOrdenar()">
+        Ordenar por
+    </button>
     <button mat-menu-item (click)="agruparAvaliacoes = !agruparAvaliacoes">
         {{agruparAvaliacoes ? 'Desagrupar' : 'Agrupar'}}
     </button>

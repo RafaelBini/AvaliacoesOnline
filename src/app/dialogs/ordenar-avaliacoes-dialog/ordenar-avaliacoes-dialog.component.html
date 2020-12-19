@@ -1,0 +1,24 @@
+<div>
+    Ordenar por:
+    <select [(ngModel)]="tipo" class="select-basico">
+        <option value='criacao'>Data de Criação (Recente - Antiga)</option>
+        <option value='criacao-desc'>Data de Criação (Antiga - Recente)</option>
+        <option value='status'>Estado (Em Preparação - Encerrada)</option>
+        <option value='status-desc'>Estado (Encerrada - Em Preparação)</option>
+        <option value='titulo'>Título (A-Z)</option>
+        <option value='titulo-desc'>Título (Z-A)</option>
+    </select>
+
+    <div class="btn-container">
+        <button mat-raised-button [mat-dialog-close]="tipo">OK</button>
+    </div>
+
+
+</div>
+
+
+
+
+<div class='btn-close' mat-icon-button mat-dialog-close>
+    <mat-icon>cancel</mat-icon>
+</div>

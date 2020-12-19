@@ -12,6 +12,9 @@ import { ComumService } from 'src/app/services/comum.service';
 export class CompartilharAvaliacaoComponent implements OnInit {
 
   @Input() avaliacao: Avaliacao;
+  private COPY_TEXT = "Copiar o link"
+  public copyBtnText = this.COPY_TEXT;
+
 
   constructor(
     public comumService: ComumService,
@@ -32,7 +35,11 @@ export class CompartilharAvaliacaoComponent implements OnInit {
   }
 
   notificarCopy() {
-    this.snack.open("Link copiado!", null, { duration: 3500 })
+    this.snack.open("Link copiado!", null, { duration: 3500 });
+    this.copyBtnText = "Copiado!";
+    setTimeout(() => {
+      this.copyBtnText = this.COPY_TEXT;
+    }, 3650)
   }
 
 

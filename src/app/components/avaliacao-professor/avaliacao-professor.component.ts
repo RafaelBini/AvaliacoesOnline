@@ -99,6 +99,7 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
           }
 
           this.avaliacao = avaliacao;
+          this.ordenarAlunos();
 
 
           this.caminho = [
@@ -576,6 +577,44 @@ export class AvaliacaoProfessorComponent implements OnInit, OnDestroy {
       width: '80%',
       height: '80%',
     })
+  }
+
+  ordenarAlunos() {
+
+    var ordemAntesHash = "";
+    for (let grupo of this.avaliacao.grupos) {
+      for (let aluno of grupo.alunos) {
+        ordemAntesHash += aluno.id;
+      }
+    }
+
+    var gruposOrdenados = this.avaliacao.grupos.concat();
+    for (let grupo of gruposOrdenados) {
+      grupo.alunos.sort((a, b) => {
+        if (a.nome < b.nome) return -1;
+        else return 1;
+      })
+    }
+
+    var ordemDepoisHash = "";
+    for (let grupo of gruposOrdenados) {
+      for (let aluno of grupo.alunos) {
+        ordemDepoisHash += aluno.id;
+      }
+    }
+
+    if (ordemAntesHash != ordemDepoisHash) {
+      for (let grupo of this.avaliacao.grupos) {
+        grupo.alunos.sort((a, b) => {
+          if (a.nome < b.nome) return -1;
+          else return 1;
+        })
+      }
+      this.avaliacaoService.updateAvaliacao(this.avaliacao);
+      console.log("REORDENEI OS ALUNOS");
+    }
+
+
   }
 
 

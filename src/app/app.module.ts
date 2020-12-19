@@ -86,6 +86,7 @@ import { AvaliacaoMenuOpcoesComponent } from './components/avaliacao-menu-opcoes
 import { CompartilharAvaliacaoComponent } from './components/compartilhar-avaliacao/compartilhar-avaliacao.component';
 import { CompartilharAvaliacaoDialogComponent } from './dialogs/compartilhar-avaliacao-dialog/compartilhar-avaliacao-dialog.component';
 import { ExcluirAvaliacaoDialogComponent } from './dialogs/excluir-avaliacao-dialog/excluir-avaliacao-dialog.component';
+import { OrdenarAvaliacoesDialogComponent } from './dialogs/ordenar-avaliacoes-dialog/ordenar-avaliacoes-dialog.component';
 
 export function initializeApp(timeService: TimeService, logService: LogService) {
   logService.getBasicInfo();
@@ -149,6 +150,7 @@ export function initializeApp(timeService: TimeService, logService: LogService) 
     CompartilharAvaliacaoComponent,
     CompartilharAvaliacaoDialogComponent,
     ExcluirAvaliacaoDialogComponent,
+    OrdenarAvaliacoesDialogComponent,
   ],
   imports: [
     BrowserModule,

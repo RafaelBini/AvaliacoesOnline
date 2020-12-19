@@ -30,3 +30,6 @@ ngx-guided-tour .guided-tour-spotlight-overlay{
     box-sizing: border-box;
 }
 
+ngx-guided-tour .tour-step.page-tour-step {
+    width: 95% !important;
+}

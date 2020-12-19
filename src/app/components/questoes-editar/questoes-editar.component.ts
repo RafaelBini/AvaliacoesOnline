@@ -93,8 +93,7 @@ export class QuestoesEditarComponent implements OnInit {
     return this.comumService.questaoTipos;
   }
   deletarQuestao(questaoIndex: number) {
-    if (this.prova.questoes.length > 1)
-      this.prova.questoes.splice(questaoIndex, 1);
+    this.prova.questoes.splice(questaoIndex, 1);
     this.setQuestoesIndex();
   }
   marcarEdicao(questaoIndex: number) {

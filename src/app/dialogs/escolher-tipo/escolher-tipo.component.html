@@ -55,48 +55,28 @@
             </mat-icon>
             <br />
             <div *ngIf="codigoCorrecaoSelecionado == 2" class="box-especial">
-                <table style="width: 100%; text-align: center;">
-                    <tr *ngIf="data.avaliacao.tipoDisposicao == 0">
-                        <td>CADA ALUNO</td>
-                        <td style="font-size: 11px;">CORRIGE</td>
-                        <td>
-                            <select style="text-align: center;" [(ngModel)]="data.avaliacao.correcaoParesQtdTipo"
-                                #SELECT_QTD (change)="selectParesChange(SELECT_QTD.value)">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="DEFINIR">DEFINIR</option>
-                                <option value="TODOS">TODOS</option>
-                            </select>
-                            <input *ngIf="data.avaliacao.correcaoParesQtdTipo == 'DEFINIR'" type="number"
-                                [(ngModel)]="data.avaliacao.correcaoParesQtdNumero" style="width: 30px" />
-                            ALUNO(S)
-                        </td>
-                    </tr>
-                    <tr *ngIf="data.avaliacao.tipoDisposicao != 0">
-                        <td>
-                            CADA GRUPO
-                        </td>
-                        <td style="font-size: 11px;">CORRIGE</td>
-                        <td>
-                            <select style="text-align: center;" [(ngModel)]="data.avaliacao.correcaoParesQtdTipo"
-                                #SELECT_QTD (change)="selectParesChange(SELECT_QTD.value)">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="DEFINIR">DEFINIR</option>
-                                <option value="TODOS">TODOS</option>
-                            </select>
-                            <input *ngIf="data.avaliacao.correcaoParesQtdTipo == 'DEFINIR'" type="number"
-                                [(ngModel)]="data.avaliacao.correcaoParesQtdNumero" style="width: 30px" />
-                            GRUPO(S)
-                        </td>
-                    </tr>
-                </table>
+                <div class="flex-container">
+
+                    <div>CADA {{data.avaliacao.tipoDisposicao == 0 ? 'ALUNO': 'GRUPO'}}</div>
+                    <div style="font-size: 11px;">CORRIGE</div>
+                    <div>
+                        <select style="text-align: center;" [(ngModel)]="data.avaliacao.correcaoParesQtdTipo"
+                            #SELECT_QTD (change)="selectParesChange(SELECT_QTD.value)">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="DEFINIR">DEFINIR</option>
+                            <option value="TODOS">TODOS</option>
+                        </select>
+                        <input *ngIf="data.avaliacao.correcaoParesQtdTipo == 'DEFINIR'" type="number"
+                            [(ngModel)]="data.avaliacao.correcaoParesQtdNumero" style="width: 30px" />
+                        {{data.avaliacao.tipoDisposicao == 0 ? 'ALUNO': 'GRUPO'}}(S)
+                    </div>
+
+
+                </div>
             </div>
             <br />
             {{comumService.correcoes[codigoCorrecaoSelecionado].descricao}}
