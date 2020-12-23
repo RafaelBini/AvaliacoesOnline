@@ -1,15 +1,15 @@
 /* @import '../node_modules/ngx-guided-tour/scss/guided-tour-base-theme.scss'; */
 
 :root {
-  --em-preparacao: rgb(35, 149, 255);
-  --encerrada: rgb(95, 209, 95);
-  --em-correcao: rgb(255, 127, 52);
-  --em-avaliacao: rgb(238, 63, 63);
+  --em-preparacao: #2395ff;
+  --encerrada: #5fd15f;
+  --em-correcao: #ff7f34;
+  --em-avaliacao: #ee3f3f;
   --cor-primaria:  rgb(18, 97, 128);
   --cor-primaria-letra: rgb(255, 255, 255);
   --cor-secundaria: rgb(28, 116, 151);
-  --cor-tranquila: rgb(95, 209, 95);
-  --cor-perigosa: rgb(199, 50, 30);
+  --cor-tranquila: #5fd15f;
+  --cor-perigosa: #c7321e;
   --cor-bloco: whitesmoke;
   --cor-bloco-letra: black;
 }
@@ -258,6 +258,13 @@ white-space: pre;
 
 .mat-checkbox-layout{
   white-space: normal !important;
+}
+
+
+.spinner-container{
+  margin: auto;
+  width: fit-content;
+  padding: 17px;
 }
 
 @media screen and (max-width: 650px){

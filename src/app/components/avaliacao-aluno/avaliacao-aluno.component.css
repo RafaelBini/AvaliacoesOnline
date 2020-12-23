@@ -169,13 +169,6 @@
     .cdk-drag-animating {
       transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     }
-    
-
-.spinner-container{
-  margin: auto;
-  width: fit-content;
-  padding: 17px;
-}
 
 .body-container{
   width: 60%; 

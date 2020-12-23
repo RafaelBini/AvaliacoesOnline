@@ -1,24 +1,20 @@
-<div *ngIf="gruposQuestoes.length > 0" class="container">
-    <!-- <div [chart]="testChart">
-
-    </div> -->
+<div *ngIf="carregado" class="container">
+    <div class='titulo'>Estatísticas da Avaliação</div>
+    <div class='subtitulo'>{{avaliacao.titulo}}</div>
     <div class="questao-container"
         *ngFor="let grupoQuestoes of gruposQuestoes; index as grupoQuestoesIndex; trackBy:identificarQuestao">
         <div class='questao-enunciado'>
             Questão {{grupoQuestoesIndex + 1}}. {{grupoQuestoes.pergunta}}
+        </div>
+        <div class='questao-gabarito'>
+            <app-questao-resposta-consulta [questao]="questoesGabarito[grupoQuestoes.questoes[0].index]">
+            </app-questao-resposta-consulta>
         </div>
         <div class='questao-tipo'>
             {{comumService.questaoTipos[grupoQuestoes.tipo].nome}}
         </div>
         <div class='questao-numero-respostas'>
             {{grupoQuestoes.questoes.length}} respostas
-        </div>
-        <div *ngIf="grupoQuestoes.tipo == 1">
-            <div *ngFor="let questao of grupoQuestoes.questoes">
-                <div class="questao-resposta-dissertativa" *ngIf="questao.resposta">
-                    {{questao.resposta}}
-                </div>
-            </div>
         </div>
         <div *ngIf="grupoQuestoes.tipo == 5">
             <span style="white-space: pre-line; font-size: 18px;"
@@ -29,20 +25,40 @@
                 </span>
             </span>
         </div>
+        <div class='resultados-container'>
 
-        <div [chart]="chart" *ngFor='let chart of grupoQuestoes.charts'></div>
+            <div class='questao-resposta-dissertativa-container' *ngIf="grupoQuestoes.tipo == 1">
+                <div *ngFor="let questao of grupoQuestoes.questoes">
+                    <div class="questao-resposta-dissertativa" *ngIf="questao.resposta">
+                        {{questao.resposta}}
+                    </div>
+                </div>
+            </div>
 
 
-        <button (click)="verGabarito(grupoQuestoes.questoes[0].index)" class="btn-gabarito" mat-button>
+            <div class='resultado' [chart]="chart" *ngFor='let chart of grupoQuestoes.charts'></div>
+
+
+
+        </div>
+
+
+        <!-- <button (click)="verGabarito(grupoQuestoes.questoes[0].index)" class="btn-gabarito" mat-button>
             Ver Gabarito
-        </button>
+        </button> -->
+    </div>
+
+    <div *ngIf="gruposQuestoes.length <= 0" class="mensagem">
+        Não existem dados.<br />
+        Nenhum aluno participou desta avaliação.
     </div>
 
 </div>
-<div *ngIf="gruposQuestoes.length <= 0" class="questao-container">
-    Não existem dados.<br />
-    Nenhum aluno participou desta avaliação.
+
+<div *ngIf="!carregado" class='spinner-container'>
+    <mat-spinner [strokeWidth]="3"></mat-spinner>
 </div>
+
 <div class='btn-close' mat-icon-button mat-dialog-close>
     <mat-icon>cancel</mat-icon>
 </div>

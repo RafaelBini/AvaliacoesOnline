@@ -91,14 +91,7 @@
 }
 
 
-.spinner-container{
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  align-content: center;
-  justify-content: center;
-  padding: 30px;
-}
+
 
 .filtros-container{
   display: flex;

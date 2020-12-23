@@ -4,6 +4,14 @@
     position: relative;
 }
 
+.titulo{
+    text-align: center;
+    font-size: large;
+}
+.subtitulo{
+    text-align: center;
+}
+
 .questao-container{
     padding: 12px;
     margin-top: 4px;
@@ -17,8 +25,28 @@
     border: 1px dotted var(--cor-primaria);
 }
 
+.mensagem{
+    text-align: center;
+    background-color: whitesmoke;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 5px;
+}
+
 .questao-enunciado{
     font-weight: bold;
+}
+
+.resultados-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.resultado{
+    display: flex;
+    flex: 1;
+    min-height: 300px;
 }
 
 .questao-tipo{
@@ -31,14 +59,22 @@
     color: rgb(105, 105, 105);
 }
 
+.questao-resposta-dissertativa-container{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
 .questao-resposta-dissertativa{
     padding: 5px;
     margin-top: 2px;
     margin-bottom: 2px;
-    width: 88%;    
+    flex: 1;   
     border: 1px solid var(--cor-secundaria);
     border-left: 5px solid var(--cor-secundaria);
+    border-radius: 3px;
     background-color: white;
+    box-sizing: border-box;
 }
 
 .btn-gabarito{
@@ -50,4 +86,10 @@
 }
 .questao-container:hover .btn-gabarito{
     display: block;
+}
+
+@media screen and (max-width: 650px){
+    .resultados-container{
+        flex-direction: column;
+    }
 }

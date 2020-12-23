@@ -28,7 +28,7 @@ export class EstatisticasAvaliacaoComponent implements OnInit, OnDestroy {
 
   public gruposQuestoes: GrupoQuestoes[] = [];
   public questoesGabarito: Questao[] = [];
-
+  public carregado: boolean = false;
   private subscription: Subscription;
 
   ngOnInit(): void {
@@ -63,18 +63,31 @@ export class EstatisticasAvaliacaoComponent implements OnInit, OnDestroy {
                   charts: [],
                   tipo: questao.tipo,
                   pergunta: questao.pergunta,
+                  totalAcertos: 0,
+                  totalAcertosParciais: 0,
+                  totalErros: 0
                 };
               }
 
               this.gruposQuestoes[questao.index].questoes.push(questao);
+              if (this.comumService.questaoTipos[questao.tipo].getNota(questao, this.questoesGabarito[questao.index]) == questao.valor) {
+                this.gruposQuestoes[questao.index].totalAcertos++;
+              }
+              else if (this.comumService.questaoTipos[questao.tipo].getNota(questao, this.questoesGabarito[questao.index]) <= 0) {
+                this.gruposQuestoes[questao.index].totalErros++;
+              }
+              else {
+                this.gruposQuestoes[questao.index].totalAcertosParciais++;
+              }
 
             }
           }
 
         }
-        console.log(this.gruposQuestoes);
-        console.log(this.questoesGabarito);
+        // console.log(this.gruposQuestoes);
+
         this.receberCharts();
+        this.carregado = true;
 
       });
 
@@ -85,6 +98,7 @@ export class EstatisticasAvaliacaoComponent implements OnInit, OnDestroy {
 
     for (let [grupoQuestoesIndex, grupoQuestoes] of this.gruposQuestoes.entries()) {
 
+      // GRÁFICO DE RESPOSTAS
 
       // ASSOCIAÇÃO
       if (grupoQuestoes.tipo == 0) {
@@ -302,10 +316,55 @@ export class EstatisticasAvaliacaoComponent implements OnInit, OnDestroy {
         grupoQuestoes.charts.push(chart);
       }
 
+      // GRAFICO DE ACERTOS
+      var chart2 = new Chart({
+        chart: {
+          type: 'pie',
+        },
+        title: {
+          text: null,
+        },
+        yAxis: {
+          title: {
+            text: 'Número de respostas dos alunos',
+          },
+          allowDecimals: false,
+        },
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.y} ({point.percentage:.0f}%)</b>'
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            colors: ['#5fd15f', '#2395ff', '#ee3f3f'],
+            dataLabels: {
+              enabled: true,
+              distance: this.comumService.isMobile() ? -50 : 10,
+              // format: '<b>{point.name}</b>: {point.y} ({point.percentage:.0f}%) %',
+              formatter: function () {
+                if (this.y > 0) {
+                  return `<b>${this.point.name}</b>: ${Math.floor(this.point.percentage)}%`;
+                }
+              }
+            }
+          }
+        },
+        series: [
+          {
+            name: 'Respostas',
+            type: 'pie',
+            data: [
+              { name: 'Acertos', y: grupoQuestoes.totalAcertos },
+              { name: 'Acertos Parciais', y: grupoQuestoes.totalAcertosParciais },
+              { name: 'Erros', y: grupoQuestoes.totalErros }
+            ]
+          },
+        ],
+      });
+      grupoQuestoes.charts.push(chart2);
+
     }
-
-
-
   }
 
   verGabarito(questaoIndex) {
@@ -324,6 +383,9 @@ export class EstatisticasAvaliacaoComponent implements OnInit, OnDestroy {
 
 interface GrupoQuestoes {
   questoes: Questao[];
+  totalAcertos: number;
+  totalAcertosParciais: number;
+  totalErros: number;
   charts: Chart[];
   tipo: number;
   pergunta: string;
