@@ -14,3 +14,11 @@
 - Professor, grupos: rolar tela somente se estiver arrastando algo
 
 - Colocar opção de excluir questão no banco de questões
+
+- Implementar esquema de "Esqueci senha"
+
+- Enviar email para aluno cadastrado
+
+- Confirmar o email cadastrado
+
+- Implementar regras de segurança no firestore e no storage
